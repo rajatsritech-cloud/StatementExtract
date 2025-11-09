@@ -1,7 +1,12 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { FileText, Menu } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export const Header = () => {
+  const router = useRouter();
+
   return (
     <header className="sticky top-0 z-50 border-b border-[hsl(var(--border))] bg-[hsl(var(--background))]/80 backdrop-blur-lg">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
@@ -31,7 +36,10 @@ export const Header = () => {
           <Button variant="ghost" className="hidden md:inline-flex">
             Sign In
           </Button>
-          <Button className="shadow-md">
+          <Button 
+            className="shadow-md"
+            onClick={() => router.push('/convert-bank-statement-to-csv-excel')}
+          >
             Get Started
           </Button>
           <Button variant="ghost" size="icon" className="md:hidden">
