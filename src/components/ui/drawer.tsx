@@ -1,0 +1,113 @@
+import * as React from "react";
+
+import { cn } from "@/lib/utils";
+
+interface DrawerProps {
+  shouldScaleBackground?: boolean;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  children: React.ReactNode;
+}
+
+const Drawer: React.FC<DrawerProps> = ({ shouldScaleBackground = true, open, onOpenChange, children }) => {
+  return (
+    <div className={cn("fixed inset-0 z-50", open ? "block" : "hidden")}>
+      {children}
+    </div>
+  );
+};
+Drawer.displayName = "Drawer";
+
+const DrawerTrigger = React.forwardRef<
+  HTMLButtonElement,
+  React.ButtonHTMLAttributes<HTMLButtonElement>
+>(({ className, ...props }, ref) => (
+  <button ref={ref} className={cn("", className)} {...props} />
+));
+DrawerTrigger.displayName = "DrawerTrigger";
+
+const DrawerPortal = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div ref={ref} className={cn("fixed inset-0 z-50", className)} {...props} />
+));
+DrawerPortal.displayName = "DrawerPortal";
+
+const DrawerClose = React.forwardRef<
+  HTMLButtonElement,
+  React.ButtonHTMLAttributes<HTMLButtonElement>
+>(({ className, ...props }, ref) => (
+  <button ref={ref} className={cn("", className)} {...props} />
+));
+DrawerClose.displayName = "DrawerClose";
+
+const DrawerOverlay = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div ref={ref} className={cn("fixed inset-0 z-50 bg-black/80", className)} {...props} />
+));
+DrawerOverlay.displayName = "DrawerOverlay";
+
+const DrawerContent = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, children, ...props }, ref) => (
+  <div className="fixed inset-x-0 bottom-0 z-50 mt-24 flex h-auto flex-col rounded-t-[10px] border bg-[hsl(var(--background))]">
+    <div className="mx-auto mt-4 h-2 w-[100px] rounded-full bg-[hsl(var(--muted))]" />
+    <div ref={ref} className={cn("", className)} {...props}>
+      {children}
+    </div>
+  </div>
+));
+DrawerContent.displayName = "DrawerContent";
+
+const DrawerHeader = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div ref={ref} className={cn("grid gap-1.5 p-4 text-center sm:text-left", className)} {...props} />
+));
+DrawerHeader.displayName = "DrawerHeader";
+
+const DrawerFooter = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div ref={ref} className={cn("mt-auto flex flex-col gap-2 p-4", className)} {...props} />
+));
+DrawerFooter.displayName = "DrawerFooter";
+
+const DrawerTitle = React.forwardRef<
+  HTMLHeadingElement,
+  React.HTMLAttributes<HTMLHeadingElement>
+>(({ className, ...props }, ref) => (
+  <h3
+    ref={ref}
+    className={cn("text-lg font-semibold leading-none tracking-tight", className)}
+    {...props}
+  />
+));
+DrawerTitle.displayName = "DrawerTitle";
+
+const DrawerDescription = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLParagraphElement>
+>(({ className, ...props }, ref) => (
+  <p ref={ref} className={cn("text-sm text-[hsl(var(--muted-foreground))]", className)} {...props} />
+));
+DrawerDescription.displayName = "DrawerDescription";
+
+export {
+  Drawer,
+  DrawerPortal,
+  DrawerOverlay,
+  DrawerTrigger,
+  DrawerClose,
+  DrawerContent,
+  DrawerHeader,
+  DrawerFooter,
+  DrawerTitle,
+  DrawerDescription,
+};
