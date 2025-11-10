@@ -13,14 +13,14 @@ export const metadata: Metadata = {
 
 const clerkPublishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY; // Or process.env.REACT_APP_CLERK_PUBLISHABLE_KEY
 
-
+console.log(clerkPublishableKey,"clerkPublishableKey")
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider publishableKey={clerkPublishableKey??""}>
+    <ClerkProvider publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}>
       <html lang="en">
         <head>
           <link rel="preconnect" href="https://fonts.googleapis.com" />
