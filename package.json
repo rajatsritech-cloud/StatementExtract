@@ -8,11 +8,13 @@
     "start": "next start",
     "lint": "eslint",
     "pages:build": "npx @cloudflare/next-on-pages",
-    "preview": "npm run pages:build && wrangler pages dev",
-    "deploy": "npm run pages:build && wrangler pages deploy"
+    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.34.5",
+    "@opennextjs/cloudflare": "^1.11.1",
     "@radix-ui/react-slot": "^1.2.4",
     "@shadcn/ui": "^0.0.4",
     "class-variance-authority": "^0.7.1",
