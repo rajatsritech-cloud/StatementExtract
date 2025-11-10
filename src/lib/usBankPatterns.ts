@@ -119,20 +119,29 @@ export const extractUSBankTransactions = (text: string) => {
       let amount = 0;
       let amountString = '';
       
-      // Pattern 1: $ 99 . 00 format (with spaces) - most reliable for this PDF
-      const spacedAmountMatch = transactionText.match(/\$\s+(\d{1,5})\s*\.\s*(\d{2})/);
-      if (spacedAmountMatch) {
-        amount = parseFloat(`${spacedAmountMatch[1]}.${spacedAmountMatch[2]}`);
-        amountString = spacedAmountMatch[0];
+      // Pattern 1: Look for amounts with $ sign first (most reliable)
+      const dollarAmountMatch = transactionText.match(/\$\s*(\d{1,5})\s*\.?\s*(\d{2})/);
+      if (dollarAmountMatch) {
+        amount = parseFloat(`${dollarAmountMatch[1]}.${dollarAmountMatch[2]}`);
+        amountString = dollarAmountMatch[0];
       } else {
-        // Pattern 2: Regular format like "100 . 00" or "100.00" but limit to reasonable amounts
-        const regularAmountMatch = transactionText.match(/(\d{1,5})\s*\.?\s*(\d{2})/);
-        if (regularAmountMatch) {
-          const potentialAmount = parseFloat(`${regularAmountMatch[1]}.${regularAmountMatch[2]}`);
-          // Validate amount is reasonable (between $0.01 and $50,000)
-          if (potentialAmount >= 0.01 && potentialAmount <= 50000) {
-            amount = potentialAmount;
-            amountString = regularAmountMatch[0];
+        // Pattern 2: Look for amounts at the end of transaction text
+        // Find all number patterns and take the last reasonable one
+        const allNumbers = transactionText.match(/(\d{1,5})\.?(\d{2})/g);
+        if (allNumbers && allNumbers.length > 0) {
+          // Check the last few numbers for a reasonable amount
+          for (let i = Math.min(3, allNumbers.length) - 1; i >= 0; i--) {
+            const lastNumber = allNumbers[allNumbers.length - 1 - i];
+            const match = lastNumber.match(/(\d{1,5})\.?(\d{2})/);
+            if (match) {
+              const potentialAmount = parseFloat(`${match[1]}.${match[2]}`);
+              // Validate amount is reasonable (between $0.01 and $10,000 for normal transactions)
+              if (potentialAmount >= 0.01 && potentialAmount <= 10000) {
+                amount = potentialAmount;
+                amountString = lastNumber;
+                break;
+              }
+            }
           }
         }
       }
@@ -140,20 +149,6 @@ export const extractUSBankTransactions = (text: string) => {
       if (isNaN(amount) || amount === 0) {
         console.log('⚠️ No valid amount found');
         continue;
-      }
-      
-      // Additional validation - amount should be the last number in the transaction text
-      const allNumbers = transactionText.match(/(\d{1,5})\s*\.?\s*(\d{2})/g);
-      if (allNumbers && allNumbers.length > 1) {
-        // Use the last occurrence as it's most likely the actual amount
-        const lastMatch = allNumbers[allNumbers.length - 1].match(/(\d{1,5})\s*\.?\s*(\d{2})/);
-        if (lastMatch) {
-          const lastAmount = parseFloat(`${lastMatch[1]}.${lastMatch[2]}`);
-          if (lastAmount >= 0.01 && lastAmount <= 50000) {
-            amount = lastAmount;
-            amountString = allNumbers[allNumbers.length - 1];
-          }
-        }
       }
       
       // Extract description (everything between date and amount)
@@ -258,58 +253,58 @@ export const extractUSBankUserInfo = (text: string) => {
     }
   };
   
-  // Extract name - look for MR/MRS pattern
-  const nameMatch = text.match(/(?:MR|MRS|MS)\.?\s+([A-Z\s]+?)(?:\n|$)/i);
+  // Extract name - look for MR/MRS pattern with better matching
+  const nameMatch = text.match(/(?:MR|MRS|MS)\.?\s+([A-Z\s]{3,}?)(?:\s+To\s+Contact|\s+2\s+POST|$)/i);
   if (nameMatch) {
-    userInfo.name = nameMatch[1].trim();
+    userInfo.name = nameMatch[1].replace(/\d+/g, '').trim();
     console.log(`✅ Found name: ${userInfo.name}`);
   }
   
   // Extract account number - look for Account Number pattern
   const accountMatch = text.match(/Account Number\s*[:\-]?\s*([\d\s\-\*]+)/i);
   if (accountMatch) {
-    userInfo.accountNumber = accountMatch[1].replace(/\s+/g, '').trim();
+    userInfo.accountNumber = accountMatch[1].replace(/\s+/g, '').replace(/\*/g, '').trim();
     console.log(`✅ Found account number: ${userInfo.accountNumber}`);
   }
   
   // Extract statement period - look for Statement Period pattern
-  const periodMatch = text.match(/Statement\s*Period\s*[:\-]?\s*(.+?)(?:\n|Page)/i);
+  const periodMatch = text.match(/Statement\s*Period\s*[:\-]?\s*([^Page\n]+?)(?:\n|Page)/i);
   if (periodMatch) {
-    userInfo.statementPeriod = periodMatch[1].trim();
+    userInfo.statementPeriod = periodMatch[1].replace(/^[^\d]*?/, '').replace(/\s+/g, ' ').trim();
     console.log(`✅ Found statement period: ${userInfo.statementPeriod}`);
   }
   
-  // Extract account summary
+  // Extract account summary with better patterns
   // Beginning Balance
-  const beginningBalanceMatch = text.match(/Beginning\s+Balance\s+on\s+[^$]*?\$\s*([\d,]+\.\d{2})/i);
+  const beginningBalanceMatch = text.match(/Beginning\s+Balance[^$]*?\$\s*([\d,]+\.\d{2})/i);
   if (beginningBalanceMatch) {
     userInfo.accountSummary.beginningBalance = parseFloat(beginningBalanceMatch[1].replace(/,/g, ''));
   }
   
   // Ending Balance
-  const endingBalanceMatch = text.match(/Ending\s+Balance\s+on\s+[^$]*?\$\s*([\d,]+\.\d{2})/i);
+  const endingBalanceMatch = text.match(/Ending\s+Balance[^$]*?\$\s*([\d,]+\.\d{2})/i);
   if (endingBalanceMatch) {
     userInfo.accountSummary.endingBalance = parseFloat(endingBalanceMatch[1].replace(/,/g, ''));
   }
   
   // Total Deposits
-  const depositsMatch = text.match(/Deposits\s+I\s+Credits\s+\$?\s*([\d,]+\.\d{2})/i);
+  const depositsMatch = text.match(/Deposits\s+\|\s+Credits[^$]*?\$?\s*([\d,]+\.\d{2})/i);
   if (depositsMatch) {
     userInfo.accountSummary.totalDeposits = parseFloat(depositsMatch[1].replace(/,/g, ''));
   }
   
   // Total Withdrawals (Card + Other)
-  const cardWithdrawalsMatch = text.match(/Card\s+Withdrawals\s+([^\$]*?)\$\s*([\d,]+\.\d{2})\s*-/i);
-  const otherWithdrawalsMatch = text.match(/Other\s+Withdrawals\s+([^\$]*?)\$\s*([\d,]+\.\d{2})\s*-/i);
+  const cardWithdrawalsMatch = text.match(/Card\s+Withdrawals[^$]*?\$?\s*([\d,]+\.\d{2})\s*-/i);
+  const otherWithdrawalsMatch = text.match(/Other\s+Withdrawals[^$]*?\$?\s*([\d,]+\.\d{2})\s*-/i);
   
   let cardWithdrawals = 0;
   let otherWithdrawals = 0;
   
   if (cardWithdrawalsMatch) {
-    cardWithdrawals = parseFloat(cardWithdrawalsMatch[2].replace(/,/g, ''));
+    cardWithdrawals = parseFloat(cardWithdrawalsMatch[1].replace(/,/g, ''));
   }
   if (otherWithdrawalsMatch) {
-    otherWithdrawals = parseFloat(otherWithdrawalsMatch[2].replace(/,/g, ''));
+    otherWithdrawals = parseFloat(otherWithdrawalsMatch[1].replace(/,/g, ''));
   }
   
   userInfo.accountSummary.totalWithdrawals = cardWithdrawals + otherWithdrawals;

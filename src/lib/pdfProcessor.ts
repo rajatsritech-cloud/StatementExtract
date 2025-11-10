@@ -133,34 +133,65 @@ export class PDFProcessor {
     let fullText = '';
     const numPages = pdf.numPages;
     
+    console.log(`🔍 Starting optimized OCR on ${numPages} pages...`);
+    
+    // Process pages in parallel for better performance
+    const ocrPromises = [];
+    
     for (let pageNum = 1; pageNum <= numPages; pageNum++) {
-      try {
-        const page = await pdf.getPage(pageNum);
-        
-        // Render page to canvas
-        const viewport = page.getViewport({ scale: 2.0 });
-        const canvas = document.createElement('canvas');
-        const context = canvas.getContext('2d');
-        canvas.height = viewport.height;
-        canvas.width = viewport.width;
-        
-        await page.render({ canvasContext: context, viewport }).promise;
-        
-        // Convert canvas to blob for OCR
-        const blob = await new Promise<Blob>((resolve) => {
-          canvas.toBlob((blob) => resolve(blob!), 'image/png');
-        });
-        
-        // Perform OCR using Tesseract
-        const result = await Tesseract.recognize(blob, 'eng');
-        fullText += result.data.text + '\n';
-        
-      } catch (error) {
-        console.error(`OCR failed for page ${pageNum}:`, error);
-      }
+      ocrPromises.push(this.ocrPage(pdf, pageNum));
     }
     
+    // Wait for all pages to complete
+    const pageTexts = await Promise.all(ocrPromises);
+    
+    // Combine all text
+    fullText = pageTexts.join('\n');
+    
+    console.log(`✅ OCR completed: ${fullText.length} characters extracted`);
     return fullText;
+  }
+  
+  private static async ocrPage(pdf: any, pageNum: number): Promise<string> {
+    try {
+      const page = await pdf.getPage(pageNum);
+      
+      // Use higher scale for better accuracy but optimized for speed
+      const viewport = page.getViewport({ scale: 1.5 });
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
+      canvas.height = viewport.height;
+      canvas.width = viewport.width;
+      
+      console.log(`📄 OCR processing page ${pageNum}/${pdf.numPages}...`);
+      
+      await page.render({ canvasContext: context, viewport }).promise;
+      
+      // Convert canvas to blob for OCR
+      const blob = await new Promise<Blob>((resolve) => {
+        canvas.toBlob((blob) => resolve(blob!), 'image/png');
+      });
+      
+      // Perform OCR using Tesseract with optimized settings
+      const result = await Tesseract.recognize(blob, 'eng', {
+        // Optimize for speed and accuracy
+        logger: (m) => {
+          if (m.status === 'recognizing text') {
+            // Only log progress for first page to avoid spam
+            if (pageNum === 1 && Math.floor(m.progress * 100) % 25 === 0) {
+              console.log(`🔍 OCR progress: ${Math.floor(m.progress * 100)}%`);
+            }
+          }
+        }
+      });
+      
+      console.log(`✅ Page ${pageNum} OCR completed`);
+      return result.data.text;
+      
+    } catch (error) {
+      console.error(`❌ OCR failed for page ${pageNum}:`, error);
+      return '';
+    }
   }
 
   static async processImage(file: File): Promise<ExtractedData> {
