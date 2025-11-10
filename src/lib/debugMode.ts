@@ -1,8 +1,17 @@
 // Debug script to help identify UI issues
 console.log('🔍 === DEBUG MODE ACTIVATED ===');
 
+// Extend Window interface for debug functions
+declare global {
+  interface Window {
+    showUploadDebug: () => void;
+    testFileUpload: () => void;
+    resetDebug: () => void;
+  }
+}
+
 // Monitor file upload events
-let uploadEvents = [];
+let uploadEvents: Array<{ timestamp: string; message: string; type?: string }> = [];
 
 // Override the file upload handler to add debugging
 if (typeof window !== 'undefined') {

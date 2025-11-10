@@ -1,9 +1,7 @@
 // Polyfill for DOMMatrix in Node.js environment
 if (typeof globalThis.DOMMatrix === 'undefined') {
-  globalThis.DOMMatrix = class DOMMatrix {
-    constructor() {
-      this.a = 1; this.b = 0; this.c = 0; this.d = 1; this.e = 0; this.f = 0;
-    }
+  (globalThis as any).DOMMatrix = class DOMMatrix {
+    a = 1; b = 0; c = 0; d = 1; e = 0; f = 0;
     translateSelf() { return this; }
     scaleSelf() { return this; }
     inverse() { return this; }
@@ -13,8 +11,11 @@ if (typeof globalThis.DOMMatrix === 'undefined') {
 
 // Polyfill for ImageData
 if (typeof globalThis.ImageData === 'undefined') {
-  globalThis.ImageData = class ImageData {
-    constructor(data, width, height) {
+  (globalThis as any).ImageData = class ImageData {
+    data: any;
+    width: number;
+    height: number;
+    constructor(data: any, width: number, height: number) {
       this.data = data;
       this.width = width;
       this.height = height;
@@ -24,11 +25,9 @@ if (typeof globalThis.ImageData === 'undefined') {
 
 // Polyfill for HTMLCanvasElement
 if (typeof globalThis.HTMLCanvasElement === 'undefined') {
-  globalThis.HTMLCanvasElement = class HTMLCanvasElement {
-    constructor() {
-      this.width = 0;
-      this.height = 0;
-    }
+  (globalThis as any).HTMLCanvasElement = class HTMLCanvasElement {
+    width = 0;
+    height = 0;
     getContext() {
       return {
         fillStyle: '',
@@ -57,7 +56,7 @@ if (typeof globalThis.HTMLCanvasElement === 'undefined') {
         clip: () => {},
       };
     }
-    toBlob(callback) {
+    toBlob(callback: any) {
       callback(new Blob());
     }
   };
@@ -65,8 +64,8 @@ if (typeof globalThis.HTMLCanvasElement === 'undefined') {
 
 // Polyfill for document
 if (typeof globalThis.document === 'undefined') {
-  globalThis.document = {
-    createElement: (tag) => {
+  (globalThis as any).document = {
+    createElement: (tag: string) => {
       if (tag === 'canvas') {
         return new globalThis.HTMLCanvasElement();
       }
@@ -77,12 +76,14 @@ if (typeof globalThis.document === 'undefined') {
 
 // Polyfill for navigator
 if (typeof globalThis.navigator === 'undefined') {
-  globalThis.navigator = {
+  (globalThis as any).navigator = {
     userAgent: 'Node.js',
   };
 }
 
 // Polyfill for window
 if (typeof globalThis.window === 'undefined') {
-  globalThis.window = globalThis;
+  (globalThis as any).window = globalThis;
 }
+
+export {};

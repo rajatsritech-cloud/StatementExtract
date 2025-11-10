@@ -1,12 +1,9 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google"
 import { Toaster } from "react-hot-toast";
 import {
   ClerkProvider,
 } from "@clerk/nextjs";
 import "./globals.css";
-
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 
 export const metadata: Metadata = {
@@ -22,8 +19,13 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
+        <head>
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+          <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Clash+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
+        </head>
         <body
-          className={`${inter.variable} antialiased`}
+          className="antialiased"
         >
           {children}
           
