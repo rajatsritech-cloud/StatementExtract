@@ -11,13 +11,16 @@ export const metadata: Metadata = {
   description: "Convert bank statements to CSV/Excel with AI-powered OCR and transaction extraction",
 };
 
+const clerkPublishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY; // Or process.env.REACT_APP_CLERK_PUBLISHABLE_KEY
+
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
+    <ClerkProvider publishableKey={clerkPublishableKey??""}>
       <html lang="en">
         <head>
           <link rel="preconnect" href="https://fonts.googleapis.com" />
