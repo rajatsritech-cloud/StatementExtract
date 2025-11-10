@@ -58,7 +58,7 @@ export class PDFProcessor {
     /\b(chase|bank of america|wells fargo|citibank|capital one|us bank)\b/gi,
   ];
 
-  static async processPDF(file: File): Promise<ExtractedData> {
+  static async processPDF(file: File, isSignedIn: boolean = false): Promise<ExtractedData> {
     try {
       // Check if we're in a browser environment
       if (typeof window === 'undefined') {
@@ -92,8 +92,32 @@ export class PDFProcessor {
 
       console.log(`📝 Total text extracted: ${fullText.length} characters`);
 
-      // If no text found, try OCR on rendered pages
+      // If no text found, try OCR on rendered pages (requires authentication)
       if (fullText.trim().length < 100) {
+        console.log('⚠️ Limited text found in PDF');
+        console.log('🔐 Authentication status:', isSignedIn ? 'Signed In' : 'Not Signed In');
+        
+        if (!isSignedIn) {
+          console.log('❌ OCR requires authentication but user is not signed in');
+          console.log('⚠️ Returning minimal data - modal should have prevented this');
+          // Return minimal data instead of throwing error
+          // The UploadArea should have caught this before processing
+          return {
+            transactions: [],
+            userInfo: {
+              name: '',
+              accountNumber: '',
+              bankName: '',
+              statementPeriod: ''
+            },
+            summary: {
+              totalCredits: 0,
+              totalDebits: 0,
+              netBalance: 0,
+              transactionCount: 0
+            }
+          };
+        }
         console.log('⚠️ Limited text found, attempting OCR...');
         fullText = await this.performOCROnPDF(pdf);
       }
@@ -133,84 +157,128 @@ export class PDFProcessor {
     let fullText = '';
     const numPages = pdf.numPages;
     
-    console.log(`🔍 Starting optimized OCR on ${numPages} pages...`);
+    console.log(`🚀 Starting optimized Tesseract OCR on ${numPages} pages...`);
     
-    // Process pages in parallel for better performance
-    const ocrPromises = [];
-    
-    for (let pageNum = 1; pageNum <= numPages; pageNum++) {
-      ocrPromises.push(this.ocrPage(pdf, pageNum));
-    }
-    
-    // Wait for all pages to complete
-    const pageTexts = await Promise.all(ocrPromises);
-    
-    // Combine all text
-    fullText = pageTexts.join('\n');
-    
-    console.log(`✅ OCR completed: ${fullText.length} characters extracted`);
-    return fullText;
-  }
-  
-  private static async ocrPage(pdf: any, pageNum: number): Promise<string> {
     try {
-      const page = await pdf.getPage(pageNum);
+      // Convert all PDF pages to images first
+      const imageBlobs = [];
       
-      // Use higher scale for better accuracy but optimized for speed
-      const viewport = page.getViewport({ scale: 1.5 });
-      const canvas = document.createElement('canvas');
-      const context = canvas.getContext('2d');
-      canvas.height = viewport.height;
-      canvas.width = viewport.width;
+      for (let pageNum = 1; pageNum <= numPages; pageNum++) {
+        const page = await pdf.getPage(pageNum);
+        
+        // Use optimized scale for balance of speed and accuracy
+        const viewport = page.getViewport({ scale: 1.5 });
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+        
+        console.log(`📄 Rendering page ${pageNum}/${numPages} for OCR...`);
+        
+        await page.render({ canvasContext: context, viewport }).promise;
+        
+        // Convert canvas to blob
+        const blob = await new Promise<Blob>((resolve) => {
+          canvas.toBlob((blob) => resolve(blob!), 'image/png');
+        });
+        
+        imageBlobs.push(blob);
+      }
       
-      console.log(`📄 OCR processing page ${pageNum}/${pdf.numPages}...`);
+      console.log(`🚀 Running optimized parallel OCR on ${imageBlobs.length} pages...`);
       
-      await page.render({ canvasContext: context, viewport }).promise;
-      
-      // Convert canvas to blob for OCR
-      const blob = await new Promise<Blob>((resolve) => {
-        canvas.toBlob((blob) => resolve(blob!), 'image/png');
-      });
-      
-      // Perform OCR using Tesseract with optimized settings
-      const result = await Tesseract.recognize(blob, 'eng', {
-        // Optimize for speed and accuracy
-        logger: (m) => {
-          if (m.status === 'recognizing text') {
-            // Only log progress for first page to avoid spam
-            if (pageNum === 1 && Math.floor(m.progress * 100) % 25 === 0) {
-              console.log(`🔍 OCR progress: ${Math.floor(m.progress * 100)}%`);
+      // Process images in parallel with optimized Tesseract settings
+      const ocrPromises = imageBlobs.map((blob, index) => 
+        Tesseract.recognize(blob, 'eng', {
+          logger: (m) => {
+            if (m.status === 'recognizing text' && index === 0) {
+              // Only show progress for first page to avoid spam
+              if (Math.floor(m.progress * 100) % 25 === 0) {
+                console.log(`🔍 OCR progress: ${Math.floor(m.progress * 100)}%`);
+              }
             }
           }
-        }
-      });
+        }).then(result => result.data.text)
+      );
       
-      console.log(`✅ Page ${pageNum} OCR completed`);
-      return result.data.text;
+      const startTime = Date.now();
+      const ocrResults = await Promise.all(ocrPromises);
+      const endTime = Date.now();
+      
+      fullText = ocrResults.join('\n');
+      
+      console.log(`✅ Optimized Tesseract OCR completed in ${endTime - startTime}ms`);
+      console.log(`📝 Extracted ${fullText.length} characters`);
+      
+      return fullText;
       
     } catch (error) {
-      console.error(`❌ OCR failed for page ${pageNum}:`, error);
+      console.error('❌ OCR failed:', error);
+      console.log('⚠️ Falling back to no OCR (PDF text extraction only)');
       return '';
     }
   }
+  
+  private static async ocrPage(pdf: any, pageNum: number): Promise<string> {
+    // This method is no longer needed with Scribe.js batch processing
+    return '';
+  }
 
-  static async processImage(file: File): Promise<ExtractedData> {
+  static async processImage(file: File, isSignedIn: boolean = false): Promise<ExtractedData> {
     try {
       // Check if we're in a browser environment
       if (typeof window === 'undefined') {
         throw new Error('Image processing is only available in the browser');
       }
 
-      // Use Tesseract.js for OCR on images
-      const result = await Tesseract.recognize(file, 'eng');
+      // Check authentication for image OCR
+      console.log('🔐 Checking authentication for image OCR');
+      console.log('🔐 Authentication status:', isSignedIn ? 'Signed In' : 'Not Signed In');
       
-      const text = result.data.text;
-      const extractedData = this.extractDataFromText(text);
+      if (!isSignedIn) {
+        console.log('❌ Image OCR requires authentication but user is not signed in');
+        console.log('⚠️ Returning minimal data - modal should have prevented this');
+        // Return minimal data instead of throwing error
+        return {
+          transactions: [],
+          userInfo: {
+            name: '',
+            accountNumber: '',
+            bankName: '',
+            statementPeriod: ''
+          },
+          summary: {
+            totalCredits: 0,
+            totalDebits: 0,
+            netBalance: 0,
+            transactionCount: 0
+          }
+        };
+      }
+
+      console.log('🚀 Using optimized Tesseract for image OCR...');
+      
+      // Use optimized Tesseract.js for OCR on images
+      const startTime = Date.now();
+      const result = await Tesseract.recognize(file, 'eng', {
+        logger: (m) => {
+          if (m.status === 'recognizing text' && Math.floor(m.progress * 100) % 25 === 0) {
+            console.log(`🔍 Image OCR progress: ${Math.floor(m.progress * 100)}%`);
+          }
+        }
+      });
+      const endTime = Date.now();
+      
+      console.log(`✅ Optimized image OCR completed in ${endTime - startTime}ms`);
+      console.log(`📝 Extracted ${result.data.text.length} characters`);
+      
+      const extractedData = this.extractDataFromText(result.data.text);
       
       return extractedData;
+      
     } catch (error) {
-      console.error('Image processing error:', error);
-      throw new Error('Failed to process image file');
+      console.error('❌ Image processing error:', error);
+      throw new Error(`Failed to process image: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
 

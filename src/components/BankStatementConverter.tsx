@@ -9,6 +9,7 @@ import { PDFViewer } from "@/components/PDFViewer";
 import { toast } from "react-hot-toast";
 import { PDFProcessor, ExtractedData } from "@/lib/pdfProcessor";
 import { ExportService } from "@/lib/exportService";
+import { useAuth } from "@clerk/nextjs";
 import "@/lib/simpleTest";
 import "@/lib/comprehensiveTester";
 import "@/lib/debugMode";
@@ -19,12 +20,23 @@ export const BankStatementConverter = () => {
   const [showResults, setShowResults] = useState(false);
   const [processingProgress, setProcessingProgress] = useState(0);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const { isSignedIn, isLoaded } = useAuth();
 
   const handleFileUpload = useCallback(async (file: File) => {
     console.log('🚀 Starting file upload...');
     console.log(`📁 File: ${file.name}`);
     console.log(`📏 Size: ${(file.size / 1024 / 1024).toFixed(2)} MB`);
     console.log(`📄 Type: ${file.type}`);
+    
+    // Wait for auth to load
+    if (!isLoaded) {
+      console.log('⏳ Waiting for auth to load...');
+      toast.error('Please wait, loading authentication...');
+      return;
+    }
+    
+    console.log('🔐 Auth loaded:', isLoaded);
+    console.log('🔐 Is signed in:', isSignedIn);
     
     // Set the selected file for PDF viewer
     setSelectedFile(file);
@@ -70,12 +82,32 @@ export const BankStatementConverter = () => {
       // Process the file using real PDF processing
       let extracted: ExtractedData;
       
-      if (file.type === 'application/pdf') {
-        console.log('📖 Processing PDF file...');
-        extracted = await PDFProcessor.processPDF(file);
-      } else {
-        console.log('🖼️ Processing image file...');
-        extracted = await PDFProcessor.processImage(file);
+      try {
+        if (file.type === 'application/pdf') {
+          console.log('📖 Processing PDF file...');
+          extracted = await PDFProcessor.processPDF(file, isSignedIn);
+        } else {
+          console.log('🖼️ Processing image file...');
+          extracted = await PDFProcessor.processImage(file, isSignedIn);
+        }
+      } catch (error: any) {
+        console.log('❌ Processing error:', error.message);
+        
+        // Handle ALL OCR authentication errors silently
+        if (error.message.includes('OCR processing requires a free account') || 
+            error.message.includes('Authentication required for OCR') ||
+            error.message.includes('sign in to continue') ||
+            error.message.includes('Image processing is only available in the browser')) {
+          console.log('🔐 OCR/authentication required - modal should handle this');
+          clearInterval(progressInterval);
+          setIsProcessing(false);
+          setProcessingProgress(0);
+          setSelectedFile(null);
+          return;
+        }
+        
+        // Re-throw other errors
+        throw error;
       }
       
       const endTime = Date.now();
@@ -105,10 +137,24 @@ export const BankStatementConverter = () => {
     } catch (error) {
       console.error('❌ Processing error:', error);
       setIsProcessing(false);
-      const errorMessage = error instanceof Error ? error.message : "Failed to process the file. Please try again.";
-      toast.error(errorMessage);
+      setSelectedFile(null); // Clear the selected file on error
+      
+      // Don't show any error message for OCR authentication - it's handled by the modal
+      if (error instanceof Error && error.message.includes('OCR processing requires a free account')) {
+        return; // Silent fail - modal handles the user communication
+      }
+      
+      let errorMessage = "Failed to process the file. Please try again.";
+      
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+      
+      toast.error(errorMessage, {
+        duration: 5000,
+      });
     }
-  }, []);
+  }, [isSignedIn, isLoaded]);
 
   const handleTryAnother = () => {
     setShowResults(false);
@@ -175,13 +221,15 @@ export const BankStatementConverter = () => {
                 🎯 99.9% Accurate
               </span>
               <span className="inline-flex items-center gap-2 rounded-full bg-[hsl(var(--muted))] px-4 py-2 text-sm font-medium text-[hsl(var(--muted-foreground))]">
-                ✨ No signup required
+                👤 Free Account
               </span>
             </div>
           </div>
 
           {/* Upload Area */}
-          <UploadArea onFileUpload={handleFileUpload} isProcessing={isProcessing} />
+          <div className="mx-auto max-w-2xl">
+            <UploadArea onFileUpload={handleFileUpload} isProcessing={isProcessing} />
+          </div>
         </div>
       </main>
 
