@@ -1,15 +1,24 @@
-import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.mjs';
 import Tesseract from 'tesseract.js';
 import { debugExtractedText } from './textAnalyzer';
 import { extractUSBankTransactions, extractUSBankUserInfo } from './usBankPatterns';
 
-// Configure PDF.js worker with correct URL
-if (typeof window !== 'undefined') {
-  // Use unpkg CDN which is reliable and accessible
-  pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/legacy/build/pdf.worker.min.mjs`;
-  
-  console.log('🔧 PDF.js worker configured:', pdfjsLib.GlobalWorkerOptions.workerSrc);
-}
+let pdfjsLibPromise: Promise<typeof import('pdfjs-dist/legacy/build/pdf.mjs')> | null = null;
+
+const loadPdfJs = async () => {
+  if (typeof window === 'undefined') {
+    throw new Error('PDF processing is only available in the browser');
+  }
+
+  if (!pdfjsLibPromise) {
+    pdfjsLibPromise = import('pdfjs-dist/legacy/build/pdf.mjs').then((module) => {
+      module.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${module.version}/legacy/build/pdf.worker.min.mjs`;
+      console.log('🔧 PDF.js worker configured:', module.GlobalWorkerOptions.workerSrc);
+      return module;
+    });
+  }
+
+  return pdfjsLibPromise;
+};
 
 export interface TransactionData {
   date: string;
@@ -64,6 +73,8 @@ export class PDFProcessor {
       if (typeof window === 'undefined') {
         throw new Error('PDF processing is only available in the browser');
       }
+
+      const pdfjsLib = await loadPdfJs();
 
       console.log('📖 Starting PDF processing...');
       const arrayBuffer = await file.arrayBuffer();
