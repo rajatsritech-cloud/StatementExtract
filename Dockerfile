@@ -2,10 +2,29 @@
 # syntax=docker/dockerfile:1.6
 
 # ---------------------------
+# Base image for all stages
+# ---------------------------
+FROM node:22.21.0-bullseye AS base
+WORKDIR /app
+ENV NODE_ENV=production
+ENV PORT=8080
+
+# --- IMPORTANT ADDITION ---
+# Declare ARG for the publishable key
+ARG NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+# Set ENV from ARG, making it available in subsequent stages
+ENV NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=$NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+# --- END IMPORTANT ADDITION ---
+
+ENV NEXT_TELEMETRY_DISABLED=1 # Moved here as it applies to all stages
+
+
+# ---------------------------
 # 1. Dependencies stage (glibc / Debian)
 # ---------------------------
-FROM node:22.21.0-bullseye AS deps
-WORKDIR /app
+FROM base AS deps
+# No WORKDIR needed, inherited from base
+# No ENV needed, inherited from base
 
 # install minimal build tools (if native builds are needed)
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -23,26 +42,24 @@ RUN npm rebuild lightningcss --update-binary || true
 # ---------------------------
 # 2. Builder stage
 # ---------------------------
-FROM node:22.21.0-bullseye AS builder
-WORKDIR /app
+FROM base AS builder
+# No WORKDIR needed, inherited from base
+# No ENV needed, inherited from base
 
 # Copy deps from previous stage
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-ENV NEXT_TELEMETRY_DISABLED=1
 # Build the Next.js app (production)
+# The NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY from the base stage will be available here
 RUN npm run build
 
 # ---------------------------
 # 3. Production Runner (minimal)
 # ---------------------------
-FROM node:22.21.0-bullseye AS runner
-WORKDIR /app
-
-ENV NODE_ENV=production
-ENV NEXT_TELEMETRY_DISABLED=1
-ENV PORT=8080
+FROM base AS runner
+# No WORKDIR needed, inherited from base
+# No ENV needed, inherited from base
 
 # Create non-root user
 RUN groupadd --system nextgroup && useradd --system --gid nextgroup --uid 1001 nextuser
