@@ -1,63 +1,76 @@
-'use client';
+"use client";
 
-import React, { useEffect, useRef, useState } from 'react';
-import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.mjs';
-
-// Configure PDF.js worker
-if (typeof window !== 'undefined') {
-  pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/legacy/build/pdf.worker.min.mjs`;
-}
+import React, { useEffect, useRef, useState } from "react";
 
 interface PDFViewerProps {
   file: File;
   className?: string;
 }
 
-export const PDFViewer: React.FC<PDFViewerProps> = ({ file, className = '' }) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+export const PDFViewer: React.FC<PDFViewerProps> = ({ file, className = "" }) => {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [numPages, setNumPages] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>('');
+  const [error, setError] = useState<string>("");
   const [pdfDoc, setPdfDoc] = useState<any>(null);
 
   useEffect(() => {
     if (!file) return;
 
+    let cancelled = false;
+    let pdfjsLib: any; // will hold the dynamically imported pdfjs
+
     const loadPDF = async () => {
       try {
         setLoading(true);
-        setError('');
+        setError("");
+
+        // dynamic import ensures pdfjs-dist runs only in browser
+        pdfjsLib = await import("pdfjs-dist/legacy/build/pdf");
+        // configure worker AFTER importing
+        if (typeof window !== "undefined" && pdfjsLib?.GlobalWorkerOptions) {
+          pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/legacy/build/pdf.worker.min.js`;
+          // note: use .js worker URL for unpkg CDN; .mjs sometimes causes CORS issues
+        }
 
         const arrayBuffer = await file.arrayBuffer();
-        const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-        
+        const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
+        const pdf = await loadingTask.promise;
+
+        if (cancelled) return;
+
         setPdfDoc(pdf);
         setNumPages(pdf.numPages);
         setCurrentPage(1);
-        
+
         // Render first page
-        await renderPage(pdf, 1);
-        
+        await renderPage(pdf, 1, pdfjsLib);
       } catch (err) {
-        console.error('Error loading PDF:', err);
-        setError('Failed to load PDF document');
+        console.error("Error loading PDF:", err);
+        setError("Failed to load PDF document");
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     };
 
     loadPDF();
-  }, [file]);
 
-  const renderPage = async (pdf: any, pageNumber: number) => {
+    return () => {
+      cancelled = true;
+      // optional cleanup
+      setPdfDoc(null);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [file]); // keep dependency only on file
+
+  const renderPage = async (pdf: any, pageNumber: number, pdfjsLibParam?: any) => {
     if (!canvasRef.current) return;
-
     try {
+      const pdfjs = pdfjsLibParam ?? (await import("pdfjs-dist/legacy/build/pdf"));
       const page = await pdf.getPage(pageNumber);
       const canvas = canvasRef.current;
-      const context = canvas.getContext('2d');
-      
+      const context = canvas.getContext("2d");
       if (!context) return;
 
       const viewport = page.getViewport({ scale: 1.5 });
@@ -66,19 +79,19 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({ file, className = '' }) =>
 
       const renderContext = {
         canvasContext: context,
-        viewport: viewport
+        viewport: viewport,
       };
 
       await page.render(renderContext).promise;
     } catch (err) {
-      console.error('Error rendering page:', err);
-      setError('Failed to render page');
+      console.error("Error rendering page:", err);
+      setError("Failed to render page");
     }
   };
 
   const handlePageChange = async (newPage: number) => {
     if (!pdfDoc || newPage < 1 || newPage > numPages) return;
-    
+
     setCurrentPage(newPage);
     await renderPage(pdfDoc, newPage);
   };
@@ -125,11 +138,9 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({ file, className = '' }) =>
           >
             Previous
           </button>
-          
-          <span className="text-sm text-gray-600">
-            Page {currentPage} of {numPages}
-          </span>
-          
+
+          <span className="text-sm text-gray-600">Page {currentPage} of {numPages}</span>
+
           <button
             onClick={handleNextPage}
             disabled={currentPage >= numPages}
@@ -138,20 +149,14 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({ file, className = '' }) =>
             Next
           </button>
         </div>
-        
-        <div className="text-sm text-gray-500">
-          {file.name}
-        </div>
+
+        <div className="text-sm text-gray-500">{file.name}</div>
       </div>
 
       {/* PDF Canvas */}
       <div className="overflow-auto max-h-[600px] bg-gray-100 p-4">
         <div className="flex justify-center">
-          <canvas
-            ref={canvasRef}
-            className="shadow-lg border border-gray-300"
-            style={{ maxWidth: '100%', height: 'auto' }}
-          />
+          <canvas ref={canvasRef} className="shadow-lg border border-gray-300" style={{ maxWidth: "100%", height: "auto" }} />
         </div>
       </div>
 
@@ -162,18 +167,12 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({ file, className = '' }) =>
             <button
               key={pageNum}
               onClick={() => handlePageChange(pageNum)}
-              className={`px-2 py-1 text-sm rounded ${
-                currentPage === pageNum
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-              }`}
+              className={`px-2 py-1 text-sm rounded ${currentPage === pageNum ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-700 hover:bg-gray-300"}`}
             >
               {pageNum}
             </button>
           ))}
-          {numPages > 10 && (
-            <span className="text-sm text-gray-500">...{numPages}</span>
-          )}
+          {numPages > 10 && <span className="text-sm text-gray-500">...{numPages}</span>}
         </div>
       )}
     </div>
