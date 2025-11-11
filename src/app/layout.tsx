@@ -1,38 +1,26 @@
+// app/layout.tsx
 import type { Metadata } from "next";
 import { Toaster } from "react-hot-toast";
-import {
-  ClerkProvider,
-} from "@clerk/nextjs";
 import "./globals.css";
-
+import ClerkProviderClient from "@/components/ClerkProviderClient"; // update path if needed
 
 export const metadata: Metadata = {
   title: "Statement Extractor - Bank Statement to CSV/Excel Converter",
   description: "Convert bank statements to CSV/Excel with AI-powered OCR and transaction extraction",
 };
 
-const clerkPublishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY; // Or process.env.REACT_APP_CLERK_PUBLISHABLE_KEY
-
-console.log(clerkPublishableKey,"clerkPublishableKey")
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <ClerkProvider publishableKey="pk_test_b3JpZW50ZWQteWFrLTkzLmNsZXJrLmFjY291bnRzLmRldiQ">
-      <html lang="en">
-        <head>
-          <link rel="preconnect" href="https://fonts.googleapis.com" />
-          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-          <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Clash+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
-        </head>
-        <body
-          className="antialiased"
-        >
+    <html lang="en">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Clash+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
+      </head>
+      <body className="antialiased">
+        <ClerkProviderClient>
           {children}
-          
-          <Toaster 
+          <Toaster
             position="top-right"
             toastOptions={{
               className: 'bg-[hsl(var(--card))] text-[hsl(var(--card-foreground))] border border-[hsl(var(--border))]',
@@ -43,8 +31,8 @@ export default function RootLayout({
               }
             }}
           />
-        </body>
-      </html>
-    </ClerkProvider>
+        </ClerkProviderClient>
+      </body>
+    </html>
   );
 }
