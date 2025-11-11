@@ -1,0 +1,23 @@
+steps:
+- name: 'gcr.io/cloud-builders/npm'
+  entrypoint: 'bash'
+  args:
+    - '-c'
+    - |
+      set -e
+      # inject the publishable key into env for the build step
+      export NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY="${_CLERK_PUBLISHABLE_KEY}"
+      npm ci --unsafe-perm --no-audit --no-fund
+      npm run build
+
+# optional: build container and push
+- name: 'gcr.io/cloud-builders/docker'
+  args:
+    - 'build'
+    - '-t'
+    - 'gcr.io/$PROJECT_ID/statementextract:$SHORT_SHA'
+    - '.'
+images:
+- 'gcr.io/$PROJECT_ID/statementextract:$SHORT_SHA'
+substitutions:
+  _CLERK_PUBLISHABLE_KEY: 'REPLACE_AT_TRIGGER'
