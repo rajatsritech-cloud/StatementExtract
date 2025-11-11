@@ -18,13 +18,18 @@ class PDFProcessorTester {
       console.log(`✅ PDF.js version: ${pdfjsLib.version}`);
       console.log(`✅ Worker URL: ${pdfjsLib.GlobalWorkerOptions.workerSrc}`);
       
-      // Test if worker URL is accessible
-      const response = await fetch(pdfjsLib.GlobalWorkerOptions.workerSrc, { method: 'HEAD' });
-      if (response.ok) {
-        console.log('✅ Worker URL is accessible');
-        this.results.workerTest = true;
+      // Test if worker URL is accessible when available
+      const workerSrc = pdfjsLib.GlobalWorkerOptions?.workerSrc;
+      if (typeof workerSrc === 'string' && workerSrc.length > 0) {
+        const response = await fetch(workerSrc, { method: 'HEAD' });
+        if (response.ok) {
+          console.log('✅ Worker URL is accessible');
+          this.results.workerTest = true;
+        } else {
+          console.log(`❌ Worker URL returned ${response.status}`);
+        }
       } else {
-        console.log(`❌ Worker URL returned ${response.status}`);
+        console.log('⚠️ Worker URL not configured yet; skipping accessibility check');
       }
       
     } catch (error) {

@@ -27,11 +27,10 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({ file, className = "" }) =>
         setError("");
 
         // dynamic import ensures pdfjs-dist runs only in browser
-        pdfjsLib = await import("pdfjs-dist/legacy/build/pdf");
+        pdfjsLib = await import("pdfjs-dist/legacy/build/pdf.mjs");
         // configure worker AFTER importing
         if (typeof window !== "undefined" && pdfjsLib?.GlobalWorkerOptions) {
-          pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/legacy/build/pdf.worker.min.js`;
-          // note: use .js worker URL for unpkg CDN; .mjs sometimes causes CORS issues
+          pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsLib.version}/legacy/build/pdf.worker.min.mjs`;
         }
 
         const arrayBuffer = await file.arrayBuffer();
@@ -67,7 +66,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({ file, className = "" }) =>
   const renderPage = async (pdf: any, pageNumber: number, pdfjsLibParam?: any) => {
     if (!canvasRef.current) return;
     try {
-      const pdfjs = pdfjsLibParam ?? (await import("pdfjs-dist/legacy/build/pdf"));
+      const pdfjs = pdfjsLibParam ?? (await import("pdfjs-dist/legacy/build/pdf.mjs"));
       const page = await pdf.getPage(pageNumber);
       const canvas = canvasRef.current;
       const context = canvas.getContext("2d");
