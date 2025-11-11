@@ -16,6 +16,8 @@ steps:
     - 'build'
     - '-t'
     - 'gcr.io/$PROJECT_ID/statementextract:$SHORT_SHA'
+    - '--build-arg'
+    - 'NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=${_CLERK_PUBLISHABLE_KEY}'
     - '.'
 images:
 - 'gcr.io/$PROJECT_ID/statementextract:$SHORT_SHA'

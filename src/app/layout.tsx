@@ -20,7 +20,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider publishableKey="pk_live_Y2xlcmsucmFqYXQtc3JpLXRlY2gud29ya2Vycy5kZXYk">
+    <ClerkProvider publishableKey="pk_test_b3JpZW50ZWQteWFrLTkzLmNsZXJrLmFjY291bnRzLmRldiQ">
       <html lang="en">
         <head>
           <link rel="preconnect" href="https://fonts.googleapis.com" />
