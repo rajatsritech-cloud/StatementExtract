@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
 import ClerkProviderClient from "@/components/ClerkProviderClient"; // update path if needed
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "Statement Extractor - Bank Statement to CSV/Excel Converter",
@@ -19,7 +21,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="antialiased">
         <ClerkProviderClient>
-          {children}
+          <div className="flex min-h-screen flex-col bg-[hsl(var(--background))]">
+            <Header />
+            <main className="flex-1">
+              {children}
+            </main>
+            <Footer />
+          </div>
           <Toaster
             position="top-right"
             toastOptions={{

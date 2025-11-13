@@ -1,7 +1,21 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { FileText, Menu, ChevronDown, Building, FileText as FileIcon, Shield, Truck, Heart, Settings, CreditCard, IdCard, FileCheck, Zap } from "lucide-react";
+import {
+  FileText,
+  Menu,
+  ChevronDown,
+  Building,
+  FileText as FileIcon,
+  Shield,
+  Truck,
+  Heart,
+  Settings,
+  CreditCard,
+  IdCard,
+  FileCheck,
+  Zap,
+} from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -205,13 +219,13 @@ export const Header = () => {
               </div>
             )}
           </div>
-          <a href="#use-cases" className="text-sm font-medium text-[hsl(var(--foreground))] hover:text-[hsl(var(--primary))] transition-colors">
+          <a href="#use-cases" className="text-sm font-medium text-[hsl(var(--foreground))] transition-colors hover:text-[hsl(var(--primary))]">
             Use Cases
           </a>
-          <a href="#docs" className="text-sm font-medium text-[hsl(var(--foreground))] hover:text-[hsl(var(--primary))] transition-colors">
-            Documentation
-          </a>
-          <a href="#pricing" className="text-sm font-medium text-[hsl(var(--foreground))] hover:text-[hsl(var(--primary))] transition-colors">
+          <Link href="/blogs" className="text-sm font-medium text-[hsl(var(--foreground))] transition-colors hover:text-[hsl(var(--primary))]">
+            Blogs
+          </Link>
+          <a href="#pricing" className="text-sm font-medium text-[hsl(var(--foreground))] transition-colors hover:text-[hsl(var(--primary))]">
             Pricing
           </a>
         </nav>

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { Header } from "@/components/Header";
 import { UploadArea } from "@/components/bank-statement/UploadArea";
 import { ProcessingModal } from "@/components/bank-statement/ProcessingModal";
 import { ResultsModal } from "@/components/bank-statement/ResultsModal";
@@ -180,8 +179,6 @@ export const BankStatementConverter = () => {
 
   return (
     <div className="min-h-screen bg-[hsl(var(--background))]">
-      <Header />
-      
       <main className="relative overflow-hidden">
         {/* Floating SVG Background */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
