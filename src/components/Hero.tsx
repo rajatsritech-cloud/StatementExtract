@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, FileText, Zap } from "lucide-react";
 
@@ -41,14 +42,18 @@ export const Hero = () => {
           </p>
           
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row animate-fade-in">
-            <Button size="lg" className="group gap-2 shadow-glow">
-              Get Started Free
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Button>
-            <Button size="lg" variant="outline" className="gap-2">
-              <FileText className="h-4 w-4" />
-              View Documentation
-            </Button>
+            <Link href="/convert-bank-statement-to-csv-excel" passHref>
+              <Button size="lg" className="group gap-2 shadow-glow">
+                Get Started Free
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Button>
+            </Link>
+            <Link href="/convert-bank-statement-to-csv-excel" passHref>
+              <Button size="lg" variant="outline" className="gap-2">
+                <FileText className="h-4 w-4" />
+                View Documentation
+              </Button>
+            </Link>
           </div>
           
           <p className="mt-6 text-sm text-[hsl(var(--muted-foreground))] animate-fade-in">
