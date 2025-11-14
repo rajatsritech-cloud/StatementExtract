@@ -8,7 +8,7 @@ export const DocumentDemo = () => {
       <div className="absolute inset-0 bg-grid-pattern-1 bg-size-24" />
       
       <div className="relative mx-auto max-w-7xl z-10">
-        <div className="text-center mb-16">
+        <div className="text-center mb-16 animate-fade-in">
           <h2 className="text-4xl font-bold text-[hsl(var(--foreground))] md:text-5xl mb-4">
             See it in action
           </h2>
@@ -19,7 +19,7 @@ export const DocumentDemo = () => {
 
         <div className="grid gap-8 md:grid-cols-2 items-center">
           {/* Before - Document */}
-          <Card className="p-8 bg-[hsl(var(--card))] border-[hsl(var(--border))] relative overflow-hidden group hover:border-[hsl(var(--primary))]/50 transition-all">
+          <Card className="p-8 bg-[hsl(var(--card))] border-[hsl(var(--border))] relative overflow-hidden group hover:border-[hsl(var(--primary))]/50 transition-all animate-slide-up">
             <div className="absolute top-3 left-3 bg-[hsl(var(--muted))] px-3 py-1 rounded-full text-xs font-medium text-[hsl(var(--muted-foreground))]">
               Input Document
             </div>
@@ -40,12 +40,12 @@ export const DocumentDemo = () => {
             </div>
           </Card>
 
-          <div className="flex justify-center md:justify-start">
+          <div className="flex justify-center md:justify-start animate-fade-in">
             <ArrowRight className="h-12 w-12 text-[hsl(var(--primary))] animate-pulse" />
           </div>
         </div>
 
-        <div className="mt-8">
+        <div className="mt-8 animate-slide-up">
           {/* After - Structured Data */}
           <Card className="p-8 bg-gradient-card border-[hsl(var(--primary))]/50 relative overflow-hidden">
             <div className="absolute top-3 left-3 bg-[hsl(var(--primary))]/20 border border-[hsl(var(--primary))]/30 px-3 py-1 rounded-full text-xs font-medium text-[hsl(var(--primary))] flex items-center gap-1">

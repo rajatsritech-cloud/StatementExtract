@@ -70,7 +70,7 @@ export default async function BlogPostPage({ params }: PageParams) {
   return (
     <main className="min-h-screen bg-[hsl(var(--background))]">
       <section className="border-b border-[hsl(var(--border))] bg-[hsl(var(--card))]">
-        <div className="mx-auto flex max-w-4xl flex-col items-center gap-4 px-6 py-16 text-center">
+        <div className="mx-auto flex max-w-4xl flex-col items-center gap-4 px-6 py-16 text-center animate-fade-in">
           <nav className="text-sm text-[hsl(var(--muted-foreground))]">
             <Link href="/blogs" className="hover:text-slate-700">
               Blogs
@@ -95,7 +95,7 @@ export default async function BlogPostPage({ params }: PageParams) {
       </section>
 
       {summary && (
-        <section className="mx-auto max-w-3xl px-6 py-10 text-center">
+        <section className="mx-auto max-w-3xl px-6 py-10 text-center animate-fade-in">
           <p className="text-base text-[hsl(var(--muted-foreground))] md:text-lg">
             {summary}
           </p>
@@ -103,7 +103,7 @@ export default async function BlogPostPage({ params }: PageParams) {
       )}
 
       {coverImage && (
-        <div className="mx-auto max-w-3xl px-6">
+        <div className="mx-auto max-w-3xl px-6 animate-fade-in">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={coverImage}
@@ -113,7 +113,7 @@ export default async function BlogPostPage({ params }: PageParams) {
         </div>
       )}
 
-      <div className="mx-auto max-w-3xl px-6 py-16">
+      <div className="mx-auto max-w-3xl px-6 py-16 animate-slide-up">
         <article className="space-y-6 rounded-3xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-10 shadow-sm">
           <ReactMarkdown components={markdownComponents}>{content}</ReactMarkdown>
         </article>

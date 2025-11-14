@@ -33,6 +33,7 @@ export const Header = () => {
   const router = useRouter();
   const [isSolutionsHovered, setIsSolutionsHovered] = useState(false);
   const [isDropdownHovered, setIsDropdownHovered] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { user } = useUser();
   const isAdmin = isAdminEmail(
     user?.primaryEmailAddress?.emailAddress ?? undefined
@@ -49,12 +50,18 @@ export const Header = () => {
 
   return (
     <header className="sticky top-0 z-50 border-b border-[hsl(var(--border))] bg-[hsl(var(--background))]/80 backdrop-blur-lg">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-        <Link href="/" className="flex items-center gap-2" aria-label="Statement Extract home">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-primary">
-            <FileText className="h-5 w-5 text-white" />
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
+        <Link
+          href="/"
+          className="flex items-center gap-2 md:gap-3"
+          aria-label="Statement Extract home"
+        >
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-primary md:h-10 md:w-10">
+            <FileText className="h-4 w-4 text-white md:h-5 md:w-5" />
           </div>
-          <span className="text-xl font-bold text-[hsl(var(--foreground))]">Statement <span className="bg-gradient-primary bg-clip-text text-transparent">Extract</span></span>
+          <span className="text-lg font-bold text-[hsl(var(--foreground))] md:text-xl">
+            Statement <span className="bg-gradient-primary bg-clip-text text-transparent">Extract</span>
+          </span>
         </Link>
         
         <nav className="hidden items-center gap-8 md:flex">
@@ -236,7 +243,7 @@ export const Header = () => {
           </a>
         </nav>
         
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 md:gap-4">
           <SignedOut>
             <SignInButton mode="modal">
               <Button variant="ghost" className="hidden md:inline-flex">
@@ -258,17 +265,80 @@ export const Header = () => {
               <UserButton afterSignOutUrl="/" />
             </div>
           </SignedIn>
-          <Button 
-            className="shadow-md"
+          <Button
+            className="hidden shadow-md md:inline-flex"
             onClick={() => router.push('/convert-bank-statement-to-csv-excel')}
           >
             Get Started
           </Button>
-          <Button variant="ghost" size="icon" className="md:hidden">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="md:hidden"
+            aria-label="Toggle navigation menu"
+            onClick={() => setIsMobileMenuOpen((open) => !open)}
+          >
             <Menu className="h-5 w-5" />
           </Button>
         </div>
       </div>
+      {isMobileMenuOpen && (
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 pb-4 md:hidden border-t border-[hsl(var(--border))] bg-[hsl(var(--background))]">
+          <nav className="pt-3">
+            <div className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] shadow-lg overflow-hidden divide-y divide-[hsl(var(--border))]/70">
+              <button
+                className="flex w-full items-center justify-between px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))]"
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  router.push('/convert-bank-statement-to-csv-excel');
+                }}
+              >
+                <span className="flex items-center gap-3">
+                  <FileText className="h-4 w-4 text-[hsl(var(--primary))]" />
+                  <span>Solutions</span>
+                </span>
+                <span className="text-xs text-[hsl(var(--muted-foreground))]">Bank Statements</span>
+              </button>
+
+              <a
+                href="#use-cases"
+                className="flex w-full items-center justify-between px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))]"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                <span className="flex items-center gap-3">
+                  <Zap className="h-4 w-4 text-[hsl(var(--primary))]" />
+                  <span>Use Cases</span>
+                </span>
+                <span className="text-xs text-[hsl(var(--muted-foreground))]">How teams use us</span>
+              </a>
+
+              <Link
+                href="/blogs"
+                className="flex w-full items-center justify-between px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))]"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                <span className="flex items-center gap-3">
+                  <FileIcon className="h-4 w-4 text-[hsl(var(--primary))]" />
+                  <span>Blogs</span>
+                </span>
+                <span className="text-xs text-[hsl(var(--muted-foreground))]">Guides & updates</span>
+              </Link>
+
+              <a
+                href="#pricing"
+                className="flex w-full items-center justify-between px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))]"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                <span className="flex items-center gap-3">
+                  <CreditCard className="h-4 w-4 text-[hsl(var(--primary))]" />
+                  <span>Pricing</span>
+                </span>
+                <span className="text-xs text-[hsl(var(--muted-foreground))]">Simple plans</span>
+              </a>
+            </div>
+          </nav>
+        </div>
+      )}
     </header>
   );
 };

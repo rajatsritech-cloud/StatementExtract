@@ -51,10 +51,12 @@ export const AdminEditor = ({
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    if (!slugTouched) {
+    // For new posts (no initialSlug), keep slug in sync with title until user edits slug manually.
+    // For existing posts (initialSlug present), do NOT auto-overwrite slug, so edits update the same file.
+    if (!slugTouched && !initialSlug) {
       setSlug(slugify(title));
     }
-  }, [title, slugTouched]);
+  }, [title, slugTouched, initialSlug]);
 
   const frontmatter = useMemo(
     () => ({
