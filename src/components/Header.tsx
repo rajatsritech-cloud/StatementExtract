@@ -24,13 +24,19 @@ import {
   SignedIn,
   SignedOut,
   UserButton,
+  useUser,
 } from "@clerk/nextjs";
+import { isAdminEmail } from "@/lib/auth";
 import { useState } from "react";
 
 export const Header = () => {
   const router = useRouter();
   const [isSolutionsHovered, setIsSolutionsHovered] = useState(false);
   const [isDropdownHovered, setIsDropdownHovered] = useState(false);
+  const { user } = useUser();
+  const isAdmin = isAdminEmail(
+    user?.primaryEmailAddress?.emailAddress ?? undefined
+  );
 
   const handleMouseEnter = () => setIsSolutionsHovered(true);
   const handleMouseLeave = () => {
@@ -239,7 +245,16 @@ export const Header = () => {
             </SignInButton>
           </SignedOut>
           <SignedIn>
-            <div suppressHydrationWarning>
+            <div suppressHydrationWarning className="flex items-center gap-2">
+              {isAdmin && (
+                <Link
+                  href="/admin"
+                  className="mr-1 inline-flex h-9 w-9 items-center justify-center rounded-full border border-[hsl(var(--border))] bg-[hsl(var(--background))] text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] hover:border-[hsl(var(--primary))] transition-colors"
+                  aria-label="Admin settings"
+                >
+                  <Settings className="h-4 w-4" />
+                </Link>
+              )}
               <UserButton afterSignOutUrl="/" />
             </div>
           </SignedIn>

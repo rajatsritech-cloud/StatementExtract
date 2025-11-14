@@ -10,7 +10,7 @@ export const Footer = () => {
               <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-primary">
                 <FileText className="h-5 w-5 text-white" />
               </div>
-              <span className="text-xl font-bold text-[hsl(var(--foreground))]">Sensible</span>
+              <span className="text-xl font-bold text-[hsl(var(--foreground))]">Statement Extract</span>
             </div>
             <p className="text-sm text-[hsl(var(--muted-foreground))]">
               AI-powered document extraction for modern teams.
