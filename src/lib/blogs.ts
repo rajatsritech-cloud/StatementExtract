@@ -114,7 +114,21 @@ export async function getAllPosts(): Promise<BlogPostMeta[]> {
       .filter((item) => item.type === "file" && item.name.endsWith(".mdx"))
       .map((item) => item.name);
   } catch (error) {
-    console.error("Failed to list blog posts from GitHub", error);
+    console.error(
+      "Failed to list blog posts from GitHub",
+      JSON.stringify(
+        {
+          owner: GH_OWNER,
+          repo: GH_REPO,
+          branch: GH_BRANCH,
+          message: error instanceof Error ? error.message : String(error),
+          status: (error as any)?.status,
+          response: (error as any)?.response?.data,
+        },
+        null,
+        2,
+      ),
+    );
     return [];
   }
 
@@ -186,7 +200,22 @@ async function readPostFile(slug: string) {
     if (error.status === 404) {
       return null;
     }
-    console.error(`Failed to fetch blog post ${slug} from GitHub`, error);
+    console.error(
+      `Failed to fetch blog post ${slug} from GitHub`,
+      JSON.stringify(
+        {
+          owner: GH_OWNER,
+          repo: GH_REPO,
+          branch: GH_BRANCH,
+          slug,
+          message: error instanceof Error ? error.message : String(error),
+          status: error?.status,
+          response: error?.response?.data,
+        },
+        null,
+        2,
+      ),
+    );
     return null;
   }
 }
