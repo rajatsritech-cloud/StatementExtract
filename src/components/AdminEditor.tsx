@@ -23,16 +23,28 @@ const slugify = (value: string) =>
 
 export interface AdminEditorProps {
   initialContent?: string;
+  initialTitle?: string;
+  initialSlug?: string;
+  initialSummary?: string;
+  initialCoverImage?: string;
+  initialTags?: string[];
 }
 
-export const AdminEditor = ({ initialContent = '' }: AdminEditorProps) => {
+export const AdminEditor = ({
+  initialContent = '',
+  initialTitle = '',
+  initialSlug = '',
+  initialSummary = '',
+  initialCoverImage = '',
+  initialTags = [],
+}: AdminEditorProps) => {
   const { getToken } = useAuth();
-  const [title, setTitle] = useState('');
-  const [slug, setSlug] = useState('');
+  const [title, setTitle] = useState(initialTitle);
+  const [slug, setSlug] = useState(initialSlug);
   const [slugTouched, setSlugTouched] = useState(false);
-  const [summary, setSummary] = useState('');
-  const [coverImage, setCoverImage] = useState('');
-  const [tags, setTags] = useState('');
+  const [summary, setSummary] = useState(initialSummary);
+  const [coverImage, setCoverImage] = useState(initialCoverImage);
+  const [tags, setTags] = useState(initialTags.join(', '));
   const [body, setBody] = useState(initialContent);
   const [commitMessage, setCommitMessage] = useState('');
   const [createPR, setCreatePR] = useState(false);
