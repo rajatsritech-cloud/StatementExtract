@@ -1,0 +1,54 @@
+---
+title: "Leveraging GPT-4 for PDF Data Extraction: A Comprehensive Guide"
+summary: "PDF extraction is the process of extracting text, images, or other data from a PDF file. In this article, we explore the current methods of PDF data extraction, their limitations, and how GPT-4 can be used to perform question-answering tasks for PDF extraction. We also provide a step-by-step guide for implementing GPT-4 for PDF data extraction."
+coverImage: "https://i2.pickpik.com/photos/17/139/622/book-book-page-old-german-font-preview.jpg"
+date: "2025-11-14"
+tags: "GPT"
+---
+
+What is PDF extraction?
+PDF data extraction is the process of extracting text, images, or other data from a PDF (Portable Document Format) file. These files are widely used for sharing and storing documents, but their content is not always easily accessible.
+
+Why is PDF extraction important?
+Accessibility and readability of PDF files are very necessary for those who have vision issues or have trouble reading small or blurred text, useful for legal situations, data analysis, and research. Some instances where extraction is required include using text or image content from PDF files in other documents to save time and avoid mistakes.
+
+What are the current methods for PDF data extraction and their limitations ?
+It’s 2023, and there are a lot of PDF Extraction techniques and tools available on the internet. Let’s dive deeper into the 3 popular techniques of data extraction and some examples for the same : 
+
+1 : OCR Technique 
+OCR or abbreviation for `Optical Character Recognition` can be used to extract text from a variety of sources, including scanned documents, images, and PDF files, and is commonly used to digitize printed documents such as books, newspapers, and historical documents.
+
+Some of the popular OCR tools includes:
+
+PyTesseract Module [ Github ] 
+EasyOCR Module [ Github ] 
+PaddlePaddle OCR [ Github ] 
+2 : Templates 
+Template-based techniques take into consideration the style of the document PDF and use hard-coded rules. These techniques generally work on structured documents, whose structure remains constant and are easy to understand.
+
+Some of the popular template-based techniques include: 
+
+Using regex pattern
+
+Ex: date can be extracted by the following regex rule:
+
+[dd-mm-yyyy or yyyy-mm-dd] - [0-9]{2,4}/[0-9]{2}/[0-9]{2,4} 
+
+Hard-Coding rules based on the position of texts and dimensions of the documents
+
+3 : Machine Learning Techniques
+Machine Learning (ML) techniques are considered one of the best methods for PDF extraction because it allows for highly accurate text recognition and extraction from PDF files regardless of the file structure. These models can store information of both the `layout` and the `position of the text` keeping in mind the neighboring text too. This helps them to generalize better and learn document structure more efficiently.
+
+What are LLMs
+Large Language Models are a subset of artificial intelligence that has been trained on vast quantities of text data. Large language models (LLMs) are a subset of artificial intelligence that has been trained on vast quantities of text data. For example : ChatGPT which is trained on the whole internet data and information to produce human-like responses to dialogue or other natural language inputs.
+
+In order to produce these natural language responses, LLMs make use of deep learning models, which use multi-layered neural networks to process, analyze, and make predictions with complex data.
+
+Some popular ML models include:
+
+Layout LM v1, v2 and v3 models [ Github ] 
+DocBERT [ Github ] 
+Limitations of ML models
+One major issue that this type of model faces is that they can just extract out the information from the PDF without knowing whether the extraction is actually accurate and correct. The extracted texts might also include some other keys information in another key. Having a intelligent context helps the model to mitigate those inaccuracies.
+
+To solve this problem and integrate intelligence into the system of PDF extraction we can leverage the power of GPT-4.
