@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useAuth } from '@clerk/nextjs';
 import dynamic from 'next/dynamic';
 import { toast } from 'react-hot-toast';
 import { Button } from '@/components/ui/button';
@@ -25,6 +26,7 @@ export interface AdminEditorProps {
 }
 
 export const AdminEditor = ({ initialContent = '' }: AdminEditorProps) => {
+  const { getToken } = useAuth();
   const [title, setTitle] = useState('');
   const [slug, setSlug] = useState('');
   const [slugTouched, setSlugTouched] = useState(false);
@@ -77,11 +79,13 @@ export const AdminEditor = ({ initialContent = '' }: AdminEditorProps) => {
           commitMessage: commitMessage || `Add blog ${title}`,
           createPR: withPR,
         };
+        const token = await getToken();
 
         const res = await fetch('/api/admin/save', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
           },
           body: JSON.stringify(payload),
         });

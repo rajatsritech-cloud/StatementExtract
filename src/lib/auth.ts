@@ -1,6 +1,6 @@
-import { auth, currentUser } from "@clerk/nextjs/server";
+import { createClerkClient, verifyToken } from "@clerk/backend";
 
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL?.toLowerCase();
+const ADMIN_EMAIL = (process.env.ADMIN_EMAIL ?? process.env.NEXT_PUBLIC_ADMIN_EMAIL)?.toLowerCase();
 
 export const isAdminEmail = (email?: string | null) => {
   if (!email || !ADMIN_EMAIL) {
@@ -15,24 +15,60 @@ export interface AdminUser {
   isAdmin: boolean;
 }
 
-export async function getUserFromRequest(): Promise<AdminUser | null> {
-  const { userId } = await auth();
-  if (!userId) {
+let clerkClient: ReturnType<typeof createClerkClient> | null = null;
+
+const getClerkClient = () => {
+  if (!clerkClient) {
+    const secretKey = process.env.CLERK_SECRET_KEY;
+    if (!secretKey) {
+      throw new Error("CLERK_SECRET_KEY is not configured");
+    }
+
+    clerkClient = createClerkClient({
+      secretKey,
+      publishableKey: process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
+    });
+  }
+
+  return clerkClient;
+};
+
+export async function verifyAdminFromToken(token?: string | null): Promise<AdminUser | null> {
+  if (!token) {
     return null;
   }
 
-  const user = await currentUser();
-  const email = user?.emailAddresses?.[0]?.emailAddress;
+  try {
+    const secretKey = process.env.CLERK_SECRET_KEY;
+    if (!secretKey) {
+      throw new Error("CLERK_SECRET_KEY is not configured");
+    }
 
-  if (!email) {
+    const payload = await verifyToken(token, {
+      secretKey,
+    });
+
+    const userId = (payload.sub as string | undefined) ?? undefined;
+    if (!userId) return null;
+
+    let email = (payload.email as string | undefined) ?? undefined;
+
+    if (!email) {
+      const user = await getClerkClient().users.getUser(userId);
+      email = user?.primaryEmailAddress?.emailAddress ?? undefined;
+    }
+
+    if (!email) return null;
+
+    const isAdmin = isAdminEmail(email);
+
+    return {
+      id: userId,
+      email,
+      isAdmin,
+    };
+  } catch (error) {
+    console.error("Failed to verify Clerk token", error);
     return null;
   }
-
-  const isAdmin = isAdminEmail(email);
-
-  return {
-    id: userId,
-    email,
-    isAdmin,
-  };
 }

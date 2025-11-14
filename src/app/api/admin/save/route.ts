@@ -2,7 +2,7 @@ import { promises as fs } from "fs";
 import path from "path";
 import { NextResponse } from "next/server";
 import { Octokit } from "@octokit/rest";
-import { getUserFromRequest } from "@/lib/auth";
+import { verifyAdminFromToken } from "@/lib/auth";
 
 const GITHUB_OWNER = process.env.GH_OWNER;
 const GITHUB_REPO = process.env.GH_REPO;
@@ -12,7 +12,9 @@ const MOCK_GITHUB = process.env.MOCK_GITHUB === "true";
 const POSTS_DIR = path.join(process.cwd(), "content", "posts");
 
 export async function POST(req: Request) {
-  const user = await getUserFromRequest();
+  const authHeader = req.headers.get("authorization");
+  const token = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null;
+  const user = await verifyAdminFromToken(token);
   if (!user || !user.isAdmin) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }

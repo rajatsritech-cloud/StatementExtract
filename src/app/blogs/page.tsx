@@ -2,8 +2,6 @@ import Link from "next/link";
 import { Metadata } from "next";
 import { getAllPosts } from "@/lib/blogs";
 
-export const dynamic = "force-dynamic";
-
 export const metadata: Metadata = {
   title: "Statement Extract Blog | Product Updates, Guides & Insights",
   description: "Read the latest product news, implementation guides, and industry insights from the Statement Extract team.",
