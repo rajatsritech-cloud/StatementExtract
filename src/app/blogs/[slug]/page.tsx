@@ -4,6 +4,8 @@ import ReactMarkdown from "react-markdown";
 import { getAllPostSlugs, getPostBySlug } from "@/lib/blogs";
 import Link from "next/link";
 
+export const revalidate = 300;
+
 interface PageParams {
   params: Promise<{
     slug: string;

@@ -7,6 +7,8 @@ export const metadata: Metadata = {
   description: "Read the latest product news, implementation guides, and industry insights from the Statement Extract team.",
 };
 
+export const revalidate = 300;
+
 export default async function BlogsPage() {
   const posts = await getAllPosts();
 
