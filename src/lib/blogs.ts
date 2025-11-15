@@ -18,14 +18,9 @@ const GH_REPO = process.env.GH_REPO;
 const GH_BRANCH = process.env.GH_BRANCH || "main";
 const POSTS_DIR = "content/posts";
 
-let octokit: Octokit | null = null;
-
-const getOctokit = () => {
-  if (!octokit) {
-    const auth = process.env.GH_TOKEN;
-    octokit = new Octokit(auth ? { auth } : {});
-  }
-  return octokit;
+const createOctokit = () => {
+  const auth = process.env.GH_TOKEN;
+  return new Octokit(auth ? { auth } : {});
 };
 
 const decodeBase64 = (input: string) => {
@@ -98,7 +93,7 @@ export async function getAllPosts(): Promise<BlogPostMeta[]> {
 
   let files: string[] = [];
   try {
-    const client = getOctokit();
+    const client = createOctokit();
     const { data } = await client.repos.getContent({
       owner: GH_OWNER!,
       repo: GH_REPO!,
@@ -179,7 +174,7 @@ async function readPostFile(slug: string) {
   }
 
   try {
-    const client = getOctokit();
+    const client = createOctokit();
     const { data } = await client.repos.getContent({
       owner: GH_OWNER!,
       repo: GH_REPO!,
