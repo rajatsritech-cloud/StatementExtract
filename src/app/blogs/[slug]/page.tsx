@@ -28,10 +28,29 @@ export async function generateMetadata({ params }: PageParams): Promise<Metadata
     openGraph: {
       title: post.title,
       description: post.summary || undefined,
-      images: post.coverImage ? [post.coverImage] : undefined,
+      type: "article",
+      siteName: "Statement Extractor",
+      url: `/blogs/${slug}`,
+      publishedTime: post.date || undefined,
+      tags: post.tags && post.tags.length > 0 ? post.tags : undefined,
+      images: post.coverImage
+        ? [post.coverImage]
+        : ["/assets/StatementExtract_Workflow_img.png"],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.summary || undefined,
+      images: post.coverImage
+        ? [post.coverImage]
+        : ["/assets/StatementExtract_Workflow_img.png"],
+    },
+    alternates: {
+      canonical: `/blogs/${slug}`,
     },
   };
 }
+
 const slugifyHeading = (value: string) =>
   value
     .toLowerCase()

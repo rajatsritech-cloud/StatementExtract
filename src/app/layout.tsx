@@ -1,5 +1,6 @@
 // app/layout.tsx
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
 import ClerkProviderClient from "@/components/ClerkProviderClient"; // update path if needed
@@ -7,8 +8,33 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "Statement Extractor - Bank Statement to CSV/Excel Converter",
-  description: "Convert bank statements to CSV/Excel with advanced OCR and AI-powered transaction extraction",
+  title: {
+    default: "Statement Extractor - Bank Statement to CSV/Excel Converter",
+    template: "%s | Statement Extractor",
+  },
+  description:
+    "Convert bank statements to CSV/Excel with advanced OCR and AI-powered transaction extraction",
+  openGraph: {
+    title: "Statement Extractor - Bank Statement to CSV/Excel Converter",
+    description:
+      "Convert bank statements to CSV/Excel with advanced OCR and AI-powered transaction extraction",
+    type: "website",
+    siteName: "Statement Extractor",
+    images: ["/assets/StatementExtract_Workflow_img.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Statement Extractor - Bank Statement to CSV/Excel Converter",
+    description:
+      "Convert bank statements to CSV/Excel with advanced OCR and AI-powered transaction extraction",
+    images: ["/assets/StatementExtract_Workflow_img.png"],
+  },
+  icons: {
+    icon: "/favicon.ico",
+  },
+  alternates: {
+    canonical: "/",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -23,6 +49,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="antialiased">
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-KXNG847173"
+          strategy="afterInteractive"
+        />
+        <Script id="gtag-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-KXNG847173');
+          `}
+        </Script>
         <ClerkProviderClient>
           <div className="flex min-h-screen flex-col bg-[hsl(var(--background))]">
             <Header />
