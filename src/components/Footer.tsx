@@ -13,7 +13,7 @@ export const Footer = () => {
               <span className="text-xl font-bold text-[hsl(var(--foreground))]">Statement Extract</span>
             </div>
             <p className="text-sm text-[hsl(var(--muted-foreground))]">
-              AI-powered document extraction for modern teams.
+              OCR + AI-powered document extraction for modern teams.
             </p>
             <div className="mt-4 flex gap-3">
               <a href="#" className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors">

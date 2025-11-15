@@ -11,8 +11,8 @@ export const HowItWorks = () => {
     },
     {
       icon: Cpu,
-      title: "AI Processing",
-      description: "Our advanced AI automatically identifies fields, extracts data, and validates information with high accuracy.",
+      title: "OCR + AI Processing",
+      description: "Our intelligent OCR and AI pipeline automatically identifies fields, extracts data, and validates information with high accuracy.",
       step: "02"
     },
     {

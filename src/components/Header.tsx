@@ -12,8 +12,6 @@ import {
   Heart,
   Settings,
   CreditCard,
-  IdCard,
-  FileCheck,
   Zap,
 } from "lucide-react";
 import Link from "next/link";
@@ -49,20 +47,21 @@ export const Header = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 border-b border-[hsl(var(--border))] bg-[hsl(var(--background))]/80 backdrop-blur-lg">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
-        <Link
-          href="/"
-          className="flex items-center gap-2 md:gap-3"
-          aria-label="Statement Extract home"
-        >
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-primary md:h-10 md:w-10">
-            <FileText className="h-4 w-4 text-white md:h-5 md:w-5" />
-          </div>
-          <span className="text-lg font-bold text-[hsl(var(--foreground))] md:text-xl">
-            Statement <span className="bg-gradient-primary bg-clip-text text-transparent">Extract</span>
-          </span>
-        </Link>
+    <header className="sticky top-0 z-50">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 pt-3 pb-0">
+        <div className="flex h-[4.5rem] items-center justify-between rounded-2xl border border-[hsl(var(--primary))]/30 bg-[hsl(var(--background))]/95 px-3 sm:px-5">
+          <Link
+            href="/"
+            className="flex items-center gap-2 md:gap-3"
+            aria-label="Statement Extract home"
+          >
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-primary md:h-10 md:w-10">
+              <FileText className="h-4 w-4 text-white md:h-5 md:w-5" />
+            </div>
+            <span className="text-lg font-bold text-[hsl(var(--foreground))] md:text-xl">
+              Statement <span className="bg-gradient-primary bg-clip-text text-transparent">Extract</span>
+            </span>
+          </Link>
         
         <nav className="hidden items-center gap-8 md:flex">
           <div 
@@ -282,10 +281,11 @@ export const Header = () => {
           </Button>
         </div>
       </div>
+      </div>
       {isMobileMenuOpen && (
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 pb-4 md:hidden border-t border-[hsl(var(--border))] bg-[hsl(var(--background))]">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 pb-4 md:hidden">
           <nav className="pt-3">
-            <div className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] shadow-lg overflow-hidden divide-y divide-[hsl(var(--border))]/70">
+            <div className="rounded-2xl border border-[hsl(var(--primary))]/30 bg-[hsl(var(--card))]/95 overflow-hidden divide-y divide-[hsl(var(--border))]/70">
               <button
                 className="flex w-full items-center justify-between px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))]"
                 onClick={() => {

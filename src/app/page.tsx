@@ -6,6 +6,7 @@ import { Features } from "@/components/Features";
 import { HowItWorks } from "@/components/HowItWorks";
 import { UseCases } from "@/components/UseCases";
 import { Integrations } from "@/components/Integrations";
+import { FAQ } from "@/components/FAQ";
 import { CTA } from "@/components/CTA";
 
 export default function Home() {
@@ -17,6 +18,7 @@ export default function Home() {
       <HowItWorks />
       <UseCases />
       <Integrations />
+      <FAQ />
       <CTA />
     </>
   );

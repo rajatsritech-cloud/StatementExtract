@@ -3,7 +3,7 @@ import { BankStatementConverter } from "@/components/BankStatementConverter";
 
 export const metadata: Metadata = {
   title: "Bank Statement Converter - Convert PDF Bank Statements to CSV/Excel | Automated Extraction",
-  description: "Automatically convert any PDF bank statement into clean Excel or CSV files—trusted accuracy for 1000s of global banks. Fast, secure, 99.9% accurate conversion.",
+  description: "Automatically convert any PDF bank statement into clean Excel or CSV files with OCR + AI—trusted accuracy for 1000s of global banks. Fast, secure, 99.9% accurate conversion.",
   keywords: [
     "Bank Statement Converter",
     "Convert PDF Bank Statements to CSV/Excel",
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: "Bank Statement Converter - Convert PDF to CSV/Excel",
-    description: "World's most trusted bank statement converter. Works with 1000s of banks globally. Fast, secure, 99.9% accurate.",
+    description: "World's most trusted OCR + AI bank statement converter. Works with 1000s of banks globally. Fast, secure, 99.9% accurate.",
     type: "website",
     url: "/convert-bank-statement-to-csv-excel"
   },
@@ -34,7 +34,7 @@ export default function BankStatementConverterPage() {
             "@context": "https://schema.org",
             "@type": "SoftwareApplication",
             "name": "Bank Statement Converter",
-            "description": "Automatically convert any PDF bank statement into clean Excel or CSV files",
+            "description": "Automatically convert any PDF bank statement into clean Excel or CSV files with OCR + AI",
             "url": "/convert-bank-statement-to-csv-excel",
             "applicationCategory": "BusinessApplication",
             "operatingSystem": "Web Browser",

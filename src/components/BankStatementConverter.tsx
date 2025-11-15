@@ -202,8 +202,8 @@ export const BankStatementConverter = () => {
             </h1>
             
             <p className="mx-auto mb-10 max-w-3xl text-xl text-[hsl(var(--muted-foreground))] animate-fade-in">
-              World's most trusted conversion, works with 1000s of banks globally. 
-              Fast, secure, and 99.9% accurate extraction.
+              World's most trusted OCR + AI bank statement converter, working with thousands of banks globally.
+              Automatically extract transactions, balances, and references into clean Excel or CSV files with 99.9% accuracy.
             </p>
 
             {/* Feature Badges */}

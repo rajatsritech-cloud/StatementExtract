@@ -1,83 +1,126 @@
-import { Card } from "@/components/ui/card";
-import { CheckCircle, ArrowRight } from "lucide-react";
+import Image from "next/image";
 
 export const DocumentDemo = () => {
   return (
     <section className="relative overflow-hidden bg-[hsl(var(--muted))]/30 py-20 px-6 md:py-32 border-y border-[hsl(var(--border))]">
       {/* Background grid pattern */}
       <div className="absolute inset-0 bg-grid-pattern-1 bg-size-24" />
-      
+      {/* Glowing stars overlay */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute top-6 left-[8%] h-1.5 w-1.5 rounded-full bg-[hsl(var(--primary))] blur-[1px] animate-twinkle" />
+        <div className="absolute top-16 right-[10%] h-1.5 w-1.5 rounded-full bg-white/70 blur-[2px] animate-twinkle" />
+        <div className="absolute top-1/3 left-[20%] h-1.5 w-1.5 rounded-full bg-[hsl(var(--accent))] blur-[1px] animate-twinkle" />
+        <div className="absolute top-1/2 right-[22%] h-1.5 w-1.5 rounded-full bg-white/60 blur-[2px] animate-twinkle" />
+        <div className="absolute bottom-20 left-[12%] h-1.5 w-1.5 rounded-full bg-[hsl(var(--primary))] blur-[1px] animate-twinkle" />
+        <div className="absolute bottom-10 right-[8%] h-1.5 w-1.5 rounded-full bg-white/70 blur-[2px] animate-twinkle" />
+        <div className="absolute top-10 left-1/2 h-1.5 w-1.5 rounded-full bg-white/60 blur-[2px] animate-twinkle" />
+        <div className="absolute bottom-5 left-1/3 h-1.5 w-1.5 rounded-full bg-[hsl(var(--accent))] blur-[1px] animate-twinkle" />
+      </div>
+
       <div className="relative mx-auto max-w-7xl z-10">
         <div className="text-center mb-16 animate-fade-in">
           <h2 className="text-4xl font-bold text-[hsl(var(--foreground))] md:text-5xl mb-4">
             See it in action
           </h2>
           <p className="text-lg text-[hsl(var(--muted-foreground))] max-w-2xl mx-auto">
-            Watch how our AI transforms unstructured documents into clean, structured data
+            Watch how our OCR and AI pipeline transforms unstructured documents into clean, structured data
           </p>
         </div>
 
-        <div className="grid gap-8 md:grid-cols-2 items-center">
-          {/* Before - Document */}
-          <Card className="p-8 bg-[hsl(var(--card))] border-[hsl(var(--border))] relative overflow-hidden group hover:border-[hsl(var(--primary))]/50 transition-all animate-slide-up">
-            <div className="absolute top-3 left-3 bg-[hsl(var(--muted))] px-3 py-1 rounded-full text-xs font-medium text-[hsl(var(--muted-foreground))]">
-              Input Document
+        <div className="grid gap-10 md:grid-cols-2 items-center">
+          {/* Left: workflow image card */}
+          <div className="flex justify-center md:justify-start animate-slide-up">
+            <div className="w-full max-w-xl rounded-3xl bg-[hsl(var(--background))]/80 border-2 border-[hsl(var(--primary))]/60 shadow-glow">
+              <figure className="relative w-full rounded-2xl overflow-hidden border border-[hsl(var(--muted))] bg-[hsl(var(--background))]/90">
+                <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-[hsl(var(--primary))]/25" />
+                <Image
+                  src="/assets/StatementExtract_Workflow_img.png"
+                  alt="StatementExtract workflow showing how OCR and AI transform documents into structured data"
+                  width={1200}
+                  height={675}
+                  className="block h-auto w-full animate-float-x"
+                />
+              </figure>
             </div>
-            <div className="mt-8 space-y-4">
-              <div className="h-3 bg-[hsl(var(--muted))] rounded w-3/4"></div>
-              <div className="h-3 bg-[hsl(var(--muted))] rounded w-full"></div>
-              <div className="h-3 bg-[hsl(var(--muted))] rounded w-5/6"></div>
-              <div className="h-20 bg-[hsl(var(--secondary))] rounded mt-6 mb-4"></div>
-              <div className="h-3 bg-[hsl(var(--muted))] rounded w-2/3"></div>
-              <div className="h-3 bg-[hsl(var(--muted))] rounded w-full"></div>
-              <div className="h-3 bg-[hsl(var(--muted))] rounded w-4/5"></div>
-              <div className="grid grid-cols-2 gap-4 mt-6">
-                <div className="h-12 bg-[hsl(var(--muted))] rounded"></div>
-                <div className="h-12 bg-[hsl(var(--muted))] rounded"></div>
-              </div>
-              <div className="h-3 bg-[hsl(var(--muted))] rounded w-full mt-6"></div>
-              <div className="h-3 bg-[hsl(var(--muted))] rounded w-3/4"></div>
-            </div>
-          </Card>
-
-          <div className="flex justify-center md:justify-start animate-fade-in">
-            <ArrowRight className="h-12 w-12 text-[hsl(var(--primary))] animate-pulse" />
           </div>
-        </div>
 
-        <div className="mt-8 animate-slide-up">
-          {/* After - Structured Data */}
-          <Card className="p-8 bg-gradient-card border-[hsl(var(--primary))]/50 relative overflow-hidden">
-            <div className="absolute top-3 left-3 bg-[hsl(var(--primary))]/20 border border-[hsl(var(--primary))]/30 px-3 py-1 rounded-full text-xs font-medium text-[hsl(var(--primary))] flex items-center gap-1">
-              <CheckCircle className="h-3 w-3" />
-              Extracted Data
-            </div>
-            <div className="mt-8 font-mono text-sm">
-              <div className="bg-[hsl(var(--secondary))]/50 rounded p-4 overflow-x-auto">
-                <pre className="text-[hsl(var(--foreground))]">
-{`{
-  "invoice_number": "INV-2024-001",
-  "date": "2024-11-09",
-  "vendor": {
-    "name": "Acme Corporation",
-    "address": "123 Business St, Suite 100"
-  },
-  "items": [
-    {
-      "description": "Professional Services",
-      "quantity": 1,
-      "unit_price": 5000.00,
-      "total": 5000.00
-    }
-  ],
-  "subtotal": 5000.00,
-  "tax": 450.00,
-  "total": 5450.00
-}`}
-                </pre>
+          {/* Right: 3-step workflow text */}
+          <div className="relative mt-8 md:mt-0 animate-fade-in">
+            <div className="space-y-6 pl-0 md:pl-10">
+              <div>
+                <p className="text-xs font-semibold tracking-wide text-[hsl(var(--primary))] uppercase">
+                  Workflow
+                </p>
+                <p className="mt-2 text-xs md:text-sm text-[hsl(var(--muted-foreground))]">
+                  From upload to structured outputs in three clear steps. OCR and AI work together to follow the same
+                  flow you see in the diagram.
+                </p>
+              </div>
+
+              {/* Step 1 */}
+              <div className="relative flex gap-3">
+                <div className="flex flex-col items-center pt-1">
+                  <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[hsl(var(--primary))]/20 text-[hsl(var(--primary))] text-xs font-semibold shadow-sm">
+                    1
+                  </div>
+                </div>
+                <div className="relative flex-1">
+                  <div className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-r from-[hsl(var(--primary))]/25 via-[hsl(var(--accent))]/20 to-transparent opacity-90" />
+                  <div className="relative rounded-2xl border border-white/5 bg-black/10 px-4 py-3 backdrop-blur-sm">
+                    <h3 className="text-sm font-semibold text-[hsl(var(--foreground))]">
+                      Upload and detect documents
+                    </h3>
+                    <p className="mt-1 text-xs md:text-sm text-[hsl(var(--muted-foreground))]">
+                      Send invoices, contracts, healthcare records, or bank statements via dashboard or API. We detect
+                      the document type and route it into the right OCR + AI pipeline.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Step 2 */}
+              <div className="relative flex gap-3">
+                <div className="flex flex-col items-center pt-1">
+                  <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[hsl(var(--accent))]/25 text-[hsl(var(--accent))] text-xs font-semibold shadow-sm">
+                    2
+                  </div>
+                </div>
+                <div className="relative flex-1">
+                  <div className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-r from-[hsl(var(--accent))]/25 via-[hsl(var(--primary))]/20 to-transparent opacity-90" />
+                  <div className="relative rounded-2xl border border-white/5 bg-black/10 px-4 py-3 backdrop-blur-sm">
+                    <h3 className="text-sm font-semibold text-[hsl(var(--foreground))]">
+                      OCR + AI extraction
+                    </h3>
+                    <p className="mt-1 text-xs md:text-sm text-[hsl(var(--muted-foreground))]">
+                      Our OCR and AI combination follows the visual layout, reads line items and clauses, and extracts
+                      key fields like totals, dates, counterparties, and account details.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Step 3 */}
+              <div className="relative flex gap-3">
+                <div className="flex flex-col items-center pt-1">
+                  <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[hsl(var(--primary))]/25 text-[hsl(var(--primary))] text-xs font-semibold shadow-sm">
+                    3
+                  </div>
+                </div>
+                <div className="relative flex-1">
+                  <div className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-r from-[hsl(var(--primary))]/25 via-[hsl(var(--accent))]/20 to-transparent opacity-90" />
+                  <div className="relative rounded-2xl border border-white/5 bg-black/10 px-4 py-3 backdrop-blur-sm">
+                    <h3 className="text-sm font-semibold text-[hsl(var(--foreground))]">
+                      Structured data delivered
+                    </h3>
+                    <p className="mt-1 text-xs md:text-sm text-[hsl(var(--muted-foreground))]">
+                      Receive clean, structured data as CSV, Excel, or via API and webhooks so you can power analytics,
+                      reconciliation, or downstream automations.
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
-          </Card>
+          </div>
         </div>
       </div>
     </section>

@@ -22,9 +22,9 @@ const useCases = [
   },
   {
     icon: Building2,
-    title: "Real Estate Forms",
-    description: "Process property documents, lease agreements, and inspection reports with ease.",
-    metrics: "50+ doc types",
+    title: "Bank Statements",
+    description: "Use OCR + AI to extract transactions, balances, IBANs, and account details from bank statements in any format.",
+    metrics: "99.9% accuracy",
   },
 ];
 

@@ -43,16 +43,20 @@ export default async function BlogsPage() {
               className="group block h-full overflow-hidden rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-lg"
             >
               <article className="flex h-full flex-col justify-between">
-                {post.coverImage && (
-                  <div className="mb-4 overflow-hidden rounded-xl border border-[hsl(var(--border))]">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                <div className="mb-4 h-56 overflow-hidden rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))]">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  {post.coverImage ? (
                     <img
                       src={post.coverImage}
                       alt={post.title}
-                      className="w-full h-auto object-contain transition-transform duration-200 group-hover:scale-[1.02]"
+                      className="h-full w-full object-cover transition-transform duration-200 group-hover:scale-[1.02]"
                     />
-                  </div>
-                )}
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center text-xs text-[hsl(var(--muted-foreground))]">
+                      No cover image
+                    </div>
+                  )}
+                </div>
                 <div className="px-5 pb-5 pt-4">
                   {post.tags.length > 0 && (
                     <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-[hsl(var(--primary))]/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-[hsl(var(--primary))]">

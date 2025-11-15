@@ -8,7 +8,7 @@ import { Footer } from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "Statement Extractor - Bank Statement to CSV/Excel Converter",
-  description: "Convert bank statements to CSV/Excel with AI-powered OCR and transaction extraction",
+  description: "Convert bank statements to CSV/Excel with advanced OCR and AI-powered transaction extraction",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

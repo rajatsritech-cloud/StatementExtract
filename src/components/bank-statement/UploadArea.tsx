@@ -305,7 +305,7 @@ export const UploadArea = ({ onFileUpload, isProcessing }: UploadAreaProps) => {
           </div>
           <h4 className="font-semibold text-[hsl(var(--foreground))] mb-2">Smart OCR</h4>
           <p className="text-sm text-[hsl(var(--muted-foreground))]">
-            Advanced optical character recognition accurately reads all text from your statements
+            OCR + AI built for bank statements: capture account holder details, IBANs, balances, and every transaction line from PDFs or images.
           </p>
         </div>
 
@@ -315,7 +315,7 @@ export const UploadArea = ({ onFileUpload, isProcessing }: UploadAreaProps) => {
           </div>
           <h4 className="font-semibold text-[hsl(var(--foreground))] mb-2">Instant Processing</h4>
           <p className="text-sm text-[hsl(var(--muted-foreground))]">
-            Get your extracted data in seconds, not minutes. All processing happens in your browser.
+            Process statements in seconds and instantly export structured data to Excel or CSV, or send it directly into your tools via API.
           </p>
         </div>
 
@@ -325,7 +325,7 @@ export const UploadArea = ({ onFileUpload, isProcessing }: UploadAreaProps) => {
           </div>
           <h4 className="font-semibold text-[hsl(var(--foreground))] mb-2">Universal Format</h4>
           <p className="text-sm text-[hsl(var(--muted-foreground))]">
-            Works with bank statements from 1000s of banks worldwide, regardless of format or layout
+            Works with statements from thousands of banks worldwide, in any layout or language, whether PDF or scanned image.
           </p>
         </div>
       </div>
