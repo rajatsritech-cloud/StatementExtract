@@ -80,6 +80,13 @@
   line-height: 1.4;
 }
 
+/* subtle divider under headings, similar to @uiw preview */
+:global(.blog-article h2),
+:global(.blog-article h3) {
+  border-bottom: 1px solid hsl(var(--border));
+  padding-bottom: 0.35rem;
+}
+
 :global(.blog-article p),
 :global(.blog-article li) {
   font-size: 17px;

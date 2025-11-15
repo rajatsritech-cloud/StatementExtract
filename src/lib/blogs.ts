@@ -141,7 +141,7 @@ export async function getAllPosts(): Promise<BlogPostMeta[]> {
       }
       const { frontmatter } = parseFrontmatter(raw);
       return mapToMeta(slug, frontmatter);
-    })
+    }),
   );
 
   return posts

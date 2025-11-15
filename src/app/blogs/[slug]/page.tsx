@@ -200,12 +200,12 @@ export default async function BlogPostPage({ params }: PageParams) {
         <div className="mx-auto max-w-6xl px-6 py-12 lg:py-16 lg:grid lg:grid-cols-[minmax(0,260px)_minmax(0,1fr)] lg:gap-10 animate-slide-up">
           <aside className="mb-10 self-start lg:mb-0 lg:sticky lg:top-28">
             <div className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-5 shadow-sm">
-              <h2 className="text-xs font-semibold tracking-wide text-[hsl(var(--muted-foreground))]">
+              <h2 className="text-xs font-semibold tracking-wide text-[hsl(var(--muted-foreground))] uppercase text-left">
                 TABLE OF CONTENTS
               </h2>
               <nav
                 aria-label="Table of contents"
-                className="mt-4 max-h-[60vh] overflow-y-auto pr-1 text-sm"
+                className="mt-4 pr-1 text-left text-sm"
               >
                 {headings.length === 0 && (
                   <p className="text-xs text-[hsl(var(--muted-foreground))]">
@@ -215,21 +215,29 @@ export default async function BlogPostPage({ params }: PageParams) {
                 {headings.length > 0 && (
                   <ul className="space-y-2">
                     {headings.map((heading) => (
-                      <li
-                        key={heading.id}
-                        className={
-                          heading.level === 1
-                            ? "font-medium"
-                            : heading.level === 2
-                            ? "ml-3"
-                            : "ml-5"
-                        }
-                      >
+                      <li key={heading.id} className="group">
                         <a
                           href={`#${heading.id}`}
-                          className="inline-flex text-[hsl(var(--muted-foreground))] transition-colors hover:text-[hsl(var(--primary))]"
+                          className="flex items-start gap-2 text-[hsl(var(--muted-foreground))] transition-colors hover:text-[hsl(var(--primary))]"
                         >
-                          {heading.text}
+                          <span className="inline-flex mt-2 h-1.5 w-1.5 rounded-full bg-[hsl(var(--primary))]/60 group-hover:bg-[hsl(var(--primary))]" />
+                          <span className="flex-1 text-xs md:text-sm leading-snug">
+                            {heading.text}
+                          </span>
+                          <svg
+                            aria-hidden="true"
+                            className="hidden h-3 w-3 text-[hsl(var(--muted-foreground))] group-hover:text-[hsl(var(--primary))] sm:block"
+                            viewBox="0 0 16 16"
+                            fill="none"
+                          >
+                            <path
+                              d="M5 3.5L10 8L5 12.5"
+                              stroke="currentColor"
+                              strokeWidth="1.4"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
                         </a>
                       </li>
                     ))}
