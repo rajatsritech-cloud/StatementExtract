@@ -7,14 +7,14 @@ export const metadata: Metadata = {
   description: "Read the latest product news, implementation guides, and industry insights from the Statement Extract team.",
 };
 
-export const revalidate = 300;
+export const revalidate = 21600;
 
 export default async function BlogsPage() {
   const posts = await getAllPosts();
 
   return (
     <main className="min-h-screen bg-[hsl(var(--background))]">
-      <section className="relative overflow-hidden border-b border-[hsl(var(--border))] bg-[hsl(var(--muted))]/30">
+      <section className="border-b border-[hsl(var(--border))]">
         <div className="mx-auto flex max-w-5xl flex-col gap-6 px-6 py-20 text-center animate-fade-in">
           <span className="mx-auto inline-flex items-center gap-2 rounded-full border border-[hsl(var(--primary))]/40 bg-[hsl(var(--muted))]/60 px-4 py-2 text-sm font-medium text-[hsl(var(--primary))]">
             Blog & Insights
@@ -28,8 +28,37 @@ export default async function BlogsPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-6 py-12">
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 animate-slide-up">
+      <section className="relative mx-auto max-w-6xl px-6 py-12">
+        <div className="pointer-events-none absolute inset-0 z-0 overflow-visible">
+          <div className="absolute top-[-8rem] left-[-28rem] h-[42rem] w-[42rem] opacity-30">
+            <svg
+              width="100%"
+              height="100%"
+              viewBox="0 0 500 500"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fill="#22C55E"
+                d="M492.5 130.5C538.5 220 376 348 274.5 492.5C173 637 54.5 455 -1.5 304.5C-57.5 154 36.5 41 199 15.5C361.5 -10 446.5 41 492.5 130.5Z"
+              />
+            </svg>
+          </div>
+          <div className="absolute bottom-[-8rem] right-[-28rem] h-[40rem] w-[40rem] opacity-30">
+            <svg
+              width="100%"
+              height="100%"
+              viewBox="0 0 500 500"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fill="#22C55E"
+                d="M375 64.5C406 142 429.5 240 374 330.5C318.5 421 184.5 504.5 90 427.5C-4.5 350.5 -19.5 192.5 40 102.5C99.5 12.5 311 16.5 375 64.5Z"
+              />
+            </svg>
+          </div>
+        </div>
+
+        <div className="relative z-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3 animate-slide-up">
           {posts.length === 0 && (
             <p className="col-span-full text-center text-sm text-[hsl(var(--muted-foreground))]">
               No blog posts found. Create one from the admin dashboard to get started.

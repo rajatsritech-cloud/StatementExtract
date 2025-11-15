@@ -5,6 +5,35 @@ export const DocumentDemo = () => {
     <section className="relative overflow-hidden bg-[hsl(var(--muted))]/30 py-20 px-6 md:py-32 border-y border-[hsl(var(--border))]">
       {/* Background grid pattern */}
       <div className="absolute inset-0 bg-grid-pattern-1 bg-size-24" />
+      {/* Large floating blob accents */}
+      <div className="pointer-events-none absolute inset-0 z-0 overflow-visible">
+        <div className="absolute top-[-8rem] left-[-26rem] h-[40rem] w-[40rem] opacity-30">
+          <svg
+            width="100%"
+            height="100%"
+            viewBox="0 0 500 500"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill="#22C55E"
+              d="M492.5 130.5C538.5 220 376 348 274.5 492.5C173 637 54.5 455 -1.5 304.5C-57.5 154 36.5 41 199 15.5C361.5 -10 446.5 41 492.5 130.5Z"
+            />
+          </svg>
+        </div>
+        <div className="absolute bottom-[-8rem] right-[-24rem] h-[36rem] w-[36rem] opacity-25">
+          <svg
+            width="100%"
+            height="100%"
+            viewBox="0 0 500 500"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill="#22C55E"
+              d="M375 64.5C406 142 429.5 240 374 330.5C318.5 421 184.5 504.5 90 427.5C-4.5 350.5 -19.5 192.5 40 102.5C99.5 12.5 311 16.5 375 64.5Z"
+            />
+          </svg>
+        </div>
+      </div>
       {/* Glowing stars overlay */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute top-6 left-[8%] h-1.5 w-1.5 rounded-full bg-[hsl(var(--primary))] blur-[1px] animate-twinkle" />
