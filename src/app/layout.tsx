@@ -8,6 +8,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://statementextract.com"),
   title: {
     default: "Statement Extractor - Bank Statement to CSV/Excel Converter",
     template: "%s | Statement Extractor",
