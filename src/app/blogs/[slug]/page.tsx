@@ -149,16 +149,16 @@ function extractUrlFromChild(onlyChild: any): string | undefined {
   if (React.isValidElement(onlyChild)) {
     const element =
       onlyChild as React.ReactElement<{ href?: string; children?: React.ReactNode }>;
-    const props = element.props || {};
+    const { href, children: elementChildren } = element.props ?? {};
     if (
-      typeof props.href === "string" &&
-      (props.href.startsWith("http://") || props.href.startsWith("https://"))
+      typeof href === "string" &&
+      (href.startsWith("http://") || href.startsWith("https://"))
     ) {
-      return props.href.trim();
+      return href.trim();
     }
 
     // children might be string or nested array — try to find a string URL inside
-    const childArray = React.Children.toArray(props.children || []);
+    const childArray = React.Children.toArray(elementChildren ?? []);
     for (const c of childArray) {
       if (typeof c === "string") {
         const t = c.trim();
@@ -237,8 +237,12 @@ const markdownComponents = {
     const textContent = childArray
       .map((child: any) => {
         if (typeof child === "string") return child;
-        if (React.isValidElement(child) && typeof child.props?.children === "string") {
-          return child.props.children;
+        if (React.isValidElement(child)) {
+          const element = child as React.ReactElement<{ children?: React.ReactNode }>;
+          const { children: elementChildren } = element.props ?? {};
+          if (typeof elementChildren === "string") {
+            return elementChildren;
+          }
         }
         return "";
       })
