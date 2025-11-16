@@ -9,6 +9,7 @@ import { getAllPostSlugs, getPostBySlug } from "@/lib/blogs";
 import Link from "next/link";
 import LazyTweet from "@/components/LazyTweet";
 import { BlogNewsletterSignup } from "@/components/BlogNewsletterSignup";
+import { BlogInlineCTA } from "@/components/BlogInlineCTA";
 import "./page.module.css";
 
 export const revalidate = 21600;
@@ -232,6 +233,20 @@ const markdownComponents = {
   p: ({ children, ...props }: any) => {
     const childArray = React.Children.toArray(children);
 
+    // Flatten simple text children to detect inline CTA phrase
+    const textContent = childArray
+      .map((child: any) => {
+        if (typeof child === "string") return child;
+        if (React.isValidElement(child) && typeof child.props?.children === "string") {
+          return child.props.children;
+        }
+        return "";
+      })
+      .join(" ")
+      .trim();
+
+    const hasInlineCTA = textContent.includes("Try StatementExtract for Free Today");
+
     if (childArray.length === 1) {
       const onlyChild: any = childArray[0];
 
@@ -272,7 +287,7 @@ const markdownComponents = {
       }
     }
 
-    return (
+    const paragraph = (
       <p
         className="mt-4 leading-7 text-[hsl(152deg_12.04%_17.8%)]"
         {...props}
@@ -280,6 +295,19 @@ const markdownComponents = {
         {children}
       </p>
     );
+
+    if (hasInlineCTA) {
+      return (
+        <>
+          {paragraph}
+          <div className="mt-6">
+            <BlogInlineCTA />
+          </div>
+        </>
+      );
+    }
+
+    return paragraph;
   },
 
   ul: (props: any) => (
