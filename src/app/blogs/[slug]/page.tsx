@@ -316,6 +316,14 @@ const markdownComponents = {
       {...props}
     />
   ),
+  table: ({ className, ...props }: any) => (
+    <div className="mt-4 w-full overflow-x-auto">
+      <table
+        className={`min-w-full text-sm ${className ?? ""}`}
+        {...props}
+      />
+    </div>
+  ),
 };
 
 export default async function BlogPostPage({ params }: PageParams) {
