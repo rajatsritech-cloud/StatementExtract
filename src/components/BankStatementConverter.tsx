@@ -6,12 +6,9 @@ import { ProcessingModal } from "@/components/bank-statement/ProcessingModal";
 import { ResultsModal } from "@/components/bank-statement/ResultsModal";
 import { PDFViewer } from "@/components/PDFViewer";
 import { toast } from "react-hot-toast";
-import { PDFProcessor, ExtractedData } from "@/lib/pdfProcessor";
+import { ExtractedData } from "@/lib/pdfProcessor";
 import { ExportService } from "@/lib/exportService";
 import { useAuth } from "@clerk/nextjs";
-import "@/lib/simpleTest";
-import "@/lib/comprehensiveTester";
-import "@/lib/debugMode";
 
 export const BankStatementConverter = () => {
   const [isProcessing, setIsProcessing] = useState(false);
@@ -82,6 +79,7 @@ export const BankStatementConverter = () => {
       let extracted: ExtractedData;
       
       try {
+        const { PDFProcessor } = await import("@/lib/pdfProcessor");
         if (file.type === 'application/pdf') {
           console.log('📖 Processing PDF file...');
           extracted = await PDFProcessor.processPDF(file, isSignedIn);

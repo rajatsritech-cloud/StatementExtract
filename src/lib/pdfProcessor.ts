@@ -1,6 +1,8 @@
-import Tesseract from 'tesseract.js';
+"use client";
+
 import { debugExtractedText } from './textAnalyzer';
 import { extractUSBankTransactions, extractUSBankUserInfo } from './usBankPatterns';
+
 
 let pdfjsLibPromise: Promise<typeof import('pdfjs-dist/legacy/build/pdf.mjs')> | null = null;
 
@@ -67,6 +69,41 @@ export class PDFProcessor {
     /\b(chase|bank of america|wells fargo|citibank|capital one|us bank)\b/gi,
   ];
 
+  private static runOCR(image: Blob): Promise<string> {
+    return new Promise((resolve, reject) => {
+      // 1. Create the worker
+      const worker = new Worker(new URL('./ocr.worker.ts', import.meta.url), {
+        type: 'module',
+      });
+
+      // 2. Listen for messages from the worker
+      worker.onmessage = (event: MessageEvent) => {
+        const { status, progress, text, error } = event.data;
+        if (status === 'progress') {
+          // Log progress, but only for the first page to avoid spam
+          if (Math.floor(progress * 100) % 25 === 0) {
+            console.log(`🔍 OCR progress: ${Math.floor(progress * 100)}%`);
+          }
+        } else if (status === 'complete') {
+          worker.terminate();
+          resolve(text);
+        } else if (status === 'error') {
+          worker.terminate();
+          reject(new Error(error));
+        }
+      };
+
+      // 3. Handle errors
+      worker.onerror = (err) => {
+        worker.terminate();
+        reject(err);
+      };
+
+      // 4. Start the worker
+      worker.postMessage({ image });
+    });
+  }
+
   static async processPDF(file: File, isSignedIn: boolean = false): Promise<ExtractedData> {
     try {
       // Check if we're in a browser environment
@@ -79,16 +116,16 @@ export class PDFProcessor {
       console.log('📖 Starting PDF processing...');
       const arrayBuffer = await file.arrayBuffer();
       console.log('📁 File loaded into memory, size:', arrayBuffer.byteLength);
-      
+
       // Load PDF directly without complex fallback
       console.log('🔧 Loading PDF with pdf.js...');
       const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
       console.log('✅ PDF loaded successfully');
-      
+
       let fullText = '';
       const numPages = pdf.numPages;
       console.log(`📄 PDF has ${numPages} pages`);
-      
+
       // Extract text from all pages
       for (let pageNum = 1; pageNum <= numPages; pageNum++) {
         console.log(`📖 Processing page ${pageNum}/${numPages}...`);
@@ -107,7 +144,7 @@ export class PDFProcessor {
       if (fullText.trim().length < 100) {
         console.log('⚠️ Limited text found in PDF');
         console.log('🔐 Authentication status:', isSignedIn ? 'Signed In' : 'Not Signed In');
-        
+
         if (!isSignedIn) {
           console.log('❌ OCR requires authentication but user is not signed in');
           console.log('⚠️ Returning minimal data - modal should have prevented this');
@@ -136,22 +173,22 @@ export class PDFProcessor {
       // Extract information from the text
       console.log('🔍 Extracting data from text...');
       console.log('📄 Raw text preview:', fullText.substring(0, 1000) + '...');
-      
+
       // Debug the extracted text to understand the format
       const analysis = debugExtractedText(fullText);
       console.log('📊 Text analysis completed');
-      
+
       const extractedData = this.extractDataFromText(fullText);
-      
+
       console.log('✅ PDF processing completed successfully!');
       return extractedData;
-      
+
     } catch (error) {
       console.error('❌ PDF processing error:', error);
-      
+
       // Provide more specific error messages
       const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-      
+
       if (errorMessage.includes('worker')) {
         throw new Error('PDF.js worker failed to load. Please refresh the page and try again.');
       } else if (errorMessage.includes('Invalid PDF')) {
@@ -167,69 +204,55 @@ export class PDFProcessor {
   private static async performOCROnPDF(pdf: any): Promise<string> {
     let fullText = '';
     const numPages = pdf.numPages;
-    
+
     console.log(`🚀 Starting optimized Tesseract OCR on ${numPages} pages...`);
-    
+
     try {
+
       // Convert all PDF pages to images first
       const imageBlobs = [];
-      
+
       for (let pageNum = 1; pageNum <= numPages; pageNum++) {
         const page = await pdf.getPage(pageNum);
-        
+
         // Use optimized scale for balance of speed and accuracy
         const viewport = page.getViewport({ scale: 1.5 });
         const canvas = document.createElement('canvas');
         const context = canvas.getContext('2d');
         canvas.height = viewport.height;
         canvas.width = viewport.width;
-        
+
         console.log(`📄 Rendering page ${pageNum}/${numPages} for OCR...`);
-        
+
         await page.render({ canvasContext: context, viewport }).promise;
-        
+
         // Convert canvas to blob
         const blob = await new Promise<Blob>((resolve) => {
           canvas.toBlob((blob) => resolve(blob!), 'image/png');
         });
-        
+
         imageBlobs.push(blob);
       }
-      
+
       console.log(`🚀 Running optimized parallel OCR on ${imageBlobs.length} pages...`);
-      
-      // Process images in parallel with optimized Tesseract settings
-      const ocrPromises = imageBlobs.map((blob, index) => 
-        Tesseract.recognize(blob, 'eng', {
-          logger: (m) => {
-            if (m.status === 'recognizing text' && index === 0) {
-              // Only show progress for first page to avoid spam
-              if (Math.floor(m.progress * 100) % 25 === 0) {
-                console.log(`🔍 OCR progress: ${Math.floor(m.progress * 100)}%`);
-              }
-            }
-          }
-        }).then(result => result.data.text)
-      );
-      
+
+      const ocrPromises = imageBlobs.map((blob) => this.runOCR(blob));
+
       const startTime = Date.now();
       const ocrResults = await Promise.all(ocrPromises);
       const endTime = Date.now();
-      
+
       fullText = ocrResults.join('\n');
-      
       console.log(`✅ Optimized Tesseract OCR completed in ${endTime - startTime}ms`);
-      console.log(`📝 Extracted ${fullText.length} characters`);
-      
       return fullText;
-      
+
     } catch (error) {
       console.error('❌ OCR failed:', error);
       console.log('⚠️ Falling back to no OCR (PDF text extraction only)');
       return '';
     }
   }
-  
+
   private static async ocrPage(pdf: any, pageNum: number): Promise<string> {
     // This method is no longer needed with Scribe.js batch processing
     return '';
@@ -245,7 +268,7 @@ export class PDFProcessor {
       // Check authentication for image OCR
       console.log('🔐 Checking authentication for image OCR');
       console.log('🔐 Authentication status:', isSignedIn ? 'Signed In' : 'Not Signed In');
-      
+
       if (!isSignedIn) {
         console.log('❌ Image OCR requires authentication but user is not signed in');
         console.log('⚠️ Returning minimal data - modal should have prevented this');
@@ -268,25 +291,20 @@ export class PDFProcessor {
       }
 
       console.log('🚀 Using optimized Tesseract for image OCR...');
-      
-      // Use optimized Tesseract.js for OCR on images
+
       const startTime = Date.now();
-      const result = await Tesseract.recognize(file, 'eng', {
-        logger: (m) => {
-          if (m.status === 'recognizing text' && Math.floor(m.progress * 100) % 25 === 0) {
-            console.log(`🔍 Image OCR progress: ${Math.floor(m.progress * 100)}%`);
-          }
-        }
-      });
+
+      // ✅ Call the worker instead of Tesseract.recognize
+      const text = await this.runOCR(file);
+
       const endTime = Date.now();
-      
       console.log(`✅ Optimized image OCR completed in ${endTime - startTime}ms`);
-      console.log(`📝 Extracted ${result.data.text.length} characters`);
-      
-      const extractedData = this.extractDataFromText(result.data.text);
-      
+
+      const extractedData = this.extractDataFromText(text);
       return extractedData;
-      
+      // Use optimized Tesseract.js for OCR on images
+
+
     } catch (error) {
       console.error('❌ Image processing error:', error);
       throw new Error(`Failed to process image: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -295,20 +313,20 @@ export class PDFProcessor {
 
   private static extractDataFromText(text: string): ExtractedData {
     console.log('🔍 Extracting data from text...');
-    
+
     // First try US Bank specific extraction
     if (text.toLowerCase().includes('us bank') || text.toLowerCase().includes('u.s. bank')) {
       console.log('🏦 US Bank format detected, using specific patterns...');
-      
+
       const userInfo = extractUSBankUserInfo(text);
       const transactions = extractUSBankTransactions(text);
-      
+
       // Type assertion to ensure transactions match TransactionData interface
       const typedTransactions: TransactionData[] = transactions.map(t => ({
         ...t,
         type: t.type as 'credit' | 'debit'
       }));
-      
+
       // Calculate summary
       let runningBalance = 0;
       const summary = {
@@ -317,43 +335,43 @@ export class PDFProcessor {
         netBalance: 0,
         transactionCount: 0
       };
-      
+
       typedTransactions.forEach(transaction => {
         runningBalance += transaction.amount;
         transaction.balance = runningBalance;
-        
+
         if (transaction.amount > 0) {
           summary.totalCredits += transaction.amount;
         } else {
           summary.totalDebits += transaction.amount;
         }
       });
-      
+
       summary.netBalance = summary.totalCredits + summary.totalDebits;
       summary.transactionCount = typedTransactions.length;
-      
+
       console.log(`📊 US Bank extraction complete: ${typedTransactions.length} transactions, $${summary.netBalance.toFixed(2)} net balance`);
-      
+
       return {
         userInfo,
         transactions: typedTransactions,
         summary
       };
     }
-    
+
     // Fallback to generic extraction (original logic)
     console.log('🏛️ Using generic extraction patterns...');
     const lines = text.split('\n').filter(line => line.trim().length > 0);
-    
+
     // Extract user information
     const userInfo = this.extractUserInfo(text);
-    
+
     // Extract transactions
     const transactions = this.extractTransactions(lines);
-    
+
     // Calculate summary
     const summary = this.calculateSummary(transactions);
-    
+
     return {
       userInfo,
       transactions,
@@ -368,13 +386,13 @@ export class PDFProcessor {
       bankName: '',
       statementPeriod: ''
     };
-    
+
     // Generic patterns for other banks
     const namePatterns = [
       /(?:name|account holder|customer)[:\s]+([A-Za-z\s]+?)(?:\n|$)/i,
       /^([A-Za-z\s]+?)(?:\n\s*(?:account|statement|date))/i,
     ];
-    
+
     for (const pattern of namePatterns) {
       const match = text.match(pattern);
       if (match) {
@@ -387,7 +405,7 @@ export class PDFProcessor {
       /account\s*number[:\s]+(\*{4,}\d{4})/i,
       /account[:\s]+(\*{4,}\d{4})/i,
     ];
-    
+
     for (const pattern of accountPatterns) {
       const match = text.match(pattern);
       if (match) {
@@ -410,7 +428,7 @@ export class PDFProcessor {
       /(?:statement period|period)[:\s]+([A-Za-z]+\s\d{1,2}\s*[-–to]*\s*[A-Za-z]+\s\d{1,2},?\s\d{4})/i,
       /(\d{1,2}[/\-]\d{1,2}[/\-]\d{2,4})\s*[-–to]+\s*(\d{1,2}[/\-]\d{1,2}[/\-]\d{2,4})/i,
     ];
-    
+
     for (const pattern of periodPatterns) {
       const match = text.match(pattern);
       if (match) {
@@ -422,13 +440,13 @@ export class PDFProcessor {
         break;
       }
     }
-    
+
     return userInfo;
   }
 
   private static extractTransactions(lines: string[]): TransactionData[] {
     const transactions: TransactionData[] = [];
-    
+
     // Generic transaction patterns
     const transactionPatterns = [
       /^(\d{1,2}\/\d{1,2}\/\d{2,4})\s+(.+?)\s+(-?\$?\d{1,3}(?:,\d{3})*(?:\.\d{2})?)\s+(-?\$?\d{1,3}(?:,\d{3})*(?:\.\d{2})?)\s*(credit|debit)?$/i,
@@ -437,7 +455,7 @@ export class PDFProcessor {
 
     for (const line of lines) {
       if (line.length < 10) continue;
-      
+
       for (const pattern of transactionPatterns) {
         const match = line.match(pattern);
         if (match) {
@@ -447,17 +465,17 @@ export class PDFProcessor {
             let amountStr = match[3];
             let balanceStr = match[4] || '';
             let explicitType = match[5] || '';
-            
+
             let amount = parseFloat(amountStr.replace(/[$,]/g, ''));
             let balance = balanceStr ? parseFloat(balanceStr.replace(/[$,]/g, '')) : 0;
-            
+
             let type: 'credit' | 'debit';
             if (explicitType) {
               type = explicitType.toLowerCase() === 'credit' ? 'credit' : 'debit';
             } else {
               type = amount >= 0 ? 'credit' : 'debit';
             }
-            
+
             const transaction: TransactionData = {
               date: this.normalizeDate(date),
               description: description.trim(),
@@ -465,7 +483,7 @@ export class PDFProcessor {
               balance: balance,
               type: type
             };
-            
+
             transactions.push(transaction);
             break;
           } catch (error) {
@@ -474,7 +492,7 @@ export class PDFProcessor {
         }
       }
     }
-    
+
     return transactions;
   }
 
@@ -485,18 +503,18 @@ export class PDFProcessor {
       netBalance: 0,
       transactionCount: 0
     };
-    
+
     summary.totalCredits = transactions
       .filter(t => t.type === 'credit')
       .reduce((sum, t) => sum + t.amount, 0);
-    
+
     summary.totalDebits = transactions
       .filter(t => t.type === 'debit')
       .reduce((sum, t) => sum + Math.abs(t.amount), 0);
-    
+
     summary.netBalance = summary.totalCredits - summary.totalDebits;
     summary.transactionCount = transactions.length;
-    
+
     return summary;
   }
 
@@ -506,7 +524,7 @@ export class PDFProcessor {
       /(\d{1,2})\/(\d{1,2})\/(\d{2,4})/,
       /(\d{4})-(\d{2})-(\d{2})/,
     ];
-    
+
     for (const pattern of patterns) {
       const match = dateStr.match(pattern);
       if (match) {
@@ -515,7 +533,7 @@ export class PDFProcessor {
         return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
       }
     }
-    
+
     return dateStr;
   }
 }
