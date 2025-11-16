@@ -1,8 +1,13 @@
 import { Metadata } from "next";
+import Image from "next/image";
 import { notFound } from "next/navigation";
+import React from "react";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
 import { getAllPostSlugs, getPostBySlug } from "@/lib/blogs";
 import Link from "next/link";
+import LazyTweet from "@/components/LazyTweet";
 import "./page.module.css";
 
 export const revalidate = 21600;
@@ -64,6 +69,12 @@ type Heading = {
   level: number;
 };
 
+const YOUTUBE_REGEX =
+  /^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/;
+
+const TWITTER_REGEX =
+  /^(?:https?:\/\/)?(?:www\.)?(?:twitter\.com|x\.com)\/[^/]+\/status\/(\d+)/;
+
 const extractHeadings = (content: string): Heading[] => {
   const headingRegex = /^(#{1,3})\s+(.+)$/gm;
   const headings: Heading[] = [];
@@ -71,6 +82,12 @@ const extractHeadings = (content: string): Heading[] => {
 
   while ((match = headingRegex.exec(content)) !== null) {
     const level = match[1].length;
+
+    // Only include level-2 headings (##) in the table of contents
+    if (level !== 2) {
+      continue;
+    }
+
     const text = match[2].trim();
     const id = slugifyHeading(text);
     headings.push({ id, text, level });
@@ -79,7 +96,99 @@ const extractHeadings = (content: string): Heading[] => {
   return headings;
 };
 
+/**
+ * Preprocess markdown/html content to normalize embeds:
+ * - Convert Twitter blockquote+script => plain tweet URL on its own line
+ * - Convert Youtube <iframe src="/embed/ID"> => https://www.youtube.com/watch?v=ID
+ * - Convert youtu.be iframe srcs as well
+ */
+function preprocessContentForEmbeds(raw: string) {
+  let s = String(raw);
+
+  // ONLY grab the <a href="..."> that contains "/status/" to avoid t.co/internal links
+  s = s.replace(
+    /<blockquote[^>]*class=["']?[^"'>]*twitter-tweet[^"'>]*["']?[\s\S]*?<a[^>]*href=["']([^"']*\/status\/\d+[^"']*)["'][\s\S]*?<\/blockquote>\s*(?:<script[\s\S]*?<\/script>)?/gi,
+    "\n$1\n"
+  );
+
+  // youtube iframe => watch url
+  s = s.replace(
+    /<iframe[^>]*src=["'](?:https?:\/\/)?(?:www\.)?youtube\.com\/embed\/([A-Za-z0-9_-]{11})[^"']*["'][\s\S]*?<\/iframe>/gi,
+    (_m, id) => `https://www.youtube.com/watch?v=${id}`
+  );
+
+  s = s.replace(
+    /<iframe[^>]*src=["'](?:https?:\/\/)?youtu\.be\/([A-Za-z0-9_-]{11})[^"']*["'][\s\S]*?<\/iframe>/gi,
+    (_m, id) => `https://www.youtube.com/watch?v=${id}`
+  );
+
+  return s;
+}
+
+
+/**
+ * Helper to extract a URL string from a React child that may be:
+ * - a plain string
+ * - an <a href="...">...</a> element
+ * - a nested element containing a string child
+ */
+function extractUrlFromChild(onlyChild: any): string | undefined {
+  if (!onlyChild) return undefined;
+
+  // plain string
+  if (typeof onlyChild === "string") {
+    const text = onlyChild.trim();
+    // treat lone URLs only
+    if (text.startsWith("http://") || text.startsWith("https://")) return text;
+    return undefined;
+  }
+
+  // element with href prop (anchor)
+  if (React.isValidElement(onlyChild)) {
+    const element =
+      onlyChild as React.ReactElement<{ href?: string; children?: React.ReactNode }>;
+    const props = element.props || {};
+    if (
+      typeof props.href === "string" &&
+      (props.href.startsWith("http://") || props.href.startsWith("https://"))
+    ) {
+      return props.href.trim();
+    }
+
+    // children might be string or nested array — try to find a string URL inside
+    const childArray = React.Children.toArray(props.children || []);
+    for (const c of childArray) {
+      if (typeof c === "string") {
+        const t = c.trim();
+        if (t.startsWith("http://") || t.startsWith("https://")) return t;
+      } else if (React.isValidElement(c)) {
+        const childElement =
+          c as React.ReactElement<{ href?: string; children?: React.ReactNode }>;
+        const href = childElement.props.href;
+        if (
+          typeof href === "string" &&
+          (href.startsWith("http://") || href.startsWith("https://"))
+        ) {
+          return href.trim();
+        }
+      }
+    }
+  }
+
+  return undefined;
+}
+
 const markdownComponents = {
+  blockquote: ({ children, ...props }: any) => {
+    return (
+      <blockquote
+        className="my-4 rounded border-l-4 border-[hsl(var(--border))] bg-[hsl(var(--card))] px-4 py-3 text-sm"
+        {...props}
+      >
+        {children}
+      </blockquote>
+    );
+  },
   h1: ({ children, ...props }: any) => {
     const text = String(children);
     const id = slugifyHeading(text);
@@ -119,12 +228,59 @@ const markdownComponents = {
       </h3>
     );
   },
-  p: (props: any) => (
-    <p
-      className="mt-4 leading-7 text-[hsl(152deg_12.04%_17.8%)]"
-      {...props}
-    />
-  ),
+  p: ({ children, ...props }: any) => {
+    const childArray = React.Children.toArray(children);
+
+    if (childArray.length === 1) {
+      const onlyChild: any = childArray[0];
+
+      let url: string | undefined;
+
+      // improved extraction (handles <a href="...">, nested anchor or plain url string)
+      url = extractUrlFromChild(onlyChild);
+
+      if (url) {
+        const ytMatch = url.match(YOUTUBE_REGEX);
+        if (ytMatch) {
+          const videoId = ytMatch[1];
+          const embedUrl = `https://www.youtube.com/embed/${videoId}`;
+
+          return (
+            <div style={{ aspectRatio: "16/9", width: "100%", overflow: "hidden", borderRadius: 12 }}>
+              <iframe
+                src={embedUrl}
+                title="YouTube video"
+                loading="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+                style={{ width: "100%", height: "100%", border: 0, display: "block" }}
+              />
+            </div>
+          );
+        }
+
+        const twitterMatch = url.match(TWITTER_REGEX);
+        if (twitterMatch) {
+          const tweetId = twitterMatch[1];
+          return (
+            <div className="my-6 w-full" data-tweet-id={tweetId}>
+              <LazyTweet id={tweetId} />
+            </div>
+          );
+        }
+      }
+    }
+
+    return (
+      <p
+        className="mt-4 leading-7 text-[hsl(152deg_12.04%_17.8%)]"
+        {...props}
+      >
+        {children}
+      </p>
+    );
+  },
+
   ul: (props: any) => (
     <ul
       className="mt-4 list-disc space-y-2 pl-5 text-[hsl(152deg_12.04%_17.8%)]"
@@ -138,11 +294,14 @@ const markdownComponents = {
     />
   ),
   li: (props: any) => <li className="leading-7" {...props} />,
-  a: (props: any) => (
+  a: ({ href, children, ...props }: any) => (
     <a
+      href={href}
       className="text-[hsl(var(--primary))] underline decoration-[hsl(var(--primary))]/40 underline-offset-4 hover:text-[hsl(var(--primary-light))]"
       {...props}
-    />
+    >
+      {children}
+    </a>
   ),
   code: (props: any) => (
     <code
@@ -168,6 +327,9 @@ export default async function BlogPostPage({ params }: PageParams) {
 
   const { title, summary, date, tags, coverImage, content } = post;
   const headings = extractHeadings(content);
+
+  // preprocess content to normalize embeds (twitter blockquote -> url, youtube iframe -> watch URL)
+  const processedContent = preprocessContentForEmbeds(content);
 
   return (
     <main className="min-h-screen bg-[hsl(var(--background))]">
@@ -224,7 +386,7 @@ export default async function BlogPostPage({ params }: PageParams) {
               </h2>
               <nav
                 aria-label="Table of contents"
-                className="mt-4 text-left text-sm"
+                className="mt-4 text-left text-sm lg:max-h-[calc(100vh-10rem)] lg:overflow-y-auto lg:pr-1 toc-scroll"
               >
                 <div className="lg:hidden">
                   <details className="group rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))]">
@@ -315,28 +477,36 @@ export default async function BlogPostPage({ params }: PageParams) {
           </aside>
 
           <div className="space-y-10">
-          {summary && (
-            <section className="rounded-3xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-6 py-6 text-left text-sm text-[hsl(152deg_12.04%_17.8%)] md:text-base">
-              {summary}
-            </section>
-          )}
+            {summary && (
+              <section className="rounded-3xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-6 py-6 text-left text-sm text-[hsl(152deg_12.04%_17.8%)] md:text-base">
+                {summary}
+              </section>
+            )}
 
-          {coverImage && (
-            <div className="overflow-hidden rounded-3xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] shadow-sm">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={coverImage}
-                alt={title}
-                className="h-auto w-full object-cover"
-              />
-            </div>
-          )}
+            {coverImage && (
+              <div className="relative aspect-video w-full overflow-hidden rounded-3xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] shadow-sm">
+                <Image
+                  src={coverImage}
+                  alt={title}
+                  fill
+                  className="object-cover"
+                  priority
+                  sizes="(max-width: 1024px) 100vw, 860px"
+                />
+              </div>
+            )}
 
-          <article className="blog-article space-y-6 rounded-3xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-6 py-8 shadow-sm md:px-10 md:py-10">
-            <ReactMarkdown components={markdownComponents}>{content}</ReactMarkdown>
-          </article>
+            <article className="blog-article space-y-6 rounded-3xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-6 py-8 shadow-sm md:px-10 md:py-10">
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                rehypePlugins={[rehypeRaw]}
+                components={markdownComponents}
+              >
+                {processedContent}
+              </ReactMarkdown>
+            </article>
+          </div>
         </div>
-      </div>
       </section>
     </main>
   );

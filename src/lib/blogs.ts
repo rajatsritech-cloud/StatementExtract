@@ -1,4 +1,6 @@
 import { Octokit } from "@octokit/rest";
+import { promises as fs } from "fs";
+import path from "path";
 
 export interface BlogPostMeta {
   slug: string;
@@ -17,6 +19,11 @@ const GH_OWNER = process.env.GH_OWNER;
 const GH_REPO = process.env.GH_REPO;
 const GH_BRANCH = process.env.GH_BRANCH || "main";
 const POSTS_DIR = "content/posts";
+
+// In local development we want to read directly from the filesystem
+// instead of going through GitHub. In production (Cloudflare) we
+// continue to use GitHub as the single source of truth.
+const USE_LOCAL_FILES = process.env.NODE_ENV !== "production";
 
 const createOctokit = () => {
   const auth = process.env.GH_TOKEN;
@@ -87,6 +94,49 @@ function mapToMeta(slug: string, frontmatter: Record<string, string>): BlogPostM
 }
 
 export async function getAllPosts(): Promise<BlogPostMeta[]> {
+  // Local development: read posts from filesystem.
+  if (USE_LOCAL_FILES) {
+    const postsDir = path.join(process.cwd(), POSTS_DIR);
+    let files: string[] = [];
+
+    try {
+      const entries = await fs.readdir(postsDir, { withFileTypes: true });
+      files = entries
+        .filter((entry) => entry.isFile() && entry.name.endsWith(".mdx"))
+        .map((entry) => entry.name);
+    } catch (error) {
+      console.error(
+        "Failed to list local blog posts",
+        JSON.stringify(
+          {
+            dir: postsDir,
+            message: error instanceof Error ? error.message : String(error),
+          },
+          null,
+          2,
+        ),
+      );
+      return [];
+    }
+
+    const posts = await Promise.all(
+      files.map(async (file) => {
+        const slug = file.replace(/\.mdx$/, "");
+        const raw = await readLocalPostFile(slug);
+        if (!raw) {
+          return null;
+        }
+        const { frontmatter } = parseFrontmatter(raw);
+        return mapToMeta(slug, frontmatter);
+      }),
+    );
+
+    return posts
+      .filter((post): post is BlogPostMeta => Boolean(post))
+      .sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+  }
+
+  // Production / GitHub-backed environment.
   if (!isGitHubConfigured()) {
     return [];
   }
@@ -145,7 +195,7 @@ export async function getAllPosts(): Promise<BlogPostMeta[]> {
 }
 
 export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
-  const raw = await readPostFile(slug);
+  const raw = USE_LOCAL_FILES ? await readLocalPostFile(slug) : await readPostFile(slug);
   if (!raw) {
     return null;
   }
@@ -160,15 +210,12 @@ export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
 }
 
 export async function getAllPostSlugs(): Promise<string[]> {
-  if (!isGitHubConfigured()) {
-    return [];
-  }
-
   const posts = await getAllPosts();
   return posts.map((post) => post.slug);
 }
 
 async function readPostFile(slug: string) {
+  // GitHub-backed read; only used in production.
   if (!isGitHubConfigured()) {
     return null;
   }
@@ -206,6 +253,32 @@ async function readPostFile(slug: string) {
           message: error instanceof Error ? error.message : String(error),
           status: error?.status,
           response: error?.response?.data,
+        },
+        null,
+        2,
+      ),
+    );
+    return null;
+  }
+}
+
+async function readLocalPostFile(slug: string) {
+  const filePath = path.join(process.cwd(), POSTS_DIR, `${slug}.mdx`);
+
+  try {
+    const content = await fs.readFile(filePath, "utf8");
+    return content;
+  } catch (error: any) {
+    if (error?.code === "ENOENT") {
+      return null;
+    }
+
+    console.error(
+      `Failed to read local blog post ${slug}`,
+      JSON.stringify(
+        {
+          filePath,
+          message: error instanceof Error ? error.message : String(error),
         },
         null,
         2,

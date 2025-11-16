@@ -97,3 +97,51 @@
   font-size: 14px;
   line-height: 1.6;
 }
+
+/* blockquote styling for markdown quotes */
+:global(.blog-article blockquote) {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+  padding: 0.9rem 1.1rem;
+  border-left: 3px solid hsl(var(--primary));
+  background-color: hsl(var(--muted));
+  border-radius: 0.9rem;
+  color: hsl(152deg 12.04% 17.8%);
+  font-style: italic;
+}
+
+/* table styling for markdown content */
+:global(.blog-article table) {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+}
+
+:global(.blog-article th),
+:global(.blog-article td) {
+  border: 1px solid hsl(var(--border));
+  padding: 0.6rem 0.8rem;
+  text-align: left;
+  color: hsl(var(--foreground));
+}
+
+:global(.blog-article th) {
+  font-weight: 600;
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+:global(.blog-article tbody tr:nth-child(even)) {
+  background-color: hsl(var(--secondary));
+}
+
+/* hide scrollbar for the table of contents container while keeping scroll behavior */
+:global(.toc-scroll) {
+  scrollbar-width: none; /* Firefox */
+}
+
+:global(.toc-scroll::-webkit-scrollbar) {
+  display: none; /* Chrome, Safari */
+}

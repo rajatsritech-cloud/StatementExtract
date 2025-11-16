@@ -244,11 +244,13 @@ export const Header = () => {
         
         <div className="flex items-center gap-2 md:gap-4">
           <SignedOut>
-            <SignInButton mode="modal">
-              <Button variant="ghost" className="hidden md:inline-flex">
-                Sign In
-              </Button>
-            </SignInButton>
+            <div suppressHydrationWarning>
+              <SignInButton mode="modal">
+                <Button variant="ghost" className="hidden md:inline-flex">
+                  Sign In
+                </Button>
+              </SignInButton>
+            </div>
           </SignedOut>
           <SignedIn>
             <div suppressHydrationWarning className="flex items-center gap-2">
