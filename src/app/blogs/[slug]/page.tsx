@@ -8,6 +8,7 @@ import rehypeRaw from "rehype-raw";
 import { getAllPostSlugs, getPostBySlug } from "@/lib/blogs";
 import Link from "next/link";
 import LazyTweet from "@/components/LazyTweet";
+import { BlogNewsletterSignup } from "@/components/BlogNewsletterSignup";
 import "./page.module.css";
 
 export const revalidate = 21600;
@@ -506,6 +507,9 @@ export default async function BlogPostPage({ params }: PageParams) {
               </ReactMarkdown>
             </article>
           </div>
+        </div>
+        <div className="mx-auto mt-10 max-w-6xl px-6 pb-16">
+          <BlogNewsletterSignup />
         </div>
       </section>
     </main>
