@@ -79,8 +79,8 @@ export default function AboutPage() {
             to keep your output consistent.
           </p>
           <p className="text-sm text-[hsl(var(--muted-foreground))]">
-            Over time, our goal is to support more financial documentsfrom invoices and receipts
-            to account summaries and KYC paperworkso that finance and operations teams can run
+            Over time, our goal is to support more financial documents from invoices and receipts
+            to account summaries and KYC paperwork so that finance and operations teams can run
             on accurate data instead of manual admin.
           </p>
         </div>

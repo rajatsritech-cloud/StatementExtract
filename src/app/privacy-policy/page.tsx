@@ -1,10 +1,5 @@
-import type { Metadata } from "next";
+"use client"
 
-export const metadata: Metadata = {
-  title: "Privacy Policy | Statement Extractor",
-  description:
-    "Privacy policy for Statement Extractor's bank statement to CSV/Excel converter, explaining what data we collect, how we use it, and how it is protected.",
-};
 
 export default function PrivacyPolicyPage() {
   return (

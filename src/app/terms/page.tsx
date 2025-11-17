@@ -1,10 +1,5 @@
-import type { Metadata } from "next";
+"use client"
 
-export const metadata: Metadata = {
-  title: "Terms of Service | Statement Extractor",
-  description:
-    "Terms of Service for Statement Extractor's bank statement to CSV/Excel converter, explaining how you may use the service and our respective responsibilities.",
-};
 
 export default function TermsPage() {
   return (

@@ -1,10 +1,4 @@
-import type { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "Careers | Statement Extractor",
-  description:
-    "Careers at Statement Extractor – we're looking for tech professionals to help build the future of bank statement automation.",
-};
+"use client"
 
 export default function CareersPage() {
   return (
