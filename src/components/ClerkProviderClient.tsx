@@ -7,7 +7,6 @@ const publishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
 export default function ClerkProviderClient({ children }: { children: React.ReactNode }) {
   // browser console check
-  console.log("NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY (client):", publishableKey);
 
   if (!publishableKey) {
     console.warn("Clerk publishable key is missing in client bundle.");
