@@ -31,8 +31,17 @@ export const metadata: Metadata = {
     images: ["/assets/StatementExtract_Workflow_img.png"],
   },
   icons: {
-    icon: "/favicon.ico",
+    icon: [
+      { url: "/favicon-16x16.webp", sizes: "16x16", type: "image/webp" },
+      { url: "/favicon-32x32.webp", sizes: "32x32", type: "image/webp" },
+      { url: "/favicon.ico", type: "image/x-icon" },
+    ],
+    apple: [
+      { url: "/apple-touch-icon.webp", sizes: "180x180", type: "image/webp" },
+    ],
   },
+  manifest: "/site.webmanifest",
+  themeColor: "#16a34a",
   alternates: {
     canonical: "/",
   },

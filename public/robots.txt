@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /admin
+
+# Allow crawling of the rest of the site
+Allow: /
+
+Sitemap: https://statementextract.com/sitemap.xml
