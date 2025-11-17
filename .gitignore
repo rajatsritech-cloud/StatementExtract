@@ -21,6 +21,10 @@
 # production
 /build
 
+# local-only admin tools (do not commit / deploy)
+/src/app/admin/
+/src/app/api/admin/
+
 # misc
 .DS_Store
 *.pem
