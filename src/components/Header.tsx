@@ -51,6 +51,15 @@ export const Header = () => {
     }, 250);
   };
 
+  const handleSolutionsItemClick = (path: string) => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+      hoverTimeoutRef.current = null;
+    }
+    setIsSolutionsHovered(false);
+    router.push(path);
+  };
+
   return (
     <header className="sticky top-0 z-50">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 pt-3 pb-0">
@@ -94,7 +103,10 @@ export const Header = () => {
                       <div>
                         <p className="text-xs font-semibold tracking-[0.2em] text-[hsl(var(--muted-foreground))] mb-4">COMPANY</p>
                         <div className="grid grid-cols-2 gap-3">
-                          <div className="group flex flex-col items-center justify-center gap-2 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))] text-center transition-all duration-200 cursor-pointer hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40 hover:shadow-glow">
+                          <div
+                            className="group flex flex-col items-center justify-center gap-2 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))] text-center transition-all duration-200 cursor-pointer hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40 hover:shadow-glow"
+                            onClick={() => handleSolutionsItemClick("/about")}
+                          >
                             <div className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] group-hover:bg-[hsl(var(--primary))] group-hover:text-[hsl(var(--primary-foreground))] transition-colors">
                               <Building className="h-4 w-4" />
                             </div>
@@ -106,7 +118,10 @@ export const Header = () => {
                             </div>
                             <span>Contact Us</span>
                           </div>
-                          <div className="group flex flex-col items-center justify-center gap-2 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))] text-center transition-all duration-200 cursor-pointer hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40 hover:shadow-glow">
+                          <div
+                            className="group flex flex-col items-center justify-center gap-2 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))] text-center transition-all duration-200 cursor-pointer hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40 hover:shadow-glow"
+                            onClick={() => handleSolutionsItemClick("/privacy-policy")}
+                          >
                             <div className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] group-hover:bg-[hsl(var(--primary))] group-hover:text-[hsl(var(--primary-foreground))] transition-colors">
                               <Shield className="h-4 w-4" />
                             </div>
@@ -122,7 +137,7 @@ export const Header = () => {
                       </div>
                       <div className="mt-6 flex gap-3">
                         <button
-                          onClick={() => router.push('/convert-bank-statement-to-csv-excel')}
+                          onClick={() => handleSolutionsItemClick('/convert-bank-statement-to-csv-excel')}
                           className="bg-gradient-button text-[hsl(var(--primary-foreground))] px-5 py-2.5 rounded-lg text-sm font-semibold shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200"
                         >
                           Try for Free
@@ -148,7 +163,7 @@ export const Header = () => {
                       <div className="grid grid-cols-2 gap-3">
                         <div
                           className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-3 cursor-pointer transition-all duration-200 hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40 hover:shadow-glow"
-                          onClick={() => router.push('/convert-bank-statement-to-csv-excel')}
+                          onClick={() => handleSolutionsItemClick('/convert-bank-statement-to-csv-excel')}
                         >
                           <div className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] group-hover:bg-[hsl(var(--primary))] group-hover:text-[hsl(var(--primary-foreground))] transition-colors">
                             <Building className="h-4 w-4" />
