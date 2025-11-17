@@ -44,7 +44,7 @@ export default async function BlogsPage() {
       </section>
 
       <section className="relative mx-auto max-w-6xl px-6 py-12">
-        <div className="pointer-events-none absolute inset-0 z-0 overflow-visible">
+        <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden md:overflow-visible">
           <div className="absolute top-[-8rem] left-[-28rem] h-[42rem] w-[42rem] opacity-30">
             <svg
               width="100%"

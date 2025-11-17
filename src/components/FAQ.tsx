@@ -142,7 +142,7 @@ export const FAQ = () => {
               <span>Got more questions?</span>
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-[hsl(var(--foreground))]">
-              Need further assistance with StatementExtract?
+              Need further assistance with Statement Extract?
             </h2>
             <p className="text-[hsl(var(--muted-foreground))] text-base md:text-lg max-w-xl">
               Got more questions? Need further assistance? Contact us at

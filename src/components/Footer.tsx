@@ -1,4 +1,5 @@
 import { FileText, Github, Linkedin, Twitter } from "lucide-react";
+import Link from "next/link";
 
 export const Footer = () => {
   return (
@@ -43,7 +44,14 @@ export const Footer = () => {
             <ul className="space-y-2 text-sm">
               <li><a href="#" className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors">Documentation</a></li>
               <li><a href="#" className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors">Guides</a></li>
-              <li><a href="#" className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors">Blog</a></li>
+              <li>
+                <Link
+                  href="/blogs"
+                  className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors"
+                >
+                  Blog
+                </Link>
+              </li>
               <li><a href="#" className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors">Support</a></li>
             </ul>
           </div>
@@ -51,10 +59,38 @@ export const Footer = () => {
           <div>
             <h3 className="mb-4 text-sm font-semibold text-[hsl(var(--foreground))]">Company</h3>
             <ul className="space-y-2 text-sm">
-              <li><a href="#" className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors">About</a></li>
-              <li><a href="#" className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors">Careers</a></li>
-              <li><a href="#" className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors">Privacy</a></li>
-              <li><a href="#" className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors">Terms</a></li>
+              <li>
+                <Link
+                  href="/about"
+                  className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors"
+                >
+                  About
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/careers"
+                  className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors"
+                >
+                  Careers
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/privacy-policy"
+                  className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors"
+                >
+                  Privacy
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/terms"
+                  className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors"
+                >
+                  Terms
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
