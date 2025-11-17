@@ -69,39 +69,13 @@ export class PDFProcessor {
     /\b(chase|bank of america|wells fargo|citibank|capital one|us bank)\b/gi,
   ];
 
-  private static runOCR(image: Blob): Promise<string> {
-    return new Promise((resolve, reject) => {
-      // 1. Create the worker
-      const worker = new Worker(new URL('./ocr.worker.ts', import.meta.url), {
-        type: 'module',
-      });
-
-      // 2. Listen for messages from the worker
-      worker.onmessage = (event: MessageEvent) => {
-        const { status, progress, text, error } = event.data;
-        if (status === 'progress') {
-          // Log progress, but only for the first page to avoid spam
-          if (Math.floor(progress * 100) % 25 === 0) {
-            console.log(`🔍 OCR progress: ${Math.floor(progress * 100)}%`);
-          }
-        } else if (status === 'complete') {
-          worker.terminate();
-          resolve(text);
-        } else if (status === 'error') {
-          worker.terminate();
-          reject(new Error(error));
-        }
-      };
-
-      // 3. Handle errors
-      worker.onerror = (err) => {
-        worker.terminate();
-        reject(err);
-      };
-
-      // 4. Start the worker
-      worker.postMessage({ image });
-    });
+  private static async runOCR(image: Blob): Promise<string> {
+    // 1. Create the worker
+    // 2. Listen for messages from the worker
+    // 3. Handle errors
+    // 4. Start the worker
+    console.log('⚠️ Frontend OCR has been disabled. Skipping image OCR and returning empty text.');
+    return '';
   }
 
   static async processPDF(file: File, isSignedIn: boolean = false): Promise<ExtractedData> {
@@ -144,30 +118,25 @@ export class PDFProcessor {
       if (fullText.trim().length < 100) {
         console.log('⚠️ Limited text found in PDF');
         console.log('🔐 Authentication status:', isSignedIn ? 'Signed In' : 'Not Signed In');
-
-        if (!isSignedIn) {
-          console.log('❌ OCR requires authentication but user is not signed in');
-          console.log('⚠️ Returning minimal data - modal should have prevented this');
-          // Return minimal data instead of throwing error
-          // The UploadArea should have caught this before processing
-          return {
-            transactions: [],
-            userInfo: {
-              name: '',
-              accountNumber: '',
-              bankName: '',
-              statementPeriod: ''
-            },
-            summary: {
-              totalCredits: 0,
-              totalDebits: 0,
-              netBalance: 0,
-              transactionCount: 0
-            }
-          };
-        }
-        console.log('⚠️ Limited text found, attempting OCR...');
-        fullText = await this.performOCROnPDF(pdf);
+        console.log('⚠️ Frontend OCR has been disabled - returning minimal data and deferring to backend.');
+        console.log('⚠️ Returning minimal data - modal should have prevented this');
+        // Return minimal data instead of throwing error
+        // The UploadArea should have caught this before processing
+        return {
+          transactions: [],
+          userInfo: {
+            name: '',
+            accountNumber: '',
+            bankName: '',
+            statementPeriod: ''
+          },
+          summary: {
+            totalCredits: 0,
+            totalDebits: 0,
+            netBalance: 0,
+            transactionCount: 0
+          }
+        };
       }
 
       // Extract information from the text
@@ -268,41 +237,24 @@ export class PDFProcessor {
       // Check authentication for image OCR
       console.log('🔐 Checking authentication for image OCR');
       console.log('🔐 Authentication status:', isSignedIn ? 'Signed In' : 'Not Signed In');
-
-      if (!isSignedIn) {
-        console.log('❌ Image OCR requires authentication but user is not signed in');
-        console.log('⚠️ Returning minimal data - modal should have prevented this');
-        // Return minimal data instead of throwing error
-        return {
-          transactions: [],
-          userInfo: {
-            name: '',
-            accountNumber: '',
-            bankName: '',
-            statementPeriod: ''
-          },
-          summary: {
-            totalCredits: 0,
-            totalDebits: 0,
-            netBalance: 0,
-            transactionCount: 0
-          }
-        };
-      }
-
-      console.log('🚀 Using optimized Tesseract for image OCR...');
-
-      const startTime = Date.now();
-
-      // ✅ Call the worker instead of Tesseract.recognize
-      const text = await this.runOCR(file);
-
-      const endTime = Date.now();
-      console.log(`✅ Optimized image OCR completed in ${endTime - startTime}ms`);
-
-      const extractedData = this.extractDataFromText(text);
-      return extractedData;
-      // Use optimized Tesseract.js for OCR on images
+      console.log('⚠️ Frontend image OCR has been disabled - returning minimal data and deferring to backend.');
+      console.log('⚠️ Returning minimal data - modal should have prevented this');
+      // Return minimal data instead of throwing error
+      return {
+        transactions: [],
+        userInfo: {
+          name: '',
+          accountNumber: '',
+          bankName: '',
+          statementPeriod: ''
+        },
+        summary: {
+          totalCredits: 0,
+          totalDebits: 0,
+          netBalance: 0,
+          transactionCount: 0
+        }
+      };
 
 
     } catch (error) {
