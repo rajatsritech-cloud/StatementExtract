@@ -58,7 +58,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           rel="stylesheet"
         />
       </head>
-      <body className="antialiased">
+      <body className="antialiased overflow-x-hidden">
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-KXNG847173"
           strategy="afterInteractive"

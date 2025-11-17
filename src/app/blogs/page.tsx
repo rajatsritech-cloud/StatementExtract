@@ -84,10 +84,10 @@ export default async function BlogsPage() {
             <Link
               key={post.slug}
               href={`/blogs/${post.slug}`}
-              className="group block h-full overflow-hidden rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-lg"
+              className="group block h-full overflow-hidden rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-primary/60 hover:shadow-glow"
             >
               <article className="flex h-full flex-col justify-between">
-                <div className="mb-4 overflow-hidden rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))]">
+                <div className="overflow-hidden rounded-xl border border-primary/50 bg-[hsl(var(--background))] shadow-glow transition-all duration-200">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   {post.coverImage ? (
                     <img
