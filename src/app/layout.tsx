@@ -10,24 +10,24 @@ import { Footer } from "@/components/Footer";
 export const metadata: Metadata = {
   metadataBase: new URL("https://statementextract.com"),
   title: {
-    default: "Statement Extractor - Bank Statement to CSV/Excel Converter",
+    default: "Statement Extract – AI-Powered Document Processing for Modern Teams",
     template: "%s | Statement Extractor",
   },
   description:
-    "Convert bank statements to CSV/Excel with advanced OCR and AI-powered transaction extraction",
+    "Extract structured data from any document—bank statements, invoices, contracts, healthcare records and more. OCR + AI with no templates, no training, just results",
   openGraph: {
-    title: "Statement Extractor - Bank Statement to CSV/Excel Converter",
+    title: "Statement Extract – Intelligent OCR & AI Document Extraction",
     description:
-      "Convert bank statements to CSV/Excel with advanced OCR and AI-powered transaction extraction",
+      "Statement Extract is an AI-powered OCR platform that converts any document—bank statements, invoices, contracts, healthcare records, forms, and more—into structured data instantly. No templates, no manual training, and no setup required. Built for scale, with secure APIs, fast processing, and industry-leading accuracy.",
     type: "website",
     siteName: "Statement Extractor",
     images: ["/assets/StatementExtract_Workflow_img.png"],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Statement Extractor - Bank Statement to CSV/Excel Converter",
+    title: "Statement Extract – AI-Powered Document Processing for Modern Teams",
     description:
-      "Convert bank statements to CSV/Excel with advanced OCR and AI-powered transaction extraction",
+      "Extract structured data from any document—bank statements, invoices, contracts, healthcare records and more. OCR + AI with no templates, no training, just results.",
     images: ["/assets/StatementExtract_Workflow_img.png"],
   },
   icons: {
