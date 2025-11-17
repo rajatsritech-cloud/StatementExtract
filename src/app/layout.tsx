@@ -1,11 +1,26 @@
 // app/layout.tsx
 import type { Metadata } from "next";
+import { Inter, Poppins } from "next/font/google";
 import Script from "next/script";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
 import ClerkProviderClient from "@/components/ClerkProviderClient"; // update path if needed
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["500", "600"],
+  variable: "--font-poppins",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://statementextract.com"),
@@ -49,12 +64,12 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${inter.variable} ${poppins.variable}`}>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Inter:wght@400;500;600;700&family=Clash+Grotesk:wght@400;600;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Clash+Grotesk:wght@400;600;700&display=swap"
           rel="stylesheet"
         />
       </head>
