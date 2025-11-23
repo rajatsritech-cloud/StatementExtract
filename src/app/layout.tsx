@@ -22,6 +22,8 @@ const poppins = Poppins({
   display: "swap",
 });
 
+const isProduction = process.env.NODE_ENV === "production";
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://statementextract.com"),
   title: {
@@ -74,19 +76,23 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="antialiased overflow-x-hidden">
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-KXNG847173"
-          strategy="afterInteractive"
-        />
-        <Script id="gtag-init" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
+        {isProduction && (
+          <>
+            <Script
+              src="https://www.googletagmanager.com/gtag/js?id=G-KXNG847173"
+              strategy="afterInteractive"
+            />
+            <Script id="gtag-init" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
 
-            gtag('config', 'G-KXNG847173');
-          `}
-        </Script>
+                gtag('config', 'G-KXNG847173');
+              `}
+            </Script>
+          </>
+        )}
         <ClerkProviderClient>
           <div className="flex min-h-screen flex-col bg-[hsl(var(--background))]">
             <Header />
