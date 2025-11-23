@@ -23,80 +23,11 @@ export const UploadArea = ({ onFileUpload, isProcessing }: UploadAreaProps) => {
       console.log('⏳ Waiting for auth to load...');
       return false;
     }
-    
+
     console.log('🔐 Checking authentication for file:', file.name);
-    console.log('🔐 Auth loaded:', isLoaded);
-    console.log('🔐 Current auth status:', isSignedIn ? 'Signed In' : 'Not Signed In');
-    console.log('🔐 File type:', file.type);
-    
-    // Image files ALWAYS need OCR - require authentication
-    const isImageFile = file.type === 'image/jpeg' || file.type === 'image/png';
-    
-    if (isImageFile) {
-      console.log('📸 Image file detected');
-      if (!isSignedIn) {
-        console.log('❌ Not signed in - showing modal');
-        setPendingFile(file);
-        setShowOCRAuthModal(true);
-        return false;
-      }
-      console.log('✅ Signed in - allowing image upload');
-      return true;
-    }
-    
-    // For PDFs, check if they have text content or will need OCR
-    if (file.type === 'application/pdf') {
-      console.log('📄 PDF file detected');
-      
-      if (!isSignedIn) {
-        console.log('⚠️ Not signed in - checking if PDF has text');
-        try {
-          // Dynamically import pdfjs-dist to avoid SSR issues
-          const pdfjsLib = await import('pdfjs-dist');
-          
-          // Configure worker
-          if (typeof window !== 'undefined') {
-            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@5.4.394/legacy/build/pdf.worker.min.mjs';
-          }
-          
-          const arrayBuffer = await file.arrayBuffer();
-          const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-          
-          // Try to extract text from first page
-          let hasText = false;
-          if (pdf.numPages > 0) {
-            const page = await pdf.getPage(1);
-            const textContent = await page.getTextContent();
-            const pageText = textContent.items.map((item: any) => item.str).join(' ');
-            hasText = pageText.trim().length > 50;
-            console.log('📝 PDF text length:', pageText.trim().length);
-          }
-          
-          // If PDF has no text, it will need OCR - require authentication
-          if (!hasText) {
-            console.log('❌ PDF has no text (needs OCR) and user not signed in - showing modal');
-            setPendingFile(file);
-            setShowOCRAuthModal(true);
-            return false;
-          }
-          
-          console.log('✅ PDF has text (no OCR needed) - allowing upload without sign in');
-          return true;
-        } catch (error) {
-          console.log('⚠️ Error checking PDF text content:', error);
-          // If we can't check, assume it needs OCR and show modal
-          console.log('❌ Cannot verify PDF content - showing modal to be safe');
-          setPendingFile(file);
-          setShowOCRAuthModal(true);
-          return false;
-        }
-      }
-      
-      console.log('✅ Signed in - allowing PDF upload');
-      return true;
-    }
-    
-    console.log('✅ Other file type - allowing upload');
+
+    // For now, we just allow upload as we are moving to backend processing
+    // and removing client-side checks that relied on pdfjs-dist
     return true;
   };
 
@@ -113,20 +44,20 @@ export const UploadArea = ({ onFileUpload, isProcessing }: UploadAreaProps) => {
   const handleDrop = useCallback(async (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragOver(false);
-    
+
     const files = Array.from(e.dataTransfer.files);
     console.log('📁 Dropped files:', files.length);
     if (files.length > 0) {
       const file = files[0];
       console.log('📄 First file:', file.name);
-      
+
       // Check authentication for OCR before setting file or calling onFileUpload
       const canProceed = await checkAuthenticationForOCR(file);
       if (!canProceed) {
         console.log('🔐 Authentication required, showing modal');
         return;
       }
-      
+
       setSelectedFile(file);
       console.log('✅ File selected, calling onFileUpload');
       onFileUpload(file);
@@ -143,7 +74,7 @@ export const UploadArea = ({ onFileUpload, isProcessing }: UploadAreaProps) => {
       console.log('📄 File selected:', file.name);
       console.log('📏 File size:', file.size);
       console.log('📋 File type:', file.type);
-      
+
       // Check authentication for OCR before setting file or calling onFileUpload
       const canProceed = await checkAuthenticationForOCR(file);
       if (!canProceed) {
@@ -151,7 +82,7 @@ export const UploadArea = ({ onFileUpload, isProcessing }: UploadAreaProps) => {
         e.target.value = '';
         return; // Don't set the file or call onFileUpload if auth fails
       }
-      
+
       setSelectedFile(file);
       console.log('🔄 Calling onFileUpload...');
       onFileUpload(file);
@@ -184,8 +115,8 @@ export const UploadArea = ({ onFileUpload, isProcessing }: UploadAreaProps) => {
       <div
         className={`
           relative border-2 border-dashed rounded-2xl p-12 text-center transition-all duration-300
-          ${isDragOver 
-            ? 'border-[hsl(var(--primary))] bg-[hsl(var(--primary))]/5 scale-[1.02]' 
+          ${isDragOver
+            ? 'border-[hsl(var(--primary))] bg-[hsl(var(--primary))]/5 scale-[1.02]'
             : 'border-[hsl(var(--border))] bg-[hsl(var(--card))] hover:border-[hsl(var(--primary))]/50'
           }
           ${isProcessing ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
@@ -226,7 +157,7 @@ export const UploadArea = ({ onFileUpload, isProcessing }: UploadAreaProps) => {
             {isProcessing ? 'Processing...' : 'Drop your bank statement here'}
           </h3>
           <p className="text-[hsl(var(--muted-foreground))]">
-            {isProcessing 
+            {isProcessing
               ? 'Please wait while we extract your data'
               : 'or click to browse from your computer'
             }
@@ -329,7 +260,7 @@ export const UploadArea = ({ onFileUpload, isProcessing }: UploadAreaProps) => {
           </p>
         </div>
       </div>
-      
+
       {/* OCR Authentication Modal */}
       <OCRAuthModal
         isOpen={showOCRAuthModal}

@@ -4,7 +4,7 @@ import { useState, useCallback } from "react";
 import { UploadArea } from "@/components/bank-statement/UploadArea";
 import { ProcessingModal } from "@/components/bank-statement/ProcessingModal";
 import { ResultsModal } from "@/components/bank-statement/ResultsModal";
-import { PDFViewer } from "@/components/PDFViewer";
+
 import { toast } from "react-hot-toast";
 import { ExtractedData } from "@/lib/pdfProcessor";
 import { ExportService } from "@/lib/exportService";
@@ -23,20 +23,20 @@ export const BankStatementConverter = () => {
     console.log(`📁 File: ${file.name}`);
     console.log(`📏 Size: ${(file.size / 1024 / 1024).toFixed(2)} MB`);
     console.log(`📄 Type: ${file.type}`);
-    
+
     // Wait for auth to load
     if (!isLoaded) {
       console.log('⏳ Waiting for auth to load...');
       toast.error('Please wait, loading authentication...');
       return;
     }
-    
+
     console.log('🔐 Auth loaded:', isLoaded);
     console.log('🔐 Is signed in:', isSignedIn);
-    
+
     // Set the selected file for PDF viewer
     setSelectedFile(file);
-    
+
     // File validation
     if (file.size > 15 * 1024 * 1024) {
       console.log('❌ File too large');
@@ -61,64 +61,41 @@ export const BankStatementConverter = () => {
 
     try {
       console.log('🔄 Starting processing...');
-      // Simulate processing progress
+      // Simulate processing progress with "fast start, slow finish" logic
       const progressInterval = setInterval(() => {
         setProcessingProgress(prev => {
-          if (prev >= 90) {
-            clearInterval(progressInterval);
-            return 90;
-          }
-          return prev + 10;
+          // Fast initial progress (uploading/analyzing)
+          if (prev < 30) return prev + 10;
+          // Steady progress (OCR/Extraction)
+          if (prev < 60) return prev + 5;
+          // Slow progress (Validation/AI) - prevents "hanging" feeling at 90%
+          if (prev < 90) return prev + 2;
+          // Cap at 90% until actual completion
+          return 90;
         });
-      }, 200);
+      }, 800);
 
-      console.log('🔍 Starting actual file processing...');
-      const startTime = Date.now();
-      
-      // Process the file using real PDF processing
       let extracted: ExtractedData;
-      
       try {
         const { PDFProcessor } = await import("@/lib/pdfProcessor");
-        if (file.type === 'application/pdf') {
-          console.log('📖 Processing PDF file...');
-          extracted = await PDFProcessor.processPDF(file, isSignedIn);
-        } else {
-          console.log('🖼️ Processing image file...');
-          extracted = await PDFProcessor.processImage(file, isSignedIn);
-        }
+        console.log('📖 Processing file with backend API...');
+        extracted = await PDFProcessor.processPDF(file, isSignedIn);
       } catch (error: any) {
         console.log('❌ Processing error:', error.message);
-        
-        // Handle ALL OCR authentication errors silently
-        if (error.message.includes('OCR processing requires a free account') || 
-            error.message.includes('Authentication required for OCR') ||
-            error.message.includes('sign in to continue') ||
-            error.message.includes('Image processing is only available in the browser')) {
-          console.log('🔐 OCR/authentication required - modal should handle this');
-          clearInterval(progressInterval);
-          setIsProcessing(false);
-          setProcessingProgress(0);
-          setSelectedFile(null);
-          return;
-        }
-        
-        // Re-throw other errors
         throw error;
       }
-      
-      const endTime = Date.now();
-      console.log(`⏱️ Processing completed in ${endTime - startTime}ms`);
-      
+
       clearInterval(progressInterval);
       setProcessingProgress(100);
-      
+
       console.log('✅ Extraction successful!');
-      console.log(`📊 Found ${extracted.transactions.length} transactions`);
+      if (extracted.transactions) {
+        console.log(`📊 Found ${extracted.transactions.length} transactions`);
+      }
       console.log(`👤 User: ${extracted.userInfo.name || 'Unknown'}`);
       console.log(`🏦 Bank: ${extracted.userInfo.bankName || 'Unknown'}`);
       console.log('📋 Full extracted data:', extracted);
-      
+
       console.log('🔄 Updating UI state...');
       setTimeout(() => {
         console.log('📊 Setting extracted data...');
@@ -128,25 +105,25 @@ export const BankStatementConverter = () => {
         console.log('👁️ Showing results modal...');
         setShowResults(true);
         console.log('🎉 Success toast...');
-        toast.success(`Successfully processed ${extracted.transactions.length} transactions!`);
+        toast.success(`Successfully processed!`);
       }, 500);
 
     } catch (error) {
       console.error('❌ Processing error:', error);
       setIsProcessing(false);
       setSelectedFile(null); // Clear the selected file on error
-      
+
       // Don't show any error message for OCR authentication - it's handled by the modal
       if (error instanceof Error && error.message.includes('OCR processing requires a free account')) {
         return; // Silent fail - modal handles the user communication
       }
-      
+
       let errorMessage = "Failed to process the file. Please try again.";
-      
+
       if (error instanceof Error) {
         errorMessage = error.message;
       }
-      
+
       toast.error(errorMessage, {
         duration: 5000,
       });
@@ -195,10 +172,10 @@ export const BankStatementConverter = () => {
           {/* Hero Section */}
           <div className="text-center mb-16">
             <h1 className="mb-6 text-5xl font-bold tracking-tight text-[hsl(var(--foreground))] md:text-7xl animate-slide-up">
-              Accurately Convert PDF Bank Statements to 
+              Accurately Convert PDF Bank Statements to
               <span className="bg-gradient-primary bg-clip-text text-transparent"> Excel or CSV</span>
             </h1>
-            
+
             <p className="mx-auto mb-10 max-w-3xl text-xl text-[hsl(var(--muted-foreground))] animate-fade-in">
               World's most trusted OCR + AI bank statement converter, working with thousands of banks globally.
               Automatically extract transactions, balances, and references into clean Excel or CSV files with 99.9% accuracy.
@@ -235,7 +212,7 @@ export const BankStatementConverter = () => {
 
       {/* Results Modal */}
       {showResults && extractedData && (
-        <ResultsModal 
+        <ResultsModal
           data={extractedData}
           file={selectedFile}
           onClose={() => setShowResults(false)}

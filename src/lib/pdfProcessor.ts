@@ -1,27 +1,5 @@
 "use client";
 
-import { debugExtractedText } from './textAnalyzer';
-import { extractUSBankTransactions, extractUSBankUserInfo } from './usBankPatterns';
-
-
-let pdfjsLibPromise: Promise<typeof import('pdfjs-dist/legacy/build/pdf.mjs')> | null = null;
-
-const loadPdfJs = async () => {
-  if (typeof window === 'undefined') {
-    throw new Error('PDF processing is only available in the browser');
-  }
-
-  if (!pdfjsLibPromise) {
-    pdfjsLibPromise = import('pdfjs-dist/legacy/build/pdf.mjs').then((module) => {
-      module.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${module.version}/legacy/build/pdf.worker.min.mjs`;
-      console.log('🔧 PDF.js worker configured:', module.GlobalWorkerOptions.workerSrc);
-      return module;
-    });
-  }
-
-  return pdfjsLibPromise;
-};
-
 export interface TransactionData {
   date: string;
   description: string;
@@ -51,395 +29,154 @@ export interface ExtractedData {
     netBalance: number;
     transactionCount: number;
   };
+  markdown?: string;
+  fraud_analysis?: {
+    status: string;
+    alerts: Array<{
+      type: string;
+      severity: string;
+      message: string;
+      transaction_index?: number;
+    }>;
+    summary: {
+      total_alerts: number;
+      high_risk: number;
+      medium_risk: number;
+      low_risk: number;
+    };
+  };
+  reconciliation?: {
+    status: string;
+    reconciled: boolean;
+    checks: {
+      passed: number;
+      total: number;
+      percentage: number;
+    };
+    issues?: Array<{
+      check: string;
+      severity: string;
+      message: string;
+    }>;
+  };
+  human_review?: {
+    requires_human_review: boolean;
+    risk_level: 'low' | 'medium' | 'high';
+    review_reasons: string[];
+    auto_approved: boolean;
+  };
 }
 
 export class PDFProcessor {
-  private static readonly TRANSACTION_PATTERNS = [
-    // Date patterns (MM/DD/YYYY, MM-DD-YYYY, DD/MM/YYYY, etc.)
-    /\b(0[1-9]|1[0-2])[-/](0[1-9]|[12][0-9]|3[01])[-/]\d{2,4}\b/g,
-    /\b(0[1-9]|[12][0-9]|3[01])[-/](0[1-9]|1[0-2])[-/]\d{2,4}\b/g,
-    // Amount patterns ($1,234.56, -$1,234.56, 1,234.56, etc.)
-    /\$?-?\d{1,3}(?:,\d{3})*(?:\.\d{2})?/g,
-    // Common transaction keywords
-    /\b(deposit|withdrawal|payment|transfer|purchase|fee|interest|credit|debit)\b/gi,
-  ];
-
-  private static readonly BANK_PATTERNS = [
-    /\b(bank|banking|statement|account)\b/gi,
-    /\b(chase|bank of america|wells fargo|citibank|capital one|us bank)\b/gi,
-  ];
-
-  private static async runOCR(image: Blob): Promise<string> {
-    // 1. Create the worker
-    // 2. Listen for messages from the worker
-    // 3. Handle errors
-    // 4. Start the worker
-    console.log('⚠️ Frontend OCR has been disabled. Skipping image OCR and returning empty text.');
-    return '';
-  }
-
   static async processPDF(file: File, isSignedIn: boolean = false): Promise<ExtractedData> {
-    try {
-      // Check if we're in a browser environment
-      if (typeof window === 'undefined') {
-        throw new Error('PDF processing is only available in the browser');
-      }
-
-      const pdfjsLib = await loadPdfJs();
-
-      console.log('📖 Starting PDF processing...');
-      const arrayBuffer = await file.arrayBuffer();
-      console.log('📁 File loaded into memory, size:', arrayBuffer.byteLength);
-
-      // Load PDF directly without complex fallback
-      console.log('🔧 Loading PDF with pdf.js...');
-      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-      console.log('✅ PDF loaded successfully');
-
-      let fullText = '';
-      const numPages = pdf.numPages;
-      console.log(`📄 PDF has ${numPages} pages`);
-
-      // Extract text from all pages
-      for (let pageNum = 1; pageNum <= numPages; pageNum++) {
-        console.log(`📖 Processing page ${pageNum}/${numPages}...`);
-        const page = await pdf.getPage(pageNum);
-        const textContent = await page.getTextContent();
-        const pageText = textContent.items
-          .map((item: any) => item.str)
-          .join(' ');
-        fullText += pageText + '\n';
-        console.log(`✅ Page ${pageNum} processed, extracted ${pageText.length} characters`);
-      }
-
-      console.log(`📝 Total text extracted: ${fullText.length} characters`);
-
-      // If no text found, try OCR on rendered pages (requires authentication)
-      if (fullText.trim().length < 100) {
-        console.log('⚠️ Limited text found in PDF');
-        console.log('🔐 Authentication status:', isSignedIn ? 'Signed In' : 'Not Signed In');
-        console.log('⚠️ Frontend OCR has been disabled - returning minimal data and deferring to backend.');
-        console.log('⚠️ Returning minimal data - modal should have prevented this');
-        // Return minimal data instead of throwing error
-        // The UploadArea should have caught this before processing
-        return {
-          transactions: [],
-          userInfo: {
-            name: '',
-            accountNumber: '',
-            bankName: '',
-            statementPeriod: ''
-          },
-          summary: {
-            totalCredits: 0,
-            totalDebits: 0,
-            netBalance: 0,
-            transactionCount: 0
-          }
-        };
-      }
-
-      // Extract information from the text
-      console.log('🔍 Extracting data from text...');
-      console.log('📄 Raw text preview:', fullText.substring(0, 1000) + '...');
-
-      // Debug the extracted text to understand the format
-      const analysis = debugExtractedText(fullText);
-      console.log('📊 Text analysis completed');
-
-      const extractedData = this.extractDataFromText(fullText);
-
-      console.log('✅ PDF processing completed successfully!');
-      return extractedData;
-
-    } catch (error) {
-      console.error('❌ PDF processing error:', error);
-
-      // Provide more specific error messages
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-
-      if (errorMessage.includes('worker')) {
-        throw new Error('PDF.js worker failed to load. Please refresh the page and try again.');
-      } else if (errorMessage.includes('Invalid PDF')) {
-        throw new Error('The file is not a valid PDF. Please ensure it\'s not corrupted.');
-      } else if (errorMessage.includes('password')) {
-        throw new Error('The PDF is password protected. Please remove the password and try again.');
-      } else {
-        throw new Error(`Failed to process PDF: ${errorMessage}`);
-      }
-    }
-  }
-
-  private static async performOCROnPDF(pdf: any): Promise<string> {
-    let fullText = '';
-    const numPages = pdf.numPages;
-
-    console.log(`🚀 Starting optimized Tesseract OCR on ${numPages} pages...`);
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('confidence_threshold', '0.3');
 
     try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 120000);
 
-      // Convert all PDF pages to images first
-      const imageBlobs = [];
+      const response = await fetch('http://127.0.0.1:8000/api/v1/pdf-extract/fast', {
+        method: 'POST',
+        body: formData,
+        signal: controller.signal,
+      });
 
-      for (let pageNum = 1; pageNum <= numPages; pageNum++) {
-        const page = await pdf.getPage(pageNum);
+      clearTimeout(timeoutId);
 
-        // Use optimized scale for balance of speed and accuracy
-        const viewport = page.getViewport({ scale: 1.5 });
-        const canvas = document.createElement('canvas');
-        const context = canvas.getContext('2d');
-        canvas.height = viewport.height;
-        canvas.width = viewport.width;
-
-        console.log(`📄 Rendering page ${pageNum}/${numPages} for OCR...`);
-
-        await page.render({ canvasContext: context, viewport }).promise;
-
-        // Convert canvas to blob
-        const blob = await new Promise<Blob>((resolve) => {
-          canvas.toBlob((blob) => resolve(blob!), 'image/png');
-        });
-
-        imageBlobs.push(blob);
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.detail || `Backend API error: ${response.statusText}`);
       }
 
-      console.log(`🚀 Running optimized parallel OCR on ${imageBlobs.length} pages...`);
+      const result = await response.json();
+      const transactions = this.parseMarkdownToTransactions(result.markdown);
+      const summary = this.calculateSummary(transactions);
 
-      const ocrPromises = imageBlobs.map((blob) => this.runOCR(blob));
-
-      const startTime = Date.now();
-      const ocrResults = await Promise.all(ocrPromises);
-      const endTime = Date.now();
-
-      fullText = ocrResults.join('\n');
-      console.log(`✅ Optimized Tesseract OCR completed in ${endTime - startTime}ms`);
-      return fullText;
+      return {
+        userInfo: {},
+        transactions: transactions,
+        summary: summary,
+        markdown: result.markdown,
+        fraud_analysis: result.fraud_analysis,
+        reconciliation: result.reconciliation,
+        human_review: result.human_review
+      };
 
     } catch (error) {
-      console.error('❌ OCR failed:', error);
-      console.log('⚠️ Falling back to no OCR (PDF text extraction only)');
-      return '';
+      console.error('PDF processing error:', error);
+      throw error;
     }
-  }
-
-  private static async ocrPage(pdf: any, pageNum: number): Promise<string> {
-    // This method is no longer needed with Scribe.js batch processing
-    return '';
   }
 
   static async processImage(file: File, isSignedIn: boolean = false): Promise<ExtractedData> {
-    try {
-      // Check if we're in a browser environment
-      if (typeof window === 'undefined') {
-        throw new Error('Image processing is only available in the browser');
-      }
-
-      // Check authentication for image OCR
-      console.log('🔐 Checking authentication for image OCR');
-      console.log('🔐 Authentication status:', isSignedIn ? 'Signed In' : 'Not Signed In');
-      console.log('⚠️ Frontend image OCR has been disabled - returning minimal data and deferring to backend.');
-      console.log('⚠️ Returning minimal data - modal should have prevented this');
-      // Return minimal data instead of throwing error
-      return {
-        transactions: [],
-        userInfo: {
-          name: '',
-          accountNumber: '',
-          bankName: '',
-          statementPeriod: ''
-        },
-        summary: {
-          totalCredits: 0,
-          totalDebits: 0,
-          netBalance: 0,
-          transactionCount: 0
-        }
-      };
-
-
-    } catch (error) {
-      console.error('❌ Image processing error:', error);
-      throw new Error(`Failed to process image: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
+    return this.processPDF(file, isSignedIn);
   }
 
-  private static extractDataFromText(text: string): ExtractedData {
-    console.log('🔍 Extracting data from text...');
+  private static parseMarkdownToTransactions(markdown: string): TransactionData[] {
+    if (!markdown) return [];
 
-    // First try US Bank specific extraction
-    if (text.toLowerCase().includes('us bank') || text.toLowerCase().includes('u.s. bank')) {
-      console.log('🏦 US Bank format detected, using specific patterns...');
-
-      const userInfo = extractUSBankUserInfo(text);
-      const transactions = extractUSBankTransactions(text);
-
-      // Type assertion to ensure transactions match TransactionData interface
-      const typedTransactions: TransactionData[] = transactions.map(t => ({
-        ...t,
-        type: t.type as 'credit' | 'debit'
-      }));
-
-      // Calculate summary
-      let runningBalance = 0;
-      const summary = {
-        totalCredits: 0,
-        totalDebits: 0,
-        netBalance: 0,
-        transactionCount: 0
-      };
-
-      typedTransactions.forEach(transaction => {
-        runningBalance += transaction.amount;
-        transaction.balance = runningBalance;
-
-        if (transaction.amount > 0) {
-          summary.totalCredits += transaction.amount;
-        } else {
-          summary.totalDebits += transaction.amount;
-        }
-      });
-
-      summary.netBalance = summary.totalCredits + summary.totalDebits;
-      summary.transactionCount = typedTransactions.length;
-
-      console.log(`📊 US Bank extraction complete: ${typedTransactions.length} transactions, $${summary.netBalance.toFixed(2)} net balance`);
-
-      return {
-        userInfo,
-        transactions: typedTransactions,
-        summary
-      };
-    }
-
-    // Fallback to generic extraction (original logic)
-    console.log('🏛️ Using generic extraction patterns...');
-    const lines = text.split('\n').filter(line => line.trim().length > 0);
-
-    // Extract user information
-    const userInfo = this.extractUserInfo(text);
-
-    // Extract transactions
-    const transactions = this.extractTransactions(lines);
-
-    // Calculate summary
-    const summary = this.calculateSummary(transactions);
-
-    return {
-      userInfo,
-      transactions,
-      summary
-    };
-  }
-
-  private static extractUserInfo(text: string): ExtractedData['userInfo'] {
-    const userInfo: ExtractedData['userInfo'] = {
-      name: '',
-      accountNumber: '',
-      bankName: '',
-      statementPeriod: ''
-    };
-
-    // Generic patterns for other banks
-    const namePatterns = [
-      /(?:name|account holder|customer)[:\s]+([A-Za-z\s]+?)(?:\n|$)/i,
-      /^([A-Za-z\s]+?)(?:\n\s*(?:account|statement|date))/i,
-    ];
-
-    for (const pattern of namePatterns) {
-      const match = text.match(pattern);
-      if (match) {
-        userInfo.name = match[1].trim();
-        break;
-      }
-    }
-
-    const accountPatterns = [
-      /account\s*number[:\s]+(\*{4,}\d{4})/i,
-      /account[:\s]+(\*{4,}\d{4})/i,
-    ];
-
-    for (const pattern of accountPatterns) {
-      const match = text.match(pattern);
-      if (match) {
-        userInfo.accountNumber = match[1].trim();
-        break;
-      }
-    }
-
-    // Extract bank name
-    const bankNames = ['chase', 'bank of america', 'wells fargo', 'citibank', 'capital one'];
-    for (const bank of bankNames) {
-      if (text.toLowerCase().includes(bank)) {
-        userInfo.bankName = bank.charAt(0).toUpperCase() + bank.slice(1);
-        break;
-      }
-    }
-
-    // Extract statement period
-    const periodPatterns = [
-      /(?:statement period|period)[:\s]+([A-Za-z]+\s\d{1,2}\s*[-–to]*\s*[A-Za-z]+\s\d{1,2},?\s\d{4})/i,
-      /(\d{1,2}[/\-]\d{1,2}[/\-]\d{2,4})\s*[-–to]+\s*(\d{1,2}[/\-]\d{1,2}[/\-]\d{2,4})/i,
-    ];
-
-    for (const pattern of periodPatterns) {
-      const match = text.match(pattern);
-      if (match) {
-        if (match[1] && match[2]) {
-          userInfo.statementPeriod = `${match[1]} - ${match[2]}`;
-        } else if (match[1]) {
-          userInfo.statementPeriod = match[1];
-        }
-        break;
-      }
-    }
-
-    return userInfo;
-  }
-
-  private static extractTransactions(lines: string[]): TransactionData[] {
     const transactions: TransactionData[] = [];
-
-    // Generic transaction patterns
-    const transactionPatterns = [
-      /^(\d{1,2}\/\d{1,2}\/\d{2,4})\s+(.+?)\s+(-?\$?\d{1,3}(?:,\d{3})*(?:\.\d{2})?)\s+(-?\$?\d{1,3}(?:,\d{3})*(?:\.\d{2})?)\s*(credit|debit)?$/i,
-      /^(\d{1,2}\/\d{1,2}\/\d{2,4})\s+(.+?)\s+(-?\$?\d{1,3}(?:,\d{3})*(?:\.\d{2})?)\s*(credit|debit)?$/i,
-    ];
+    const lines = markdown.split('\n');
+    let isTable = false;
+    let headers: string[] = [];
 
     for (const line of lines) {
-      if (line.length < 10) continue;
+      const trimmedLine = line.trim();
 
-      for (const pattern of transactionPatterns) {
-        const match = line.match(pattern);
-        if (match) {
-          try {
-            let date = match[1];
-            let description = match[2];
-            let amountStr = match[3];
-            let balanceStr = match[4] || '';
-            let explicitType = match[5] || '';
+      if (trimmedLine.startsWith('|') && !isTable) {
+        if (trimmedLine.includes('---')) continue;
+        const cols = trimmedLine.split('|').map(c => c.trim()).filter(c => c);
+        if (cols.some(c => /date|description|money|amount|balance/i.test(c))) {
+          headers = cols.map(c => c.toLowerCase());
+          isTable = true;
+          continue;
+        }
+      }
 
-            let amount = parseFloat(amountStr.replace(/[$,]/g, ''));
-            let balance = balanceStr ? parseFloat(balanceStr.replace(/[$,]/g, '')) : 0;
+      if (isTable && trimmedLine.startsWith('|')) {
+        if (trimmedLine.includes('---')) continue;
+        const cols = trimmedLine.split('|').map(c => c.trim()).filter(c => c !== '');
 
-            let type: 'credit' | 'debit';
-            if (explicitType) {
-              type = explicitType.toLowerCase() === 'credit' ? 'credit' : 'debit';
-            } else {
-              type = amount >= 0 ? 'credit' : 'debit';
+        if (cols.length >= 3) {
+          const transaction: any = {};
+          let moneyIn = 0;
+          let moneyOut = 0;
+
+          headers.forEach((header, index) => {
+            if (index >= cols.length) return;
+            const value = cols[index];
+
+            if (header.includes('date')) {
+              transaction.date = value;
+            } else if (header.includes('description')) {
+              transaction.description = value;
+            } else if (header.includes('money in') || header.includes('credit')) {
+              if (value !== '-') {
+                const amount = parseFloat(value.replace(/[^0-9.-]/g, ''));
+                if (!isNaN(amount)) moneyIn = Math.abs(amount);
+              }
+            } else if (header.includes('money out') || header.includes('debit')) {
+              if (value !== '-') {
+                const amount = parseFloat(value.replace(/[^0-9.-]/g, ''));
+                if (!isNaN(amount)) moneyOut = Math.abs(amount);
+              }
+            } else if (header.includes('balance')) {
+              transaction.balance = parseFloat(value.replace(/[^0-9.-]/g, '')) || 0;
             }
+          });
 
-            const transaction: TransactionData = {
-              date: this.normalizeDate(date),
-              description: description.trim(),
-              amount: amount,
-              balance: balance,
-              type: type
-            };
+          if (moneyIn > 0) {
+            transaction.amount = moneyIn;
+            transaction.type = 'credit';
+          } else if (moneyOut > 0) {
+            transaction.amount = moneyOut;
+            transaction.type = 'debit';
+          }
 
-            transactions.push(transaction);
-            break;
-          } catch (error) {
-            console.log('⚠️ Failed to parse transaction:', line);
+          if (transaction.date && transaction.description && transaction.amount) {
+            transactions.push(transaction as TransactionData);
           }
         }
       }
@@ -449,43 +186,19 @@ export class PDFProcessor {
   }
 
   private static calculateSummary(transactions: TransactionData[]) {
-    const summary = {
-      totalCredits: 0,
-      totalDebits: 0,
-      netBalance: 0,
-      transactionCount: 0
+    let totalCredits = 0;
+    let totalDebits = 0;
+
+    transactions.forEach(t => {
+      if (t.type === 'credit') totalCredits += t.amount;
+      else totalDebits += t.amount;
+    });
+
+    return {
+      totalCredits,
+      totalDebits,
+      netBalance: totalCredits - totalDebits,
+      transactionCount: transactions.length
     };
-
-    summary.totalCredits = transactions
-      .filter(t => t.type === 'credit')
-      .reduce((sum, t) => sum + t.amount, 0);
-
-    summary.totalDebits = transactions
-      .filter(t => t.type === 'debit')
-      .reduce((sum, t) => sum + Math.abs(t.amount), 0);
-
-    summary.netBalance = summary.totalCredits - summary.totalDebits;
-    summary.transactionCount = transactions.length;
-
-    return summary;
-  }
-
-  private static normalizeDate(dateStr: string): string {
-    // Try various date formats
-    const patterns = [
-      /(\d{1,2})\/(\d{1,2})\/(\d{2,4})/,
-      /(\d{4})-(\d{2})-(\d{2})/,
-    ];
-
-    for (const pattern of patterns) {
-      const match = dateStr.match(pattern);
-      if (match) {
-        let [, month, day, year] = match;
-        if (year.length === 2) year = '20' + year;
-        return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
-      }
-    }
-
-    return dateStr;
   }
 }

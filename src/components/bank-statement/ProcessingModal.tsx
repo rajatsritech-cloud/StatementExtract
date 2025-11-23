@@ -7,6 +7,14 @@ interface ProcessingModalProps {
 }
 
 export const ProcessingModal = ({ progress }: ProcessingModalProps) => {
+  const steps = [
+    { label: 'Analyzing document format', threshold: 10, icon: '📄' },
+    { label: 'Extracting text with OCR', threshold: 25, icon: '🔍' },
+    { label: 'Identifying transactions', threshold: 45, icon: '💳' },
+    { label: 'AI accuracy enhancement', threshold: 90, icon: '🤖' },
+    { label: 'Structuring data', threshold: 100, icon: '📊' },
+  ];
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
       <div className="relative mx-auto max-w-md w-full mx-4">
@@ -19,7 +27,7 @@ export const ProcessingModal = ({ progress }: ProcessingModalProps) => {
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-[hsl(var(--foreground))]">Processing Statement</h3>
-                <p className="text-sm text-[hsl(var(--muted-foreground))]">Upload in Progress...</p>
+                <p className="text-sm text-[hsl(var(--muted-foreground))]">Ensuring 97%+ accuracy...</p>
               </div>
             </div>
           </div>
@@ -33,7 +41,7 @@ export const ProcessingModal = ({ progress }: ProcessingModalProps) => {
                 <span className="text-sm text-[hsl(var(--muted-foreground))]">{progress}%</span>
               </div>
               <div className="relative h-2 w-full overflow-hidden rounded-full bg-[hsl(var(--muted))]">
-                <div 
+                <div
                   className="absolute h-full bg-gradient-to-r from-[hsl(var(--primary))] to-[hsl(var(--accent))] transition-all duration-300 ease-out"
                   style={{ width: `${progress}%` }}
                 />
@@ -41,34 +49,32 @@ export const ProcessingModal = ({ progress }: ProcessingModalProps) => {
             </div>
 
             {/* Processing Steps */}
-            <div className="space-y-3">
-              <div className={`flex items-center gap-3 ${progress >= 25 ? 'text-[hsl(var(--foreground))]' : 'text-[hsl(var(--muted-foreground))]'}`}>
-                <div className={`flex h-5 w-5 items-center justify-center rounded-full text-xs ${progress >= 25 ? 'bg-[hsl(var(--primary))] text-white' : 'bg-[hsl(var(--muted))]'}`}>
-                  {progress >= 25 ? '✓' : '1'}
-                </div>
-                <span className="text-sm">Analyzing document format</span>
-              </div>
-              
-              <div className={`flex items-center gap-3 ${progress >= 50 ? 'text-[hsl(var(--foreground))]' : 'text-[hsl(var(--muted-foreground))]'}`}>
-                <div className={`flex h-5 w-5 items-center justify-center rounded-full text-xs ${progress >= 50 ? 'bg-[hsl(var(--primary))] text-white' : 'bg-[hsl(var(--muted))]'}`}>
-                  {progress >= 50 ? '✓' : '2'}
-                </div>
-                <span className="text-sm">Extracting text with OCR</span>
-              </div>
-              
-              <div className={`flex items-center gap-3 ${progress >= 75 ? 'text-[hsl(var(--foreground))]' : 'text-[hsl(var(--muted-foreground))]'}`}>
-                <div className={`flex h-5 w-5 items-center justify-center rounded-full text-xs ${progress >= 75 ? 'bg-[hsl(var(--primary))] text-white' : 'bg-[hsl(var(--muted))]'}`}>
-                  {progress >= 75 ? '✓' : '3'}
-                </div>
-                <span className="text-sm">Identifying transactions</span>
-              </div>
-              
-              <div className={`flex items-center gap-3 ${progress >= 100 ? 'text-[hsl(var(--foreground))]' : 'text-[hsl(var(--muted-foreground))]'}`}>
-                <div className={`flex h-5 w-5 items-center justify-center rounded-full text-xs ${progress >= 100 ? 'bg-[hsl(var(--primary))] text-white' : 'bg-[hsl(var(--muted))]'}`}>
-                  {progress >= 100 ? '✓' : '4'}
-                </div>
-                <span className="text-sm">Structuring data</span>
-              </div>
+            <div className="space-y-2.5">
+              {steps.map((step, index) => {
+                const isCompleted = progress >= step.threshold;
+                const isActive = progress >= (steps[index - 1]?.threshold || 0) && progress < step.threshold;
+
+                return (
+                  <div
+                    key={index}
+                    className={`flex items-center gap-3 transition-all duration-300 ${isCompleted ? 'text-[hsl(var(--foreground))]' :
+                      isActive ? 'text-[hsl(var(--primary))]' :
+                        'text-[hsl(var(--muted-foreground))]'
+                      }`}
+                  >
+                    <div className={`flex h-5 w-5 items-center justify-center rounded-full text-xs font-medium transition-all duration-300 ${isCompleted ? 'bg-[hsl(var(--primary))] text-white scale-110' :
+                      isActive ? 'bg-[hsl(var(--primary))]/20 text-[hsl(var(--primary))] animate-pulse' :
+                        'bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))]'
+                      }`}>
+                      {isCompleted ? '✓' : index + 1}
+                    </div>
+                    <span className="text-sm flex items-center gap-1.5">
+                      <span>{step.icon}</span>
+                      <span>{step.label}</span>
+                    </span>
+                  </div>
+                );
+              })}
             </div>
 
             {/* Loading Animation */}
