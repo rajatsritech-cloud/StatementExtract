@@ -54,6 +54,7 @@ export const BankStatementConverter = () => {
     console.log('✅ File validation passed');
     setIsProcessing(true);
     setProcessingProgress(0);
+    setSelectedFile(null); // Clear file from upload area immediately
     toast("Processing your bank statement...", {
       icon: '⏳',
       duration: 4000,

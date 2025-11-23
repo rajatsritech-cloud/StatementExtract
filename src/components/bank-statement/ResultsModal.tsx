@@ -22,7 +22,7 @@ export const ResultsModal = ({ data, file, onClose, onTryAnother, onExport }: Re
   const [showPdf, setShowPdf] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortConfig, setSortConfig] = useState<{ key: keyof typeof data.transactions[0]; direction: 'asc' | 'desc' } | null>(null);
-  const [isApproved, setIsApproved] = useState(!data.human_review?.requires_human_review);
+  const [isApproved, setIsApproved] = useState(true);
 
   // Sort transactions
   const sortedTransactions = useMemo(() => {
