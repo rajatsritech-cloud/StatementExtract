@@ -2,7 +2,6 @@
 
 import { useState, useCallback } from "react";
 import { UploadArea } from "@/components/bank-statement/UploadArea";
-import { ProcessingModal } from "@/components/bank-statement/ProcessingModal";
 import { ResultsModal } from "@/components/bank-statement/ResultsModal";
 
 import { toast } from "react-hot-toast";
@@ -11,11 +10,13 @@ import { ExportService } from "@/lib/exportService";
 import { useAuth } from "@clerk/nextjs";
 
 export const BankStatementConverter = () => {
+  // Trigger HMR update
   const [isProcessing, setIsProcessing] = useState(false);
   const [extractedData, setExtractedData] = useState<ExtractedData | null>(null);
   const [showResults, setShowResults] = useState(false);
   const [processingProgress, setProcessingProgress] = useState(0);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [uploadKey, setUploadKey] = useState(0);
   const { isSignedIn, isLoaded } = useAuth();
 
   const handleFileUpload = useCallback(async (file: File) => {
@@ -53,8 +54,12 @@ export const BankStatementConverter = () => {
 
     console.log('✅ File validation passed');
     setIsProcessing(true);
+    setShowResults(true); // Show modal immediately
     setProcessingProgress(0);
-    setSelectedFile(null); // Clear file from upload area immediately
+
+    // Reset UploadArea UI by changing its key
+    setUploadKey(prev => prev + 1);
+
     toast("Processing your bank statement...", {
       icon: '⏳',
       duration: 4000,
@@ -201,21 +206,18 @@ export const BankStatementConverter = () => {
 
           {/* Upload Area */}
           <div className="mx-auto max-w-2xl">
-            <UploadArea onFileUpload={handleFileUpload} isProcessing={isProcessing} />
+            <UploadArea key={uploadKey} onFileUpload={handleFileUpload} isProcessing={isProcessing} />
           </div>
         </div>
       </main>
 
-      {/* Processing Modal */}
-      {isProcessing && (
-        <ProcessingModal progress={processingProgress} />
-      )}
-
-      {/* Results Modal */}
-      {showResults && extractedData && (
+      {/* Results Modal (Handles both processing and results) */}
+      {showResults && (
         <ResultsModal
           data={extractedData}
           file={selectedFile}
+          isProcessing={isProcessing}
+          progress={processingProgress}
           onClose={() => setShowResults(false)}
           onTryAnother={handleTryAnother}
           onExport={handleExport}

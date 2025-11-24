@@ -15,6 +15,7 @@ export interface ExtractedData {
     accountNumber?: string;
     bankName?: string;
     statementPeriod?: string;
+    currency?: string; // Added currency field
     accountSummary?: {
       beginningBalance: number;
       endingBalance: number;
@@ -93,9 +94,10 @@ export class PDFProcessor {
       const result = await response.json();
       const transactions = this.parseMarkdownToTransactions(result.markdown);
       const summary = this.calculateSummary(transactions);
+      const userInfo = this.parseUserInfo(result.markdown);
 
       return {
-        userInfo: {},
+        userInfo: userInfo,
         transactions: transactions,
         summary: summary,
         markdown: result.markdown,
@@ -112,6 +114,124 @@ export class PDFProcessor {
 
   static async processImage(file: File, isSignedIn: boolean = false): Promise<ExtractedData> {
     return this.processPDF(file, isSignedIn);
+  }
+
+  static parseTableStructure(markdown: string): { headers: string[], rows: string[][] } {
+    if (!markdown) return { headers: [], rows: [] };
+
+    const lines = markdown.split('\n');
+    let headers: string[] = [];
+    const rows: string[][] = [];
+    let isTable = false;
+
+    for (const line of lines) {
+      const trimmedLine = line.trim();
+
+      // Check for header row
+      if (trimmedLine.startsWith('|') && !isTable) {
+        if (trimmedLine.includes('---')) continue; // Skip separator
+        const cols = trimmedLine.split('|').map(c => c.trim()).filter(c => c);
+        // Simple heuristic: if it looks like a header (has date/desc/amount keywords), treat as start
+        if (cols.some(c => /date|description|money|amount|balance|credit|debit/i.test(c))) {
+          headers = cols;
+          isTable = true;
+          continue;
+        }
+      }
+
+      // Process table rows
+      if (isTable && trimmedLine.startsWith('|')) {
+        if (trimmedLine.includes('---')) continue;
+        const cols = trimmedLine.split('|').map(c => c.trim()).filter(c => c !== '');
+
+        if (cols.length > 0) {
+          rows.push(cols);
+        }
+      }
+    }
+
+    return { headers, rows };
+  }
+
+  private static parseUserInfo(markdown: string): ExtractedData['userInfo'] {
+    const userInfo: ExtractedData['userInfo'] = {
+      accountSummary: {
+        beginningBalance: 0,
+        endingBalance: 0,
+        totalDeposits: 0,
+        totalWithdrawals: 0
+      }
+    };
+
+    if (!markdown) return userInfo;
+
+    // Helper to extract value using regex (robust against markdown formatting)
+    const extract = (regex: RegExp): string | undefined => {
+      const match = markdown.match(regex);
+      return match ? match[1].replace(/\*\*/g, '').trim() : undefined;
+    };
+
+    // Helper to extract currency value
+    const extractCurrency = (regex: RegExp): number => {
+      const match = markdown.match(regex);
+      if (match) {
+        let valStr = match[1].replace(/,/g, '');
+        // Handle trailing negative sign (e.g., "100.00-")
+        if (valStr.endsWith('-')) {
+          valStr = '-' + valStr.slice(0, -1);
+        }
+
+        // Handle comma as decimal separator logic if needed, but for now standardizing on dot
+        // If the document uses commas for decimals (e.g. 40.000,00), simple replace might fail.
+        // But the user's example showed "40,000,00" which is ambiguous (could be 40k or 40).
+        // Assuming standard US/UK format for now as per previous success, but being robust to trailing chars.
+
+        return parseFloat(valStr.replace(/[^0-9.-]/g, '')) || 0;
+      }
+      return 0;
+    };
+
+    // Attempt to detect currency symbol
+    const currencyMatch = markdown.match(/([£$€¥])/);
+    if (currencyMatch) {
+      userInfo.currency = currencyMatch[1];
+    } else {
+      userInfo.currency = '$'; // Default
+    }
+
+    // Extract Account Details
+    userInfo.name = extract(/(?:Account Name|Name)[:\s*]+(?:\*\*)?(.*?)(?:\*\*)?$/m);
+    userInfo.accountNumber = extract(/(?:Account Number)[:\s*]+(?:\*\*)?(.*?)(?:\*\*)?$/m);
+    userInfo.bankName = extract(/(?:Bank Name)[:\s*]+(?:\*\*)?(.*?)(?:\*\*)?$/m) || "Bank Statement";
+    userInfo.statementPeriod = extract(/(?:Statement Period|Period|Statement Date)[:\s*]+(?:\*\*)?(.*?)(?:\*\*)?$/m);
+
+    // Extract Email if present
+    userInfo.email = extract(/(?:Email)[:\s*]+(?:\*\*)?(.*?)(?:\*\*)?$/m);
+
+    // Extract Account Summary
+    if (userInfo.accountSummary) {
+      // Regex looks for label, optional bold, optional currency symbol, and the number
+
+      userInfo.accountSummary.beginningBalance = extractCurrency(/(?:Opening Balance|Beginning Balance|Balance at [0-9]+ [A-Za-z]+)[^0-9]*[£$€]?([0-9,.]+)/i);
+      userInfo.accountSummary.endingBalance = extractCurrency(/(?:Closing Balance|Ending Balance|Balance at [0-9]+ [A-Za-z]+)[^0-9]*[£$€]?([0-9,.]+)/i);
+
+      // Try to find Total Credits/Deposits/Money In
+      userInfo.accountSummary.totalDeposits = extractCurrency(/(?:Total )?(?:Deposits|Credits|Money In)[^0-9]*[£$€]?([0-9,.]+)/i);
+
+      // Try to find Total Debits/Withdrawals/Money Out
+      userInfo.accountSummary.totalWithdrawals = extractCurrency(/(?:Total )?(?:Debits|Withdrawals|Money Out)[^0-9]*[£$€]?([0-9,.]+)/i);
+
+      // Fallback: If Total Debits is 0, try summing "Card Withdrawals" and "Other Withdrawals"
+      if (userInfo.accountSummary.totalWithdrawals === 0) {
+        const cardWithdrawals = extractCurrency(/Card Withdrawals[^0-9]*[£$€]?([0-9,.]+)/i);
+        const otherWithdrawals = extractCurrency(/Other Withdrawals[^0-9]*[£$€]?([0-9,.]+)/i);
+        if (cardWithdrawals > 0 || otherWithdrawals > 0) {
+          userInfo.accountSummary.totalWithdrawals = cardWithdrawals + otherWithdrawals;
+        }
+      }
+    }
+
+    return userInfo;
   }
 
   private static parseMarkdownToTransactions(markdown: string): TransactionData[] {
