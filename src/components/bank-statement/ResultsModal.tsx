@@ -101,66 +101,95 @@ const UserInfoAndSummary = ({ userInfo }: UserInfoAndSummaryProps) => {
 
 // --- Dynamic Table Component ---
 interface DynamicTableProps {
-  markdown: string;
+  transactions: ExtractedData['transactions'];
+  currency?: string;
+  columnNames?: { [key: string]: string };
 }
 
-const DynamicTable = ({ markdown }: DynamicTableProps) => {
+const DynamicTable = ({ transactions, currency = '$', columnNames }: DynamicTableProps) => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [sortConfig, setSortConfig] = useState<{ key: number; direction: 'asc' | 'desc' } | null>(null);
+  const [sortConfig, setSortConfig] = useState<{ key: string; direction: 'asc' | 'desc' } | null>(null);
 
+  // Convert transactions to rows for display
   const { headers, rows } = useMemo(() => {
-    return PDFProcessor.parseTableStructure(markdown);
-  }, [markdown]);
+    if (!transactions || transactions.length === 0) return { headers: [], rows: [] };
 
-  const filteredRows = useMemo(() => {
-    if (!searchTerm) return rows;
-    return rows.filter(row =>
-      row.some(cell => cell.toLowerCase().includes(searchTerm.toLowerCase()))
+    const creditLabel = columnNames?.credit || "Money In";
+    const debitLabel = columnNames?.debit || "Money Out";
+
+    const headers = ["Date", "Description", creditLabel, debitLabel, "Balance"];
+
+    // Filter rows based on search term
+    const filtered = transactions.filter(t =>
+      t.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      t.date.includes(searchTerm) ||
+      t.amount.toString().includes(searchTerm)
     );
-  }, [rows, searchTerm]);
 
-  const sortedRows = useMemo(() => {
-    if (!sortConfig) return filteredRows;
-    return [...filteredRows].sort((a, b) => {
-      const aValue = a[sortConfig.key] || "";
-      const bValue = b[sortConfig.key] || "";
+    // Sort rows
+    const sorted = [...filtered].sort((a, b) => {
+      if (!sortConfig) return 0;
 
-      // Try numeric sort first
-      const aNum = parseFloat(aValue.replace(/[^0-9.-]/g, ''));
-      const bNum = parseFloat(bValue.replace(/[^0-9.-]/g, ''));
+      let aValue: any = '';
+      let bValue: any = '';
 
-      if (!isNaN(aNum) && !isNaN(bNum)) {
-        return sortConfig.direction === 'asc' ? aNum - bNum : bNum - aNum;
+      // Map sort keys to values
+      switch (sortConfig.key) {
+        case 'Date': aValue = a.date; bValue = b.date; break;
+        case 'Description': aValue = a.description; bValue = b.description; break;
+        case creditLabel:
+          aValue = a.moneyIn || (a.type === 'credit' ? a.amount : 0);
+          bValue = b.moneyIn || (b.type === 'credit' ? b.amount : 0);
+          break;
+        case debitLabel:
+          aValue = a.moneyOut || (a.type === 'debit' ? a.amount : 0);
+          bValue = b.moneyOut || (b.type === 'debit' ? b.amount : 0);
+          break;
+        case 'Balance': aValue = a.balance; bValue = b.balance; break;
+        default: return 0;
       }
 
-      // Fallback to string sort
-      return sortConfig.direction === 'asc'
-        ? aValue.localeCompare(bValue)
-        : bValue.localeCompare(aValue);
+      if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
+      if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
+      return 0;
     });
-  }, [filteredRows, sortConfig]);
 
-  const requestSort = (key: number) => {
+    const rows = sorted.map(t => {
+      const moneyIn = t.moneyIn !== undefined ? t.moneyIn : (t.type === 'credit' ? t.amount : 0);
+      const moneyOut = t.moneyOut !== undefined ? t.moneyOut : (t.type === 'debit' ? t.amount : 0);
+
+      return [
+        t.date,
+        t.description,
+        moneyIn > 0 ? formatCurrency(moneyIn, currency) : '-',
+        moneyOut > 0 ? formatCurrency(moneyOut, currency) : '-',
+        formatCurrency(t.balance, currency)
+      ];
+    });
+
+    return { headers, rows };
+  }, [transactions, searchTerm, sortConfig, currency, columnNames]);
+
+  const requestSort = (headerIndex: number) => {
+    const header = headers[headerIndex];
     let direction: 'asc' | 'desc' = 'asc';
-    if (sortConfig && sortConfig.key === key && sortConfig.direction === 'asc') {
+    if (sortConfig && sortConfig.key === header && sortConfig.direction === 'asc') {
       direction = 'desc';
     }
-    setSortConfig({ key, direction });
+    setSortConfig({ key: header, direction });
   };
 
   // Helper to determine cell style based on header
   const getCellStyle = (header: string, content: string) => {
-    const h = header.toLowerCase();
-    if (h.includes('credit') || h.includes('deposit') || h.includes('money in')) {
-      return "text-green-600 font-medium";
-    }
-    if (h.includes('debit') || h.includes('withdrawal') || h.includes('money out')) {
-      return "text-red-600 font-medium";
-    }
+    const creditLabel = columnNames?.credit || "Money In";
+    const debitLabel = columnNames?.debit || "Money Out";
+
+    if (header === creditLabel && content !== '-') return "text-green-600 font-medium";
+    if (header === debitLabel && content !== '-') return "text-red-600 font-medium";
     return "text-[hsl(var(--foreground))]";
   };
 
-  if (headers.length === 0) return <div className="text-center py-8 text-[hsl(var(--muted-foreground))]">No transaction data found.</div>;
+  if (transactions.length === 0) return <div className="text-center py-8 text-[hsl(var(--muted-foreground))]">No transaction data found.</div>;
 
   return (
     <div className="space-y-4">
@@ -197,7 +226,7 @@ const DynamicTable = ({ markdown }: DynamicTableProps) => {
               </tr>
             </thead>
             <tbody>
-              {sortedRows.map((row, rowIndex) => (
+              {rows.map((row, rowIndex) => (
                 <tr key={rowIndex} className="hover:bg-[hsl(var(--muted))]/30 transition-colors border-b border-[hsl(var(--border))] last:border-0">
                   {row.map((cell, cellIndex) => (
                     <td key={cellIndex} className={`px-4 py-3 ${getCellStyle(headers[cellIndex], cell)}`}>
@@ -211,7 +240,7 @@ const DynamicTable = ({ markdown }: DynamicTableProps) => {
         </div>
       </div>
       <div className="text-xs text-[hsl(var(--muted-foreground))] text-right">
-        Showing {sortedRows.length} transactions
+        Showing {rows.length} transactions
       </div>
     </div>
   );
@@ -401,7 +430,7 @@ export const ResultsModal = ({ data, file, isProcessing = false, progress = 0, o
                   </div>
 
                   {/* Dynamic Table with Sort/Search */}
-                  {data.markdown && <DynamicTable markdown={data.markdown} />}
+                  {data.transactions && <DynamicTable transactions={data.transactions} currency={data.userInfo.currency} columnNames={data.column_names} />}
                 </>
               ) : null}
             </div>

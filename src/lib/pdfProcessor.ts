@@ -6,6 +6,8 @@ export interface TransactionData {
   amount: number;
   balance: number;
   type: 'credit' | 'debit';
+  moneyIn?: number;
+  moneyOut?: number;
 }
 
 export interface ExtractedData {
@@ -30,6 +32,7 @@ export interface ExtractedData {
     netBalance: number;
     transactionCount: number;
   };
+  column_names?: { [key: string]: string }; // Added column_names field
   markdown?: string;
   fraud_analysis?: {
     status: string;
@@ -76,7 +79,7 @@ export class PDFProcessor {
 
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 120000);
+      const timeoutId = setTimeout(() => controller.abort(), 300000);
 
       const response = await fetch('http://127.0.0.1:8000/api/v1/pdf-extract/fast', {
         method: 'POST',
@@ -92,6 +95,56 @@ export class PDFProcessor {
       }
 
       const result = await response.json();
+
+      // Use structured data from backend if available (New "Hybrid AI" approach)
+      if (result.data) {
+        console.log("Using structured data from backend:", result.data);
+        const backendData = result.data;
+
+        // Map backend structure to frontend ExtractedData interface
+        const userInfoRaw = backendData.userInfo || backendData.user_info || {};
+        const summaryRaw = backendData.summary || {};
+
+        return {
+          userInfo: {
+            name: userInfoRaw.name,
+            email: userInfoRaw.email,
+            accountNumber: userInfoRaw.account_number || userInfoRaw.accountNumber,
+            bankName: userInfoRaw.bank_name || userInfoRaw.bankName || "Bank Statement",
+            statementPeriod: userInfoRaw.statement_period || userInfoRaw.statementPeriod,
+            currency: backendData.currency || userInfoRaw.currency || '$',
+            accountSummary: {
+              beginningBalance: summaryRaw.opening_balance || summaryRaw.beginningBalance || 0,
+              endingBalance: summaryRaw.closing_balance || summaryRaw.endingBalance || 0,
+              totalDeposits: summaryRaw.total_money_in || summaryRaw.totalDeposits || 0,
+              totalWithdrawals: summaryRaw.total_money_out || summaryRaw.totalWithdrawals || 0,
+            }
+          },
+          transactions: backendData.transactions.map((t: any) => ({
+            date: t.date,
+            description: t.description,
+            amount: t.money_in > 0 ? t.money_in : t.money_out,
+            balance: t.balance,
+            type: t.money_in > 0 ? 'credit' : 'debit',
+            // Preserve original values for UI flexibility
+            moneyIn: t.money_in,
+            moneyOut: t.money_out
+          })),
+          summary: {
+            totalCredits: summaryRaw.total_money_in || 0,
+            totalDebits: summaryRaw.total_money_out || 0,
+            netBalance: (summaryRaw.total_money_in || 0) - (summaryRaw.total_money_out || 0),
+            transactionCount: backendData.transactions?.length || 0
+          },
+          column_names: backendData.column_names, // Pass column names
+          markdown: result.markdown,
+          fraud_analysis: result.fraud_analysis,
+          reconciliation: result.reconciliation,
+          human_review: result.human_review
+        };
+      }
+
+      // Fallback to frontend parsing (Legacy)
       const transactions = this.parseMarkdownToTransactions(result.markdown);
       const summary = this.calculateSummary(transactions);
       const userInfo = this.parseUserInfo(result.markdown);
