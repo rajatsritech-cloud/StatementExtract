@@ -25,8 +25,6 @@
 /src/app/_admin/
 /src/app/_api
 
-# misc
-.DS_Store
 *.pem
 
 # debug

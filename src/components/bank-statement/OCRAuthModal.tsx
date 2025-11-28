@@ -1,6 +1,6 @@
 "use client";
 
-import { SignInButton, SignUpButton } from "@clerk/nextjs";
+import { SignInButton, SignUpButton } from "@clerk/clerk-react";
 import { X, FileText, Image, Lock } from "lucide-react";
 
 interface OCRAuthModalProps {
@@ -14,7 +14,7 @@ export const OCRAuthModal = ({ isOpen, onClose, fileType }: OCRAuthModalProps) =
 
   const isImageFile = fileType === 'image';
   const title = isImageFile ? 'Image File Processing' : 'OCR Processing Required';
-  const description = isImageFile 
+  const description = isImageFile
     ? 'Image files require OCR processing to extract text and transactions.'
     : 'This PDF appears to be image-based and requires OCR processing to extract text.';
 

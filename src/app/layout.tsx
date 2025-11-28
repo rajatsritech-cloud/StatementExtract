@@ -58,10 +58,14 @@ export const metadata: Metadata = {
     ],
   },
   manifest: "/site.webmanifest",
-  themeColor: "#16a34a",
+
   alternates: {
     canonical: "/",
   },
+};
+
+export const viewport = {
+  themeColor: "#16a34a",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

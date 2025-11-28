@@ -2,7 +2,7 @@
 
 import { useCallback, useState } from "react";
 import { Upload, FileText, Image, X } from "lucide-react";
-import { useAuth } from "@clerk/nextjs";
+import { useAuth } from "@clerk/clerk-react";
 import { OCRAuthModal } from "./OCRAuthModal";
 
 interface UploadAreaProps {

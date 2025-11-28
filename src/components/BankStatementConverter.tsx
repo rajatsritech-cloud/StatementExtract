@@ -7,7 +7,7 @@ import { ResultsModal } from "@/components/bank-statement/ResultsModal";
 import { toast } from "react-hot-toast";
 import { ExtractedData } from "@/lib/pdfProcessor";
 import { ExportService } from "@/lib/exportService";
-import { useAuth } from "@clerk/nextjs";
+import { useAuth } from "@clerk/clerk-react";
 
 export const BankStatementConverter = () => {
   // Trigger HMR update

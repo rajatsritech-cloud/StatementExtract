@@ -94,49 +94,35 @@ function mapToMeta(slug: string, frontmatter: Record<string, string>): BlogPostM
 }
 
 export async function getAllPosts(): Promise<BlogPostMeta[]> {
-  // Local development: read posts from filesystem.
-  if (USE_LOCAL_FILES) {
-    const postsDir = path.join(process.cwd(), POSTS_DIR);
-    let files: string[] = [];
+  // Try reading from local filesystem first (works for build if content is present)
+  const postsDir = path.join(process.cwd(), POSTS_DIR);
+  let localFiles: string[] = [];
+  try {
+    const entries = await fs.readdir(postsDir, { withFileTypes: true });
+    localFiles = entries
+      .filter((entry) => entry.isFile() && entry.name.endsWith(".mdx"))
+      .map((entry) => entry.name);
+  } catch (e) {
+    // Local dir might not exist in some envs, ignore
+  }
 
-    try {
-      const entries = await fs.readdir(postsDir, { withFileTypes: true });
-      files = entries
-        .filter((entry) => entry.isFile() && entry.name.endsWith(".mdx"))
-        .map((entry) => entry.name);
-    } catch (error) {
-      console.error(
-        "Failed to list local blog posts",
-        JSON.stringify(
-          {
-            dir: postsDir,
-            message: error instanceof Error ? error.message : String(error),
-          },
-          null,
-          2,
-        ),
-      );
-      return [];
-    }
-
+  if (localFiles.length > 0) {
+    console.log(`Found ${localFiles.length} local posts, using filesystem.`);
     const posts = await Promise.all(
-      files.map(async (file) => {
+      localFiles.map(async (file) => {
         const slug = file.replace(/\.mdx$/, "");
         const raw = await readLocalPostFile(slug);
-        if (!raw) {
-          return null;
-        }
+        if (!raw) return null;
         const { frontmatter } = parseFrontmatter(raw);
         return mapToMeta(slug, frontmatter);
-      }),
+      })
     );
-
     return posts
       .filter((post): post is BlogPostMeta => Boolean(post))
       .sort((a, b) => (b.date || "").localeCompare(a.date || ""));
   }
 
-  // Production / GitHub-backed environment.
+  // Fallback to GitHub if no local files found
   if (!isGitHubConfigured()) {
     return [];
   }
@@ -159,20 +145,9 @@ export async function getAllPosts(): Promise<BlogPostMeta[]> {
       .filter((item) => item.type === "file" && item.name.endsWith(".mdx"))
       .map((item) => item.name);
   } catch (error) {
-    console.error(
-      "Failed to list blog posts from GitHub",
-      JSON.stringify(
-        {
-          owner: GH_OWNER,
-          repo: GH_REPO,
-          branch: GH_BRANCH,
-          message: error instanceof Error ? error.message : String(error),
-          status: (error as any)?.status,
-          response: (error as any)?.response?.data,
-        },
-        null,
-        2,
-      ),
+    console.warn(
+      "Failed to list blog posts from GitHub (returning empty list to allow build)",
+      error instanceof Error ? error.message : String(error)
     );
     return [];
   }
@@ -195,7 +170,14 @@ export async function getAllPosts(): Promise<BlogPostMeta[]> {
 }
 
 export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
-  const raw = USE_LOCAL_FILES ? await readLocalPostFile(slug) : await readPostFile(slug);
+  // Try local first
+  let raw = await readLocalPostFile(slug);
+
+  // If not found locally and GitHub is configured, try GitHub
+  if (!raw && isGitHubConfigured()) {
+    raw = await readPostFile(slug);
+  }
+
   if (!raw) {
     return null;
   }
