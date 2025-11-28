@@ -15,7 +15,7 @@ export default function ClerkProviderClient({ children }: { children: React.Reac
 
   return (
     <ClerkProvider
-      publishableKey={publishableKey ?? ""}
+      publishableKey="pk_test_b3JpZW50ZWQteWFrLTkzLmNsZXJrLmFjY291bnRzLmRldiQ"
       routerPush={(to) => router.push(to)}
       routerReplace={(to) => router.replace(to)}
     >
