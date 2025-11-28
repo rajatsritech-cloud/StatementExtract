@@ -1,13 +1,12 @@
 import type { NextConfig } from "next";
 
-const shouldUseStandalone = process.platform !== "win32" || process.env.NEXT_FORCE_STANDALONE === "true";
-
 const nextConfig: NextConfig = {
-  // Use standalone output for OpenNext/Cloudflare
-  ...(shouldUseStandalone ? { output: "standalone" } : {}),
+  // Enable static export for Cloudflare Pages (Pure Static)
+  output: "export",
 
   // Add the 'images' config right here
   images: {
+    unoptimized: true, // Required for static export
     remotePatterns: [
       {
         protocol: "https",
@@ -17,7 +16,6 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  // We removed rewrites to avoid production issues, but kept standalone for API support.
 };
 
 export default nextConfig;
