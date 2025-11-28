@@ -12,7 +12,12 @@ import { BlogNewsletterSignup } from "@/components/BlogNewsletterSignup";
 import { BlogInlineCTA } from "@/components/BlogInlineCTA";
 import "./page.module.css";
 
-export const revalidate = 21600;
+import "./page.module.css";
+
+// Disable ISR (Incremental Static Regeneration)
+// We want strict SSG (Static Site Generation) to avoid Cloudflare Worker limits.
+// Content updates will require a site rebuild.
+export const dynamicParams = false; // 404 if slug not found in generateStaticParams
 
 interface PageParams {
   params: Promise<{
