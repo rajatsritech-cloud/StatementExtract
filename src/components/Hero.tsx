@@ -23,24 +23,24 @@ export const Hero = () => {
           <path fill="currentColor" d="M39.7,-54.2C51.1,-45.5,59.4,-32.9,63.3,-19C67.2,-5.1,66.7,10.1,61.1,23.6C55.5,37.1,44.8,48.9,31.8,57.2C18.8,65.5,3.5,70.3,-11.9,69.5C-27.3,68.7,-42.8,62.3,-54.5,51.5C-66.2,40.7,-74.1,25.5,-75.3,9.7C-76.5,-6.1,-71,-22.5,-61.5,-35.3C-52,-48.1,-38.5,-57.3,-24.3,-64.2C-10.1,-71.1,4.8,-75.7,19.3,-73.9C33.8,-72.1,28.3,-62.9,39.7,-54.2Z" transform="translate(100 100)" />
         </svg>
       </div>
-      
+
       <div className="relative mx-auto max-w-7xl">
         <div className="text-center">
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[hsl(var(--primary))]/30 bg-[hsl(var(--secondary))] px-4 py-2 backdrop-blur-sm animate-fade-in">
             <Zap className="h-4 w-4 text-[hsl(var(--primary))]" />
-            <span className="text-sm font-medium text-[hsl(var(--foreground))]">Powered by Intelligent OCR and AI</span>
+            <span className="text-sm font-medium text-[hsl(var(--foreground))]">AI-Powered Document Processing</span>
           </div>
-          
+
           <h1 className="mb-6 text-5xl font-bold tracking-tight text-[hsl(var(--foreground))] md:text-7xl animate-slide-up">
             Extract data from
             <span className="bg-gradient-primary bg-clip-text text-transparent"> any document</span>
           </h1>
-          
+
           <p className="mx-auto mb-10 max-w-2xl text-lg text-[hsl(var(--muted-foreground))] md:text-xl animate-fade-in">
-            Turn PDFs, forms, and unstructured documents into structured data instantly. 
+            Turn PDFs, forms, and unstructured documents into structured data instantly.
             No templates. No training. Just results.
           </p>
-          
+
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row animate-fade-in">
             <Link href="/convert-bank-statement-to-csv-excel" passHref>
               <Button size="lg" className="group gap-2 shadow-glow">
@@ -55,9 +55,9 @@ export const Hero = () => {
               </Button>
             </Link>
           </div>
-          
+
           <p className="mt-6 text-sm text-[hsl(var(--muted-foreground))] animate-fade-in">
-            No credit card required • 500 free pages per month
+            No credit card required • Start your free trial
           </p>
         </div>
       </div>

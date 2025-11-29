@@ -4,7 +4,7 @@ import { Card } from "@/components/ui/card";
 const features = [
   {
     icon: Brain,
-    title: "OCR + AI-Powered Extraction",
+    title: "AI-Powered Document Processing",
     description: "Intelligent OCR and AI models understand document context and extract data with human-level accuracy.",
   },
   {
@@ -38,7 +38,7 @@ export const Features = () => {
             Extract data from any document type with industry-leading accuracy and speed.
           </p>
         </div>
-        
+
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           {features.map((feature, index) => (
             <Card

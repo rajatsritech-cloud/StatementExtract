@@ -125,8 +125,34 @@ export const AdminEditor = ({
     [body, commitMessage, frontmatter, slug, title],
   );
 
+  const [loadSlug, setLoadSlug] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleLoad = useCallback(() => {
+    if (!loadSlug.trim()) {
+      toast.error('Please enter a slug');
+      return;
+    }
+    window.location.href = `/admin?slug=${loadSlug}`;
+  }, [loadSlug]);
+
   return (
     <div className="space-y-8">
+      <section className="grid gap-6 rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-6 shadow-sm">
+        <h2 className="text-lg font-semibold text-[hsl(var(--foreground))]">Load Existing Post</h2>
+        <div className="flex gap-4">
+          <Input
+            value={loadSlug}
+            onChange={(e) => setLoadSlug(e.target.value)}
+            placeholder="Enter slug (e.g. my-blog-post)"
+            onKeyDown={(e) => e.key === 'Enter' && handleLoad()}
+          />
+          <Button onClick={handleLoad} disabled={loading} variant="secondary">
+            {loading ? 'Loading...' : 'Load'}
+          </Button>
+        </div>
+      </section>
+
       <section className="grid gap-6 rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-6 shadow-sm">
         <div className="grid gap-2">
           <label className="text-sm font-medium text-[hsl(var(--muted-foreground))]">Title</label>
@@ -202,7 +228,7 @@ export const AdminEditor = ({
           </Button>
         </div>
       </section>
-    </div>
+    </div >
   );
 };
 
