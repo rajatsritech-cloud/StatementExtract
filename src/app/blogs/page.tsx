@@ -84,7 +84,6 @@ export default async function BlogsPage() {
             <Link
               key={post.slug}
               href={`/blogs/${post.slug}`}
-              prefetch={false} // Disable prefetch to avoid RSC 404s
               className="group block h-full overflow-hidden rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-primary/60 hover:shadow-glow"
             >
               <article className="flex h-full flex-col justify-between">

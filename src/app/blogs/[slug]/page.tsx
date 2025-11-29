@@ -382,7 +382,6 @@ export default async function BlogPostPage({ params }: PageParams) {
           <nav className="flex items-center gap-2 text-xs font-medium text-[hsl(var(--muted-foreground))]">
             <Link
               href="/blogs"
-              prefetch={false} // Disable prefetch to avoid RSC 404s
               className="transition-colors hover:text-[hsl(var(--primary))]"
             >
               Blogs
