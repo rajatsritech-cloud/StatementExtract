@@ -28,17 +28,25 @@ export const Footer = () => {
               </a>
             </div>
           </div>
-          
+
           <div>
             <h3 className="mb-4 text-sm font-semibold text-[hsl(var(--foreground))]">Product</h3>
             <ul className="space-y-2 text-sm">
+              <li>
+                <Link
+                  href="/convert-bank-statement-to-csv-excel"
+                  className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors"
+                >
+                  Bank Statement Converter
+                </Link>
+              </li>
               <li><a href="#" className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors">Features</a></li>
               <li><a href="#" className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors">Pricing</a></li>
               <li><a href="#" className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors">API</a></li>
               <li><a href="#" className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors">Changelog</a></li>
             </ul>
           </div>
-          
+
           <div>
             <h3 className="mb-4 text-sm font-semibold text-[hsl(var(--foreground))]">Resources</h3>
             <ul className="space-y-2 text-sm">
@@ -55,7 +63,7 @@ export const Footer = () => {
               <li><a href="#" className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors">Support</a></li>
             </ul>
           </div>
-          
+
           <div>
             <h3 className="mb-4 text-sm font-semibold text-[hsl(var(--foreground))]">Company</h3>
             <ul className="space-y-2 text-sm">
@@ -94,7 +102,7 @@ export const Footer = () => {
             </ul>
           </div>
         </div>
-        
+
         <div className="mt-12 border-t border-[hsl(var(--border))] pt-8 text-center text-sm text-[hsl(var(--muted-foreground))]">
           <p>© 2025 Statement Extract. All rights reserved.</p>
         </div>

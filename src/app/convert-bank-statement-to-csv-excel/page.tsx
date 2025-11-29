@@ -1,5 +1,8 @@
 import { Metadata } from "next";
 import { BankStatementConverter } from "@/components/BankStatementConverter";
+import { BankStatementFeatures, SupportedBanks, BankStatementFAQ, BankStatementSEOContent } from "@/components/bank-statement/BankStatementContent";
+import { HowItWorks } from "@/components/HowItWorks";
+import { CTA } from "@/components/CTA";
 
 export const metadata: Metadata = {
   title: "Bank Statement Converter - Convert PDF Bank Statements to CSV/Excel | Automated Extraction",
@@ -11,7 +14,14 @@ export const metadata: Metadata = {
     "Best Bank Statement Converter Online",
     "PDF to Excel Converter",
     "Bank Statement OCR",
-    "Financial Data Extraction"
+    "Financial Data Extraction",
+    "Convert Chase Bank Statement to Excel",
+    "Convert Wells Fargo PDF to CSV",
+    "Scanned Bank Statement to Excel",
+    "Bank of America PDF Converter",
+    "Free Bank Statement Converter",
+    "PDF to CSV for QuickBooks",
+    "PDF to Excel for Xero"
   ],
   openGraph: {
     title: "Bank Statement Converter - Convert PDF to CSV/Excel",
@@ -35,7 +45,7 @@ export default function BankStatementConverterPage() {
             "@type": "SoftwareApplication",
             "name": "Bank Statement Converter",
             "description": "Automatically convert any PDF bank statement into clean Excel or CSV files with OCR + AI",
-            "url": "/convert-bank-statement-to-csv-excel",
+            "url": "https://statementextract.com/convert-bank-statement-to-csv-excel",
             "applicationCategory": "BusinessApplication",
             "operatingSystem": "Web Browser",
             "offers": {
@@ -48,12 +58,20 @@ export default function BankStatementConverterPage() {
               "Bank statement OCR",
               "Transaction extraction",
               "CSV export",
-              "Secure processing"
+              "Secure processing",
+              "Multi-currency support",
+              "Fraud detection"
             ]
           })
         }}
       />
       <BankStatementConverter />
+      <SupportedBanks />
+      <HowItWorks />
+      <BankStatementFeatures />
+      <BankStatementSEOContent />
+      <BankStatementFAQ />
+      <CTA />
     </>
   );
 }

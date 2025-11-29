@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles } from "lucide-react";
+import Link from "next/link";
 
 export const CTA = () => {
   return (
@@ -24,13 +25,15 @@ export const CTA = () => {
             </p>
 
             <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <Button
-                size="lg"
-                className="group gap-2"
-              >
-                Start Free Trial
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </Button>
+              <Link href="/convert-bank-statement-to-csv-excel">
+                <Button
+                  size="lg"
+                  className="group gap-2"
+                >
+                  Start Free Trial
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </Button>
+              </Link>
               <Button
                 size="lg"
                 variant="outline"
