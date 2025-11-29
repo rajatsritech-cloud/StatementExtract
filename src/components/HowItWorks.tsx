@@ -24,7 +24,7 @@ export const HowItWorks = () => {
   ];
 
   return (
-    <section className="relative py-20 px-6 md:py-32 bg-[hsl(var(--background))] border-y border-[hsl(var(--border))]">
+    <section className="relative py-12 px-6 md:py-20 bg-[hsl(var(--background))] border-y border-[hsl(var(--border))]">
       {/* Vertical lines pattern */}
       <div className="absolute inset-0 bg-grid-pattern-3 bg-size-40" />
 

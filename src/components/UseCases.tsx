@@ -24,13 +24,13 @@ const useCases = [
     icon: Building2,
     title: "Bank Statements",
     description: "Use OCR + AI to extract transactions, balances, IBANs, and account details from bank statements in any format.",
-    metrics: "99.9% accuracy",
+    metrics: "Industry-leading accuracy",
   },
 ];
 
 export const UseCases = () => {
   return (
-    <section className="relative bg-[hsl(var(--background))] py-20 px-6 md:py-32 border-y border-[hsl(var(--border))]">
+    <section className="relative bg-[hsl(var(--background))] py-12 px-6 md:py-20 border-y border-[hsl(var(--border))]">
       {/* Diagonal lines pattern */}
       <div className="absolute inset-0 bg-grid-pattern-2 bg-size-32" />
       <div className="relative mx-auto max-w-7xl z-10">
@@ -42,7 +42,7 @@ export const UseCases = () => {
             From startups to Fortune 500 companies, teams rely on our platform for critical document processing.
           </p>
         </div>
-        
+
         <div className="grid gap-8 md:grid-cols-2">
           {useCases.map((useCase, index) => (
             <Card
@@ -57,14 +57,14 @@ export const UseCases = () => {
                   {useCase.metrics}
                 </span>
               </div>
-              
+
               <h3 className="mb-3 text-2xl font-semibold text-[hsl(var(--card-foreground))]">
                 {useCase.title}
               </h3>
               <p className="text-[hsl(var(--muted-foreground))]">
                 {useCase.description}
               </p>
-              
+
               <div className="absolute inset-0 -z-10 bg-gradient-primary opacity-0 transition-opacity group-hover:opacity-5" />
             </Card>
           ))}

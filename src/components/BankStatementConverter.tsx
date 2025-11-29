@@ -184,7 +184,7 @@ export const BankStatementConverter = () => {
 
             <p className="mx-auto mb-10 max-w-3xl text-xl text-[hsl(var(--muted-foreground))] animate-fade-in">
               World's most trusted OCR + AI bank statement converter, working with thousands of banks globally.
-              Automatically extract transactions, balances, and references into clean Excel or CSV files with 99.9% accuracy.
+              Automatically extract transactions, balances, and references into clean Excel or CSV files with industry-leading accuracy.
             </p>
 
             {/* Feature Badges */}
@@ -196,7 +196,7 @@ export const BankStatementConverter = () => {
                 🔒 Secure
               </span>
               <span className="inline-flex items-center gap-2 rounded-full bg-[hsl(var(--accent))] px-4 py-2 text-sm font-medium text-[hsl(var(--accent-foreground))]">
-                🎯 99.9% Accurate
+                🎯 Industry-Leading Accuracy
               </span>
               <span className="inline-flex items-center gap-2 rounded-full bg-[hsl(var(--muted))] px-4 py-2 text-sm font-medium text-[hsl(var(--muted-foreground))]">
                 👤 Free Account

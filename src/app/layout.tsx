@@ -7,6 +7,7 @@ import "./globals.css";
 import ClerkProviderClient from "@/components/ClerkProviderClient"; // update path if needed
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -95,24 +96,26 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </>
         )}
         <ClerkProviderClient>
-          <div className="flex min-h-screen flex-col bg-[hsl(var(--background))]">
-            <Header />
-            <main className="flex-1">
-              {children}
-            </main>
-            <Footer />
-          </div>
-          <Toaster
-            position="top-right"
-            toastOptions={{
-              className: 'bg-[hsl(var(--card))] text-[hsl(var(--card-foreground))] border border-[hsl(var(--border))]',
-              style: {
-                background: 'hsl(var(--card))',
-                color: 'hsl(var(--card-foreground))',
-                border: '1px solid hsl(var(--border))'
-              }
-            }}
-          />
+          <ThemeProvider defaultTheme="green" storageKey="statement-extract-theme">
+            <div className="flex min-h-screen flex-col bg-[hsl(var(--background))]">
+              <Header />
+              <main className="flex-1">
+                {children}
+              </main>
+              <Footer />
+            </div>
+            <Toaster
+              position="top-right"
+              toastOptions={{
+                className: 'bg-[hsl(var(--card))] text-[hsl(var(--card-foreground))] border border-[hsl(var(--border))]',
+                style: {
+                  background: 'hsl(var(--card))',
+                  color: 'hsl(var(--card-foreground))',
+                  border: '1px solid hsl(var(--border))'
+                }
+              }}
+            />
+          </ThemeProvider>
         </ClerkProviderClient>
       </body>
     </html>

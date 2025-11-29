@@ -50,7 +50,7 @@ const faqs = [
     intro:
       "The extraction pipeline is tuned for financial data and built to minimize silent errors.",
     points: [
-      "Targets up to 99.9% accuracy on well-structured statements.",
+      "Targets industry-leading accuracy on well-structured statements.",
       "Applies validation checks across balances and transaction totals to catch anomalies.",
       "Flags suspicious or low-confidence areas instead of guessing and polluting your data.",
     ],
@@ -131,7 +131,7 @@ export const FAQ = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="relative bg-[hsl(var(--background))] py-20 px-6 md:py-32 border-y border-[hsl(var(--border))]">
+    <section className="relative bg-[hsl(var(--background))] py-12 px-6 md:py-20 border-y border-[hsl(var(--border))]">
       <div className="absolute inset-0 bg-grid-pattern-3 bg-size-40" />
 
       <div className="relative mx-auto max-w-7xl z-10">

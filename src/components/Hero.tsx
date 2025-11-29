@@ -1,12 +1,16 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, FileText, Zap } from "lucide-react";
+import { ArrowRight, FileText, CheckCircle2, ShieldCheck, Zap } from "lucide-react";
 
 export const Hero = () => {
   return (
-    <section className="relative overflow-hidden bg-[hsl(var(--background))] py-20 px-6 md:py-32">
-      {/* Floating SVG Shapes */}
-      <div className="absolute inset-0 overflow-hidden">
+    <section className="relative overflow-hidden bg-[hsl(var(--background))] pt-20 pb-20 md:pt-32 md:pb-32">
+      {/* Background Grids */}
+      <div className="absolute inset-0 bg-grid-pattern-1 bg-size-40 opacity-[0.15] pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-hero pointer-events-none" />
+
+      {/* Floating SVG Shapes - Theme Reactive */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <svg className="absolute top-20 left-10 w-32 h-32 text-[hsl(var(--primary))]/10 animate-float" style={{ animationDelay: '0s' }} viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
           <path fill="currentColor" d="M45.3,-57.3C57.9,-49.1,66.7,-33.5,70.4,-16.3C74.1,0.9,72.7,19.7,64.6,35.1C56.5,50.5,41.7,62.5,24.8,68.4C7.9,74.3,-11.1,74.1,-28.4,68.2C-45.7,62.3,-61.3,50.7,-69.5,35.2C-77.7,19.7,-78.5,0.3,-74.6,-17.6C-70.7,-35.5,-62.1,-51.9,-49.3,-60C-36.5,-68.1,-18.3,-67.9,-0.5,-67.2C17.2,-66.5,32.7,-65.5,45.3,-57.3Z" transform="translate(100 100)" />
         </svg>
@@ -24,41 +28,62 @@ export const Hero = () => {
         </svg>
       </div>
 
-      <div className="relative mx-auto max-w-7xl">
-        <div className="text-center">
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[hsl(var(--primary))]/30 bg-[hsl(var(--secondary))] px-4 py-2 backdrop-blur-sm animate-fade-in">
-            <Zap className="h-4 w-4 text-[hsl(var(--primary))]" />
-            <span className="text-sm font-medium text-[hsl(var(--foreground))]">AI-Powered Document Processing</span>
+      <div className="relative mx-auto max-w-7xl px-6">
+        <div className="flex flex-col items-center text-center">
+
+          {/* Badge */}
+          <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-[hsl(var(--primary))]/30 bg-[hsl(var(--primary))]/10 px-4 py-1.5 backdrop-blur-sm animate-fade-in">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[hsl(var(--primary))] opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-[hsl(var(--primary))]"></span>
+            </span>
+            <span className="text-sm font-medium text-[hsl(var(--primary))]">
+              AI-Powered Document Processing
+            </span>
           </div>
 
-          <h1 className="mb-6 text-5xl font-bold tracking-tight text-[hsl(var(--foreground))] md:text-7xl animate-slide-up">
-            Extract data from
-            <span className="bg-gradient-primary bg-clip-text text-transparent"> any document</span>
+          {/* Headline */}
+          <h1 className="mb-6 max-w-6xl text-5xl font-bold tracking-tight text-[hsl(var(--foreground))] md:text-7xl lg:text-[5.5rem] leading-[1.1] animate-slide-up">
+            Intelligent Document Processing <br />
+            <span className="bg-gradient-primary bg-clip-text text-transparent">Reimagined for Scale</span>
           </h1>
 
-          <p className="mx-auto mb-10 max-w-2xl text-lg text-[hsl(var(--muted-foreground))] md:text-xl animate-fade-in">
-            Turn PDFs, forms, and unstructured documents into structured data instantly.
-            No templates. No training. Just results.
+          {/* Subheadline */}
+          <p className="mx-auto mb-10 max-w-2xl text-lg text-[hsl(var(--muted-foreground))] md:text-xl animate-fade-in delay-100">
+            Stop building fragile templates. Our AI extracts verified data from bank statements, invoices, and tax forms with industry-leading accuracy.
           </p>
 
-          <div className="flex flex-col items-center justify-center gap-4 sm:flex-row animate-fade-in">
-            <Link href="/convert-bank-statement-to-csv-excel" passHref>
-              <Button size="lg" className="group gap-2 shadow-glow">
-                Get Started Free
+          {/* Buttons */}
+          <div className="flex flex-col items-center justify-center gap-4 sm:flex-row animate-fade-in delay-200 w-full sm:w-auto">
+            <Link href="/convert-bank-statement-to-csv-excel" passHref className="w-full sm:w-auto">
+              <Button size="lg" className="group gap-2 h-12 px-8 text-base shadow-glow w-full sm:w-auto">
+                Start Free Trial
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Button>
             </Link>
-            <Link href="/convert-bank-statement-to-csv-excel" passHref>
-              <Button size="lg" variant="outline" className="gap-2">
-                <FileText className="h-4 w-4" />
-                View Documentation
+            <Link href="#how-it-works" passHref className="w-full sm:w-auto">
+              <Button size="lg" variant="outline" className="gap-2 h-12 px-8 text-base w-full sm:w-auto bg-[hsl(var(--background))]/50 backdrop-blur-sm hover:bg-[hsl(var(--muted))]">
+                <Zap className="h-4 w-4" />
+                See How It Works
               </Button>
             </Link>
           </div>
 
-          <p className="mt-6 text-sm text-[hsl(var(--muted-foreground))] animate-fade-in">
-            No credit card required • Start your free trial
-          </p>
+          {/* Trust Indicators */}
+          <div className="mt-12 flex flex-wrap justify-center gap-x-8 gap-y-4 text-sm text-[hsl(var(--muted-foreground))] animate-fade-in delay-300">
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="h-4 w-4 text-[hsl(var(--primary))]" />
+              <span>No Credit Card Required</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <ShieldCheck className="h-4 w-4 text-[hsl(var(--primary))]" />
+              <span>Bank-Level Security</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <FileText className="h-4 w-4 text-[hsl(var(--primary))]" />
+              <span>High Accuracy Extraction</span>
+            </div>
+          </div>
         </div>
       </div>
     </section>

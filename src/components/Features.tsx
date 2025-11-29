@@ -26,7 +26,7 @@ const features = [
 
 export const Features = () => {
   return (
-    <section className="relative py-20 px-6 md:py-32 bg-[hsl(var(--muted))]/30 border-y border-[hsl(var(--border))]">
+    <section className="relative py-12 px-6 md:py-20 bg-[hsl(var(--muted))]/30 border-y border-[hsl(var(--border))]">
       {/* Background lines pattern */}
       <div className="absolute inset-0 bg-grid-pattern-1 bg-size-64" />
       <div className="relative mx-auto max-w-7xl z-10">
