@@ -32,6 +32,7 @@ export const Header = () => {
   const router = useRouter();
   const [isSolutionsHovered, setIsSolutionsHovered] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobileSolutionsOpen, setIsMobileSolutionsOpen] = useState(false);
   const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const { user } = useUser();
   const { theme, setTheme } = useTheme();
@@ -250,35 +251,15 @@ export const Header = () => {
           </nav>
 
           <div className="flex items-center gap-2 md:gap-4">
-            <SignedOut>
-              <div suppressHydrationWarning>
-                <SignInButton mode="modal">
-                  <Button variant="ghost" className="hidden md:inline-flex">
-                    Sign In
-                  </Button>
-                </SignInButton>
-              </div>
-            </SignedOut>
             <SignedIn>
-              <div suppressHydrationWarning className="flex items-center gap-2">
-                <Link
-                  href="/dashboard"
-                  className="mr-1 inline-flex h-9 items-center justify-center rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 text-sm font-medium text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] hover:border-[hsl(var(--primary))] transition-colors"
-                >
-                  Dashboard
-                </Link>
-                {isAdmin && (
-                  <Link
-                    href="/admin"
-                    className="mr-1 inline-flex h-9 w-9 items-center justify-center rounded-full border border-[hsl(var(--border))] bg-[hsl(var(--background))] text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] hover:border-[hsl(var(--primary))] transition-colors"
-                    aria-label="Admin settings"
-                  >
-                    <Settings className="h-4 w-4" />
-                  </Link>
-                )}
-                <UserButton afterSignOutUrl="/" />
-              </div>
+              <Link
+                href="/dashboard"
+                className="hidden md:inline-flex mr-1 h-9 items-center justify-center rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 text-sm font-medium text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] hover:border-[hsl(var(--primary))] transition-colors"
+              >
+                Dashboard
+              </Link>
             </SignedIn>
+
             <div className="hidden md:flex items-center gap-2 mr-2">
               <div className="flex items-center gap-1 rounded-full border border-[hsl(var(--border))] bg-[hsl(var(--background))] p-1">
                 <button
@@ -303,12 +284,29 @@ export const Header = () => {
                 />
               </div>
             </div>
-            <Button
-              className="hidden shadow-md md:inline-flex"
-              onClick={() => router.push('/convert-bank-statement-to-csv-excel')}
-            >
-              Get Started
-            </Button>
+
+            <SignedOut>
+              <div suppressHydrationWarning className="flex items-center gap-2">
+                <SignInButton mode="modal">
+                  <Button variant="ghost" className="hidden md:inline-flex">
+                    Sign In
+                  </Button>
+                </SignInButton>
+                <Button
+                  className="hidden shadow-md md:inline-flex"
+                  onClick={() => router.push('/convert-bank-statement-to-csv-excel')}
+                >
+                  Get Started
+                </Button>
+              </div>
+            </SignedOut>
+
+            <SignedIn>
+              <div suppressHydrationWarning className="flex items-center gap-2">
+                <UserButton afterSignOutUrl="/" />
+              </div>
+            </SignedIn>
+
             <Button
               variant="ghost"
               size="icon"
@@ -325,19 +323,36 @@ export const Header = () => {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 pb-4 md:hidden">
           <nav className="pt-3">
             <div className="rounded-2xl border border-[hsl(var(--primary))]/30 bg-[hsl(var(--card))]/95 overflow-hidden divide-y divide-[hsl(var(--border))]/70">
-              <button
-                className="flex w-full items-center justify-between px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))]"
-                onClick={() => {
-                  setIsMobileMenuOpen(false);
-                  router.push('/convert-bank-statement-to-csv-excel');
-                }}
-              >
-                <span className="flex items-center gap-3">
-                  <FileText className="h-4 w-4 text-[hsl(var(--primary))]" />
-                  <span>Solutions</span>
-                </span>
-                <span className="text-xs text-[hsl(var(--muted-foreground))]">Bank Statements</span>
-              </button>
+              {/* Mobile Solutions Accordion */}
+              <div>
+                <button
+                  className="flex w-full items-center justify-between px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))]"
+                  onClick={() => setIsMobileSolutionsOpen(!isMobileSolutionsOpen)}
+                >
+                  <span className="flex items-center gap-3">
+                    <FileText className="h-4 w-4 text-[hsl(var(--primary))]" />
+                    <span>Solutions</span>
+                  </span>
+                  <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isMobileSolutionsOpen ? 'rotate-180' : ''}`} />
+                </button>
+
+                {isMobileSolutionsOpen && (
+                  <div className="bg-[hsl(var(--muted))]/30 px-4 py-2 space-y-1">
+                    <div className="mb-2">
+                      <p className="text-[10px] font-semibold tracking-wider text-[hsl(var(--muted-foreground))] uppercase px-2 py-1">Company</p>
+                      <button onClick={() => { setIsMobileMenuOpen(false); router.push('/about'); }} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">About Us</button>
+                      <button onClick={() => { setIsMobileMenuOpen(false); }} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Contact Us</button>
+                      <button onClick={() => { setIsMobileMenuOpen(false); router.push('/privacy-policy'); }} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Privacy Policy</button>
+                    </div>
+                    <div>
+                      <p className="text-[10px] font-semibold tracking-wider text-[hsl(var(--muted-foreground))] uppercase px-2 py-1">Solutions</p>
+                      <button onClick={() => { setIsMobileMenuOpen(false); router.push('/convert-bank-statement-to-csv-excel'); }} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Banking & Lending</button>
+                      <button onClick={() => { setIsMobileMenuOpen(false); router.push('/convert-bank-statement-to-csv-excel'); }} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Insurance</button>
+                      <button onClick={() => { setIsMobileMenuOpen(false); router.push('/convert-bank-statement-to-csv-excel'); }} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Real Estate</button>
+                    </div>
+                  </div>
+                )}
+              </div>
 
               <a
                 href="#use-cases"
@@ -348,7 +363,6 @@ export const Header = () => {
                   <Zap className="h-4 w-4 text-[hsl(var(--primary))]" />
                   <span>Use Cases</span>
                 </span>
-                <span className="text-xs text-[hsl(var(--muted-foreground))]">How teams use us</span>
               </a>
 
               <Link
@@ -360,7 +374,6 @@ export const Header = () => {
                   <FileIcon className="h-4 w-4 text-[hsl(var(--primary))]" />
                   <span>Blogs</span>
                 </span>
-                <span className="text-xs text-[hsl(var(--muted-foreground))]">Guides & updates</span>
               </Link>
 
               <a
@@ -372,8 +385,59 @@ export const Header = () => {
                   <CreditCard className="h-4 w-4 text-[hsl(var(--primary))]" />
                   <span>Pricing</span>
                 </span>
-                <span className="text-xs text-[hsl(var(--muted-foreground))]">Simple plans</span>
               </a>
+
+              {/* Mobile Theme Toggle */}
+              <div className="flex items-center justify-between px-4 py-3">
+                <span className="text-sm font-medium text-[hsl(var(--foreground))]">Theme</span>
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => setTheme("green")}
+                    className={`h-5 w-5 rounded-full bg-[#16a34a] transition-all ${theme === 'green' ? 'ring-2 ring-offset-2 ring-[#16a34a] scale-110' : ''}`}
+                    aria-label="Green theme"
+                  />
+                  <button
+                    onClick={() => setTheme("blue")}
+                    className={`h-5 w-5 rounded-full bg-[#3b82f6] transition-all ${theme === 'blue' ? 'ring-2 ring-offset-2 ring-[#3b82f6] scale-110' : ''}`}
+                    aria-label="Blue theme"
+                  />
+                  <button
+                    onClick={() => setTheme("violet")}
+                    className={`h-5 w-5 rounded-full bg-[#8b5cf6] transition-all ${theme === 'violet' ? 'ring-2 ring-offset-2 ring-[#8b5cf6] scale-110' : ''}`}
+                    aria-label="Violet theme"
+                  />
+                  <button
+                    onClick={() => setTheme("orange")}
+                    className={`h-5 w-5 rounded-full bg-[#f97316] transition-all ${theme === 'orange' ? 'ring-2 ring-offset-2 ring-[#f97316] scale-110' : ''}`}
+                    aria-label="Orange theme"
+                  />
+                </div>
+              </div>
+
+              {/* Mobile Auth Buttons */}
+              <div className="p-4 space-y-3">
+                <SignedOut>
+                  <div suppressHydrationWarning className="grid grid-cols-2 gap-3">
+                    <SignInButton mode="modal">
+                      <Button variant="outline" className="w-full justify-center">
+                        Sign In
+                      </Button>
+                    </SignInButton>
+                    <SignUpButton mode="modal">
+                      <Button className="w-full justify-center bg-gradient-button text-white shadow-lg">
+                        Get Started
+                      </Button>
+                    </SignUpButton>
+                  </div>
+                </SignedOut>
+                <SignedIn>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-[hsl(var(--muted-foreground))]">Signed in as {user?.primaryEmailAddress?.emailAddress}</span>
+                    <UserButton afterSignOutUrl="/" />
+                  </div>
+                </SignedIn>
+              </div>
+
             </div>
           </nav>
         </div>
