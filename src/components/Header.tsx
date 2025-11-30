@@ -15,7 +15,7 @@ import {
   Zap,
 } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import {
   SignInButton,
   SignUpButton,
@@ -61,6 +61,12 @@ export const Header = () => {
     setIsSolutionsHovered(false);
     router.push(path);
   };
+
+  const pathname = usePathname();
+
+  if (pathname?.startsWith("/dashboard")) {
+    return null;
+  }
 
   return (
     <header className="sticky top-0 z-50">
@@ -255,6 +261,12 @@ export const Header = () => {
             </SignedOut>
             <SignedIn>
               <div suppressHydrationWarning className="flex items-center gap-2">
+                <Link
+                  href="/dashboard"
+                  className="mr-1 inline-flex h-9 items-center justify-center rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 text-sm font-medium text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] hover:border-[hsl(var(--primary))] transition-colors"
+                >
+                  Dashboard
+                </Link>
                 {isAdmin && (
                   <Link
                     href="/admin"
@@ -310,7 +322,7 @@ export const Header = () => {
             </Button>
           </div>
         </div>
-      </div>
+      </div >
       {isMobileMenuOpen && (
         <div className="mx-auto max-w-7xl px-4 sm:px-6 pb-4 md:hidden">
           <nav className="pt-3">
@@ -368,6 +380,6 @@ export const Header = () => {
           </nav>
         </div>
       )}
-    </header>
+    </header >
   );
 };

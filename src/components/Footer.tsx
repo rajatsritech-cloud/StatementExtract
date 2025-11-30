@@ -1,7 +1,16 @@
+"use client";
+
 import { FileText, Github, Linkedin, Twitter } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export const Footer = () => {
+  const pathname = usePathname();
+
+  if (pathname?.startsWith("/dashboard")) {
+    return null;
+  }
+
   return (
     <footer className="border-t border-[hsl(var(--border))] bg-[hsl(var(--muted))]">
       <div className="mx-auto max-w-7xl px-6 py-12 md:py-16">

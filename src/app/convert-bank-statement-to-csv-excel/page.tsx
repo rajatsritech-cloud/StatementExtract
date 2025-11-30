@@ -34,9 +34,12 @@ export const metadata: Metadata = {
   }
 };
 
+import { RedirectIfAuthenticated } from "@/components/RedirectIfAuthenticated";
+
 export default function BankStatementConverterPage() {
   return (
     <>
+      <RedirectIfAuthenticated />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{

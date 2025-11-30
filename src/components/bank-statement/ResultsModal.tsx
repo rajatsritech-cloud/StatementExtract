@@ -246,10 +246,9 @@ const DynamicTable = ({ transactions, currency = '$', columnNames }: DynamicTabl
   );
 };
 
-
 // --- Main Component ---
 export const ResultsModal = ({ data, file, isProcessing = false, progress = 0, onClose, onTryAnother, onExport }: ResultsModalProps) => {
-  const [showPdf, setShowPdf] = useState(true);
+  const [showPdf, setShowPdf] = useState(false);
   const [isApproved, setIsApproved] = useState(true);
 
   const [fileUrl, setFileUrl] = useState<string | null>(null);
