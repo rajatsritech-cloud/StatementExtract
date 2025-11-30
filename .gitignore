@@ -23,7 +23,7 @@
 
 # local-only admin tools (do not commit / deploy)
 /src/app/admin/
-/src/app/api
+/src/app/api/admin
 
 *.pem
 
