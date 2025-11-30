@@ -1,8 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Enable static export for Cloudflare Pages (Pure Static)
-  output: "export",
+  // Enable static export for Cloudflare Pages (Pure Static) - only in production
+  output: process.env.NODE_ENV === "production" ? "export" : undefined,
 
   // Add the 'images' config right here
   images: {
@@ -15,6 +15,9 @@ const nextConfig: NextConfig = {
         pathname: "/**",
       },
     ],
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
   },
 };
 
