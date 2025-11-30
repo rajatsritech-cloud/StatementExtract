@@ -1,40 +1,21 @@
 .blog-light-theme {
-  --background: 150 27% 97%;
-  --foreground: 152 8% 18%;
-
+  --background: 0 0% 100%;
+  --foreground: 240 10% 3.9%;
   --card: 0 0% 100%;
-  --card-foreground: 152 8% 18%;
-
+  --card-foreground: 240 10% 3.9%;
   --popover: 0 0% 100%;
-  --popover-foreground: 152 8% 18%;
-
-  --primary: 147 55% 40%;
-  --primary-foreground: 0 0% 100%;
-
-  --primary-light: 147 65% 50%;
-  --primary-dark: 147 55% 30%;
-
-  --secondary: 156 30% 94%;
-  --secondary-foreground: 152 12% 30%;
-
-  --muted: 150 18% 92%;
-  --muted-foreground: 152 10% 40%;
-
-  --accent: 150 25% 90%;
-  --accent-foreground: 152 12% 30%;
-
-  --destructive: 0 72% 50%;
-  --destructive-foreground: 0 0% 100%;
-
-  --border: 150 14% 85%;
-  --input: 150 14% 85%;
-  --ring: 147 55% 40%;
-
-  /* softer shadows for light blog theme */
-  --shadow-sm: 0 1px 2px 0 hsl(150 15% 60% / 0.3);
-  --shadow-md: 0 4px 6px -1px hsl(152 15% 55% / 0.35);
-  --shadow-lg: 0 10px 25px -5px hsl(152 20% 50% / 0.35);
-  --shadow-glow: 0 0 35px hsl(147 55% 40% / 0.4);
+  --popover-foreground: 240 10% 3.9%;
+  --secondary: 240 4.8% 95.9%;
+  --secondary-foreground: 240 5.9% 10%;
+  --muted: 240 4.8% 95.9%;
+  --muted-foreground: 240 3.8% 46.1%;
+  --accent: 240 4.8% 95.9%;
+  --accent-foreground: 240 5.9% 10%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 240 5.9% 90%;
+  --input: 240 5.9% 90%;
+  /* Inherit primary from global theme */
 }
 
 .blog-article {
@@ -124,7 +105,7 @@
   border-left: 3px solid hsl(var(--primary));
   background-color: hsl(var(--muted));
   border-radius: 0.9rem;
-  color: hsl(152deg 12.04% 17.8%);
+  color: hsl(var(--foreground));
   font-style: italic;
 }
 

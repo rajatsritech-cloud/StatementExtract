@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { ArrowRight, Cpu, FileSpreadsheet, FileText, Image as ImageIcon, UploadCloud } from "lucide-react";
 
 export const DocumentDemo = () => {
   return (
@@ -31,19 +31,69 @@ export const DocumentDemo = () => {
         </div>
 
         <div className="grid gap-10 md:grid-cols-2 items-center">
-          {/* Left: workflow image card */}
+          {/* Left: Dynamic Visualization Card */}
           <div className="flex justify-center md:justify-start animate-slide-up">
-            <div className="w-full max-w-xl rounded-3xl bg-[hsl(var(--background))]/80 border-2 border-[hsl(var(--primary))]/20 shadow-glow backdrop-blur-sm transition-transform hover:scale-[1.02] duration-500">
-              <figure className="relative w-full rounded-2xl overflow-hidden border border-[hsl(var(--muted))] bg-[hsl(var(--background))]/90">
-                <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-[hsl(var(--primary))]/25" />
-                <Image
-                  src="/assets/StatementExtract_Workflow_img.png"
-                  alt="StatementExtract workflow showing how OCR and AI transform documents into structured data"
-                  width={1200}
-                  height={675}
-                  className="block h-auto w-full"
-                />
-              </figure>
+            <div className="w-full max-w-xl rounded-3xl bg-[hsl(var(--background))]/80 border-2 border-[hsl(var(--primary))]/20 shadow-glow backdrop-blur-sm p-8 md:p-12 flex flex-col items-center justify-center min-h-[400px] relative overflow-hidden group">
+
+              {/* Animated Background Pulse */}
+              <div className="absolute inset-0 bg-[hsl(var(--primary))]/5 animate-pulse" />
+
+              {/* Flow Container */}
+              <div className="relative z-10 flex items-center gap-4 md:gap-8 w-full justify-center">
+
+                {/* Input Node */}
+                <div className="flex flex-col items-center gap-3">
+                  <div className="relative">
+                    <div className="h-16 w-16 md:h-20 md:w-20 rounded-2xl bg-[hsl(var(--card))] border border-[hsl(var(--border))] shadow-lg flex items-center justify-center relative z-10">
+                      <div className="absolute -top-2 -right-2 h-6 w-6 rounded-full bg-[hsl(var(--primary))] flex items-center justify-center text-[hsl(var(--primary-foreground))] text-xs font-bold">1</div>
+                      <ImageIcon className="h-8 w-8 text-[hsl(var(--muted-foreground))]" />
+                    </div>
+                    <div className="absolute top-2 left-2 h-16 w-16 md:h-20 md:w-20 rounded-2xl bg-[hsl(var(--card))] border border-[hsl(var(--border))] shadow-md -z-10 rotate-6" />
+                  </div>
+                  <span className="text-xs font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wider">Input</span>
+                </div>
+
+                {/* Arrow 1 */}
+                <div className="flex-1 h-[2px] bg-gradient-to-r from-[hsl(var(--border))] to-[hsl(var(--primary))] relative overflow-hidden">
+                  <div className="absolute inset-0 bg-[hsl(var(--primary))] w-1/2 animate-[shimmer_1.5s_infinite]" />
+                </div>
+
+                {/* Processing Node */}
+                <div className="flex flex-col items-center gap-3 relative">
+                  <div className="h-20 w-20 md:h-24 md:w-24 rounded-full bg-gradient-primary shadow-glow flex items-center justify-center relative z-10 animate-float">
+                    <Cpu className="h-10 w-10 text-white animate-pulse" />
+                  </div>
+                  {/* Orbiting particles */}
+                  <div className="absolute inset-0 rounded-full border border-[hsl(var(--primary))]/30 w-full h-full scale-150 animate-[spin_4s_linear_infinite]" />
+                  <div className="absolute inset-0 rounded-full border border-dashed border-[hsl(var(--primary))]/20 w-full h-full scale-[1.8] animate-[spin_8s_linear_infinite_reverse]" />
+
+                  <span className="text-xs font-bold text-[hsl(var(--primary))] uppercase tracking-wider">AI Engine</span>
+                </div>
+
+                {/* Arrow 2 */}
+                <div className="flex-1 h-[2px] bg-gradient-to-r from-[hsl(var(--primary))] to-[hsl(var(--border))] relative overflow-hidden">
+                  <div className="absolute inset-0 bg-[hsl(var(--primary))] w-1/2 animate-[shimmer_1.5s_infinite] delay-75" />
+                </div>
+
+                {/* Output Node */}
+                <div className="flex flex-col items-center gap-3">
+                  <div className="relative group-hover:-translate-y-2 transition-transform duration-300">
+                    <div className="h-16 w-16 md:h-20 md:w-20 rounded-2xl bg-[hsl(var(--card))] border border-[hsl(var(--primary))]/30 shadow-lg flex items-center justify-center relative z-10">
+                      <div className="absolute -top-2 -right-2 h-6 w-6 rounded-full bg-[hsl(var(--accent))] flex items-center justify-center text-white text-xs font-bold">3</div>
+                      <FileSpreadsheet className="h-8 w-8 text-[hsl(var(--primary))]" />
+                    </div>
+                    <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-12 h-1 bg-[hsl(var(--primary))]/20 blur-sm rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  </div>
+                  <span className="text-xs font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wider">Output</span>
+                </div>
+
+              </div>
+
+              <div className="mt-12 flex items-center gap-2 text-sm font-medium text-[hsl(var(--muted-foreground))] bg-[hsl(var(--background))]/50 px-4 py-2 rounded-full border border-[hsl(var(--border))]">
+                <UploadCloud className="h-4 w-4 text-[hsl(var(--primary))]" />
+                <span>Processing in real-time</span>
+              </div>
+
             </div>
           </div>
 

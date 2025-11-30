@@ -279,32 +279,30 @@ export const Header = () => {
                 <UserButton afterSignOutUrl="/" />
               </div>
             </SignedIn>
-            {isAdmin && (
-              <div className="hidden md:flex items-center gap-2 mr-2">
-                <div className="flex items-center gap-1 rounded-full border border-[hsl(var(--border))] bg-[hsl(var(--background))] p-1">
-                  <button
-                    onClick={() => setTheme("green")}
-                    className={`h-4 w-4 rounded-full bg-[#16a34a] transition-all hover:scale-110 ${theme === 'green' ? 'ring-2 ring-offset-1 ring-[#16a34a]' : ''}`}
-                    aria-label="Green theme"
-                  />
-                  <button
-                    onClick={() => setTheme("blue")}
-                    className={`h-4 w-4 rounded-full bg-[#3b82f6] transition-all hover:scale-110 ${theme === 'blue' ? 'ring-2 ring-offset-1 ring-[#3b82f6]' : ''}`}
-                    aria-label="Blue theme"
-                  />
-                  <button
-                    onClick={() => setTheme("violet")}
-                    className={`h-4 w-4 rounded-full bg-[#8b5cf6] transition-all hover:scale-110 ${theme === 'violet' ? 'ring-2 ring-offset-1 ring-[#8b5cf6]' : ''}`}
-                    aria-label="Violet theme"
-                  />
-                  <button
-                    onClick={() => setTheme("orange")}
-                    className={`h-4 w-4 rounded-full bg-[#f97316] transition-all hover:scale-110 ${theme === 'orange' ? 'ring-2 ring-offset-1 ring-[#f97316]' : ''}`}
-                    aria-label="Orange theme"
-                  />
-                </div>
+            <div className="hidden md:flex items-center gap-2 mr-2">
+              <div className="flex items-center gap-1 rounded-full border border-[hsl(var(--border))] bg-[hsl(var(--background))] p-1">
+                <button
+                  onClick={() => setTheme("green")}
+                  className={`h-4 w-4 rounded-full bg-[#16a34a] transition-all hover:scale-110 ${theme === 'green' ? 'ring-2 ring-offset-1 ring-[#16a34a]' : ''}`}
+                  aria-label="Green theme"
+                />
+                <button
+                  onClick={() => setTheme("blue")}
+                  className={`h-4 w-4 rounded-full bg-[#3b82f6] transition-all hover:scale-110 ${theme === 'blue' ? 'ring-2 ring-offset-1 ring-[#3b82f6]' : ''}`}
+                  aria-label="Blue theme"
+                />
+                <button
+                  onClick={() => setTheme("violet")}
+                  className={`h-4 w-4 rounded-full bg-[#8b5cf6] transition-all hover:scale-110 ${theme === 'violet' ? 'ring-2 ring-offset-1 ring-[#8b5cf6]' : ''}`}
+                  aria-label="Violet theme"
+                />
+                <button
+                  onClick={() => setTheme("orange")}
+                  className={`h-4 w-4 rounded-full bg-[#f97316] transition-all hover:scale-110 ${theme === 'orange' ? 'ring-2 ring-offset-1 ring-[#f97316]' : ''}`}
+                  aria-label="Orange theme"
+                />
               </div>
-            )}
+            </div>
             <Button
               className="hidden shadow-md md:inline-flex"
               onClick={() => router.push('/convert-bank-statement-to-csv-excel')}

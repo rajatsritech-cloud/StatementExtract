@@ -296,7 +296,7 @@ const markdownComponents = {
 
     const paragraph = (
       <p
-        className="mt-4 leading-7 text-[hsl(152deg_12.04%_17.8%)]"
+        className="mt-4 leading-7 text-[hsl(var(--foreground))]"
         {...props}
       >
         {children}
@@ -319,13 +319,13 @@ const markdownComponents = {
 
   ul: (props: any) => (
     <ul
-      className="mt-4 list-disc space-y-2 pl-5 text-[hsl(152deg_12.04%_17.8%)]"
+      className="mt-4 list-disc space-y-2 pl-5 text-[hsl(var(--foreground))]"
       {...props}
     />
   ),
   ol: (props: any) => (
     <ol
-      className="mt-4 list-decimal space-y-2 pl-5 text-[hsl(152deg_12.04%_17.8%)]"
+      className="mt-4 list-decimal space-y-2 pl-5 text-[hsl(var(--foreground))]"
       {...props}
     />
   ),
@@ -522,7 +522,7 @@ export default async function BlogPostPage({ params }: PageParams) {
 
           <div className="space-y-10">
             {summary && (
-              <section className="rounded-3xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-6 py-6 text-left text-sm text-[hsl(152deg_12.04%_17.8%)] md:text-base">
+              <section className="rounded-3xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-6 py-6 text-left text-sm text-[hsl(var(--foreground))] md:text-base">
                 {summary}
               </section>
             )}

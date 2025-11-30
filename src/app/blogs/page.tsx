@@ -53,7 +53,7 @@ export default async function BlogsPage() {
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                fill="#22C55E"
+                fill="hsl(var(--primary))"
                 d="M492.5 130.5C538.5 220 376 348 274.5 492.5C173 637 54.5 455 -1.5 304.5C-57.5 154 36.5 41 199 15.5C361.5 -10 446.5 41 492.5 130.5Z"
               />
             </svg>
@@ -66,7 +66,7 @@ export default async function BlogsPage() {
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                fill="#22C55E"
+                fill="hsl(var(--primary))"
                 d="M375 64.5C406 142 429.5 240 374 330.5C318.5 421 184.5 504.5 90 427.5C-4.5 350.5 -19.5 192.5 40 102.5C99.5 12.5 311 16.5 375 64.5Z"
               />
             </svg>
@@ -87,7 +87,7 @@ export default async function BlogsPage() {
               className="group block h-full overflow-hidden rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-primary/60 hover:shadow-glow"
             >
               <article className="flex h-full flex-col justify-between">
-                <div className="overflow-hidden rounded-xl border border-primary/50 bg-[hsl(var(--background))] shadow-glow transition-all duration-200">
+                <div className="overflow-hidden rounded-xl bg-[hsl(var(--background))] transition-all duration-200">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   {post.coverImage ? (
                     <img
