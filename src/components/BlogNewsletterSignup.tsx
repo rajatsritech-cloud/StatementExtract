@@ -36,10 +36,10 @@ export function BlogNewsletterSignup() {
 
   return (
     <section
-      className="relative mt-12 overflow-hidden rounded-3xl border border-[hsl(var(--border))]/50 bg-[hsl(var(--secondary))] bg-grid-pattern-4 bg-size-32 px-4 py-10 text-center shadow-md md:px-10 md:py-12"
+      className="relative mt-12 overflow-hidden rounded-3xl border border-gray-200 bg-slate-50 bg-grid-pattern-4 bg-size-32 px-4 py-10 text-center shadow-sm md:px-10 md:py-12"
     >
       <svg
-        className="pointer-events-none absolute -left-10 top-0 h-32 w-32 text-[hsl(var(--primary))]/12"
+        className="pointer-events-none absolute -left-10 top-0 h-32 w-32 text-[hsl(var(--primary))]/5"
         viewBox="0 0 200 200"
         aria-hidden="true"
       >
@@ -50,7 +50,7 @@ export function BlogNewsletterSignup() {
         />
       </svg>
       <svg
-        className="pointer-events-none absolute -right-12 bottom-[-40px] h-40 w-40 text-[hsl(var(--accent))]/18"
+        className="pointer-events-none absolute -right-12 bottom-[-40px] h-40 w-40 text-[hsl(var(--accent))]/10"
         viewBox="0 0 200 200"
         aria-hidden="true"
       >
@@ -62,17 +62,17 @@ export function BlogNewsletterSignup() {
       </svg>
       <div className="relative mx-auto flex max-w-2xl flex-col gap-4">
         <div>
-          <h3 className="text-lg font-semibold tracking-tight text-[hsl(var(--foreground))]">
+          <h3 className="text-lg font-semibold tracking-tight text-slate-900">
             Join Statement Extract news
           </h3>
-          <p className="mt-1 text-sm text-[hsl(var(--muted-foreground))]">
+          <p className="mt-1 text-sm text-slate-500">
             And we’ll inform you about upcoming features, improvements, and best
             practices for automating financial documents.
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="mt-2 flex justify-center">
-          <div className="flex w-full max-w-xl items-center gap-2 rounded-full bg-white px-2 py-1 shadow-md md:px-3 md:py-1.5">
+          <div className="flex w-full max-w-xl items-center gap-2 rounded-full bg-white px-2 py-1 shadow-sm border border-gray-200 md:px-3 md:py-1.5">
             <div className="hidden h-9 w-9 items-center justify-center rounded-full bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] sm:flex">
               <span className="text-lg">@</span>
             </div>
@@ -82,7 +82,7 @@ export function BlogNewsletterSignup() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
-              className="flex-1 border-0 bg-transparent px-2 text-sm text-[hsl(var(--foreground))] outline-none ring-0 placeholder:text-[hsl(var(--muted-foreground))]"
+              className="flex-1 border-0 bg-transparent px-2 text-sm text-slate-900 outline-none ring-0 placeholder:text-slate-400"
             />
             <button
               type="submit"
@@ -94,20 +94,19 @@ export function BlogNewsletterSignup() {
           </div>
         </form>
 
-        <p className="mt-2 text-[11px] leading-snug text-[hsl(var(--muted-foreground))]">
+        <p className="mt-2 text-[11px] leading-snug text-slate-400">
           We use your email only to deliver newsletters. See our Privacy Policy for
           more information.
         </p>
 
         {message && (
           <p
-            className={`mt-1 text-xs ${
-              status === "success"
+            className={`mt-1 text-xs ${status === "success"
                 ? "text-emerald-700"
                 : status === "error"
-                ? "text-red-600"
-                : "text-[hsl(var(--muted-foreground))]"
-            }`}
+                  ? "text-red-600"
+                  : "text-slate-500"
+              }`}
           >
             {message}
           </p>

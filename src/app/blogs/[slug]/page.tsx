@@ -5,7 +5,7 @@ import React from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
-import { getAllPostSlugs, getPostBySlug } from "@/lib/blogs";
+import { getAllPostSlugs, getPostBySlug, getAllPosts } from "@/lib/blogs";
 import Link from "next/link";
 import LazyTweet from "@/components/LazyTweet";
 import { BlogNewsletterSignup } from "@/components/BlogNewsletterSignup";
@@ -558,8 +558,91 @@ export default async function BlogPostPage({ params }: PageParams) {
             </article>
           </div>
         </div>
-        <div className="mx-auto mt-10 max-w-6xl px-6 pb-16">
-          <BlogNewsletterSignup />
+      </section>
+
+      {/* Resources Section - Light Theme with SVG Pattern */}
+      <section className="relative overflow-hidden border-t border-gray-200 bg-slate-50 py-16 md:py-24">
+        {/* Modern Background Pattern */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
+          <div className="absolute left-0 right-0 top-0 m-auto h-[300px] w-[300px] rounded-full bg-[hsl(var(--primary))] opacity-[0.05] blur-[100px]"></div>
+        </div>
+
+        <div className="relative z-10 mx-auto max-w-5xl px-6">
+          <div className="mb-10 flex flex-col items-start justify-between gap-4 md:flex-row md:items-end">
+            <div>
+              <h3 className="text-2xl font-bold tracking-tight text-slate-900 md:text-3xl">
+                Resources
+              </h3>
+              <p className="mt-2 text-sm text-slate-500">
+                Explore more articles and guides.
+              </p>
+            </div>
+            <Link
+              href="/blogs"
+              className="group inline-flex items-center gap-2 text-sm font-medium text-[hsl(var(--primary))] transition-colors hover:text-[hsl(var(--primary-light))]"
+            >
+              See all resources
+              <svg className="h-4 w-4 transition-transform group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+            </Link>
+          </div>
+
+          <div className="grid gap-8 md:grid-cols-2">
+            {(await getAllPosts())
+              .filter((p) => p.slug !== slug)
+              .slice(0, 2)
+              .map((post) => (
+                <Link
+                  key={post.slug}
+                  href={`/blogs/${post.slug}`}
+                  className="group flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white transition-all duration-300 hover:-translate-y-1 hover:border-[hsl(var(--primary)/0.5)] hover:shadow-xl hover:shadow-[hsl(var(--primary)/0.1)]"
+                >
+                  <div className="relative aspect-[1.6/1] w-full overflow-hidden bg-gray-100">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    {post.coverImage ? (
+                      <img
+                        src={post.coverImage}
+                        alt={post.title}
+                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center text-xs text-gray-400">
+                        No cover image
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex flex-1 flex-col p-6">
+                    <div className="mb-3 flex items-center gap-2">
+                      {post.tags.length > 0 && (
+                        <span className="inline-flex items-center rounded-full bg-[hsl(var(--primary)/0.1)] px-2.5 py-0.5 text-xs font-medium text-[hsl(var(--primary))]">
+                          {post.tags[0]}
+                        </span>
+                      )}
+                      <span className="text-xs text-slate-400">•</span>
+                      <span className="text-xs text-slate-500">{post.date}</span>
+                    </div>
+
+                    <h4 className="mb-2 text-xl font-bold leading-tight text-slate-900 transition-colors group-hover:text-[hsl(var(--primary))]">
+                      {post.title}
+                    </h4>
+
+                    <p className="mb-4 line-clamp-2 text-sm leading-relaxed text-slate-500">
+                      {post.summary}
+                    </p>
+
+                    <div className="mt-auto flex items-center text-sm font-medium text-[hsl(var(--primary))]">
+                      Read article
+                      <svg className="ml-1 h-3 w-3 transition-transform group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+          </div>
+
+          <div className="mt-16 md:mt-24">
+            <BlogNewsletterSignup />
+          </div>
         </div>
       </section>
     </main>
