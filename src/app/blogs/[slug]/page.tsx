@@ -10,7 +10,7 @@ import Link from "next/link";
 import LazyTweet from "@/components/LazyTweet";
 import { BlogNewsletterSignup } from "@/components/BlogNewsletterSignup";
 import { BlogInlineCTA } from "@/components/BlogInlineCTA";
-import "./page.module.css";
+import styles from "./page.module.css";
 
 // Disable ISR (Incremental Static Regeneration)
 // We want strict SSG (Static Site Generation) to avoid Cloudflare Worker limits.
@@ -421,7 +421,7 @@ export default async function BlogPostPage({ params }: PageParams) {
           </div>
         </div>
       </section>
-      <section className="blog-light-theme bg-[hsl(var(--background))]">
+      <section className={`${styles['blog-light-theme']} bg-[hsl(var(--background))]`}>
         <div className="mx-auto max-w-6xl px-6 py-12 lg:py-16 lg:grid lg:grid-cols-[minmax(0,260px)_minmax(0,1fr)] lg:gap-10 animate-slide-up">
           <aside className="mb-10 self-start lg:mb-0 lg:sticky lg:top-28">
             <div className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-5 shadow-sm">
@@ -430,7 +430,7 @@ export default async function BlogPostPage({ params }: PageParams) {
               </h2>
               <nav
                 aria-label="Table of contents"
-                className="mt-4 text-left text-sm lg:max-h-[calc(100vh-10rem)] lg:overflow-y-auto lg:pr-1 toc-scroll"
+                className={`mt-4 text-left text-sm lg:max-h-[calc(100vh-10rem)] lg:overflow-y-auto lg:pr-1 ${styles['toc-scroll']}`}
               >
                 <div className="lg:hidden">
                   <details className="group rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))]">
@@ -540,7 +540,7 @@ export default async function BlogPostPage({ params }: PageParams) {
               </div>
             )}
 
-            <article className="blog-article space-y-6 rounded-3xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-6 py-8 shadow-sm md:px-10 md:py-10">
+            <article className={`${styles['blog-article']} space-y-6 rounded-3xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-6 py-8 shadow-sm md:px-10 md:py-10`}>
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
                 rehypePlugins={[rehypeRaw]}
