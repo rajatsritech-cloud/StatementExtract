@@ -18,6 +18,8 @@ export default function ClerkProviderClient({ children }: { children: React.Reac
       publishableKey={publishableKey}
       routerPush={(to) => router.push(to)}
       routerReplace={(to) => router.replace(to)}
+      signInForceRedirectUrl="/dashboard"
+      signUpForceRedirectUrl="/dashboard"
     >
       {children}
     </ClerkProvider>

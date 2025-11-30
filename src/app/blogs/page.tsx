@@ -43,7 +43,7 @@ export default async function BlogsPage() {
         </div>
       </section>
 
-      <section className="relative mx-auto max-w-6xl px-6 py-12">
+      <section className="relative mx-auto max-w-5xl px-6 py-12">
         <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden md:overflow-visible">
           <div className="absolute top-[-8rem] left-[-28rem] h-[42rem] w-[42rem] opacity-30">
             <svg
@@ -87,13 +87,13 @@ export default async function BlogsPage() {
               className="group block h-full overflow-hidden rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-primary/60 hover:shadow-glow"
             >
               <article className="flex h-full flex-col justify-between">
-                <div className="overflow-hidden rounded-xl bg-[hsl(var(--background))] transition-all duration-200">
+                <div className="relative aspect-video w-full overflow-hidden rounded-xl bg-[hsl(var(--muted))] transition-all duration-200">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   {post.coverImage ? (
                     <img
                       src={post.coverImage}
                       alt={post.title}
-                      className="w-full h-auto object-contain transition-transform duration-200 group-hover:scale-[1.02]"
+                      className="h-full w-full transition-transform duration-200 group-hover:scale-[1.02]"
                     />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center text-xs text-[hsl(var(--muted-foreground))]">

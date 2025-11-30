@@ -359,6 +359,13 @@ const markdownComponents = {
       />
     </div>
   ),
+  img: (props: any) => (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      className="my-6 h-auto w-full rounded-xl border border-[hsl(var(--border))]"
+      {...props}
+    />
+  ),
 };
 
 export default async function BlogPostPage({ params }: PageParams) {
@@ -533,7 +540,7 @@ export default async function BlogPostPage({ params }: PageParams) {
                   src={coverImage}
                   alt={title}
                   fill
-                  className="object-cover"
+                  className=""
                   priority
                   sizes="(max-width: 1024px) 100vw, 860px"
                 />
