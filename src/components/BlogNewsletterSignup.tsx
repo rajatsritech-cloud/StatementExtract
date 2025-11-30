@@ -62,7 +62,7 @@ export function BlogNewsletterSignup() {
       </svg>
       <div className="relative mx-auto flex max-w-2xl flex-col gap-4">
         <div>
-          <h3 className="text-lg font-semibold tracking-tight text-slate-900">
+          <h3 className="text-lg font-semibold tracking-normal text-slate-900">
             Join Statement Extract news
           </h3>
           <p className="mt-1 text-sm text-slate-500">
@@ -102,10 +102,10 @@ export function BlogNewsletterSignup() {
         {message && (
           <p
             className={`mt-1 text-xs ${status === "success"
-                ? "text-emerald-700"
-                : status === "error"
-                  ? "text-red-600"
-                  : "text-slate-500"
+              ? "text-emerald-700"
+              : status === "error"
+                ? "text-red-600"
+                : "text-slate-500"
               }`}
           >
             {message}

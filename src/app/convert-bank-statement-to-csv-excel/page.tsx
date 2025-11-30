@@ -36,6 +36,8 @@ export const metadata: Metadata = {
 
 import { RedirectIfAuthenticated } from "@/components/RedirectIfAuthenticated";
 
+import { RecentBlogs } from "@/components/RecentBlogs";
+
 export default function BankStatementConverterPage() {
   return (
     <>
@@ -74,6 +76,7 @@ export default function BankStatementConverterPage() {
       <BankStatementFeatures />
       <BankStatementSEOContent />
       <BankStatementFAQ />
+      <RecentBlogs />
       <CTA />
     </>
   );

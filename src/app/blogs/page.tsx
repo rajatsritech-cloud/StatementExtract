@@ -93,7 +93,7 @@ export default async function BlogsPage() {
                     <img
                       src={post.coverImage}
                       alt={post.title}
-                      className="h-full w-full transition-transform duration-200 group-hover:scale-[1.02]"
+                      className="h-full w-full object-fill transition-transform duration-200 group-hover:scale-[1.02]"
                     />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center text-xs text-[hsl(var(--muted-foreground))]">
