@@ -262,7 +262,6 @@ export const UploadArea = ({ onFileUpload, isProcessing, hideFeatures = false, m
   return (
     <div className="w-full max-w-4xl mx-auto">
       {/* Privacy Notice - Moved above dropzone */}
-      {showPrivacyNotice && <PrivacyNotice size="large" className="mb-8 max-w-2xl mx-auto" />}
 
       {/* Login Prompt - Moved above dropzone */}
       {showLoginPrompt && !isSignedIn && (
