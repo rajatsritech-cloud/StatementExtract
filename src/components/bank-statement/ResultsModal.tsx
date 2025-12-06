@@ -40,7 +40,7 @@ const UserInfoAndSummary = ({ userInfo }: UserInfoAndSummaryProps) => {
   const currency = userInfo.currency || '$';
 
   return (
-    <div className="mb-6 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-6 shadow-sm">
+    <div className="mb-6 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-6 shadow-sm" data-clarity-mask="true">
       <div className="flex items-center gap-2 mb-6 border-b border-[hsl(var(--border))] pb-3">
         <FileText className="h-5 w-5 text-[hsl(var(--primary))]" />
         <h4 className="font-semibold text-[hsl(var(--foreground))]">Statement Overview</h4>
@@ -225,7 +225,7 @@ const DynamicTable = ({ transactions, currency = '$', columnNames }: DynamicTabl
                 ))}
               </tr>
             </thead>
-            <tbody>
+            <tbody data-clarity-mask="true">
               {rows.map((row, rowIndex) => (
                 <tr key={rowIndex} className="hover:bg-[hsl(var(--muted))]/30 transition-colors border-b border-[hsl(var(--border))] last:border-0">
                   {row.map((cell, cellIndex) => (

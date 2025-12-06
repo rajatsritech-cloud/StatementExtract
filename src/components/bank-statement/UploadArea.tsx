@@ -257,7 +257,7 @@ export const UploadArea = ({ onFileUpload, isProcessing, hideFeatures = false, m
                   <FileText className="h-5 w-5 text-[hsl(var(--primary))]" />
                 </div>
                 <div className="text-left">
-                  <p className="font-medium text-[hsl(var(--foreground))]">{selectedFile.name}</p>
+                  <p className="font-medium text-[hsl(var(--foreground))]" data-clarity-mask="true">{selectedFile.name}</p>
                   <p className="text-sm text-[hsl(var(--muted-foreground))]">{formatFileSize(selectedFile.size)}</p>
                   {manualTrigger && uploadStatus === 'uploading' && (
                     <div className="flex items-center gap-2 mt-1">

@@ -249,6 +249,23 @@ export default function PrivacyPolicyPage() {
       </section>
 
       <section className="space-y-3">
+        <h2 className="text-lg font-semibold text-[hsl(var(--foreground))]">Microsoft Clarity</h2>
+        <p className="text-sm text-[hsl(var(--muted-foreground))]">
+          We use Microsoft Clarity to capture how you use and interact with our website through behavioral metrics, heatmaps, and session replays to improve and market our products/services. Website usage data is captured using first and third-party cookies and other tracking technologies to determine the popularity of products/services and online activity. Additionally, we use this information for site optimization, fraud/security purposes, and advertising. For more information about how Microsoft collects and uses your data, visit the <a href="https://privacy.microsoft.com/en-US/privacystatement" className="text-[hsl(var(--primary))] hover:underline" target="_blank" rel="noopener noreferrer">Microsoft Privacy Statement</a>.
+        </p>
+        <p className="text-sm text-[hsl(var(--muted-foreground))]">
+          Microsoft Clarity is GDPR and CCPA ready. We have configured Clarity to mask sensitive text by default to protect your privacy.
+        </p>
+      </section>
+
+      <section className="space-y-3">
+        <h2 className="text-lg font-semibold text-[hsl(var(--foreground))]">User Responsibility</h2>
+        <p className="text-sm text-[hsl(var(--muted-foreground))]">
+          While we implement strict security measures and data masking, it is your responsibility to ensure you have the necessary consent and rights to upload any documents containing personal or sensitive information. Please redact highly sensitive data before uploading if it is not required for the extraction process.
+        </p>
+      </section>
+
+      <section className="space-y-3">
         <h2 className="text-lg font-semibold text-[hsl(var(--foreground))]">Changes to this policy</h2>
         <p className="text-sm text-[hsl(var(--muted-foreground))]">
           We may update this privacy policy from time to time to reflect changes in our product,
