@@ -20,6 +20,16 @@ export default function ClerkProviderClient({ children }: { children: React.Reac
       routerReplace={(to) => router.replace(to)}
       signInForceRedirectUrl="/dashboard"
       signUpForceRedirectUrl="/dashboard"
+      appearance={{
+        layout: {
+          unsafe_disableDevelopmentModeWarnings: true,
+        },
+        elements: {
+          footer: "hidden",
+          footerAction: "hidden",
+          clerkBranding: "hidden",
+        },
+      }}
     >
       {children}
     </ClerkProvider>

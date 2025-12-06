@@ -1237,3 +1237,11 @@ All colors MUST be HSL.
 .dark\:border-destructive:is(.dark *) {
   border-color: hsl(var(--destructive));
 }
+
+/* Clerk Branding Override */
+.cl-footer,
+.cl-internal-b3fm6y,
+.cl-userButtonPopoverFooter,
+.cl-internal-1dauvpw {
+  display: none !important;
+}
