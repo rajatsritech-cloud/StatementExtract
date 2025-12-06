@@ -42,11 +42,7 @@ export const DashboardSidebar = ({ className }: SidebarProps) => {
         const handleUsageUpdate = () => fetchUsage();
         window.addEventListener('usage_updated', handleUsageUpdate);
 
-        // Poll every 30 seconds to keep it fresh
-        const interval = setInterval(fetchUsage, 30000);
-
         return () => {
-            clearInterval(interval);
             window.removeEventListener('usage_updated', handleUsageUpdate);
         };
     }, [getToken]);
