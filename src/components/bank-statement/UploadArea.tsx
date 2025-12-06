@@ -46,18 +46,42 @@ export const UploadArea = ({ onFileUpload, isProcessing, hideFeatures = false, m
   const checkLimits = async (file: File): Promise<boolean> => {
     if (isSignedIn) return true; // Logged-in users have different limits (enforced by backend)
 
-    // Public Limit: 1 PDF (enforced by single file state), Max 5 pages
+    // 1. Check Page Count of Current File
     if (file.type === 'application/pdf') {
       const pageCount = await countPdfPages(file);
       if (pageCount > 5) {
         toast.error(
           <div className="flex flex-col gap-1">
             <span className="font-semibold">Limit Exceeded</span>
-            <span>Free uploads are limited to 5 pages. Please login for higher limits.</span>
+            <span>Free uploads are limited to 5 pages per document.</span>
           </div>,
           { duration: 5000 }
         );
         return false;
+      }
+
+      // 2. Check Backend Usage (Daily Limit)
+      try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+        const response = await fetch(`${apiUrl}/api/v1/user/usage`);
+        if (response.ok) {
+          const data = await response.json();
+          // data.remaining is the pages remaining for the day
+          if (data.remaining < pageCount) {
+            toast.error(
+              <div className="flex flex-col gap-1">
+                <span className="font-semibold">Daily Limit Exceeded</span>
+                <span>You have {data.remaining} pages remaining today. This file has {pageCount} pages.</span>
+                <span className="text-xs mt-1">Login for higher limits!</span>
+              </div>,
+              { duration: 6000 }
+            );
+            return false;
+          }
+        }
+      } catch (error) {
+        console.error("Failed to check backend usage:", error);
+        // Fail open or closed? Let's fail open on frontend check, backend will catch it.
       }
     }
     return true;
