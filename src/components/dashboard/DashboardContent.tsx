@@ -20,6 +20,7 @@ interface Document {
     status: "processing" | "completed" | "failed";
     data?: ExtractedData;
     file?: File;
+    errorMessage?: string;
 }
 
 export const DashboardContent = () => {
@@ -27,7 +28,7 @@ export const DashboardContent = () => {
     const [selectedDoc, setSelectedDoc] = useState<Document | null>(null);
     const [showResults, setShowResults] = useState(false);
     const [showUploadModal, setShowUploadModal] = useState(false);
-    const { isSignedIn, isLoaded } = useAuth();
+    const { isSignedIn, isLoaded, getToken } = useAuth();
     const [isProcessing, setIsProcessing] = useState(false); // Global processing state for UploadArea
     const [uploadKey, setUploadKey] = useState(0);
     const documentsRef = useRef<HTMLDivElement>(null);
@@ -81,7 +82,8 @@ export const DashboardContent = () => {
 
         try {
             const { PDFProcessor } = await import("@/lib/pdfProcessor");
-            const extracted = await PDFProcessor.processPDF(file, isSignedIn);
+            const token = await getToken();
+            const extracted = await PDFProcessor.processPDF(file, isSignedIn, token);
 
             // Save to IndexedDB
             const storedDoc: StoredDocument = {
@@ -103,15 +105,19 @@ export const DashboardContent = () => {
             setSelectedDoc(prev => prev?.id === newDoc.id ? { ...prev, status: "completed", data: extracted } : prev);
 
             toast.success("Document processed and saved locally!");
-        } catch (error) {
+        } catch (error: any) {
             console.error(error);
+            const errorMessage = error.message || "Failed to process document.";
+
             setDocuments(prev => prev.map(doc =>
                 doc.id === newDoc.id
-                    ? { ...doc, status: "failed" }
+                    ? { ...doc, status: "failed", errorMessage }
                     : doc
             ));
-            setSelectedDoc(prev => prev?.id === newDoc.id ? { ...prev, status: "failed" } : prev);
-            toast.error("Failed to process document.");
+            setSelectedDoc(prev => prev?.id === newDoc.id ? { ...prev, status: "failed", errorMessage } : prev);
+
+            // Show specific error toast
+            toast.error(errorMessage, { duration: 5000 });
         } finally {
             setIsProcessing(false);
         }
@@ -235,9 +241,18 @@ export const DashboardContent = () => {
                                                             </span>
                                                         )}
                                                         {doc.status === "failed" && (
-                                                            <span className="inline-flex items-center gap-1.5 rounded-full bg-red-500/10 px-2.5 py-0.5 text-xs font-medium text-red-600 dark:text-red-400">
-                                                                Failed
-                                                            </span>
+                                                            <div className="group relative">
+                                                                <span className="inline-flex items-center gap-1.5 rounded-full bg-red-500/10 px-2.5 py-0.5 text-xs font-medium text-red-600 dark:text-red-400 cursor-help">
+                                                                    Failed
+                                                                    <Info className="h-3 w-3" />
+                                                                </span>
+                                                                {doc.errorMessage && (
+                                                                    <div className="absolute bottom-full left-1/2 mb-2 w-64 -translate-x-1/2 rounded-lg bg-gray-900 p-2 text-xs text-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100 pointer-events-none z-50">
+                                                                        {doc.errorMessage}
+                                                                        <div className="absolute top-full left-1/2 -mt-1 h-2 w-2 -translate-x-1/2 rotate-45 bg-gray-900"></div>
+                                                                    </div>
+                                                                )}
+                                                            </div>
                                                         )}
                                                     </td>
                                                     <td className="p-4 align-middle text-right">

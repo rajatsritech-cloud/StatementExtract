@@ -1,8 +1,9 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { FileText, Receipt, FileSpreadsheet, Settings, CreditCard, LayoutDashboard } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { UserButton, useUser } from "@clerk/clerk-react";
+import { UserButton, useUser, useAuth } from "@clerk/clerk-react";
 
 interface SidebarProps {
     className?: string;
@@ -10,6 +11,35 @@ interface SidebarProps {
 
 export const DashboardSidebar = ({ className }: SidebarProps) => {
     const { user } = useUser();
+    const { getToken, isLoaded, isSignedIn } = useAuth();
+    const [usageData, setUsageData] = useState<{ usage: number; limit: number; tier: string } | null>(null);
+
+    useEffect(() => {
+        const fetchUsage = async () => {
+            try {
+                const token = await getToken();
+                if (!token) return;
+
+                const response = await fetch("http://localhost:8000/api/v1/user/usage", {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    setUsageData(data);
+                }
+            } catch (error) {
+                console.error("Failed to fetch usage:", error);
+            }
+        };
+
+        fetchUsage();
+        // Poll every 30 seconds to keep it fresh
+        const interval = setInterval(fetchUsage, 30000);
+        return () => clearInterval(interval);
+    }, [getToken]);
     const navItems = [
         { icon: LayoutDashboard, label: "Home", active: false, href: "/" },
         { icon: FileSpreadsheet, label: "Bank Statements", active: true },
@@ -68,12 +98,23 @@ export const DashboardSidebar = ({ className }: SidebarProps) => {
 
             <div className="p-4 border-t border-[hsl(var(--border))] space-y-4">
                 <div className="rounded-xl bg-gradient-to-br from-[hsl(var(--primary))]/20 to-[hsl(var(--accent))]/20 p-4">
-                    <h4 className="mb-1 text-sm font-semibold text-[hsl(var(--foreground))]">Free Plan</h4>
+                    <h4 className="mb-1 text-sm font-semibold text-[hsl(var(--foreground))] capitalize">
+                        {usageData ? `${usageData.tier} Plan` : "Free Plan"}
+                    </h4>
                     <p className="text-xs text-[hsl(var(--muted-foreground))] mb-3">
-                        Free Tier: 10 pages per day
+                        {usageData
+                            ? `${usageData.usage} / ${usageData.limit} pages used`
+                            : "Loading usage..."}
                     </p>
-                    <div className="h-1.5 w-full rounded-full bg-[hsl(var(--background))]">
-                        <div className="h-full w-[20%] rounded-full bg-[hsl(var(--primary))]" />
+                    <div className="h-1.5 w-full rounded-full bg-[hsl(var(--background))] overflow-hidden">
+                        <div
+                            className="h-full rounded-full bg-[hsl(var(--primary))] transition-all duration-500"
+                            style={{
+                                width: usageData
+                                    ? `${Math.min(100, (usageData.usage / usageData.limit) * 100)}%`
+                                    : '0%'
+                            }}
+                        />
                     </div>
                 </div>
 
