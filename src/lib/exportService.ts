@@ -1,4 +1,5 @@
 import { TransactionData, ExtractedData } from './pdfProcessor';
+import * as XLSX from 'xlsx';
 
 export class ExportService {
   static exportToCSV(data: ExtractedData, filename: string = 'bank-statement.csv'): void {
@@ -29,9 +30,23 @@ export class ExportService {
   }
 
   static exportToExcel(data: ExtractedData, filename: string = 'bank-statement.xlsx'): void {
-    // For now, export as CSV since ExcelJS is having issues
-    // In production, you'd want to fix the ExcelJS dependency
-    this.exportToCSV(data, filename.replace('.xlsx', '.csv'));
+    const rows = data.transactions.map(transaction => ({
+      Date: transaction.date,
+      Description: transaction.description,
+      Amount: transaction.amount,
+      Balance: transaction.balance,
+      Type: transaction.type
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(rows);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Transactions");
+
+    // Auto-width columns
+    const max_width = rows.reduce((w, r) => Math.max(w, r.Description.length), 10);
+    worksheet["!cols"] = [{ wch: 12 }, { wch: Math.min(max_width, 50) }, { wch: 12 }, { wch: 12 }, { wch: 10 }];
+
+    XLSX.writeFile(workbook, filename);
   }
 
   static copyToClipboard(data: ExtractedData): void {
@@ -49,7 +64,7 @@ export class ExportService {
         headers.join('\t'),
         ...rows.map(row => row.join('\t'))
       ].join('\n');
-      
+
       // Only try clipboard if user has interacted with the page
       if (navigator.clipboard && document.hasFocus()) {
         navigator.clipboard.writeText(csvContent)
@@ -77,14 +92,14 @@ export class ExportService {
       document.body.appendChild(textArea);
       textArea.focus();
       textArea.select();
-      
+
       const successful = document.execCommand('copy');
       if (successful) {
         console.log('Data copied to clipboard successfully (fallback method)');
       } else {
         console.error('Failed to copy to clipboard (fallback method failed)');
       }
-      
+
       document.body.removeChild(textArea);
     } catch (error) {
       console.error('Fallback clipboard copy failed:', error);

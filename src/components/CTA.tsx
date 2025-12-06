@@ -44,7 +44,7 @@ export const CTA = () => {
             </div>
 
             <p className="mt-6 text-sm text-[hsl(var(--muted-foreground))]">
-              Start with 500 free pages • No credit card required
+              Start with 10 free pages per day • No credit card required
             </p>
           </div>
         </div>

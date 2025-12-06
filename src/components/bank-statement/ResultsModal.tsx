@@ -1,13 +1,14 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import { X, Download, Copy, Eye, EyeOff, TrendingUp, TrendingDown, DollarSign, User, Mail, Building, CreditCard, Calendar, Wallet, ArrowUpCircle, ArrowDownCircle, FileText, Search, ArrowUpDown } from "lucide-react";
+import { X, Download, Copy, Eye, EyeOff, TrendingUp, TrendingDown, DollarSign, User, Mail, Building, CreditCard, Calendar, Wallet, ArrowUpCircle, ArrowDownCircle, FileText, Search, ArrowUpDown, Sparkles, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 // Assuming ExportService and ExtractedData are correctly defined elsewhere
 import { ExportService } from "@/lib/exportService";
 import { ExtractedData, PDFProcessor } from "@/lib/pdfProcessor";
 import { toast } from "react-hot-toast";
+import { useAuth, SignInButton } from "@clerk/clerk-react";
 
 interface ResultsModalProps {
   data: ExtractedData | null;
@@ -250,8 +251,9 @@ const DynamicTable = ({ transactions, currency = '$', columnNames }: DynamicTabl
 export const ResultsModal = ({ data, file, isProcessing = false, progress = 0, onClose, onTryAnother, onExport }: ResultsModalProps) => {
   const [showPdf, setShowPdf] = useState(false);
   const [isApproved, setIsApproved] = useState(true);
-
   const [fileUrl, setFileUrl] = useState<string | null>(null);
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+  const { isSignedIn, isLoaded } = useAuth();
 
   // Effect to create and revoke PDF object URL
   useEffect(() => {
@@ -263,7 +265,34 @@ export const ResultsModal = ({ data, file, isProcessing = false, progress = 0, o
     setFileUrl(null);
   }, [file]);
 
+  const handleExport = (format: 'csv' | 'excel') => {
+    if (isLoaded && !isSignedIn) {
+      // Save data to localStorage so it can be recovered after login
+      if (data) {
+        localStorage.setItem("pending_extraction", JSON.stringify({
+          data: data,
+          fileName: file?.name || "Extracted Statement.pdf",
+          date: new Date().toLocaleDateString()
+        }));
+      }
+      setShowLoginPrompt(true);
+    } else {
+      onExport(format);
+    }
+  };
+
   const handleCopyToClipboard = () => {
+    if (isLoaded && !isSignedIn) {
+      if (data) {
+        localStorage.setItem("pending_extraction", JSON.stringify({
+          data: data,
+          fileName: file?.name || "Extracted Statement.pdf",
+          date: new Date().toLocaleDateString()
+        }));
+      }
+      setShowLoginPrompt(true);
+      return;
+    }
     try {
       if (!data) {
         toast.error("No data to copy.");
@@ -344,7 +373,7 @@ export const ResultsModal = ({ data, file, isProcessing = false, progress = 0, o
           </div>
 
           {/* Right Side - Transaction Data/Processing UI */}
-          <div className={`${showPdf ? 'w-1/2' : 'w-full'} flex flex-col`}>
+          <div className={`${showPdf ? 'w-1/2' : 'w-full'} flex flex-col relative`}>
 
             {/* Show PDF Toggle Button (when PDF is hidden) */}
             {!showPdf && (
@@ -409,7 +438,7 @@ export const ResultsModal = ({ data, file, isProcessing = false, progress = 0, o
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => onExport('csv')}
+                      onClick={() => handleExport('csv')}
                       disabled={!isApproved}
                       title={!isApproved ? "Please approve the review first" : "Export as CSV"}
                     >
@@ -419,7 +448,7 @@ export const ResultsModal = ({ data, file, isProcessing = false, progress = 0, o
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => onExport('excel')}
+                      onClick={() => handleExport('excel')}
                       disabled={!isApproved}
                       title={!isApproved ? "Please approve the review first" : "Export as Excel"}
                     >
@@ -433,6 +462,47 @@ export const ResultsModal = ({ data, file, isProcessing = false, progress = 0, o
                 </>
               ) : null}
             </div>
+
+            {/* Inline Login Prompt Overlay */}
+            {showLoginPrompt && (
+              <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-[2px] animate-fade-in rounded-br-2xl">
+                <div className="w-full max-w-sm bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-xl shadow-2xl p-6 animate-scale-in mx-4">
+                  <div className="flex justify-end">
+                    <button
+                      onClick={() => setShowLoginPrompt(false)}
+                      className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]"
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                  </div>
+                  <div className="text-center mt-2">
+                    <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[hsl(var(--primary))]/10">
+                      <Sparkles className="h-6 w-6 text-[hsl(var(--primary))]" />
+                    </div>
+                    <h3 className="text-lg font-bold text-[hsl(var(--foreground))] mb-2">
+                      Sign in to Download
+                    </h3>
+                    <p className="text-sm text-[hsl(var(--muted-foreground))] mb-6">
+                      Create a free account to download your extracted data and save it to your dashboard.
+                    </p>
+                    <div className="space-y-3">
+                      <SignInButton mode="modal" forceRedirectUrl="/dashboard">
+                        <Button className="w-full gap-2 shadow-lg hover:shadow-xl transition-all">
+                          Login / Sign Up Free
+                        </Button>
+                      </SignInButton>
+                      <Button
+                        variant="ghost"
+                        onClick={() => setShowLoginPrompt(false)}
+                        className="w-full"
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div >
       </div >

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { UploadArea } from "@/components/bank-statement/UploadArea";
 import { ResultsModal } from "@/components/bank-statement/ResultsModal";
 import { UploadModal } from "@/components/dashboard/UploadModal";
@@ -99,6 +99,35 @@ export const DashboardContent = () => {
         setDocuments(prev => prev.filter(doc => doc.id !== id));
         toast.success("Document deleted");
     };
+
+    // Check for pending extraction from pre-login session
+    useEffect(() => {
+        const pendingData = localStorage.getItem("pending_extraction");
+        if (pendingData) {
+            try {
+                const { data, fileName, date } = JSON.parse(pendingData);
+
+                const newDoc: Document = {
+                    id: Math.random().toString(36).substr(2, 9),
+                    fileName: fileName || "Restored Document",
+                    date: date || new Date().toLocaleDateString(),
+                    status: "completed",
+                    data: data
+                };
+
+                setDocuments(prev => [newDoc, ...prev]);
+                localStorage.removeItem("pending_extraction");
+                toast.success("Restored your pending extraction!");
+
+                // Optional: Open it immediately
+                // setSelectedDoc(newDoc);
+                // setShowResults(true);
+            } catch (e) {
+                console.error("Failed to restore pending extraction", e);
+                localStorage.removeItem("pending_extraction");
+            }
+        }
+    }, []);
 
     const handleView = (doc: Document) => {
         if (doc.status !== "completed" || !doc.data) return;

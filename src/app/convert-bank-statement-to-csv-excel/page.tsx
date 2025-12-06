@@ -35,7 +35,6 @@ export const metadata: Metadata = {
 };
 
 import { RedirectIfAuthenticated } from "@/components/RedirectIfAuthenticated";
-
 import { RecentBlogs } from "@/components/RecentBlogs";
 
 export default function BankStatementConverterPage() {
