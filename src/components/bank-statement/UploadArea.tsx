@@ -1,9 +1,16 @@
 "use client";
 
-import { useCallback, useState } from "react";
-import { Upload, FileText, Image, X } from "lucide-react";
-import { useAuth } from "@clerk/clerk-react";
+import { useCallback, useState, useEffect } from "react";
+import { Upload, FileText, Image, X, Sparkles } from "lucide-react";
+import { useAuth, SignInButton } from "@clerk/clerk-react";
+import Link from "next/link";
 import { OCRAuthModal } from "./OCRAuthModal";
+import { PrivacyNotice } from "@/components/PrivacyNotice";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { toast } from "react-hot-toast";
+
+// Import pdf-lib
+import { PDFDocument } from 'pdf-lib';
 
 interface UploadAreaProps {
   onFileUpload: (file: File) => void;
@@ -11,15 +18,50 @@ interface UploadAreaProps {
   hideFeatures?: boolean;
   manualTrigger?: boolean;
   minimal?: boolean;
+  showPrivacyNotice?: boolean;
+  showLoginPrompt?: boolean;
 }
 
-export const UploadArea = ({ onFileUpload, isProcessing, hideFeatures = false, manualTrigger = false, minimal = false }: UploadAreaProps) => {
+export const UploadArea = ({ onFileUpload, isProcessing, hideFeatures = false, manualTrigger = false, minimal = false, showPrivacyNotice = true, showLoginPrompt = false }: UploadAreaProps) => {
   const [isDragOver, setIsDragOver] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploadStatus, setUploadStatus] = useState<'idle' | 'uploading' | 'ready'>('idle');
   const [showOCRAuthModal, setShowOCRAuthModal] = useState(false);
   const [pendingFile, setPendingFile] = useState<File | null>(null);
   const { isSignedIn, isLoaded } = useAuth();
+
+  const countPdfPages = async (file: File): Promise<number> => {
+    try {
+      const arrayBuffer = await file.arrayBuffer();
+      // Load the PDF document
+      const pdfDoc = await PDFDocument.load(arrayBuffer);
+      // Get the number of pages
+      return pdfDoc.getPageCount();
+    } catch (error) {
+      console.error("Error counting PDF pages:", error);
+      return 0;
+    }
+  };
+
+  const checkLimits = async (file: File): Promise<boolean> => {
+    if (isSignedIn) return true; // Logged-in users have different limits (enforced by backend)
+
+    // Public Limit: 1 PDF (enforced by single file state), Max 5 pages
+    if (file.type === 'application/pdf') {
+      const pageCount = await countPdfPages(file);
+      if (pageCount > 5) {
+        toast.error(
+          <div className="flex flex-col gap-1">
+            <span className="font-semibold">Limit Exceeded</span>
+            <span>Free uploads are limited to 5 pages. Please login for higher limits.</span>
+          </div>,
+          { duration: 5000 }
+        );
+        return false;
+      }
+    }
+    return true;
+  };
 
   const checkAuthenticationForOCR = async (file: File): Promise<boolean> => {
     // Wait for auth to load
@@ -51,9 +93,20 @@ export const UploadArea = ({ onFileUpload, isProcessing, hideFeatures = false, m
 
     const files = Array.from(e.dataTransfer.files);
     console.log('📁 Dropped files:', files.length);
+
+    if (files.length > 1 && !isSignedIn) {
+      toast.error("Free users can only upload 1 file at a time.");
+      return;
+    }
+
     if (files.length > 0) {
       const file = files[0];
       console.log('📄 First file:', file.name);
+
+      // Check limits first
+      if (!(await checkLimits(file))) {
+        return;
+      }
 
       // Check authentication for OCR before setting file or calling onFileUpload
       const canProceed = await checkAuthenticationForOCR(file);
@@ -87,6 +140,12 @@ export const UploadArea = ({ onFileUpload, isProcessing, hideFeatures = false, m
       console.log('📄 File selected:', file.name);
       console.log('📏 File size:', file.size);
       console.log('📋 File type:', file.type);
+
+      // Check limits first
+      if (!(await checkLimits(file))) {
+        e.target.value = ''; // Clear input
+        return;
+      }
 
       // Check authentication for OCR before setting file or calling onFileUpload
       const canProceed = await checkAuthenticationForOCR(file);
@@ -178,6 +237,22 @@ export const UploadArea = ({ onFileUpload, isProcessing, hideFeatures = false, m
 
   return (
     <div className="w-full max-w-4xl mx-auto">
+      {/* Privacy Notice - Moved above dropzone */}
+      {showPrivacyNotice && <PrivacyNotice size="large" className="mb-8 max-w-2xl mx-auto" />}
+
+      {/* Login Prompt - Moved above dropzone */}
+      {showLoginPrompt && !isSignedIn && (
+        <Alert className="mb-8 max-w-2xl mx-auto bg-[hsl(var(--accent))]/5 border-[hsl(var(--accent))]/20 p-6">
+          <Sparkles className="h-6 w-6 top-6 text-[hsl(var(--accent))]" />
+          <AlertTitle className="text-lg mb-2 text-[hsl(var(--foreground))]">Unlock Advanced Features</AlertTitle>
+          <AlertDescription className="text-base text-[hsl(var(--muted-foreground))]">
+            <SignInButton mode="modal">
+              <span className="text-[hsl(var(--accent))] hover:underline font-medium cursor-pointer">Login</span>
+            </SignInButton> to see your dashboard with advanced features and extended limits.
+          </AlertDescription>
+        </Alert>
+      )}
+
       <div
         className={`
           relative border-2 border-dashed rounded-2xl ${hideFeatures ? 'p-6' : 'p-12'} text-center transition-all duration-300
@@ -311,7 +386,7 @@ export const UploadArea = ({ onFileUpload, isProcessing, hideFeatures = false, m
 
         {/* Size Limit Notice */}
         <p className="mt-4 text-xs text-[hsl(var(--muted-foreground))]">
-          Free tier upload limit: 10MB
+          {isSignedIn ? 'Daily limit: 10 pages' : 'Free tier limit: 1 PDF (max 5 pages)'}
         </p>
       </div>
 

@@ -72,7 +72,7 @@ export interface ExtractedData {
 }
 
 export class PDFProcessor {
-  static async processPDF(file: File, isSignedIn: boolean = false): Promise<ExtractedData> {
+  static async processPDF(file: File, isSignedIn: boolean = false, token?: string | null): Promise<ExtractedData> {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('confidence_threshold', '0.3');
@@ -90,8 +90,15 @@ export class PDFProcessor {
 
       // Sanitize: Remove accidental quotes (e.g. if user set "" in env)
       apiUrl = apiUrl.replace(/['"]+/g, '').trim();
+
+      const headers: HeadersInit = {};
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
       const response = await fetch(`${apiUrl}/api/v1/pdf-extract/fast`, {
         method: 'POST',
+        headers: headers,
         body: formData,
         signal: controller.signal,
       });
@@ -174,8 +181,8 @@ export class PDFProcessor {
     }
   }
 
-  static async processImage(file: File, isSignedIn: boolean = false): Promise<ExtractedData> {
-    return this.processPDF(file, isSignedIn);
+  static async processImage(file: File, isSignedIn: boolean = false, token?: string | null): Promise<ExtractedData> {
+    return this.processPDF(file, isSignedIn, token);
   }
 
   static parseTableStructure(markdown: string): { headers: string[], rows: string[][] } {

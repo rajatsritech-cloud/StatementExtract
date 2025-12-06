@@ -9,6 +9,7 @@ import { ExportService } from "@/lib/exportService";
 import { ExtractedData, PDFProcessor } from "@/lib/pdfProcessor";
 import { toast } from "react-hot-toast";
 import { useAuth, SignInButton } from "@clerk/clerk-react";
+import { PrivacyNotice } from "@/components/PrivacyNotice";
 
 interface ResultsModalProps {
   data: ExtractedData | null;
@@ -459,6 +460,9 @@ export const ResultsModal = ({ data, file, isProcessing = false, progress = 0, o
 
                   {/* Dynamic Table with Sort/Search */}
                   {data.transactions && <DynamicTable transactions={data.transactions} currency={data.userInfo.currency} columnNames={data.column_names} />}
+
+                  {/* Privacy Notice */}
+                  <PrivacyNotice className="mt-8" />
                 </>
               ) : null}
             </div>

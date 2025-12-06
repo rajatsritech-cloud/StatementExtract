@@ -17,7 +17,7 @@ export const BankStatementConverter = () => {
   const [processingProgress, setProcessingProgress] = useState(0);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploadKey, setUploadKey] = useState(0);
-  const { isSignedIn, isLoaded } = useAuth();
+  const { isSignedIn, isLoaded, getToken } = useAuth();
 
   const handleFileUpload = useCallback(async (file: File) => {
     console.log('🚀 Starting file upload...');
@@ -85,7 +85,8 @@ export const BankStatementConverter = () => {
       try {
         const { PDFProcessor } = await import("@/lib/pdfProcessor");
         console.log('📖 Processing file with backend API...');
-        extracted = await PDFProcessor.processPDF(file, isSignedIn);
+        const token = await getToken();
+        extracted = await PDFProcessor.processPDF(file, isSignedIn, token);
       } catch (error: any) {
         console.log('❌ Processing error:', error.message);
         throw error;
@@ -134,7 +135,7 @@ export const BankStatementConverter = () => {
         duration: 5000,
       });
     }
-  }, [isSignedIn, isLoaded]);
+  }, [isSignedIn, isLoaded, getToken]);
 
   const handleTryAnother = () => {
     setShowResults(false);
@@ -166,10 +167,10 @@ export const BankStatementConverter = () => {
           <svg className="absolute top-20 left-10 w-32 h-32 text-[hsl(var(--primary))]/5 animate-float" style={{ animationDelay: '0s' }} viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
             <path fill="currentColor" d="M45.3,-57.3C57.9,-49.1,66.7,-33.5,70.4,-16.3C74.1,0.9,72.7,19.7,64.6,35.1C56.5,50.5,41.7,62.5,24.8,68.4C7.9,74.3,-11.1,74.1,-28.4,68.2C-45.7,62.3,-61.3,50.7,-69.5,35.2C-77.7,19.7,-78.5,0.3,-74.6,-17.6C-70.7,-35.5,-62.1,-51.9,-49.3,-60C-36.5,-68.1,-18.3,-67.9,-0.5,-67.2C17.2,-66.5,32.7,-65.5,45.3,-57.3Z" transform="translate(100 100)" />
           </svg>
-          <svg className="absolute top-40 right-20 w-24 h-24 text-[hsl(var(--accent))]/5 animate-float" style={{ animationDelay: '1s' }} viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <svg className="absolute top-40 right-10 w-24 h-24 text-[hsl(var(--accent))]/5 animate-float" style={{ animationDelay: '1s' }} viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
             <path fill="currentColor" d="M41.3,-53.4C53.4,-43.7,62.7,-30.9,66.6,-16.4C70.5,-1.9,69,14.3,62.2,28.3C55.4,42.3,43.3,54.1,28.7,61.2C14.1,68.3,-3.1,70.7,-19.6,66.9C-36.1,63.1,-51.9,53.1,-61.3,38.9C-70.7,24.7,-73.7,6.3,-70.5,-10.3C-67.3,-26.9,-57.9,-41.7,-45.3,-51.2C-32.7,-60.7,-16.3,-64.9,-0.8,-63.8C14.7,-62.7,29.3,-63.1,41.3,-53.4Z" transform="translate(100 100)" />
           </svg>
-          <svg className="absolute bottom-20 left-1/4 w-28 h-28 text-[hsl(var(--primary))]/5 animate-float" style={{ animationDelay: '2s' }} viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <svg className="absolute bottom-20 left-10 w-28 h-28 text-[hsl(var(--primary))]/5 animate-float" style={{ animationDelay: '2s' }} viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
             <path fill="currentColor" d="M37.3,-49.6C48.9,-40.3,59.3,-29.5,63.8,-16.2C68.3,-2.9,67,12.9,60.5,26.3C54,39.7,42.3,50.7,28.5,57.5C14.7,64.3,-1.2,67,-16.3,63.9C-31.4,60.8,-45.7,51.9,-55.4,39.3C-65.1,26.7,-70.2,10.4,-68.8,-5.4C-67.4,-21.2,-59.5,-36.5,-48.3,-45.5C-37.1,-54.5,-23.6,-57.2,-10.8,-57.7C2,-58.2,25.7,-58.9,37.3,-49.6Z" transform="translate(100 100)" />
           </svg>
         </div>
@@ -206,7 +207,7 @@ export const BankStatementConverter = () => {
 
           {/* Upload Area */}
           <div className="mx-auto max-w-2xl">
-            <UploadArea key={uploadKey} onFileUpload={handleFileUpload} isProcessing={isProcessing} />
+            <UploadArea key={uploadKey} onFileUpload={handleFileUpload} isProcessing={isProcessing} showPrivacyNotice={false} showLoginPrompt={true} />
           </div>
         </div>
       </main>

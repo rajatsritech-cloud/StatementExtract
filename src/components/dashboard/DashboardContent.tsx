@@ -7,8 +7,9 @@ import { UploadModal } from "@/components/dashboard/UploadModal";
 import { ExtractedData } from "@/lib/pdfProcessor";
 import { toast } from "react-hot-toast";
 import { useAuth, UserButton } from "@clerk/clerk-react";
-import { FileText, Trash2, Eye, Loader2, CheckCircle2, Upload } from "lucide-react";
-
+import { FileText, Trash2, Eye, Loader2, CheckCircle2, Upload, Info } from "lucide-react";
+import { StorageService, StoredDocument } from "@/lib/storageService";
+import { PrivacyNotice } from "@/components/PrivacyNotice";
 
 import { Button } from "@/components/ui/button";
 
@@ -31,19 +32,36 @@ export const DashboardContent = () => {
     const [uploadKey, setUploadKey] = useState(0);
     const documentsRef = useRef<HTMLDivElement>(null);
 
+    // Load documents from IndexedDB on mount
+    useEffect(() => {
+        const loadDocs = async () => {
+            try {
+                const storedDocs = await StorageService.getDocuments();
+                const mappedDocs: Document[] = storedDocs.map(doc => ({
+                    id: doc.id,
+                    fileName: doc.fileName,
+                    date: doc.date,
+                    status: "completed",
+                    data: doc.data,
+                    file: doc.fileBlob ? new File([doc.fileBlob], doc.fileName, { type: 'application/pdf' }) : undefined
+                }));
+                setDocuments(mappedDocs);
+            } catch (error) {
+                console.error("Failed to load documents from storage:", error);
+            }
+        };
+        loadDocs();
+    }, []);
+
     const handleFileUpload = useCallback(async (file: File) => {
         if (!isLoaded || !isSignedIn) {
             toast.error('Please sign in to upload documents.');
             return;
         }
 
-        // Close upload modal
         setShowUploadModal(false);
-        // Do NOT show results modal immediately
-        // setShowResults(true); 
         setIsProcessing(true);
 
-        // Create new document entry
         const newDoc: Document = {
             id: Math.random().toString(36).substr(2, 9),
             fileName: file.name,
@@ -53,21 +71,28 @@ export const DashboardContent = () => {
         };
 
         setDocuments(prev => [newDoc, ...prev]);
-        setUploadKey(prev => prev + 1); // Reset UploadArea to clear the file
+        setUploadKey(prev => prev + 1);
 
         toast.loading("Processing started...", { duration: 2000 });
 
-        // Scroll to documents section
         setTimeout(() => {
             documentsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }, 100);
 
         try {
-            // Do NOT set selected doc yet, so modal doesn't open
-            // setSelectedDoc(newDoc);
-
             const { PDFProcessor } = await import("@/lib/pdfProcessor");
             const extracted = await PDFProcessor.processPDF(file, isSignedIn);
+
+            // Save to IndexedDB
+            const storedDoc: StoredDocument = {
+                id: newDoc.id,
+                fileName: newDoc.fileName,
+                date: newDoc.date,
+                data: extracted,
+                fileBlob: file, // Store the file blob
+                timestamp: Date.now()
+            };
+            await StorageService.saveDocument(storedDoc);
 
             setDocuments(prev => prev.map(doc =>
                 doc.id === newDoc.id
@@ -75,10 +100,9 @@ export const DashboardContent = () => {
                     : doc
             ));
 
-            // Update selected doc with data if it's still the one being viewed
             setSelectedDoc(prev => prev?.id === newDoc.id ? { ...prev, status: "completed", data: extracted } : prev);
 
-            toast.success("Document processed successfully!");
+            toast.success("Document processed and saved locally!");
         } catch (error) {
             console.error(error);
             setDocuments(prev => prev.map(doc =>
@@ -86,42 +110,54 @@ export const DashboardContent = () => {
                     ? { ...doc, status: "failed" }
                     : doc
             ));
-            // Update selected doc status
             setSelectedDoc(prev => prev?.id === newDoc.id ? { ...prev, status: "failed" } : prev);
-
             toast.error("Failed to process document.");
         } finally {
             setIsProcessing(false);
         }
     }, [isLoaded, isSignedIn]);
 
-    const handleDelete = (id: string) => {
-        setDocuments(prev => prev.filter(doc => doc.id !== id));
-        toast.success("Document deleted");
+    const handleDelete = async (id: string) => {
+        try {
+            await StorageService.deleteDocument(id);
+            setDocuments(prev => prev.filter(doc => doc.id !== id));
+            toast.success("Document deleted");
+        } catch (error) {
+            console.error("Failed to delete document:", error);
+            toast.error("Failed to delete document");
+        }
     };
 
-    // Check for pending extraction from pre-login session
+    // Check for pending extraction from pre-login session (Redirect flow)
     useEffect(() => {
         const pendingData = localStorage.getItem("pending_extraction");
         if (pendingData) {
             try {
                 const { data, fileName, date } = JSON.parse(pendingData);
 
+                const id = Math.random().toString(36).substr(2, 9);
                 const newDoc: Document = {
-                    id: Math.random().toString(36).substr(2, 9),
+                    id: id,
                     fileName: fileName || "Restored Document",
                     date: date || new Date().toLocaleDateString(),
                     status: "completed",
                     data: data
                 };
 
-                setDocuments(prev => [newDoc, ...prev]);
-                localStorage.removeItem("pending_extraction");
-                toast.success("Restored your pending extraction!");
+                // Save restored doc to IndexedDB immediately
+                const storedDoc: StoredDocument = {
+                    id: id,
+                    fileName: newDoc.fileName,
+                    date: newDoc.date,
+                    data: data,
+                    timestamp: Date.now()
+                };
+                StorageService.saveDocument(storedDoc).then(() => {
+                    setDocuments(prev => [newDoc, ...prev]);
+                    localStorage.removeItem("pending_extraction");
+                    toast.success("Restored your pending extraction!");
+                });
 
-                // Optional: Open it immediately
-                // setSelectedDoc(newDoc);
-                // setShowResults(true);
             } catch (e) {
                 console.error("Failed to restore pending extraction", e);
                 localStorage.removeItem("pending_extraction");
@@ -139,6 +175,9 @@ export const DashboardContent = () => {
         <div className="flex-1 flex flex-col overflow-hidden bg-[hsl(var(--background))]">
             <div className="flex-1 overflow-y-auto p-8">
                 <div className="mx-auto max-w-5xl space-y-8">
+
+                    {/* Privacy Notice */}
+                    <PrivacyNotice />
 
                     {/* Documents Table */}
                     <div className="space-y-4" ref={documentsRef}>
