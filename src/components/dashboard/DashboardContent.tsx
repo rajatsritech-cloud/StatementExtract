@@ -105,6 +105,9 @@ export const DashboardContent = () => {
             setSelectedDoc(prev => prev?.id === newDoc.id ? { ...prev, status: "completed", data: extracted } : prev);
 
             toast.success("Document processed and saved locally!");
+
+            // Trigger usage update in sidebar
+            window.dispatchEvent(new Event('usage_updated'));
         } catch (error: any) {
             console.error(error);
             const errorMessage = error.message || "Failed to process document.";
