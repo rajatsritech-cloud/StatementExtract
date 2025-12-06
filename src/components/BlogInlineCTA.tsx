@@ -37,7 +37,7 @@ export function BlogInlineCTA() {
             Get started free with Statement Extract
           </h3>
           <p className="mt-2 text-sm text-[hsl(var(--muted-foreground))] md:text-base">
-            Convert your first 10 bank statements in less than 5 minutes with our AI-powered bank statement OCR.
+            Convert your first 10 bank statements in less than 5 minutes with our Intelligent Document Processing.
           </p>
         </div>
 

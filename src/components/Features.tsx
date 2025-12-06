@@ -5,7 +5,7 @@ const features = [
   {
     icon: Brain,
     title: "AI-Powered Document Processing",
-    description: "Intelligent OCR and AI models understand document context and extract data with human-level accuracy.",
+    description: "Intelligent Document Processing models understand document context and extract data with human-level accuracy.",
   },
   {
     icon: Gauge,

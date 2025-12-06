@@ -6,14 +6,14 @@ import { CTA } from "@/components/CTA";
 
 export const metadata: Metadata = {
   title: "Bank Statement Converter - Convert PDF Bank Statements to CSV/Excel | Automated Extraction",
-  description: "Automatically convert any PDF bank statement into clean Excel or CSV files with OCR + AI—trusted accuracy for 1000s of global banks. Fast, secure, industry-leading accuracy conversion.",
+  description: "Automatically convert any PDF bank statement into clean Excel or CSV files with Intelligent Document Processing—trusted accuracy for 1000s of global banks. Fast, secure, industry-leading accuracy conversion.",
   keywords: [
     "Bank Statement Converter",
     "Convert PDF Bank Statements to CSV/Excel",
     "Automated Bank Statement Extraction",
     "Best Bank Statement Converter Online",
     "PDF to Excel Converter",
-    "Bank Statement OCR",
+    "Bank Statement Processing",
     "Financial Data Extraction",
     "Convert Chase Bank Statement to Excel",
     "Convert Wells Fargo PDF to CSV",
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: "Bank Statement Converter - Convert PDF to CSV/Excel",
-    description: "World's most trusted OCR + AI bank statement converter. Works with 1000s of banks globally. Fast, secure, industry-leading accuracy.",
+    description: "World's most trusted Intelligent Document Processing bank statement converter. Works with 1000s of banks globally. Fast, secure, industry-leading accuracy.",
     type: "website",
     url: "/convert-bank-statement-to-csv-excel"
   },
@@ -49,7 +49,7 @@ export default function BankStatementConverterPage() {
             "@context": "https://schema.org",
             "@type": "SoftwareApplication",
             "name": "Bank Statement Converter",
-            "description": "Automatically convert any PDF bank statement into clean Excel or CSV files with OCR + AI",
+            "description": "Automatically convert any PDF bank statement into clean Excel or CSV files with Intelligent Document Processing",
             "url": "https://statementextract.com/convert-bank-statement-to-csv-excel",
             "applicationCategory": "BusinessApplication",
             "operatingSystem": "Web Browser",
@@ -60,7 +60,7 @@ export default function BankStatementConverterPage() {
             },
             "featureList": [
               "PDF to Excel conversion",
-              "Bank statement OCR",
+              "Bank statement processing",
               "Transaction extraction",
               "CSV export",
               "Secure processing",

@@ -2,12 +2,14 @@
 
 import { FileText, Receipt, FileSpreadsheet, Settings, CreditCard, LayoutDashboard } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { UserButton, useUser } from "@clerk/clerk-react";
 
 interface SidebarProps {
     className?: string;
 }
 
 export const DashboardSidebar = ({ className }: SidebarProps) => {
+    const { user } = useUser();
     const navItems = [
         { icon: LayoutDashboard, label: "Home", active: false, href: "/" },
         { icon: FileSpreadsheet, label: "Bank Statements", active: true },
@@ -64,14 +66,27 @@ export const DashboardSidebar = ({ className }: SidebarProps) => {
                 </nav>
             </div>
 
-            <div className="p-4 border-t border-[hsl(var(--border))]">
+            <div className="p-4 border-t border-[hsl(var(--border))] space-y-4">
                 <div className="rounded-xl bg-gradient-to-br from-[hsl(var(--primary))]/20 to-[hsl(var(--accent))]/20 p-4">
                     <h4 className="mb-1 text-sm font-semibold text-[hsl(var(--foreground))]">Free Plan</h4>
                     <p className="text-xs text-[hsl(var(--muted-foreground))] mb-3">
-                        500 pages remaining this month
+                        Free Tier: 10 pages per day
                     </p>
                     <div className="h-1.5 w-full rounded-full bg-[hsl(var(--background))]">
                         <div className="h-full w-[20%] rounded-full bg-[hsl(var(--primary))]" />
+                    </div>
+                </div>
+
+                {/* User Profile Section */}
+                <div className="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-[hsl(var(--muted))] transition-colors">
+                    <UserButton afterSignOutUrl="/" />
+                    <div className="flex flex-col overflow-hidden">
+                        <span className="text-sm font-medium truncate text-[hsl(var(--foreground))]">
+                            {user?.fullName || user?.firstName || "User"}
+                        </span>
+                        <span className="text-xs text-[hsl(var(--muted-foreground))] truncate">
+                            {user?.primaryEmailAddress?.emailAddress}
+                        </span>
                     </div>
                 </div>
             </div>

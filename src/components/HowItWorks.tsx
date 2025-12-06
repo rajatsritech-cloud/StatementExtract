@@ -12,7 +12,7 @@ export const HowItWorks = () => {
     {
       icon: Cpu,
       title: "AI-Powered Document Processing",
-      description: "Our intelligent OCR and AI pipeline automatically identifies fields, extracts data, and validates information with high accuracy.",
+      description: "Our Intelligent Document Processing engine automatically identifies fields, extracts data, and validates information with high accuracy.",
       step: "02"
     },
     {

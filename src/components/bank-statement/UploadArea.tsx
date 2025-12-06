@@ -10,9 +10,10 @@ interface UploadAreaProps {
   isProcessing: boolean;
   hideFeatures?: boolean;
   manualTrigger?: boolean;
+  minimal?: boolean;
 }
 
-export const UploadArea = ({ onFileUpload, isProcessing, hideFeatures = false, manualTrigger = false }: UploadAreaProps) => {
+export const UploadArea = ({ onFileUpload, isProcessing, hideFeatures = false, manualTrigger = false, minimal = false }: UploadAreaProps) => {
   const [isDragOver, setIsDragOver] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploadStatus, setUploadStatus] = useState<'idle' | 'uploading' | 'ready'>('idle');
@@ -130,6 +131,50 @@ export const UploadArea = ({ onFileUpload, isProcessing, hideFeatures = false, m
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
+
+  if (minimal) {
+    return (
+      <div className="w-full">
+        <input
+          id="file-input-minimal"
+          type="file"
+          className="hidden"
+          accept=".pdf,.jpg,.jpeg,.png"
+          onChange={handleFileSelect}
+          disabled={isProcessing}
+        />
+
+        <div className="flex items-center gap-4">
+          <button
+            onClick={() => !isProcessing && document.getElementById('file-input-minimal')?.click()}
+            disabled={isProcessing}
+            className="inline-flex items-center gap-2 rounded-lg bg-[hsl(var(--primary))] px-4 py-2 text-sm font-medium text-white hover:bg-[hsl(var(--primary))]/90 transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isProcessing ? (
+              <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+            ) : (
+              <Upload className="h-4 w-4" />
+            )}
+            {isProcessing ? 'Processing...' : 'Upload Document'}
+          </button>
+
+          {/* Show selected file name if any (though usually it processes immediately) */}
+          {selectedFile && !isProcessing && (
+            <span className="text-sm text-[hsl(var(--muted-foreground))] flex items-center gap-2">
+              <FileText className="h-4 w-4" />
+              {selectedFile.name}
+            </span>
+          )}
+        </div>
+
+        <OCRAuthModal
+          isOpen={showOCRAuthModal}
+          onClose={handleModalClose}
+          fileType={pendingFile?.type === 'image/jpeg' || pendingFile?.type === 'image/png' ? 'image' : 'pdf'}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="w-full max-w-4xl mx-auto">
@@ -266,7 +311,7 @@ export const UploadArea = ({ onFileUpload, isProcessing, hideFeatures = false, m
 
         {/* Size Limit Notice */}
         <p className="mt-4 text-xs text-[hsl(var(--muted-foreground))]">
-          Maximum file size: 15MB
+          Free tier upload limit: 10MB
         </p>
       </div>
 
@@ -277,9 +322,9 @@ export const UploadArea = ({ onFileUpload, isProcessing, hideFeatures = false, m
             <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-[hsl(var(--primary))]/10 mx-auto">
               <FileText className="h-6 w-6 text-[hsl(var(--primary))]" />
             </div>
-            <h4 className="font-semibold text-[hsl(var(--foreground))] mb-2">Smart OCR</h4>
+            <h4 className="font-semibold text-[hsl(var(--foreground))] mb-2">Intelligent Processing</h4>
             <p className="text-sm text-[hsl(var(--muted-foreground))]">
-              OCR + AI built for bank statements: capture account holder details, IBANs, balances, and every transaction line from PDFs or images.
+              Intelligent Document Processing built for bank statements: capture account holder details, IBANs, balances, and every transaction line from PDFs or images.
             </p>
           </div>
 

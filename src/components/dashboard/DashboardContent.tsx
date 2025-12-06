@@ -3,10 +3,11 @@
 import { useState, useCallback, useRef } from "react";
 import { UploadArea } from "@/components/bank-statement/UploadArea";
 import { ResultsModal } from "@/components/bank-statement/ResultsModal";
+import { UploadModal } from "@/components/dashboard/UploadModal";
 import { ExtractedData } from "@/lib/pdfProcessor";
 import { toast } from "react-hot-toast";
 import { useAuth, UserButton } from "@clerk/clerk-react";
-import { FileText, Trash2, Eye, Loader2, CheckCircle2 } from "lucide-react";
+import { FileText, Trash2, Eye, Loader2, CheckCircle2, Upload } from "lucide-react";
 
 
 import { Button } from "@/components/ui/button";
@@ -24,6 +25,7 @@ export const DashboardContent = () => {
     const [documents, setDocuments] = useState<Document[]>([]);
     const [selectedDoc, setSelectedDoc] = useState<Document | null>(null);
     const [showResults, setShowResults] = useState(false);
+    const [showUploadModal, setShowUploadModal] = useState(false);
     const { isSignedIn, isLoaded } = useAuth();
     const [isProcessing, setIsProcessing] = useState(false); // Global processing state for UploadArea
     const [uploadKey, setUploadKey] = useState(0);
@@ -34,6 +36,12 @@ export const DashboardContent = () => {
             toast.error('Please sign in to upload documents.');
             return;
         }
+
+        // Close upload modal
+        setShowUploadModal(false);
+        // Do NOT show results modal immediately
+        // setShowResults(true); 
+        setIsProcessing(true);
 
         // Create new document entry
         const newDoc: Document = {
@@ -47,7 +55,7 @@ export const DashboardContent = () => {
         setDocuments(prev => [newDoc, ...prev]);
         setUploadKey(prev => prev + 1); // Reset UploadArea to clear the file
 
-        toast.loading("Processing started. You can view the status in 'Your Documents'.", { duration: 4000 });
+        toast.loading("Processing started...", { duration: 2000 });
 
         // Scroll to documents section
         setTimeout(() => {
@@ -55,7 +63,9 @@ export const DashboardContent = () => {
         }, 100);
 
         try {
-            // Simulate processing delay or actual processing
+            // Do NOT set selected doc yet, so modal doesn't open
+            // setSelectedDoc(newDoc);
+
             const { PDFProcessor } = await import("@/lib/pdfProcessor");
             const extracted = await PDFProcessor.processPDF(file, isSignedIn);
 
@@ -64,6 +74,10 @@ export const DashboardContent = () => {
                     ? { ...doc, status: "completed", data: extracted }
                     : doc
             ));
+
+            // Update selected doc with data if it's still the one being viewed
+            setSelectedDoc(prev => prev?.id === newDoc.id ? { ...prev, status: "completed", data: extracted } : prev);
+
             toast.success("Document processed successfully!");
         } catch (error) {
             console.error(error);
@@ -72,7 +86,12 @@ export const DashboardContent = () => {
                     ? { ...doc, status: "failed" }
                     : doc
             ));
+            // Update selected doc status
+            setSelectedDoc(prev => prev?.id === newDoc.id ? { ...prev, status: "failed" } : prev);
+
             toast.error("Failed to process document.");
+        } finally {
+            setIsProcessing(false);
         }
     }, [isLoaded, isSignedIn]);
 
@@ -89,31 +108,21 @@ export const DashboardContent = () => {
 
     return (
         <div className="flex-1 flex flex-col overflow-hidden bg-[hsl(var(--background))]">
-            {/* Top Header with User Details */}
-            <div className="flex items-center justify-end px-8 py-4 border-b border-[hsl(var(--border))] bg-[hsl(var(--card))]">
-                <UserButton afterSignOutUrl="/" />
-            </div>
-
             <div className="flex-1 overflow-y-auto p-8">
                 <div className="mx-auto max-w-5xl space-y-8">
 
-                    {/* Header */}
-                    <div>
-                        <h1 className="text-2xl font-bold text-[hsl(var(--foreground))]">Bank Statement Converter</h1>
-                        <p className="text-sm text-[hsl(var(--muted-foreground))] mt-1">
-                            Upload your PDF statements to convert them into Excel/CSV formats.
-                        </p>
-                    </div>
-
-                    {/* Upload Section */}
-                    <div className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-4 shadow-sm">
-                        <h2 className="text-base font-semibold mb-3 text-[hsl(var(--foreground))]">Upload New Document</h2>
-                        <UploadArea key={uploadKey} onFileUpload={handleFileUpload} isProcessing={isProcessing} hideFeatures={true} manualTrigger={true} />
-                    </div>
-
                     {/* Documents Table */}
                     <div className="space-y-4" ref={documentsRef}>
-                        <h2 className="text-xl font-semibold text-[hsl(var(--foreground))]">Your Documents</h2>
+                        <div className="flex items-center justify-between">
+                            <h2 className="text-xl font-semibold text-[hsl(var(--foreground))]">Your Documents</h2>
+                            <Button
+                                onClick={() => setShowUploadModal(true)}
+                                className="inline-flex items-center gap-2 rounded-lg bg-[hsl(var(--primary))] px-4 py-2 text-sm font-medium text-white hover:bg-[hsl(var(--primary))]/90 transition-colors shadow-sm"
+                            >
+                                <Upload className="h-4 w-4" />
+                                Upload Document
+                            </Button>
+                        </div>
                         <div className="rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] overflow-hidden shadow-sm">
                             <div className="w-full overflow-auto">
                                 <table className="w-full caption-bottom text-sm">
@@ -146,19 +155,19 @@ export const DashboardContent = () => {
                                                     <td className="p-4 align-middle">{doc.date}</td>
                                                     <td className="p-4 align-middle">
                                                         {doc.status === "processing" && (
-                                                            <span className="inline-flex items-center gap-1.5 rounded-full bg-yellow-500/10 px-2.5 py-0.5 text-xs font-medium text-yellow-600">
+                                                            <span className="inline-flex items-center gap-1.5 rounded-full bg-[hsl(var(--primary))]/10 px-2.5 py-0.5 text-xs font-medium text-[hsl(var(--primary))]">
                                                                 <Loader2 className="h-3 w-3 animate-spin" />
                                                                 Processing
                                                             </span>
                                                         )}
                                                         {doc.status === "completed" && (
-                                                            <span className="inline-flex items-center gap-1.5 rounded-full bg-green-500/10 px-2.5 py-0.5 text-xs font-medium text-green-600">
+                                                            <span className="inline-flex items-center gap-1.5 rounded-full bg-green-500/10 px-2.5 py-0.5 text-xs font-medium text-green-600 dark:text-green-400">
                                                                 <CheckCircle2 className="h-3 w-3" />
                                                                 Completed
                                                             </span>
                                                         )}
                                                         {doc.status === "failed" && (
-                                                            <span className="inline-flex items-center gap-1.5 rounded-full bg-red-500/10 px-2.5 py-0.5 text-xs font-medium text-red-600">
+                                                            <span className="inline-flex items-center gap-1.5 rounded-full bg-red-500/10 px-2.5 py-0.5 text-xs font-medium text-red-600 dark:text-red-400">
                                                                 Failed
                                                             </span>
                                                         )}
@@ -195,21 +204,37 @@ export const DashboardContent = () => {
                     </div>
                 </div>
 
+                {/* Upload Modal */}
+                <UploadModal
+                    isOpen={showUploadModal}
+                    onClose={() => setShowUploadModal(false)}
+                    onFileUpload={handleFileUpload}
+                    isProcessing={isProcessing}
+                />
+
                 {/* Results Modal */}
-                {showResults && selectedDoc && selectedDoc.data && (
+                {showResults && selectedDoc && (
                     <ResultsModal
-                        data={selectedDoc.data}
+                        data={selectedDoc.data || null}
                         file={selectedDoc.file || null}
-                        isProcessing={false}
-                        progress={100}
-                        onClose={() => setShowResults(false)}
-                        onTryAnother={() => setShowResults(false)}
+                        isProcessing={selectedDoc.status === 'processing'}
+                        progress={100} // You might want to implement real progress later
+                        onClose={() => {
+                            setShowResults(false);
+                            setSelectedDoc(null);
+                        }}
+                        onTryAnother={() => {
+                            setShowResults(false);
+                            setShowUploadModal(true);
+                        }}
                         onExport={(format) => {
                             // Re-implement export logic or import ExportService
                             import("@/lib/exportService").then(({ ExportService }) => {
-                                if (format === 'csv') ExportService.exportToCSV(selectedDoc.data!);
-                                else ExportService.exportToExcel(selectedDoc.data!);
-                                toast.success(`Exported as ${format.toUpperCase()}`);
+                                if (selectedDoc.data) {
+                                    if (format === 'csv') ExportService.exportToCSV(selectedDoc.data);
+                                    else ExportService.exportToExcel(selectedDoc.data);
+                                    toast.success(`Exported as ${format.toUpperCase()}`);
+                                }
                             });
                         }}
                     />

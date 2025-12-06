@@ -15,9 +15,9 @@ const faqs = [
     ],
   },
   {
-    question: "How is StatementExtract different from generic OCR tools?",
+    question: "How is StatementExtract different from standard OCR tools?",
     intro:
-      "Generic OCR only gives you plain text; StatementExtract understands the structure and meaning of financial data.",
+      "Standard OCR only gives you plain text; StatementExtract understands the structure and meaning of financial data.",
     points: [
       "Built specifically for high-value documents like invoices, contracts, healthcare records, and bank statements, not generic images.",
       "Identifies the right fields for each document type—line items, key terms, patient details, or transactions—automatically.",
@@ -31,7 +31,7 @@ const faqs = [
     points: [
       "Supports digital PDFs, scanned PDFs, and images (JPG, PNG).",
       "Handles invoices, contracts, healthcare records, bank statements, and other financial documents.",
-      "OCR + AI adapts to new layouts so you don’t have to maintain rigid templates for every format.",
+      "Intelligent Document Processing adapts to new layouts so you don’t have to maintain rigid templates for every format.",
     ],
   },
   {
@@ -46,7 +46,7 @@ const faqs = [
     ],
   },
   {
-    question: "How accurate is the OCR + AI extraction?",
+    question: "How accurate is the Intelligent Document Processing engine?",
     intro:
       "The extraction pipeline is tuned for financial data and built to minimize silent errors.",
     points: [
@@ -62,7 +62,7 @@ const faqs = [
     points: [
       "No need to build or maintain per-bank templates.",
       "Upload a statement or call the API and receive structured results immediately.",
-      "OCR, layout understanding, and AI models generalize across many formats for you.",
+      "Intelligent Document Processing models generalize across many formats for you.",
     ],
   },
   {
@@ -116,7 +116,7 @@ const faqs = [
     ],
   },
   {
-    question: "What happens if the OCR is unsure or something looks wrong?",
+    question: "What happens if the engine is unsure or something looks wrong?",
     intro:
       "We prefer explicit handling of edge cases rather than letting bad data slip into your systems.",
     points: [

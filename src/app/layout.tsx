@@ -32,11 +32,11 @@ export const metadata: Metadata = {
     template: "%s | Statement Extractor",
   },
   description:
-    "Extract structured data from any document—bank statements, invoices, contracts, healthcare records and more. OCR + AI with no templates, no training, just results",
+    "Extract structured data from any document—bank statements, invoices, contracts, healthcare records and more. Intelligent Document Processing with no templates, no training, just results",
   openGraph: {
-    title: "Statement Extract – Intelligent OCR & AI Document Extraction",
+    title: "Statement Extract – Intelligent Document Processing & Extraction",
     description:
-      "Statement Extract is an AI-powered OCR platform that converts any document—bank statements, invoices, contracts, healthcare records, forms, and more—into structured data instantly. No templates, no manual training, and no setup required. Built for scale, with secure APIs, fast processing, and industry-leading accuracy.",
+      "Statement Extract is an AI-powered Intelligent Document Processing platform that converts any document—bank statements, invoices, contracts, healthcare records, forms, and more—into structured data instantly. No templates, no manual training, and no setup required. Built for scale, with secure APIs, fast processing, and industry-leading accuracy.",
     type: "website",
     siteName: "Statement Extractor",
     images: ["/assets/StatementExtract_Workflow_img.png"],
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Statement Extract – AI-Powered Document Processing for Modern Teams",
     description:
-      "Extract structured data from any document—bank statements, invoices, contracts, healthcare records and more. OCR + AI with no templates, no training, just results.",
+      "Extract structured data from any document—bank statements, invoices, contracts, healthcare records and more. Intelligent Document Processing with no templates, no training, just results.",
     images: ["/assets/StatementExtract_Workflow_img.png"],
   },
   appleWebApp: {

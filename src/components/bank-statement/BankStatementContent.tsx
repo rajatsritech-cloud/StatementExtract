@@ -37,7 +37,7 @@ export const BankStatementFeatures = () => {
                         Why professionals choose our converter
                     </h2>
                     <p className="text-lg text-[hsl(var(--muted-foreground))] max-w-2xl mx-auto">
-                        More than just OCR. We understand financial data structure.
+                        More than just standard OCR. We understand financial data structure.
                     </p>
                 </div>
 
@@ -93,7 +93,7 @@ export const BankStatementFAQ = () => {
     const faqs = [
         {
             q: "Can I convert scanned PDF bank statements?",
-            a: "Yes! Our tool uses advanced OCR (Optical Character Recognition) to read data from scanned images and flattened PDFs with industry-leading accuracy."
+            a: "Yes! Our tool uses advanced Intelligent Document Processing to read data from scanned images and flattened PDFs with industry-leading accuracy."
         },
         {
             q: "Is my financial data secure?",
@@ -155,7 +155,7 @@ export const BankStatementSEOContent = () => {
                 </h2>
                 <p className="text-[hsl(var(--muted-foreground))] mb-6">
                     Converting PDF bank statements to Excel or CSV is a critical task for accountants, lenders, and business owners.
-                    Manual data entry is slow and error-prone, while generic OCR tools often fail to recognize the complex table structures found in financial documents.
+                    Manual data entry is slow and error-prone, while generic extraction tools often fail to recognize the complex table structures found in financial documents.
                 </p>
 
                 <h3 className="text-2xl font-semibold text-[hsl(var(--foreground))] mb-4">

@@ -39,9 +39,9 @@ export const BankStatementConverter = () => {
     setSelectedFile(file);
 
     // File validation
-    if (file.size > 15 * 1024 * 1024) {
+    if (file.size > 10 * 1024 * 1024) {
       console.log('❌ File too large');
-      toast.error("File too large. Please upload a statement smaller than 15MB.");
+      toast.error("File too large. Please upload a statement smaller than 10MB.");
       return;
     }
 
@@ -183,7 +183,7 @@ export const BankStatementConverter = () => {
             </h1>
 
             <p className="mx-auto mb-10 max-w-3xl text-xl text-[hsl(var(--muted-foreground))] animate-fade-in">
-              World's most trusted OCR + AI bank statement converter, working with thousands of banks globally.
+              World's most trusted Intelligent Document Processing bank statement converter, working with thousands of banks globally.
               Automatically extract transactions, balances, and references into clean Excel or CSV files with industry-leading accuracy.
             </p>
 

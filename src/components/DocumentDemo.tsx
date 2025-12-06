@@ -26,7 +26,7 @@ export const DocumentDemo = () => {
             See it in action
           </h2>
           <p className="text-lg text-[hsl(var(--muted-foreground))] max-w-2xl mx-auto">
-            Watch how our OCR and AI pipeline transforms unstructured documents into clean, structured data
+            Watch how our Intelligent Document Processing pipeline transforms unstructured documents into clean, structured data
           </p>
         </div>
 
@@ -124,7 +124,7 @@ export const DocumentDemo = () => {
                     </h3>
                     <p className="mt-2 text-sm text-[hsl(var(--muted-foreground))] leading-relaxed">
                       Send invoices, contracts, healthcare records, or bank statements via dashboard or API. We detect
-                      the document type and route it into the right OCR + AI pipeline.
+                      the document type and route it into the right Intelligent Document Processing pipeline.
                     </p>
                   </div>
                 </div>
@@ -141,10 +141,10 @@ export const DocumentDemo = () => {
                 <div className="relative flex-1 pb-8">
                   <div className="relative rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))]/50 px-5 py-4 backdrop-blur-sm hover:bg-[hsl(var(--card))] hover:shadow-md transition-all duration-300 hover:-translate-y-1">
                     <h3 className="text-base font-bold text-[hsl(var(--foreground))]">
-                      OCR + AI extraction
+                      Intelligent Document Processing extraction
                     </h3>
                     <p className="mt-2 text-sm text-[hsl(var(--muted-foreground))] leading-relaxed">
-                      Our OCR and AI combination follows the visual layout, reads line items and clauses, and extracts
+                      Our Intelligent Document Processing engine follows the visual layout, reads line items and clauses, and extracts
                       key fields like totals, dates, counterparties, and account details.
                     </p>
                   </div>

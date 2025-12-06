@@ -23,7 +23,7 @@ const useCases = [
   {
     icon: Building2,
     title: "Bank Statements",
-    description: "Use OCR + AI to extract transactions, balances, IBANs, and account details from bank statements in any format.",
+    description: "Use Intelligent Document Processing to extract transactions, balances, IBANs, and account details from bank statements in any format.",
     metrics: "Industry-leading accuracy",
   },
 ];
