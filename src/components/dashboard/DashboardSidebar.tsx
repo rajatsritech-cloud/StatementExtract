@@ -14,7 +14,15 @@ export const DashboardSidebar = ({ className }: SidebarProps) => {
     const { user } = useUser();
     const { usage: usageData, isLoading } = useUsage();
 
-    const navItems = [
+    type NavItem = {
+        icon: React.ElementType;
+        label: string;
+        active: boolean;
+        href: string;
+        badge?: string;
+    };
+
+    const navItems: NavItem[] = [
         { icon: LayoutDashboard, label: "Home", active: false, href: "/" },
         { icon: FileText, label: "My Statements", active: true, href: "/dashboard" },
         { icon: FileSpreadsheet, label: "Exports", active: false, href: "/exports" },
