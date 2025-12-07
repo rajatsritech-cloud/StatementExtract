@@ -78,8 +78,8 @@ export const UploadArea = ({ onFileUpload, isProcessing, hideFeatures = false, m
         }
       } else {
         // Fallback if usage not loaded yet (should be rare as hook loads on mount)
-        // We could block or allow. Let's allow but trigger refresh.
-        refreshUsage();
+        // We could block or allow. Let's allow but NOT trigger refresh here to avoid premature updates.
+        // refreshUsage();
       }
     }
     return true;

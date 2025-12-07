@@ -10,6 +10,7 @@ import { useAuth, UserButton } from "@clerk/clerk-react";
 import { FileText, Trash2, Eye, Loader2, CheckCircle2, Upload, Info } from "lucide-react";
 import { StorageService, StoredDocument } from "@/lib/storageService";
 import { PrivacyNotice } from "@/components/PrivacyNotice";
+import { useUsage } from "@/hooks/useUsage";
 
 import { Button } from "@/components/ui/button";
 
@@ -29,6 +30,7 @@ export const DashboardContent = () => {
     const [showResults, setShowResults] = useState(false);
     const [showUploadModal, setShowUploadModal] = useState(false);
     const { isSignedIn, isLoaded, getToken } = useAuth();
+    const { refreshUsage } = useUsage();
     const [isProcessing, setIsProcessing] = useState(false); // Global processing state for UploadArea
     const [uploadKey, setUploadKey] = useState(0);
     const documentsRef = useRef<HTMLDivElement>(null);
@@ -107,7 +109,7 @@ export const DashboardContent = () => {
             toast.success("Document processed and saved locally!");
 
             // Trigger usage update in sidebar
-            window.dispatchEvent(new Event('usage_updated'));
+            refreshUsage();
         } catch (error: any) {
             console.error(error);
             const errorMessage = error.message || "Failed to process document.";
@@ -182,19 +184,19 @@ export const DashboardContent = () => {
 
     return (
         <div className="flex-1 flex flex-col overflow-hidden bg-[hsl(var(--background))]">
-            <div className="flex-1 overflow-y-auto p-8">
-                <div className="mx-auto max-w-5xl space-y-8">
+            <div className="flex-1 overflow-y-auto p-6">
+                <div className="mx-auto max-w-5xl space-y-6">
 
                     {/* Privacy Notice */}
                     <PrivacyNotice />
 
                     {/* Documents Table */}
-                    <div className="space-y-4" ref={documentsRef}>
+                    <div className="space-y-3" ref={documentsRef}>
                         <div className="flex items-center justify-between">
-                            <h2 className="text-xl font-semibold text-[hsl(var(--foreground))]">Your Documents</h2>
+                            <h2 className="text-lg font-semibold text-[hsl(var(--foreground))]">Your Documents</h2>
                             <Button
                                 onClick={() => setShowUploadModal(true)}
-                                className="inline-flex items-center gap-2 rounded-lg bg-[hsl(var(--primary))] px-4 py-2 text-sm font-medium text-white hover:bg-[hsl(var(--primary))]/90 transition-colors shadow-sm"
+                                className="inline-flex items-center gap-2 rounded-lg bg-[hsl(var(--primary))] px-3 py-2 text-sm font-medium text-white hover:bg-[hsl(var(--primary))]/90 transition-colors shadow-sm"
                             >
                                 <Upload className="h-4 w-4" />
                                 Upload Document
@@ -205,23 +207,23 @@ export const DashboardContent = () => {
                                 <table className="w-full caption-bottom text-sm">
                                     <thead className="[&_tr]:border-b">
                                         <tr className="border-b transition-colors hover:bg-[hsl(var(--muted))]/50 data-[state=selected]:bg-[hsl(var(--muted))] bg-[hsl(var(--muted))]/50">
-                                            <th className="h-12 px-4 text-left align-middle font-medium text-[hsl(var(--muted-foreground))]">Document Name</th>
-                                            <th className="h-12 px-4 text-left align-middle font-medium text-[hsl(var(--muted-foreground))]">Date Uploaded</th>
-                                            <th className="h-12 px-4 text-left align-middle font-medium text-[hsl(var(--muted-foreground))]">Status</th>
-                                            <th className="h-12 px-4 text-right align-middle font-medium text-[hsl(var(--muted-foreground))]">Actions</th>
+                                            <th className="h-10 px-4 text-left align-middle font-medium text-[hsl(var(--muted-foreground))]">Document Name</th>
+                                            <th className="h-10 px-4 text-left align-middle font-medium text-[hsl(var(--muted-foreground))]">Date Uploaded</th>
+                                            <th className="h-10 px-4 text-left align-middle font-medium text-[hsl(var(--muted-foreground))]">Status</th>
+                                            <th className="h-10 px-4 text-right align-middle font-medium text-[hsl(var(--muted-foreground))]">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody className="[&_tr:last-child]:border-0">
                                         {documents.length === 0 ? (
                                             <tr className="border-b transition-colors hover:bg-[hsl(var(--muted))]/50">
-                                                <td colSpan={4} className="p-4 align-middle h-32 text-center text-[hsl(var(--muted-foreground))]">
+                                                <td colSpan={4} className="p-3 align-middle h-24 text-center text-[hsl(var(--muted-foreground))]">
                                                     No documents uploaded yet.
                                                 </td>
                                             </tr>
                                         ) : (
                                             documents.map((doc) => (
                                                 <tr key={doc.id} className="border-b transition-colors hover:bg-[hsl(var(--muted))]/50">
-                                                    <td className="p-4 align-middle font-medium">
+                                                    <td className="p-3 align-middle font-medium">
                                                         <div className="flex items-center gap-3">
                                                             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))]">
                                                                 <FileText className="h-4 w-4" />
@@ -229,8 +231,8 @@ export const DashboardContent = () => {
                                                             {doc.fileName}
                                                         </div>
                                                     </td>
-                                                    <td className="p-4 align-middle">{doc.date}</td>
-                                                    <td className="p-4 align-middle">
+                                                    <td className="p-3 align-middle">{doc.date}</td>
+                                                    <td className="p-3 align-middle">
                                                         {doc.status === "processing" && (
                                                             <span className="inline-flex items-center gap-1.5 rounded-full bg-[hsl(var(--primary))]/10 px-2.5 py-0.5 text-xs font-medium text-[hsl(var(--primary))]">
                                                                 <Loader2 className="h-3 w-3 animate-spin" />
@@ -258,7 +260,7 @@ export const DashboardContent = () => {
                                                             </div>
                                                         )}
                                                     </td>
-                                                    <td className="p-4 align-middle text-right">
+                                                    <td className="p-3 align-middle text-right">
                                                         <div className="flex justify-end gap-2">
                                                             {doc.status === "completed" && (
                                                                 <Button
