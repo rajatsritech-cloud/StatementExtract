@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import { FileText, Receipt, FileSpreadsheet, Settings, CreditCard, LayoutDashboard } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { UserButton, useUser, useAuth } from "@clerk/clerk-react";
+import { UserButton, useUser } from "@clerk/clerk-react";
+import { useUsage } from "@/hooks/useUsage";
 
 interface SidebarProps {
     className?: string;
@@ -11,51 +12,14 @@ interface SidebarProps {
 
 export const DashboardSidebar = ({ className }: SidebarProps) => {
     const { user } = useUser();
-    const { getToken, isLoaded, isSignedIn } = useAuth();
-    const [usageData, setUsageData] = useState<{ usage: number; limit: number; tier: string } | null>(null);
+    const { usage: usageData, isLoading } = useUsage();
 
-    useEffect(() => {
-        const fetchUsage = async () => {
-            try {
-                const token = await getToken();
-                if (!token) {
-                    console.log("Sidebar: No token available");
-                    return;
-                }
-
-                console.log("Sidebar: Fetching usage with token:", token.substring(0, 10) + "...");
-                const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-                const response = await fetch(`${apiUrl}/api/v1/user/usage`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    setUsageData(data);
-                }
-            } catch (error) {
-                console.error("Failed to fetch usage:", error);
-            }
-        };
-
-        fetchUsage();
-
-        // Listen for usage updates from other components
-        const handleUsageUpdate = () => fetchUsage();
-        window.addEventListener('usage_updated', handleUsageUpdate);
-
-        return () => {
-            window.removeEventListener('usage_updated', handleUsageUpdate);
-        };
-    }, [getToken]);
     const navItems = [
         { icon: LayoutDashboard, label: "Home", active: false, href: "/" },
-        { icon: FileSpreadsheet, label: "Bank Statements", active: true },
-        { icon: Receipt, label: "Invoices", active: false, badge: "Soon" },
-        { icon: FileText, label: "Receipts", active: false, badge: "Soon" },
-        { icon: CreditCard, label: "Credit Cards", active: false, badge: "Soon" },
+        { icon: FileText, label: "My Statements", active: true, href: "/dashboard" },
+        { icon: FileSpreadsheet, label: "Exports", active: false, href: "/exports" },
+        { icon: CreditCard, label: "Billing", active: false, href: "/billing" },
+        { icon: Settings, label: "Settings", active: false, href: "/settings" },
     ];
 
     return (
@@ -66,8 +30,8 @@ export const DashboardSidebar = ({ className }: SidebarProps) => {
                         <FileText className="h-4 w-4 text-white" />
                     </div>
                     <span>Statement Extract</span>
-                </div>
-            </div>
+                </div >
+            </div >
 
             <div className="flex-1 px-4 py-2">
                 <nav className="space-y-1">
@@ -141,6 +105,6 @@ export const DashboardSidebar = ({ className }: SidebarProps) => {
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     );
 };

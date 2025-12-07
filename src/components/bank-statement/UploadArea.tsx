@@ -8,6 +8,7 @@ import { OCRAuthModal } from "./OCRAuthModal";
 import { PrivacyNotice } from "@/components/PrivacyNotice";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { toast } from "react-hot-toast";
+import { useUsage } from "@/hooks/useUsage";
 
 // Import pdf-lib
 import { PDFDocument } from 'pdf-lib';
@@ -29,6 +30,7 @@ export const UploadArea = ({ onFileUpload, isProcessing, hideFeatures = false, m
   const [showOCRAuthModal, setShowOCRAuthModal] = useState(false);
   const [pendingFile, setPendingFile] = useState<File | null>(null);
   const { isSignedIn, isLoaded, getToken } = useAuth();
+  const { usage, refreshUsage } = useUsage();
 
   const countPdfPages = async (file: File): Promise<number> => {
     try {
@@ -61,36 +63,23 @@ export const UploadArea = ({ onFileUpload, isProcessing, hideFeatures = false, m
       }
 
       // 2. Check Backend Usage (Daily Limit)
-      try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-        const token = await getToken();
-        const headers: HeadersInit = {};
-        if (token) {
-          headers['Authorization'] = `Bearer ${token}`;
+      // Use cached usage data if available
+      if (usage) {
+        if (usage.remaining < pageCount) {
+          toast.error(
+            <div className="flex flex-col gap-1">
+              <span className="font-semibold">Daily Limit Exceeded</span>
+              <span>You have {usage.remaining} pages remaining today. This file has {pageCount} pages.</span>
+              <span className="text-xs mt-1">Login for higher limits!</span>
+            </div>,
+            { duration: 6000 }
+          );
+          return false;
         }
-
-        const response = await fetch(`${apiUrl}/api/v1/user/usage`, {
-          headers
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          // data.remaining is the pages remaining for the day
-          if (data.remaining < pageCount) {
-            toast.error(
-              <div className="flex flex-col gap-1">
-                <span className="font-semibold">Daily Limit Exceeded</span>
-                <span>You have {data.remaining} pages remaining today. This file has {pageCount} pages.</span>
-                <span className="text-xs mt-1">Login for higher limits!</span>
-              </div>,
-              { duration: 6000 }
-            );
-            return false;
-          }
-        }
-      } catch (error) {
-        console.error("Failed to check backend usage:", error);
-        // Fail open or closed? Let's fail open on frontend check, backend will catch it.
+      } else {
+        // Fallback if usage not loaded yet (should be rare as hook loads on mount)
+        // We could block or allow. Let's allow but trigger refresh.
+        refreshUsage();
       }
     }
     return true;

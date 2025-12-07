@@ -84,9 +84,17 @@ export class PDFProcessor {
       // Use environment variable for API URL
       // If NEXT_PUBLIC_API_URL is undefined, fallback to localhost for dev
       // If it is explicitly empty string (for proxy), use empty string
-      let apiUrl = process.env.NEXT_PUBLIC_API_URL !== undefined
-        ? process.env.NEXT_PUBLIC_API_URL
-        : 'http://127.0.0.1:8000';
+      // Logic:
+      // 1. If env var is set, use it.
+      // 2. If env var is NOT set:
+      //    - If dev, use localhost.
+      //    - If prod (or unknown), use empty string (relative).
+
+      let apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+      if (apiUrl === undefined) {
+        apiUrl = process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:8000' : '';
+      }
 
       // Sanitize: Remove accidental quotes (e.g. if user set "" in env)
       apiUrl = apiUrl.replace(/['"]+/g, '').trim();
