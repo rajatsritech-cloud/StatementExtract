@@ -44,38 +44,46 @@ export class StorageService {
             }
         }
 
+        // Check document count and prune BEFORE opening transaction
+        const currentCount = await this.getDocumentCount();
+        if (currentCount >= MAX_DOCS) {
+            await this.pruneDocuments(MAX_DOCS - 1);
+        }
+
+        // Now open a fresh transaction for the put operation
         return new Promise((resolve, reject) => {
             const transaction = db.transaction([STORE_NAME], 'readwrite');
             const store = transaction.objectStore(STORE_NAME);
 
-            // Get all keys to check count
-            const countRequest = store.count();
-
-            countRequest.onsuccess = async () => {
-                if (countRequest.result >= MAX_DOCS) {
-                    // Delete oldest
-                    await this.pruneDocuments(MAX_DOCS - 1);
-                }
-
-                // Sanitize data to store only essential fields
-                // We exclude 'markdown', 'fraud_analysis', etc. to save space
-                const sanitizedData: ExtractedData = {
-                    userInfo: doc.data.userInfo,
-                    transactions: doc.data.transactions,
-                    summary: doc.data.summary,
-                    column_names: doc.data.column_names
-                };
-
-                const docToSave = {
-                    ...doc,
-                    data: sanitizedData
-                };
-
-                const addRequest = store.put(docToSave);
-                addRequest.onsuccess = () => resolve();
-                addRequest.onerror = () => reject(addRequest.error);
+            // Sanitize data to store only essential fields
+            // We exclude 'markdown', 'fraud_analysis', etc. to save space
+            const sanitizedData: ExtractedData = {
+                userInfo: doc.data.userInfo,
+                transactions: doc.data.transactions,
+                summary: doc.data.summary,
+                column_names: doc.data.column_names
             };
 
+            const docToSave = {
+                ...doc,
+                data: sanitizedData
+            };
+
+            const addRequest = store.put(docToSave);
+            addRequest.onsuccess = () => resolve();
+            addRequest.onerror = () => reject(addRequest.error);
+
+            transaction.onerror = () => reject(transaction.error);
+        });
+    }
+
+    private static async getDocumentCount(): Promise<number> {
+        const db = await this.openDB();
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction([STORE_NAME], 'readonly');
+            const store = transaction.objectStore(STORE_NAME);
+            const countRequest = store.count();
+            countRequest.onsuccess = () => resolve(countRequest.result);
             countRequest.onerror = () => reject(countRequest.error);
         });
     }
