@@ -28,7 +28,7 @@ export const UploadArea = ({ onFileUpload, isProcessing, hideFeatures = false, m
   const [uploadStatus, setUploadStatus] = useState<'idle' | 'uploading' | 'ready'>('idle');
   const [showOCRAuthModal, setShowOCRAuthModal] = useState(false);
   const [pendingFile, setPendingFile] = useState<File | null>(null);
-  const { isSignedIn, isLoaded } = useAuth();
+  const { isSignedIn, isLoaded, getToken } = useAuth();
 
   const countPdfPages = async (file: File): Promise<number> => {
     try {
@@ -63,7 +63,16 @@ export const UploadArea = ({ onFileUpload, isProcessing, hideFeatures = false, m
       // 2. Check Backend Usage (Daily Limit)
       try {
         const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-        const response = await fetch(`${apiUrl}/api/v1/user/usage`);
+        const token = await getToken();
+        const headers: HeadersInit = {};
+        if (token) {
+          headers['Authorization'] = `Bearer ${token}`;
+        }
+
+        const response = await fetch(`${apiUrl}/api/v1/user/usage`, {
+          headers
+        });
+
         if (response.ok) {
           const data = await response.json();
           // data.remaining is the pages remaining for the day
@@ -409,7 +418,7 @@ export const UploadArea = ({ onFileUpload, isProcessing, hideFeatures = false, m
 
         {/* Size Limit Notice */}
         <p className="mt-4 text-xs text-[hsl(var(--muted-foreground))]">
-          {isSignedIn ? 'Daily limit: 10 pages' : 'Free tier limit: 1 PDF (max 5 pages)'}
+          {isSignedIn ? 'Daily limit: 10 pages' : 'Free tier daily limit: 1 PDF (max 5 pages)'}
         </p>
       </div>
 

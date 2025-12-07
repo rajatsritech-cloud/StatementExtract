@@ -18,8 +18,12 @@ export const DashboardSidebar = ({ className }: SidebarProps) => {
         const fetchUsage = async () => {
             try {
                 const token = await getToken();
-                if (!token) return;
+                if (!token) {
+                    console.log("Sidebar: No token available");
+                    return;
+                }
 
+                console.log("Sidebar: Fetching usage with token:", token.substring(0, 10) + "...");
                 const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
                 const response = await fetch(`${apiUrl}/api/v1/user/usage`, {
                     headers: {
