@@ -77,7 +77,7 @@ export const DashboardSidebar = ({ className }: SidebarProps) => {
                     </h4>
                     <p className="text-xs text-[hsl(var(--muted-foreground))] mb-3">
                         {usageData
-                            ? `${usageData.usage} / ${usageData.limit} pages used`
+                            ? `${usageData.usage} / ${usageData.limit} pages used today`
                             : "Loading usage..."}
                     </p>
                     <div className="h-1.5 w-full rounded-full bg-[hsl(var(--background))] overflow-hidden">
