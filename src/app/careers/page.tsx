@@ -41,15 +41,16 @@ export default function CareersPage() {
           Statement Extractor, please send us an email with a short introduction and any relevant
           links (GitHub, LinkedIn, portfolio, or CV).
         </p>
-        <p className="text-sm text-[hsl(var(--muted-foreground))]">
-          <span className="block font-medium text-[hsl(var(--foreground))]">Email</span>
-          <a
-            href="mailto:careers@statementextract.com"
-            className="text-[hsl(var(--primary))] hover:text-[hsl(var(--primary))]/80 underline underline-offset-4"
-          >
-            careers@statementextract.com
-          </a>
+        <p className="text-lg text-[hsl(var(--muted-foreground))] mb-8">
+          We're always looking for talented individuals to join our team.
+          If you're passionate about financial data extraction and AI, send us your resume!
         </p>
+        <a
+          href="mailto:support@statementextract.com"
+          className="inline-flex items-center justify-center rounded-lg bg-[hsl(var(--primary))] px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-[hsl(var(--primary))]/90"
+        >
+          Email Us
+        </a>
       </section>
     </div>
   );

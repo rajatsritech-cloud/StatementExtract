@@ -146,13 +146,13 @@ export const FAQ = () => {
             </h2>
             <p className="text-[hsl(var(--muted-foreground))] text-base md:text-lg max-w-xl">
               Got more questions? Need further assistance? Contact us at
-              <span className="font-medium"> contact@statementextract.com</span>, check out our
+              <span className="font-medium"> support@statementextract.com</span>, check out our
               documentation or book a demo.
             </p>
 
             <div className="flex flex-wrap gap-3 pt-2">
               <a
-                href="mailto:contact@statementextract.com"
+                href="mailto:support@statementextract.com"
                 className="inline-flex items-center gap-2 rounded-lg bg-[hsl(var(--primary))] px-4 py-2 text-sm font-medium text-[hsl(var(--primary-foreground))] shadow-md hover:shadow-lg transition-shadow"
               >
                 <Mail className="h-4 w-4" />
@@ -166,7 +166,7 @@ export const FAQ = () => {
                 Read documentation & guides
               </a>
               <a
-                href="mailto:contact@statementextract.com?subject=Book%20a%20demo%20of%20StatementExtract"
+                href="mailto:support@statementextract.com?subject=Book%20a%20demo%20of%20StatementExtract"
                 className="inline-flex items-center gap-2 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-4 py-2 text-sm font-medium text-[hsl(var(--foreground))] hover:border-[hsl(var(--primary))]/60 hover:bg-[hsl(var(--muted))] transition-colors"
               >
                 <Calendar className="h-4 w-4" />
