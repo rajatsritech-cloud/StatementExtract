@@ -10,6 +10,17 @@ export interface TransactionData {
   moneyOut?: number;
 }
 
+// NEW: Section for multi-table display
+export interface TransactionSection {
+  name: string;  // "TRANSACTIONS", "CHECKS", etc.
+  transactions: TransactionData[];
+  summary?: {
+    transaction_count: number;
+    total_credits: number;
+    total_debits: number;
+  };
+}
+
 export interface ExtractedData {
   userInfo: {
     name?: string;
@@ -26,6 +37,7 @@ export interface ExtractedData {
     };
   };
   transactions: TransactionData[];
+  sections?: TransactionSection[];  // NEW: Multiple tables/sections
   summary: {
     totalCredits: number;
     totalDebits: number;
@@ -129,6 +141,24 @@ export class PDFProcessor {
         const userInfoRaw = backendData.userInfo || backendData.user_info || {};
         const summaryRaw = backendData.summary || {};
 
+        // Map transactions
+        const mapTransaction = (t: any) => ({
+          date: t.date,
+          description: t.description,
+          amount: t.money_in > 0 ? t.money_in : t.money_out,
+          balance: t.balance,
+          type: t.money_in > 0 ? 'credit' as const : 'debit' as const,
+          moneyIn: t.money_in,
+          moneyOut: t.money_out
+        });
+
+        // Map sections if available (NEW: multi-table support)
+        const sections = backendData.sections?.map((s: any) => ({
+          name: s.name,
+          transactions: s.transactions.map(mapTransaction),
+          summary: s.summary
+        })) || undefined;
+
         return {
           userInfo: {
             name: userInfoRaw.name,
@@ -144,16 +174,8 @@ export class PDFProcessor {
               totalWithdrawals: summaryRaw.total_money_out || summaryRaw.totalWithdrawals || 0,
             }
           },
-          transactions: backendData.transactions.map((t: any) => ({
-            date: t.date,
-            description: t.description,
-            amount: t.money_in > 0 ? t.money_in : t.money_out,
-            balance: t.balance,
-            type: t.money_in > 0 ? 'credit' : 'debit',
-            // Preserve original values for UI flexibility
-            moneyIn: t.money_in,
-            moneyOut: t.money_out
-          })),
+          transactions: backendData.transactions.map(mapTransaction),
+          sections: sections,  // NEW: Include sections for multi-table UI
           summary: {
             totalCredits: summaryRaw.total_money_in || 0,
             totalDebits: summaryRaw.total_money_out || 0,

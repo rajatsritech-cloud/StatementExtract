@@ -53,22 +53,30 @@ const UserInfoAndSummary = ({ userInfo }: UserInfoAndSummaryProps) => {
         <div>
           <h5 className="text-sm font-medium text-[hsl(var(--muted-foreground))] uppercase tracking-wider mb-4">Account Information</h5>
           <div className="space-y-3">
-            <div className="flex justify-between border-b border-[hsl(var(--border))]/50 pb-2">
-              <span className="text-sm text-[hsl(var(--muted-foreground))]">Account Name</span>
-              <span className="text-sm font-medium text-[hsl(var(--foreground))]">{userInfo.name || 'N/A'}</span>
-            </div>
-            <div className="flex justify-between border-b border-[hsl(var(--border))]/50 pb-2">
-              <span className="text-sm text-[hsl(var(--muted-foreground))]">Account Number</span>
-              <span className="text-sm font-medium text-[hsl(var(--foreground))] font-mono">{userInfo.accountNumber || 'N/A'}</span>
-            </div>
-            <div className="flex justify-between border-b border-[hsl(var(--border))]/50 pb-2">
-              <span className="text-sm text-[hsl(var(--muted-foreground))]">Bank Name</span>
-              <span className="text-sm font-medium text-[hsl(var(--foreground))]">{userInfo.bankName || 'N/A'}</span>
-            </div>
-            <div className="flex justify-between border-b border-[hsl(var(--border))]/50 pb-2">
-              <span className="text-sm text-[hsl(var(--muted-foreground))]">Statement Period</span>
-              <span className="text-sm font-medium text-[hsl(var(--foreground))]">{userInfo.statementPeriod || 'N/A'}</span>
-            </div>
+            {userInfo.name && userInfo.name !== 'N/A' && (
+              <div className="flex justify-between border-b border-[hsl(var(--border))]/50 pb-2">
+                <span className="text-sm text-[hsl(var(--muted-foreground))]">Account Name</span>
+                <span className="text-sm font-medium text-[hsl(var(--foreground))]">{userInfo.name}</span>
+              </div>
+            )}
+            {userInfo.accountNumber && userInfo.accountNumber !== 'N/A' && (
+              <div className="flex justify-between border-b border-[hsl(var(--border))]/50 pb-2">
+                <span className="text-sm text-[hsl(var(--muted-foreground))]">Account Number</span>
+                <span className="text-sm font-medium text-[hsl(var(--foreground))] font-mono">{userInfo.accountNumber}</span>
+              </div>
+            )}
+            {userInfo.bankName && userInfo.bankName !== 'N/A' && (
+              <div className="flex justify-between border-b border-[hsl(var(--border))]/50 pb-2">
+                <span className="text-sm text-[hsl(var(--muted-foreground))]">Bank Name</span>
+                <span className="text-sm font-medium text-[hsl(var(--foreground))]">{userInfo.bankName}</span>
+              </div>
+            )}
+            {userInfo.statementPeriod && userInfo.statementPeriod !== 'N/A' && (
+              <div className="flex justify-between border-b border-[hsl(var(--border))]/50 pb-2">
+                <span className="text-sm text-[hsl(var(--muted-foreground))]">Statement Period</span>
+                <span className="text-sm font-medium text-[hsl(var(--foreground))]">{userInfo.statementPeriod}</span>
+              </div>
+            )}
           </div>
         </div>
 
@@ -106,9 +114,10 @@ interface DynamicTableProps {
   transactions: ExtractedData['transactions'];
   currency?: string;
   columnNames?: { [key: string]: string };
+  title?: string;
 }
 
-const DynamicTable = ({ transactions, currency = '$', columnNames }: DynamicTableProps) => {
+const DynamicTable = ({ transactions, currency = '$', columnNames, title = "Transactions" }: DynamicTableProps) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortConfig, setSortConfig] = useState<{ key: string; direction: 'asc' | 'desc' } | null>(null);
 
@@ -196,7 +205,7 @@ const DynamicTable = ({ transactions, currency = '$', columnNames }: DynamicTabl
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h4 className="font-medium text-[hsl(var(--foreground))]">Transactions</h4>
+        <h4 className="font-medium text-[hsl(var(--foreground))]">{title}</h4>
         <div className="relative w-64">
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-[hsl(var(--muted-foreground))]" />
           <Input
@@ -458,8 +467,31 @@ export const ResultsModal = ({ data, file, isProcessing = false, progress = 0, o
                     </Button>
                   </div>
 
-                  {/* Dynamic Table with Sort/Search */}
-                  {data.transactions && <DynamicTable transactions={data.transactions} currency={data.userInfo.currency} columnNames={data.column_names} />}
+                  {/* Sectioned Transaction Display */}
+                  {data.sections && data.sections.length > 0 ? (
+                    // Multi-section display - Clean / Flat Style
+                    <div className="space-y-8">
+                      {data.sections.map((section, idx) => (
+                        <div key={idx} className="space-y-2">
+                          <DynamicTable
+                            transactions={section.transactions}
+                            currency={data.userInfo.currency}
+                            columnNames={data.column_names}
+                            title={section.name}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    // Fallback: Single table (backward compatible)
+                    data.transactions && (
+                      <DynamicTable
+                        transactions={data.transactions}
+                        currency={data.userInfo.currency}
+                        columnNames={data.column_names}
+                      />
+                    )
+                  )}
 
                   {/* Privacy Notice */}
                   <PrivacyNotice className="mt-8" />
