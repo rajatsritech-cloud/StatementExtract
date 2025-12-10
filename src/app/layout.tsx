@@ -8,6 +8,7 @@ import ClerkProviderClient from "@/components/ClerkProviderClient"; // update pa
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { ServerWarmup } from "@/components/ServerWarmup";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -111,6 +112,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </>
         )}
         <ClerkProviderClient>
+          <ServerWarmup />
           <ThemeProvider defaultTheme="green" storageKey="statement-extract-theme">
             <div className="flex min-h-screen flex-col bg-[hsl(var(--background))]">
               <Header />
