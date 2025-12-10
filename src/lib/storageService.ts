@@ -61,7 +61,8 @@ export class StorageService {
                 userInfo: doc.data.userInfo,
                 transactions: doc.data.transactions,
                 summary: doc.data.summary,
-                column_names: doc.data.column_names
+                column_names: doc.data.column_names,
+                sections: doc.data.sections // Persist sections/tabs
             };
 
             const docToSave = {
