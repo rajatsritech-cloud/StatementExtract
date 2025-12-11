@@ -128,17 +128,21 @@ export const DashboardContent = () => {
         }
     }, [getToken, isSignedIn, refreshUsage]);
 
-    // Process next item from queue if under limit
+    // Process queued items up to the concurrent limit
     const processNextInQueue = useCallback(() => {
-        if (activeCountRef.current >= MAX_CONCURRENT) return;
-
-        // Find next queued document
+        // Get current queued documents
         setDocuments(prev => {
-            const queuedDoc = prev.find(d => d.status === "queued" && d.file);
-            if (queuedDoc && queuedDoc.file && activeCountRef.current < MAX_CONCURRENT) {
-                // Start processing this document (async, don't await)
-                processDocument(queuedDoc.id, queuedDoc.file);
+            const queuedDocs = prev.filter(d => d.status === "queued" && d.file);
+
+            // Start processing for each available slot
+            for (const queuedDoc of queuedDocs) {
+                if (activeCountRef.current >= MAX_CONCURRENT) break;
+                if (queuedDoc.file) {
+                    // Start processing this document (async, don't await)
+                    processDocument(queuedDoc.id, queuedDoc.file);
+                }
             }
+
             return prev; // No state change here
         });
     }, [processDocument]);
