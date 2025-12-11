@@ -117,31 +117,32 @@ export const UploadArea = ({ onFileUpload, isProcessing, hideFeatures = false, m
     console.log('📁 Dropped files:', files.length);
 
     if (files.length > 1 && !isSignedIn) {
-      toast.error("Free users can only upload 1 file at a time.");
+      toast.error("Free users can only upload 1 file at a time. Login for batch uploads!");
       return;
     }
 
-    if (files.length > 0) {
-      const file = files[0];
-      console.log('📄 First file:', file.name);
+    // Process all files for signed-in users, or just first file for guests
+    const filesToProcess = isSignedIn ? files : files.slice(0, 1);
+
+    for (const file of filesToProcess) {
+      console.log('📄 Processing file:', file.name);
 
       // Check limits first
       if (!(await checkLimits(file))) {
-        return;
+        continue; // Skip this file
       }
 
       // Check authentication for OCR before setting file or calling onFileUpload
       const canProceed = await checkAuthenticationForOCR(file);
       if (!canProceed) {
         console.log('🔐 Authentication required, showing modal');
-        return;
+        continue;
       }
 
       setSelectedFile(file);
 
       if (manualTrigger) {
         setUploadStatus('uploading');
-        // Simulate upload delay
         setTimeout(() => {
           setUploadStatus('ready');
         }, 1500);
@@ -149,8 +150,6 @@ export const UploadArea = ({ onFileUpload, isProcessing, hideFeatures = false, m
         console.log('✅ File selected, calling onFileUpload');
         onFileUpload(file);
       }
-    } else {
-      console.log('❌ No files in drop');
     }
   }, [onFileUpload, isSignedIn]);
 
@@ -158,37 +157,41 @@ export const UploadArea = ({ onFileUpload, isProcessing, hideFeatures = false, m
     console.log('📁 File select triggered');
     const files = e.target.files;
     if (files && files.length > 0) {
-      const file = files[0];
-      console.log('📄 File selected:', file.name);
-      console.log('📏 File size:', file.size);
-      console.log('📋 File type:', file.type);
+      // Process all selected files
+      const fileArray = Array.from(files);
+      console.log('📄 Files selected:', fileArray.length);
 
-      // Check limits first
-      if (!(await checkLimits(file))) {
-        e.target.value = ''; // Clear input
-        return;
+      for (const file of fileArray) {
+        console.log('📄 Processing file:', file.name);
+        console.log('📏 File size:', file.size);
+        console.log('📋 File type:', file.type);
+
+        // Check limits first
+        if (!(await checkLimits(file))) {
+          continue; // Skip this file and try next
+        }
+
+        // Check authentication for OCR before setting file or calling onFileUpload
+        const canProceed = await checkAuthenticationForOCR(file);
+        if (!canProceed) {
+          continue; // Skip this file
+        }
+
+        setSelectedFile(file);
+
+        if (manualTrigger) {
+          setUploadStatus('uploading');
+          setTimeout(() => {
+            setUploadStatus('ready');
+          }, 1500);
+        } else {
+          console.log('🔄 Calling onFileUpload...');
+          onFileUpload(file);
+        }
       }
 
-      // Check authentication for OCR before setting file or calling onFileUpload
-      const canProceed = await checkAuthenticationForOCR(file);
-      if (!canProceed) {
-        // Clear the file input
-        e.target.value = '';
-        return; // Don't set the file or call onFileUpload if auth fails
-      }
-
-      setSelectedFile(file);
-
-      if (manualTrigger) {
-        setUploadStatus('uploading');
-        // Simulate upload delay
-        setTimeout(() => {
-          setUploadStatus('ready');
-        }, 1500);
-      } else {
-        console.log('🔄 Calling onFileUpload...');
-        onFileUpload(file);
-      }
+      // Clear input to allow re-selecting same files
+      e.target.value = '';
     } else {
       console.log('❌ No files selected');
     }
@@ -296,6 +299,7 @@ export const UploadArea = ({ onFileUpload, isProcessing, hideFeatures = false, m
           accept=".pdf,.jpg,.jpeg,.png"
           onChange={handleFileSelect}
           disabled={isProcessing}
+          multiple={isSignedIn}
         />
 
         {/* Upload Icon */}
@@ -406,9 +410,14 @@ export const UploadArea = ({ onFileUpload, isProcessing, hideFeatures = false, m
         )}
 
         {/* Size Limit Notice */}
-        <p className="mt-4 text-xs text-[hsl(var(--muted-foreground))]">
-          {isSignedIn ? 'Daily limit: 10 pages' : 'Free tier daily limit: 1 PDF (max 5 pages)'}
-        </p>
+        {!isProcessing && (
+          <p className="mt-4 text-xs text-[hsl(var(--muted-foreground))]">
+            {isSignedIn
+              ? (usage?.tier === 'admin' ? 'Unlimited pages' : `Daily limit: ${usage?.limit || 10} pages`)
+              : 'Free tier daily limit: 1 PDF (max 5 pages)'
+            }
+          </p>
+        )}
       </div>
 
       {/* Features Grid */}

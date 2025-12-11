@@ -3,7 +3,7 @@ import { ExtractedData } from './pdfProcessor';
 const DB_NAME = 'StatementExtractDB';
 const STORE_NAME = 'documents';
 const DB_VERSION = 1;
-const MAX_DOCS = 5;
+const MAX_DOCS = 100;
 
 export interface StoredDocument {
     id: string;
@@ -38,16 +38,15 @@ export class StorageService {
         // Check storage quota
         if (navigator.storage && navigator.storage.estimate) {
             const { quota, usage } = await navigator.storage.estimate();
-            if (quota && usage && (quota - usage) < 10 * 1024 * 1024) { // Less than 10MB left
-                // Aggressive cleanup if space is low
-                await this.pruneDocuments(3);
+            if (quota && usage && (quota - usage) < 5 * 1024 * 1024) { // Less than 5MB left
+                throw new Error('STORAGE_FULL: Your browser storage is almost full. Please delete some old documents from your dashboard to free up space.');
             }
         }
 
-        // Check document count and prune BEFORE opening transaction
+        // Check document count
         const currentCount = await this.getDocumentCount();
         if (currentCount >= MAX_DOCS) {
-            await this.pruneDocuments(MAX_DOCS - 1);
+            throw new Error(`STORAGE_LIMIT: You've reached the maximum of ${MAX_DOCS} stored documents. Please delete some old documents from your dashboard to continue.`);
         }
 
         // Now open a fresh transaction for the put operation
@@ -140,5 +139,29 @@ export class StorageService {
         return new Promise((resolve) => {
             transaction.oncomplete = () => resolve();
         });
+    }
+
+    static async getStorageStatus(): Promise<{
+        documentCount: number;
+        maxDocuments: number;
+        availableSpaceMB: number | null;
+        isNearLimit: boolean;
+    }> {
+        const documentCount = await this.getDocumentCount();
+        let availableSpaceMB: number | null = null;
+
+        if (navigator.storage && navigator.storage.estimate) {
+            const { quota, usage } = await navigator.storage.estimate();
+            if (quota && usage) {
+                availableSpaceMB = Math.round((quota - usage) / (1024 * 1024));
+            }
+        }
+
+        return {
+            documentCount,
+            maxDocuments: MAX_DOCS,
+            availableSpaceMB,
+            isNearLimit: documentCount >= MAX_DOCS - 5 || (availableSpaceMB !== null && availableSpaceMB < 10)
+        };
     }
 }

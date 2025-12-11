@@ -7,18 +7,20 @@ import { UploadModal } from "@/components/dashboard/UploadModal";
 import { ExtractedData } from "@/lib/pdfProcessor";
 import { toast } from "react-hot-toast";
 import { useAuth, UserButton } from "@clerk/clerk-react";
-import { FileText, Trash2, Eye, Loader2, CheckCircle2, Upload, Info } from "lucide-react";
+import { FileText, Trash2, Eye, Loader2, CheckCircle2, Upload, Info, ChevronLeft, ChevronRight, Clock } from "lucide-react";
 import { StorageService, StoredDocument } from "@/lib/storageService";
 import { PrivacyNotice } from "@/components/PrivacyNotice";
 import { useUsage } from "@/hooks/useUsage";
 
 import { Button } from "@/components/ui/button";
 
+const ITEMS_PER_PAGE = 10;
+
 interface Document {
     id: string;
     fileName: string;
     date: string;
-    status: "processing" | "completed" | "failed";
+    status: "queued" | "processing" | "completed" | "failed";
     data?: ExtractedData;
     file?: File;
     errorMessage?: string;
@@ -31,8 +33,9 @@ export const DashboardContent = () => {
     const [showUploadModal, setShowUploadModal] = useState(false);
     const { isSignedIn, isLoaded, getToken } = useAuth();
     const { refreshUsage } = useUsage();
-    const [isProcessing, setIsProcessing] = useState(false); // Global processing state for UploadArea
+    const [isProcessing, setIsProcessing] = useState(false);
     const [uploadKey, setUploadKey] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
     const documentsRef = useRef<HTMLDivElement>(null);
 
     // Load documents from IndexedDB on mount
@@ -56,6 +59,102 @@ export const DashboardContent = () => {
         loadDocs();
     }, []);
 
+    // Concurrency limit for parallel processing
+    const MAX_CONCURRENT = 3;
+    const activeCountRef = useRef<number>(0);
+
+    // Process a single document
+    const processDocument = useCallback(async (docId: string, file: File) => {
+        activeCountRef.current++;
+
+        try {
+            // Update status to processing
+            setDocuments(prev => prev.map(doc =>
+                doc.id === docId ? { ...doc, status: "processing" as const } : doc
+            ));
+
+            const { PDFProcessor } = await import("@/lib/pdfProcessor");
+            const token = await getToken();
+            const extracted = await PDFProcessor.processPDF(file, isSignedIn || false, token);
+
+            // Save to IndexedDB
+            const storedDoc: StoredDocument = {
+                id: docId,
+                fileName: file.name,
+                date: new Date().toLocaleDateString(),
+                data: extracted,
+                fileBlob: file,
+                timestamp: Date.now()
+            };
+            await StorageService.saveDocument(storedDoc);
+
+            setDocuments(prev => prev.map(doc =>
+                doc.id === docId ? { ...doc, status: "completed" as const, data: extracted } : doc
+            ));
+
+            toast.success(`Processed: ${file.name}`);
+            refreshUsage();
+        } catch (error: any) {
+            console.error(error);
+            let errorMessage = error.message || "Failed to process document.";
+            let userFriendlyMessage = `Failed: ${file.name}`;
+
+            // Check for server overload (503)
+            if (error.message?.includes("503") || error.message?.includes("capacity") || error.message?.includes("overload")) {
+                errorMessage = "Server is busy. Your file will retry automatically.";
+                userFriendlyMessage = "🔄 Server busy - retrying in a moment...";
+
+                // Auto-retry after 10 seconds
+                setTimeout(() => {
+                    setDocuments(prev => prev.map(doc =>
+                        doc.id === docId && doc.status === "failed" ? { ...doc, status: "queued" as const, errorMessage: undefined } : doc
+                    ));
+                }, 10000);
+            }
+            // Check for rate limit exceeded (402)
+            else if (error.message?.includes("limit exceeded") || error.message?.includes("402") || error.message?.includes("Upgrade")) {
+                errorMessage = "Daily page limit exceeded. Upgrade for more!";
+                userFriendlyMessage = "Daily limit reached - Upgrade to Pro for more pages!";
+            }
+
+            setDocuments(prev => prev.map(doc =>
+                doc.id === docId ? { ...doc, status: "failed" as const, errorMessage } : doc
+            ));
+            toast.error(userFriendlyMessage, { duration: 5000 });
+        } finally {
+            activeCountRef.current--;
+            // Process next queued item if any
+            processNextInQueue();
+        }
+    }, [getToken, isSignedIn, refreshUsage]);
+
+    // Process next item from queue if under limit
+    const processNextInQueue = useCallback(() => {
+        if (activeCountRef.current >= MAX_CONCURRENT) return;
+
+        // Find next queued document
+        setDocuments(prev => {
+            const queuedDoc = prev.find(d => d.status === "queued" && d.file);
+            if (queuedDoc && queuedDoc.file && activeCountRef.current < MAX_CONCURRENT) {
+                // Start processing this document (async, don't await)
+                processDocument(queuedDoc.id, queuedDoc.file);
+            }
+            return prev; // No state change here
+        });
+    }, [processDocument]);
+
+    // Watch for new queued documents
+    useEffect(() => {
+        const queuedDocs = documents.filter(d => d.status === "queued");
+        if (queuedDocs.length > 0 && activeCountRef.current < MAX_CONCURRENT) {
+            processNextInQueue();
+        }
+
+        // Update global processing state
+        const hasActiveOrQueued = documents.some(d => d.status === "processing" || d.status === "queued");
+        setIsProcessing(hasActiveOrQueued);
+    }, [documents, processNextInQueue]);
+
     const handleFileUpload = useCallback(async (file: File) => {
         if (!isLoaded || !isSignedIn) {
             toast.error('Please sign in to upload documents.');
@@ -63,75 +162,46 @@ export const DashboardContent = () => {
         }
 
         setShowUploadModal(false);
-        setIsProcessing(true);
+
+        // Determine initial status based on current active count
+        const willQueue = activeCountRef.current >= MAX_CONCURRENT;
 
         const newDoc: Document = {
             id: Math.random().toString(36).substr(2, 9),
             fileName: file.name,
             date: new Date().toLocaleDateString(),
-            status: "processing",
+            status: willQueue ? "queued" : "queued", // Always start as queued, effect will pick it up
             file: file
         };
 
         setDocuments(prev => [newDoc, ...prev]);
-        setUploadKey(prev => prev + 1);
 
-        toast.loading("Processing started...", { duration: 2000 });
+        if (willQueue) {
+            const queuePosition = documents.filter(d => d.status === "queued" || d.status === "processing").length + 1;
+            toast(`${file.name} added to queue`, { icon: '📋' });
+        } else {
+            toast.loading("Processing started...", { duration: 2000 });
+        }
 
         setTimeout(() => {
             documentsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }, 100);
-
-        try {
-            const { PDFProcessor } = await import("@/lib/pdfProcessor");
-            const token = await getToken();
-            const extracted = await PDFProcessor.processPDF(file, isSignedIn, token);
-
-            // Save to IndexedDB
-            const storedDoc: StoredDocument = {
-                id: newDoc.id,
-                fileName: newDoc.fileName,
-                date: newDoc.date,
-                data: extracted,
-                fileBlob: file, // Store the file blob
-                timestamp: Date.now()
-            };
-            await StorageService.saveDocument(storedDoc);
-
-            setDocuments(prev => prev.map(doc =>
-                doc.id === newDoc.id
-                    ? { ...doc, status: "completed", data: extracted }
-                    : doc
-            ));
-
-            setSelectedDoc(prev => prev?.id === newDoc.id ? { ...prev, status: "completed", data: extracted } : prev);
-
-            toast.success("Document processed and saved locally!");
-
-            // Trigger usage update in sidebar
-            refreshUsage();
-        } catch (error: any) {
-            console.error(error);
-            const errorMessage = error.message || "Failed to process document.";
-
-            setDocuments(prev => prev.map(doc =>
-                doc.id === newDoc.id
-                    ? { ...doc, status: "failed", errorMessage }
-                    : doc
-            ));
-            setSelectedDoc(prev => prev?.id === newDoc.id ? { ...prev, status: "failed", errorMessage } : prev);
-
-            // Show specific error toast
-            toast.error(errorMessage, { duration: 5000 });
-        } finally {
-            setIsProcessing(false);
-        }
-    }, [isLoaded, isSignedIn]);
+    }, [isLoaded, isSignedIn, documents]);
 
     const handleDelete = async (id: string) => {
         try {
             await StorageService.deleteDocument(id);
-            setDocuments(prev => prev.filter(doc => doc.id !== id));
+            setDocuments(prev => {
+                const newDocs = prev.filter(doc => doc.id !== id);
+                // Adjust current page if we're now beyond the last page
+                const newTotalPages = Math.ceil(newDocs.length / ITEMS_PER_PAGE);
+                if (currentPage > newTotalPages && newTotalPages > 0) {
+                    setCurrentPage(newTotalPages);
+                } else if (newDocs.length === 0) {
+                    setCurrentPage(1);
+                }
+                return newDocs;
+            });
             toast.success("Document deleted");
         } catch (error) {
             console.error("Failed to delete document:", error);
@@ -203,91 +273,134 @@ export const DashboardContent = () => {
                             </Button>
                         </div>
                         <div className="rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] overflow-hidden shadow-sm">
-                            <div className="w-full overflow-auto">
-                                <table className="w-full caption-bottom text-sm">
-                                    <thead className="[&_tr]:border-b">
-                                        <tr className="border-b transition-colors hover:bg-[hsl(var(--muted))]/50 data-[state=selected]:bg-[hsl(var(--muted))] bg-[hsl(var(--muted))]/50">
-                                            <th className="h-10 px-4 text-left align-middle font-medium text-[hsl(var(--muted-foreground))]">Document Name</th>
-                                            <th className="h-10 px-4 text-left align-middle font-medium text-[hsl(var(--muted-foreground))]">Date Uploaded</th>
-                                            <th className="h-10 px-4 text-left align-middle font-medium text-[hsl(var(--muted-foreground))]">Status</th>
-                                            <th className="h-10 px-4 text-right align-middle font-medium text-[hsl(var(--muted-foreground))]">Actions</th>
+                            <div className="w-full overflow-x-auto">
+                                <table className="w-full caption-bottom text-sm table-fixed">
+                                    <thead className="[&_tr]:border-b sticky top-0 bg-[hsl(var(--card))] z-10">
+                                        <tr className="border-b transition-colors bg-[hsl(var(--muted))]/30">
+                                            <th className="h-10 px-4 text-left align-middle text-xs font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wide">Document Name</th>
+                                            <th className="h-10 px-4 text-left align-middle text-xs font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wide w-32">Date</th>
+                                            <th className="h-10 px-4 text-center align-middle text-xs font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wide w-28">Status</th>
+                                            <th className="h-10 px-4 text-center align-middle text-xs font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wide w-24">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody className="[&_tr:last-child]:border-0">
                                         {documents.length === 0 ? (
-                                            <tr className="border-b transition-colors hover:bg-[hsl(var(--muted))]/50">
-                                                <td colSpan={4} className="p-3 align-middle h-24 text-center text-[hsl(var(--muted-foreground))]">
-                                                    No documents uploaded yet.
+                                            <tr className="border-b transition-colors">
+                                                <td colSpan={4} className="p-8 align-middle text-center text-[hsl(var(--muted-foreground))]">
+                                                    No documents uploaded yet. Click "Upload Document" to get started.
                                                 </td>
                                             </tr>
                                         ) : (
-                                            documents.map((doc) => (
-                                                <tr key={doc.id} className="border-b transition-colors hover:bg-[hsl(var(--muted))]/50">
-                                                    <td className="p-3 align-middle font-medium">
-                                                        <div className="flex items-center gap-3">
-                                                            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))]">
-                                                                <FileText className="h-4 w-4" />
-                                                            </div>
-                                                            {doc.fileName}
-                                                        </div>
-                                                    </td>
-                                                    <td className="p-3 align-middle">{doc.date}</td>
-                                                    <td className="p-3 align-middle">
-                                                        {doc.status === "processing" && (
-                                                            <span className="inline-flex items-center gap-1.5 rounded-full bg-[hsl(var(--primary))]/10 px-2.5 py-0.5 text-xs font-medium text-[hsl(var(--primary))]">
-                                                                <Loader2 className="h-3 w-3 animate-spin" />
-                                                                Processing
-                                                            </span>
-                                                        )}
-                                                        {doc.status === "completed" && (
-                                                            <span className="inline-flex items-center gap-1.5 rounded-full bg-green-500/10 px-2.5 py-0.5 text-xs font-medium text-green-600 dark:text-green-400">
-                                                                <CheckCircle2 className="h-3 w-3" />
-                                                                Completed
-                                                            </span>
-                                                        )}
-                                                        {doc.status === "failed" && (
-                                                            <div className="group relative">
-                                                                <span className="inline-flex items-center gap-1.5 rounded-full bg-red-500/10 px-2.5 py-0.5 text-xs font-medium text-red-600 dark:text-red-400 cursor-help">
-                                                                    Failed
-                                                                    <Info className="h-3 w-3" />
+                                            documents
+                                                .slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE)
+                                                .map((doc) => (
+                                                    <tr key={doc.id} className="border-b transition-colors hover:bg-[hsl(var(--muted))]/20">
+                                                        <td className="py-3 px-4 align-middle">
+                                                            <div className="flex items-center gap-3">
+                                                                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] flex-shrink-0">
+                                                                    <FileText className="h-4 w-4" />
+                                                                </div>
+                                                                <span className="truncate text-sm font-medium text-[hsl(var(--foreground))]" title={doc.fileName}>
+                                                                    {doc.fileName}
                                                                 </span>
-                                                                {doc.errorMessage && (
-                                                                    <div className="absolute bottom-full left-1/2 mb-2 w-64 -translate-x-1/2 rounded-lg bg-gray-900 p-2 text-xs text-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100 pointer-events-none z-50">
-                                                                        {doc.errorMessage}
-                                                                        <div className="absolute top-full left-1/2 -mt-1 h-2 w-2 -translate-x-1/2 rotate-45 bg-gray-900"></div>
-                                                                    </div>
-                                                                )}
                                                             </div>
-                                                        )}
-                                                    </td>
-                                                    <td className="p-3 align-middle text-right">
-                                                        <div className="flex justify-end gap-2">
+                                                        </td>
+                                                        <td className="py-3 px-4 align-middle text-sm text-[hsl(var(--muted-foreground))]">{doc.date}</td>
+                                                        <td className="py-3 px-4 align-middle text-center">
+                                                            {doc.status === "queued" && (
+                                                                <span className="inline-flex items-center gap-1.5 rounded-full bg-yellow-500/10 px-2.5 py-1 text-xs font-medium text-yellow-600 dark:text-yellow-400">
+                                                                    <Clock className="h-3 w-3" />
+                                                                    In Queue
+                                                                </span>
+                                                            )}
+                                                            {doc.status === "processing" && (
+                                                                <span className="inline-flex items-center gap-1.5 rounded-full bg-[hsl(var(--primary))]/10 px-2.5 py-1 text-xs font-medium text-[hsl(var(--primary))]">
+                                                                    <Loader2 className="h-3 w-3 animate-spin" />
+                                                                    Processing
+                                                                </span>
+                                                            )}
                                                             {doc.status === "completed" && (
+                                                                <span className="inline-flex items-center gap-1.5 rounded-full bg-green-500/10 px-2.5 py-1 text-xs font-medium text-green-600 dark:text-green-400">
+                                                                    <CheckCircle2 className="h-3 w-3" />
+                                                                    Completed
+                                                                </span>
+                                                            )}
+                                                            {doc.status === "failed" && (
+                                                                <div className="group relative inline-flex">
+                                                                    <span className="inline-flex items-center gap-1.5 rounded-full bg-red-500/10 px-2.5 py-1 text-xs font-medium text-red-600 dark:text-red-400 cursor-help">
+                                                                        Failed
+                                                                        <Info className="h-3 w-3" />
+                                                                    </span>
+                                                                    {doc.errorMessage && (
+                                                                        <div className="absolute bottom-full left-1/2 mb-2 w-64 -translate-x-1/2 rounded-lg bg-gray-900 p-2 text-xs text-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100 pointer-events-none z-50">
+                                                                            {doc.errorMessage}
+                                                                            <div className="absolute top-full left-1/2 -mt-1 h-2 w-2 -translate-x-1/2 rotate-45 bg-gray-900"></div>
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                            )}
+                                                        </td>
+                                                        <td className="py-3 px-4 align-middle">
+                                                            <div className="flex justify-center gap-1">
+                                                                {doc.status === "completed" && (
+                                                                    <Button
+                                                                        variant="ghost"
+                                                                        size="sm"
+                                                                        onClick={() => handleView(doc)}
+                                                                        className="h-8 w-8 p-0 text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] hover:bg-[hsl(var(--primary))]/10"
+                                                                    >
+                                                                        <Eye className="h-4 w-4" />
+                                                                    </Button>
+                                                                )}
                                                                 <Button
                                                                     variant="ghost"
                                                                     size="sm"
-                                                                    onClick={() => handleView(doc)}
-                                                                    className="h-8 w-8 p-0 text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))]"
+                                                                    onClick={() => handleDelete(doc.id)}
+                                                                    className="h-8 w-8 p-0 text-[hsl(var(--muted-foreground))] hover:text-red-600 hover:bg-red-500/10"
                                                                 >
-                                                                    <Eye className="h-4 w-4" />
+                                                                    <Trash2 className="h-4 w-4" />
                                                                 </Button>
-                                                            )}
-                                                            <Button
-                                                                variant="ghost"
-                                                                size="sm"
-                                                                onClick={() => handleDelete(doc.id)}
-                                                                className="h-8 w-8 p-0 text-[hsl(var(--muted-foreground))] hover:text-red-600"
-                                                            >
-                                                                <Trash2 className="h-4 w-4" />
-                                                            </Button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            ))
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                ))
                                         )}
                                     </tbody>
                                 </table>
                             </div>
+                            {/* Pagination */}
+                            {documents.length > ITEMS_PER_PAGE && (
+                                <div className="flex items-center justify-between border-t border-[hsl(var(--border))] px-4 py-3">
+                                    <div className="text-sm text-[hsl(var(--muted-foreground))]">
+                                        Showing {((currentPage - 1) * ITEMS_PER_PAGE) + 1} to {Math.min(currentPage * ITEMS_PER_PAGE, documents.length)} of {documents.length} documents
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                                            disabled={currentPage === 1}
+                                            className="h-8 px-3"
+                                        >
+                                            <ChevronLeft className="h-4 w-4 mr-1" />
+                                            Previous
+                                        </Button>
+                                        <span className="text-sm text-[hsl(var(--muted-foreground))] px-2">
+                                            Page {currentPage} of {Math.ceil(documents.length / ITEMS_PER_PAGE)}
+                                        </span>
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() => setCurrentPage(prev => Math.min(Math.ceil(documents.length / ITEMS_PER_PAGE), prev + 1))}
+                                            disabled={currentPage >= Math.ceil(documents.length / ITEMS_PER_PAGE)}
+                                            className="h-8 px-3"
+                                        >
+                                            Next
+                                            <ChevronRight className="h-4 w-4 ml-1" />
+                                        </Button>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>

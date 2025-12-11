@@ -68,20 +68,23 @@ export class ExportService {
   static exportToExcel(data: ExtractedData, filename: string = 'bank-statement.xlsx'): void {
     const workbook = XLSX.utils.book_new();
 
-    const processTransactionsToSheet = (transactions: TransactionData[]) => {
+    const processTransactionsToSheet = (transactions: TransactionData[], includeCategory: boolean = false) => {
       const colNames = data.column_names || {};
       const hasMoneyInOut = transactions.some(t => t.moneyIn !== undefined || t.moneyOut !== undefined);
 
       const dateHeader = colNames.date || 'Date';
       const descHeader = colNames.desc || colNames.description || 'Description';
-      const creditHeader = colNames.credit || 'Money In';
-      const debitHeader = colNames.debit || 'Money Out';
+      const creditHeader = colNames.credit || 'Deposits';
+      const debitHeader = colNames.debit || 'Withdrawals';
       const balanceHeader = colNames.balance || 'Balance';
 
       return transactions.map(t => {
         const row: any = {};
         row[dateHeader] = t.date;
         row[descHeader] = t.description;
+        if (includeCategory && (t as any).category) {
+          row['Category'] = (t as any).category;
+        }
 
         if (hasMoneyInOut) {
           row[creditHeader] = t.moneyIn || "";
@@ -95,8 +98,54 @@ export class ExportService {
       });
     };
 
+    // Sheet 1: Summary (Account Information)
+    const summaryData = [
+      { Field: 'Account Name', Value: data.userInfo?.name || 'N/A' },
+      { Field: 'Account Number', Value: data.userInfo?.accountNumber || 'N/A' },
+      { Field: 'Bank Name', Value: data.userInfo?.bankName || 'N/A' },
+      { Field: 'Statement Period', Value: data.userInfo?.statementPeriod || 'N/A' },
+      { Field: '', Value: '' },
+      { Field: 'Opening Balance', Value: data.userInfo?.accountSummary?.beginningBalance ?? 'N/A' },
+      { Field: 'Total Credits', Value: data.summary?.totalCredits ?? 'N/A' },
+      { Field: 'Total Debits', Value: data.summary?.totalDebits ?? 'N/A' },
+      { Field: 'Closing Balance', Value: data.userInfo?.accountSummary?.endingBalance ?? 'N/A' },
+    ];
+    const summarySheet = XLSX.utils.json_to_sheet(summaryData);
+    summarySheet["!cols"] = [{ wch: 20 }, { wch: 40 }];
+    XLSX.utils.book_append_sheet(workbook, summarySheet, "Summary");
+
+    // Sheet 2: All Transactions (Consolidated - preferred by accountants for import)
     if (data.sections && data.sections.length > 0) {
-      // Create a sheet for each section
+      const allTransactions: any[] = [];
+      data.sections.forEach(section => {
+        section.transactions.forEach(t => {
+          allTransactions.push({
+            ...t,
+            category: section.name
+          });
+        });
+      });
+
+      // Sort by date
+      allTransactions.sort((a, b) => {
+        const dateA = new Date(a.date).getTime();
+        const dateB = new Date(b.date).getTime();
+        return dateA - dateB;
+      });
+
+      const allRows = processTransactionsToSheet(allTransactions, true);
+      const allSheet = XLSX.utils.json_to_sheet(allRows);
+
+      // Auto-width columns
+      const maxDescLen = allRows.reduce((w, r) => {
+        const descKey = data.column_names?.desc || data.column_names?.description || 'Description';
+        return Math.max(w, (r[descKey] as string)?.length || 0);
+      }, 10);
+      allSheet["!cols"] = [{ wch: 12 }, { wch: Math.min(maxDescLen, 50) }, { wch: 20 }, { wch: 14 }, { wch: 14 }, { wch: 14 }];
+
+      XLSX.utils.book_append_sheet(workbook, allSheet, "All Transactions");
+
+      // Individual category sheets
       data.sections.forEach(section => {
         const rows = processTransactionsToSheet(section.transactions);
         const worksheet = XLSX.utils.json_to_sheet(rows);
@@ -107,7 +156,7 @@ export class ExportService {
           return Math.max(w, (r[descKey] as string)?.length || 0);
         }, 10);
 
-        const cols = [{ wch: 12 }, { wch: Math.min(max_desc, 60) }, { wch: 12 }, { wch: 12 }, { wch: 12 }];
+        const cols = [{ wch: 12 }, { wch: Math.min(max_desc, 50) }, { wch: 14 }, { wch: 14 }, { wch: 14 }];
         worksheet["!cols"] = cols;
 
         // Sanitize sheet name (max 31 chars, no special chars)
@@ -123,9 +172,10 @@ export class ExportService {
         XLSX.utils.book_append_sheet(workbook, worksheet, uniqueName);
       });
     } else {
-      // Fallback: Single sheet
+      // Fallback: Single sheet for transactions
       const rows = processTransactionsToSheet(data.transactions);
       const worksheet = XLSX.utils.json_to_sheet(rows);
+      worksheet["!cols"] = [{ wch: 12 }, { wch: 50 }, { wch: 14 }, { wch: 14 }, { wch: 14 }];
       XLSX.utils.book_append_sheet(workbook, worksheet, "Transactions");
     }
 
