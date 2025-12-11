@@ -16,7 +16,7 @@ type ThemeProviderState = {
 };
 
 const initialState: ThemeProviderState = {
-    theme: "green",
+    theme: "orange",
     setTheme: () => null,
 };
 
@@ -24,18 +24,29 @@ const ThemeProviderContext = React.createContext<ThemeProviderState>(initialStat
 
 export function ThemeProvider({
     children,
-    defaultTheme = "green",
+    defaultTheme = "orange",
     storageKey = "vite-ui-theme",
     ...props
 }: ThemeProviderProps) {
-    const [theme, setTheme] = React.useState<Theme>(
-        () => (typeof window !== "undefined" ? (localStorage.getItem(storageKey) as Theme) : defaultTheme) || defaultTheme
-    );
+    // Start with default theme to avoid hydration mismatch
+    const [theme, setTheme] = React.useState<Theme>(defaultTheme);
+    const [mounted, setMounted] = React.useState(false);
+
+    // Read from localStorage only after mount (client-side)
+    React.useEffect(() => {
+        const stored = localStorage.getItem(storageKey) as Theme;
+        if (stored && ["green", "blue", "violet", "orange"].includes(stored)) {
+            setTheme(stored);
+        }
+        setMounted(true);
+    }, [storageKey]);
 
     React.useEffect(() => {
-        const root = window.document.documentElement;
-        root.setAttribute("data-theme", theme);
-    }, [theme]);
+        if (mounted) {
+            const root = window.document.documentElement;
+            root.setAttribute("data-theme", theme);
+        }
+    }, [theme, mounted]);
 
     const value = {
         theme,

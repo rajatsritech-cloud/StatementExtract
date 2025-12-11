@@ -114,7 +114,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         )}
         <ClerkProviderClient>
           <ServerWarmup />
-          <ThemeProvider defaultTheme="green" storageKey="statement-extract-theme">
+          <ThemeProvider defaultTheme="orange" storageKey="statement-extract-theme">
             <div className="flex min-h-screen flex-col bg-[hsl(var(--background))]">
               <Header />
               <main className="flex-1">
