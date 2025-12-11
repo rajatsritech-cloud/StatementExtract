@@ -86,7 +86,7 @@ export const Header = () => {
             </span>
           </Link>
 
-          <nav className="hidden items-center gap-8 md:flex">
+          <nav className="hidden items-center gap-8 lg:flex">
             <div
               className="relative"
               onMouseEnter={handleMouseEnter}
@@ -250,17 +250,17 @@ export const Header = () => {
             </a>
           </nav>
 
-          <div className="flex items-center gap-2 md:gap-4">
+          <div className="flex items-center gap-2 lg:gap-4">
             <SignedIn>
               <Link
                 href="/dashboard"
-                className="hidden md:inline-flex mr-1 h-9 items-center justify-center rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 text-sm font-medium text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] hover:border-[hsl(var(--primary))] transition-colors"
+                className="hidden lg:inline-flex mr-1 h-9 items-center justify-center rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 text-sm font-medium text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] hover:border-[hsl(var(--primary))] transition-colors"
               >
                 Dashboard
               </Link>
             </SignedIn>
 
-            <div className="hidden md:flex items-center gap-2 mr-2">
+            <div className="hidden lg:flex items-center gap-2 mr-2">
               <div className="flex items-center gap-1 rounded-full border border-[hsl(var(--border))] bg-[hsl(var(--background))] p-1">
                 <button
                   onClick={() => setTheme("green")}
@@ -288,12 +288,12 @@ export const Header = () => {
             <SignedOut>
               <div suppressHydrationWarning className="flex items-center gap-2">
                 <SignInButton mode="modal">
-                  <Button variant="ghost" className="hidden md:inline-flex">
+                  <Button variant="ghost" className="hidden lg:inline-flex">
                     Sign In
                   </Button>
                 </SignInButton>
                 <Button
-                  className="hidden shadow-md md:inline-flex"
+                  className="hidden shadow-md lg:inline-flex"
                   onClick={() => router.push('/convert-bank-statement-to-csv-excel')}
                 >
                   Get Started
@@ -301,16 +301,32 @@ export const Header = () => {
               </div>
             </SignedOut>
 
+            {/* Tablet-only buttons (hidden on desktop, visible on tablet/mobile) */}
             <SignedIn>
+              <Link
+                href="/dashboard"
+                className="lg:hidden inline-flex h-9 items-center justify-center rounded-md bg-[hsl(var(--primary))] px-4 text-sm font-medium text-white hover:bg-[hsl(var(--primary))]/90 transition-colors"
+              >
+                Dashboard
+              </Link>
               <div suppressHydrationWarning className="flex items-center gap-2">
                 <UserButton afterSignOutUrl="/" />
               </div>
             </SignedIn>
 
+            <SignedOut>
+              <Button
+                className="lg:hidden shadow-md"
+                onClick={() => router.push('/convert-bank-statement-to-csv-excel')}
+              >
+                Get Started
+              </Button>
+            </SignedOut>
+
             <Button
               variant="ghost"
               size="icon"
-              className="md:hidden"
+              className="lg:hidden"
               aria-label="Toggle navigation menu"
               onClick={() => setIsMobileMenuOpen((open) => !open)}
             >
@@ -320,7 +336,7 @@ export const Header = () => {
         </div>
       </div >
       {isMobileMenuOpen && (
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 pb-4 md:hidden">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 pb-4 lg:hidden">
           <nav className="pt-3">
             <div className="rounded-2xl border border-[hsl(var(--primary))]/30 bg-[hsl(var(--card))]/95 overflow-hidden divide-y divide-[hsl(var(--border))]/70">
               {/* Mobile Solutions Accordion */}
