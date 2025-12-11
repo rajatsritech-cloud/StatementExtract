@@ -5,59 +5,108 @@
       xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 
+<!-- Homepage -->
 <url>
   <loc>https://statementextract.com/</loc>
-  <lastmod>2025-11-29T18:12:12+00:00</lastmod>
+  <lastmod>2025-12-11</lastmod>
+  <changefreq>daily</changefreq>
   <priority>1.0</priority>
 </url>
-<url>
-  <loc>https://statementextract.com/blogs</loc>
-  <lastmod>2025-11-29T18:12:12+00:00</lastmod>
-  <priority>1.0</priority>
-</url>
-<url>
-  <loc>https://statementextract.com/blogs/ai-bank-statement-data-extraction-no-templates</loc>
-  <lastmod>2025-11-29T18:12:12+00:00</lastmod>
-  <priority>1.0</priority>
-</url>
+
+<!-- Main Product Page -->
 <url>
   <loc>https://statementextract.com/convert-bank-statement-to-csv-excel</loc>
-  <lastmod>2025-11-29T18:12:12+00:00</lastmod>
+  <lastmod>2025-12-11</lastmod>
+  <changefreq>daily</changefreq>
   <priority>1.0</priority>
 </url>
+
+<!-- Blog Index -->
+<url>
+  <loc>https://statementextract.com/blogs</loc>
+  <lastmod>2025-12-11</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>1.0</priority>
+</url>
+
+<!-- Blog Posts -->
+<url>
+  <loc>https://statementextract.com/blogs/bank-statement-converter-pdf-to-excel-csv</loc>
+  <lastmod>2025-12-11</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>1.0</priority>
+</url>
+
+<url>
+  <loc>https://statementextract.com/blogs/bank-statement-analysis-loan-underwriting-automation</loc>
+  <lastmod>2025-12-11</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>1.0</priority>
+</url>
+
+<url>
+  <loc>https://statementextract.com/blogs/idp-vs-ocr-document-processing</loc>
+  <lastmod>2025-12-11</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>1.0</priority>
+</url>
+
 <url>
   <loc>https://statementextract.com/blogs/bank-statement-pdf-to-excel-using-ai</loc>
-  <lastmod>2025-11-30T18:12:12+00:00</lastmod>
+  <lastmod>2025-12-11</lastmod>
+  <changefreq>monthly</changefreq>
   <priority>1.0</priority>
 </url>
+
 <url>
   <loc>https://statementextract.com/blogs/ultimate-guide-accurate-bank-statement-extraction-ocr-ai</loc>
-  <lastmod>2025-11-29T18:12:12+00:00</lastmod>
+  <lastmod>2025-12-11</lastmod>
+  <changefreq>monthly</changefreq>
   <priority>1.0</priority>
 </url>
 
 <url>
-  <loc>https://statementextract.com/about</loc>
-  <lastmod>2025-11-29T18:12:12+00:00</lastmod>
-  <priority>0.6</priority>
+  <loc>https://statementextract.com/blogs/ai-bank-statement-data-extraction-no-templates</loc>
+  <lastmod>2025-12-11</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>1.0</priority>
 </url>
 
+<!-- About Page -->
+<url>
+  <loc>https://statementextract.com/about</loc>
+  <lastmod>2025-12-11</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>1.0</priority>
+</url>
+
+<!-- Footer/Legal Pages - Lower Priority -->
 <url>
   <loc>https://statementextract.com/careers</loc>
-  <lastmod>2025-11-29T18:12:12+00:00</lastmod>
-  <priority>0.4</priority>
+  <lastmod>2025-12-11</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.5</priority>
 </url>
 
 <url>
   <loc>https://statementextract.com/privacy-policy</loc>
-  <lastmod>2025-11-29T18:12:12+00:00</lastmod>
-  <priority>0.5</priority>
+  <lastmod>2025-12-11</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.3</priority>
 </url>
 
 <url>
   <loc>https://statementextract.com/terms</loc>
-  <lastmod>2025-11-29T18:12:12+00:00</lastmod>
-  <priority>0.5</priority>
+  <lastmod>2025-12-11</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.3</priority>
+</url>
+
+<url>
+  <loc>https://statementextract.com/contact</loc>
+  <lastmod>2025-12-11</lastmod>
+  <changefreq>yearly</changefreq>
+  <priority>0.3</priority>
 </url>
 
 </urlset>
