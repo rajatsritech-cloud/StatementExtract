@@ -63,20 +63,20 @@ A developer must manually draw a digital box (a "**zone**" or "**template**") ar
 
 Template-based Zonal OCR is wholly inadequate for modern financial operations, presenting four critical failure points:
 
-#### 🛑 Failure Point 1: Format Drift and Template Breaking
+#### Failure Point 1: Format Drift and Template Breaking
 This is the most common and costly failure. When banks update their statement layouts, the pre-defined zones become misaligned. The OCR might try to read a date from a spot that now contains a logo.
 * **Result:** The system extracts **incorrect data silently** or errors out, causing massive backlogs and requiring manual template rework.
 
-#### 🛑 Failure Point 2: Poor Accuracy on Scans and Variability
+#### Failure Point 2: Poor Accuracy on Scans and Variability
 Traditional OCR is brittle and performs poorly with real-world inputs:
 * **Scanned Documents:** Poor lighting, shadows, creases, or crooked scans can drop accuracy from $\text{90%}$ to below $\text{70%}$.
 * **Image Quality:** It struggles with older documents or lower resolution images common in loan files.
 
-#### 🛑 Failure Point 3: Lack of Context and Understanding
+#### Failure Point 3: Lack of Context and Understanding
 OCR cannot answer **What is this data related to?** It reads "31-Dec-2025" but cannot distinguish if it is the statement period end date or the date the document was printed.
 * **Result:** Data is extracted in isolation. Humans must manually connect the dots, verify the data type, and ensure the value is correctly assigned.
 
-#### 🛑 Failure Point 4: Inability to Handle Unstructured Data
+#### Failure Point 4: Inability to Handle Unstructured Data
 The majority of valuable business data (emails, contracts) is **unstructured** or **semi-structured**. Since OCR relies entirely on fixed zones, it is useless for documents where the desired data might appear anywhere on the page.
 
 ### 2.4 The True Cost of OCR's Limitations
