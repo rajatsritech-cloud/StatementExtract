@@ -313,15 +313,14 @@ export const Header = () => {
               <div suppressHydrationWarning className="flex items-center gap-2">
                 <SignInButton mode="modal">
                   <Button variant="ghost" className="hidden lg:inline-flex">
-                    Sign In
+                    Login
                   </Button>
                 </SignInButton>
-                <Button
-                  className="hidden shadow-md lg:inline-flex"
-                  onClick={() => router.push('/convert-bank-statement-to-csv-excel')}
-                >
-                  Get Started
-                </Button>
+                <SignUpButton mode="modal">
+                  <Button className="hidden shadow-md lg:inline-flex">
+                    Sign Up
+                  </Button>
+                </SignUpButton>
               </div>
             </SignedOut>
 
@@ -339,12 +338,11 @@ export const Header = () => {
             </SignedIn>
 
             <SignedOut>
-              <Button
-                className="lg:hidden shadow-md"
-                onClick={() => router.push('/convert-bank-statement-to-csv-excel')}
-              >
-                Get Started
-              </Button>
+              <SignUpButton mode="modal">
+                <Button className="lg:hidden shadow-md">
+                  Sign Up
+                </Button>
+              </SignUpButton>
             </SignedOut>
 
             <Button
