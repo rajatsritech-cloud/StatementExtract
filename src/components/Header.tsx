@@ -121,11 +121,14 @@ export const Header = () => {
                               </div>
                               <span>About Us</span>
                             </div>
-                            <div className="group flex flex-col items-center justify-center gap-2 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))] text-center transition-all duration-200 cursor-pointer hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40 hover:shadow-glow">
+                            <div
+                              className="group flex flex-col items-center justify-center gap-2 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))] text-center transition-all duration-200 cursor-pointer hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40 hover:shadow-glow"
+                              onClick={() => handleSolutionsItemClick("/careers")}
+                            >
                               <div className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] group-hover:bg-[hsl(var(--primary))] group-hover:text-[hsl(var(--primary-foreground))] transition-colors">
                                 <FileText className="h-4 w-4" />
                               </div>
-                              <span>Contact Us</span>
+                              <span>Careers</span>
                             </div>
                             <div
                               className="group flex flex-col items-center justify-center gap-2 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))] text-center transition-all duration-200 cursor-pointer hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40 hover:shadow-glow"
@@ -136,11 +139,14 @@ export const Header = () => {
                               </div>
                               <span>Privacy Policy</span>
                             </div>
-                            <div className="group flex flex-col items-center justify-center gap-2 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))] text-center transition-all duration-200 cursor-pointer hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40 hover:shadow-glow">
+                            <div
+                              className="group flex flex-col items-center justify-center gap-2 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))] text-center transition-all duration-200 cursor-pointer hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40 hover:shadow-glow"
+                              onClick={() => handleSolutionsItemClick("/terms")}
+                            >
                               <div className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] group-hover:bg-[hsl(var(--primary))] group-hover:text-[hsl(var(--primary-foreground))] transition-colors">
                                 <Settings className="h-4 w-4" />
                               </div>
-                              <span>Partners</span>
+                              <span>Terms</span>
                             </div>
                           </div>
                         </div>
@@ -151,8 +157,11 @@ export const Header = () => {
                           >
                             Try for Free
                           </button>
-                          <button className="bg-[hsl(var(--muted))] text-[hsl(var(--foreground))] border border-[hsl(var(--border))] px-5 py-2.5 rounded-lg text-sm font-semibold hover:bg-[hsl(var(--secondary))] hover:border-[hsl(var(--primary))]/50 transition-all duration-200 hover:-translate-y-0.5">
-                            Talk to our team
+                          <button
+                            onClick={() => handleSolutionsItemClick('/about')}
+                            className="bg-[hsl(var(--muted))] text-[hsl(var(--foreground))] border border-[hsl(var(--border))] px-5 py-2.5 rounded-lg text-sm font-semibold hover:bg-[hsl(var(--secondary))] hover:border-[hsl(var(--primary))]/50 transition-all duration-200 hover:-translate-y-0.5"
+                          >
+                            Learn More
                           </button>
                         </div>
                       </div>
@@ -171,7 +180,7 @@ export const Header = () => {
 
                         <div className="grid grid-cols-2 gap-3">
                           <div
-                            className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-3 cursor-pointer transition-all duration-200 hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40 hover:shadow-glow"
+                            className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--primary))]/30 bg-[hsl(var(--background))] px-3 py-3 cursor-pointer transition-all duration-200 hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40 hover:shadow-glow"
                             onClick={() => handleSolutionsItemClick('/convert-bank-statement-to-csv-excel')}
                           >
                             <div className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] group-hover:bg-[hsl(var(--primary))] group-hover:text-[hsl(var(--primary-foreground))] transition-colors">
@@ -183,53 +192,68 @@ export const Header = () => {
                             </div>
                           </div>
 
-                          <div className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-3 cursor-pointer transition-all duration-200 hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40 hover:shadow-glow">
-                            <div className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] group-hover:bg-[hsl(var(--primary))] group-hover:text-[hsl(var(--primary-foreground))] transition-colors">
+                          <div className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-3 opacity-60 cursor-default">
+                            <div className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[hsl(var(--muted))]/50 text-[hsl(var(--muted-foreground))]">
                               <Shield className="h-4 w-4" />
                             </div>
                             <div>
-                              <p className="text-sm font-semibold text-[hsl(var(--foreground))]">Insurance</p>
-                              <p className="mt-0.5 text-xs text-[hsl(var(--muted-foreground))]">Insurance policies, loss runs, and claims documents.</p>
+                              <p className="text-sm font-semibold text-[hsl(var(--foreground))] flex items-center gap-2">
+                                Insurance
+                                <span className="text-[10px] font-medium bg-[hsl(var(--muted))] px-1.5 py-0.5 rounded">Coming Soon</span>
+                              </p>
+                              <p className="mt-0.5 text-xs text-[hsl(var(--muted-foreground))]">Insurance policies, loss runs, and claims.</p>
                             </div>
                           </div>
 
-                          <div className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-3 cursor-pointer transition-all duration-200 hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40 hover:shadow-glow">
-                            <div className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] group-hover:bg-[hsl(var(--primary))] group-hover:text-[hsl(var(--primary-foreground))] transition-colors">
+                          <div className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-3 opacity-60 cursor-default">
+                            <div className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[hsl(var(--muted))]/50 text-[hsl(var(--muted-foreground))]">
                               <FileIcon className="h-4 w-4" />
                             </div>
                             <div>
-                              <p className="text-sm font-semibold text-[hsl(var(--foreground))]">Real Estate</p>
-                              <p className="mt-0.5 text-xs text-[hsl(var(--muted-foreground))]">Offering memoranda, rent rolls, and closing statements.</p>
+                              <p className="text-sm font-semibold text-[hsl(var(--foreground))] flex items-center gap-2">
+                                Real Estate
+                                <span className="text-[10px] font-medium bg-[hsl(var(--muted))] px-1.5 py-0.5 rounded">Coming Soon</span>
+                              </p>
+                              <p className="mt-0.5 text-xs text-[hsl(var(--muted-foreground))]">Rent rolls, closing statements, and more.</p>
                             </div>
                           </div>
 
-                          <div className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-3 cursor-pointer transition-all duration-200 hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40 hover:shadow-glow">
-                            <div className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] group-hover:bg-[hsl(var(--primary))] group-hover:text-[hsl(var(--primary-foreground))] transition-colors">
+                          <div className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-3 opacity-60 cursor-default">
+                            <div className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[hsl(var(--muted))]/50 text-[hsl(var(--muted-foreground))]">
                               <Truck className="h-4 w-4" />
                             </div>
                             <div>
-                              <p className="text-sm font-semibold text-[hsl(var(--foreground))]">Logistics</p>
-                              <p className="mt-0.5 text-xs text-[hsl(var(--muted-foreground))]">Rate confirmations, bills of lading, and invoices.</p>
+                              <p className="text-sm font-semibold text-[hsl(var(--foreground))] flex items-center gap-2">
+                                Logistics
+                                <span className="text-[10px] font-medium bg-[hsl(var(--muted))] px-1.5 py-0.5 rounded">Coming Soon</span>
+                              </p>
+                              <p className="mt-0.5 text-xs text-[hsl(var(--muted-foreground))]">Bills of lading and invoices.</p>
                             </div>
                           </div>
 
-                          <div className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-3 cursor-pointer transition-all duration-200 hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40 hover:shadow-glow">
-                            <div className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] group-hover:bg-[hsl(var(--primary))] group-hover:text-[hsl(var(--primary-foreground))] transition-colors">
+                          <div className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-3 opacity-60 cursor-default">
+                            <div className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[hsl(var(--muted))]/50 text-[hsl(var(--muted-foreground))]">
                               <Heart className="h-4 w-4" />
                             </div>
                             <div>
-                              <p className="text-sm font-semibold text-[hsl(var(--foreground))]">Healthcare</p>
-                              <p className="mt-0.5 text-xs text-[hsl(var(--muted-foreground))]">EOBs, healthcare policies, prior authorizations, and contracts.</p>
+                              <p className="text-sm font-semibold text-[hsl(var(--foreground))] flex items-center gap-2">
+                                Healthcare
+                                <span className="text-[10px] font-medium bg-[hsl(var(--muted))] px-1.5 py-0.5 rounded">Coming Soon</span>
+                              </p>
+                              <p className="mt-0.5 text-xs text-[hsl(var(--muted-foreground))]">EOBs, policies, and contracts.</p>
                             </div>
                           </div>
 
-                          <div className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-3 cursor-pointer transition-all duration-200 hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40 hover:shadow-glow">
-                            <div className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] group-hover:bg-[hsl(var(--primary))] group-hover:text-[hsl(var(--primary-foreground))] transition-colors">
+                          <div className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-3 opacity-60 cursor-default">
+                            <div className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[hsl(var(--muted))]/50 text-[hsl(var(--muted-foreground))]">
                               <Settings className="h-4 w-4" />
                             </div>
                             <div>
-                              <p className="text-sm font-semibold text-[hsl(var(--foreground))]">Custom</p>
-                              <p className="mt-0.5 text-xs text-[hsl(var(--muted-foreground))]">Work with solution engineers on any document type.</p>
+                              <p className="text-sm font-semibold text-[hsl(var(--foreground))] flex items-center gap-2">
+                                Custom
+                                <span className="text-[10px] font-medium bg-[hsl(var(--muted))] px-1.5 py-0.5 rounded">Coming Soon</span>
+                              </p>
+                              <p className="mt-0.5 text-xs text-[hsl(var(--muted-foreground))]">Work with our team on any document.</p>
                             </div>
                           </div>
                         </div>

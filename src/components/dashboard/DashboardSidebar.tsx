@@ -62,7 +62,7 @@ export const DashboardSidebar = ({ className }: SidebarProps) => {
                     <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-gradient-primary">
                         <FileText className="h-4 w-4 text-white" />
                     </div>
-                    {!isCollapsed && <span>Statement Extract</span>}
+                    {!isCollapsed && <span>Statement <span className="bg-gradient-primary bg-clip-text text-transparent">Extract</span></span>}
                 </div >
             </div >
 
