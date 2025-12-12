@@ -55,13 +55,18 @@ export class StorageService {
             const store = transaction.objectStore(STORE_NAME);
 
             // Sanitize data to store only essential fields
-            // We exclude 'markdown', 'fraud_analysis', etc. to save space
+            // We exclude 'markdown', 'fraud_analysis' to save space but keep validation data
             const sanitizedData: ExtractedData = {
                 userInfo: doc.data.userInfo,
                 transactions: doc.data.transactions,
                 summary: doc.data.summary,
                 column_names: doc.data.column_names,
-                sections: doc.data.sections // Persist sections/tabs
+                sections: doc.data.sections, // Persist sections/tabs
+                processing_steps: doc.data.processing_steps, // Processing pipeline
+                processing_stats: doc.data.processing_stats, // Processing statistics
+                reconciliation: doc.data.reconciliation, // Validation results
+                num_pages: doc.data.num_pages, // Page count
+                llm_used: doc.data.llm_used // Extraction method
             };
 
             const docToSave = {

@@ -8,6 +8,8 @@ export interface TransactionData {
   type: 'credit' | 'debit';
   moneyIn?: number;
   moneyOut?: number;
+  source_page?: number;  // Page number in PDF for audit trail
+  normalized_payee?: string;  // Cleaned up payee name (e.g., "Amazon Marketplace")
 }
 
 // NEW: Section for multi-table display
@@ -81,6 +83,21 @@ export interface ExtractedData {
     review_reasons: string[];
     auto_approved: boolean;
   };
+  processing_steps?: Array<{
+    id: string;
+    name: string;
+    status: 'pending' | 'running' | 'complete' | 'skipped' | 'warning';
+    details?: string;
+    sub_steps?: string[];
+  }>;
+  processing_stats?: {
+    payees_normalized: number;
+    total_steps: number;
+    steps_passed: number;
+    extraction_method: string;
+  };
+  num_pages?: number;
+  llm_used?: boolean;
 }
 
 export class PDFProcessor {
@@ -149,7 +166,9 @@ export class PDFProcessor {
           balance: t.balance,
           type: t.money_in > 0 ? 'credit' as const : 'debit' as const,
           moneyIn: t.money_in,
-          moneyOut: t.money_out
+          moneyOut: t.money_out,
+          source_page: t.source_page,  // Add source page for audit trail
+          normalized_payee: t.normalized_payee  // Add normalized payee name
         });
 
         // Map sections if available (NEW: multi-table support)
@@ -186,7 +205,11 @@ export class PDFProcessor {
           markdown: result.markdown,
           fraud_analysis: result.fraud_analysis,
           reconciliation: result.reconciliation,
-          human_review: result.human_review
+          human_review: result.human_review,
+          processing_steps: result.processing_steps,  // Processing pipeline steps
+          processing_stats: backendData.processing_stats,  // Processing statistics
+          num_pages: result.num_pages,
+          llm_used: result.llm_used
         };
       }
 
