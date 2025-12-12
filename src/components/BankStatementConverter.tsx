@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from "react";
 import { UploadArea } from "@/components/bank-statement/UploadArea";
+import { FileText, Upload } from "lucide-react";
 import { ResultsModal } from "@/components/bank-statement/ResultsModal";
 
 import { toast } from "react-hot-toast";
@@ -175,39 +176,75 @@ export const BankStatementConverter = () => {
           </svg>
         </div>
 
-        <div className="relative mx-auto max-w-7xl px-6 py-20 md:py-32">
-          {/* Hero Section */}
-          <div className="text-center mb-16">
-            <h1 className="mb-6 text-5xl font-bold tracking-tight text-[hsl(var(--foreground))] md:text-7xl animate-slide-up">
-              Accurately Convert PDF Bank Statements to
-              <span className="bg-gradient-primary bg-clip-text text-transparent"> Excel or CSV</span>
-            </h1>
+        <div className="relative mx-auto max-w-7xl px-6 pt-20 md:pt-25">
+          {/* Two-column layout: Content left, Upload right */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            {/* Left Column - Hero Content */}
+            <div className="text-left">
+              <h1 className="mb-6 text-4xl font-bold tracking-tight text-[hsl(var(--foreground))] md:text-5xl lg:text-6xl animate-slide-up">
+                Accurately Convert PDF Bank Statements to
+                <span className="bg-gradient-primary bg-clip-text text-transparent"> Excel or CSV</span>
+              </h1>
 
-            <p className="mx-auto mb-10 max-w-3xl text-xl text-[hsl(var(--muted-foreground))] animate-fade-in">
-              World's most trusted Intelligent Document Processing bank statement converter, working with thousands of banks globally.
-              Automatically extract transactions, balances, and references into clean Excel or CSV files with industry-leading accuracy.
-            </p>
+              <p className="mb-8 max-w-xl text-lg text-[hsl(var(--muted-foreground))] animate-fade-in">
+                World's most trusted Intelligent Document Processing bank statement converter, working with thousands of banks globally.
+                Automatically extract transactions, balances, and references into clean Excel or CSV files with industry-leading accuracy.
+              </p>
 
-            {/* Feature Badges */}
-            <div className="flex flex-wrap justify-center gap-3 mb-12 animate-fade-in">
-              <span className="inline-flex items-center gap-2 rounded-full bg-[hsl(var(--primary))]/10 px-4 py-2 text-sm font-medium text-[hsl(var(--primary))]">
-                ⚡ Fast
-              </span>
-              <span className="inline-flex items-center gap-2 rounded-full bg-[hsl(var(--secondary))] px-4 py-2 text-sm font-medium text-[hsl(var(--secondary-foreground))]">
-                🔒 Secure
-              </span>
-              <span className="inline-flex items-center gap-2 rounded-full bg-[hsl(var(--accent))] px-4 py-2 text-sm font-medium text-[hsl(var(--accent-foreground))]">
-                🎯 Industry-Leading Accuracy
-              </span>
-              <span className="inline-flex items-center gap-2 rounded-full bg-[hsl(var(--muted))] px-4 py-2 text-sm font-medium text-[hsl(var(--muted-foreground))]">
-                👤 Free Account
-              </span>
+              {/* Feature Badges */}
+              <div className="flex flex-wrap gap-3 animate-fade-in">
+                <span className="inline-flex items-center gap-2 rounded-full bg-[hsl(var(--primary))]/10 px-4 py-2 text-sm font-medium text-[hsl(var(--primary))]">
+                  ⚡ Fast
+                </span>
+                <span className="inline-flex items-center gap-2 rounded-full bg-[hsl(var(--secondary))] px-4 py-2 text-sm font-medium text-[hsl(var(--secondary-foreground))]">
+                  🔒 Secure
+                </span>
+                <span className="inline-flex items-center gap-2 rounded-full bg-[hsl(var(--accent))] px-4 py-2 text-sm font-medium text-[hsl(var(--accent-foreground))]">
+                  🎯 Industry-Leading Accuracy
+                </span>
+                <span className="inline-flex items-center gap-2 rounded-full bg-[hsl(var(--muted))] px-4 py-2 text-sm font-medium text-[hsl(var(--muted-foreground))]">
+                  👤 Free Account
+                </span>
+              </div>
+            </div>
+
+            {/* Right Column - Upload Area */}
+            <div className="w-full">
+              <UploadArea key={uploadKey} onFileUpload={handleFileUpload} isProcessing={isProcessing} showPrivacyNotice={false} showLoginPrompt={true} hideFeatures={true} />
             </div>
           </div>
 
-          {/* Upload Area */}
-          <div className="mx-auto max-w-2xl">
-            <UploadArea key={uploadKey} onFileUpload={handleFileUpload} isProcessing={isProcessing} showPrivacyNotice={false} showLoginPrompt={true} />
+          {/* Features Grid - Below the hero + upload row */}
+          <div className="mt-16 grid gap-6 md:grid-cols-3">
+            <div className="rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-6 text-center">
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-[hsl(var(--primary))]/10 mx-auto">
+                <FileText className="h-6 w-6 text-[hsl(var(--primary))]" />
+              </div>
+              <h4 className="font-semibold text-[hsl(var(--foreground))] mb-2">Intelligent Processing</h4>
+              <p className="text-sm text-[hsl(var(--muted-foreground))]">
+                Intelligent Document Processing built for bank statements: capture account holder details, IBANs, balances, and every transaction line from PDFs or images.
+              </p>
+            </div>
+
+            <div className="rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-6 text-center">
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-[hsl(var(--secondary))] mx-auto">
+                <Upload className="h-6 w-6 text-[hsl(var(--secondary-foreground))]" />
+              </div>
+              <h4 className="font-semibold text-[hsl(var(--foreground))] mb-2">Instant Processing</h4>
+              <p className="text-sm text-[hsl(var(--muted-foreground))]">
+                Process statements in seconds and instantly export structured data to Excel or CSV, or send it directly into your tools via API.
+              </p>
+            </div>
+
+            <div className="rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-6 text-center">
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-[hsl(var(--accent))] mx-auto">
+                <FileText className="h-6 w-6 text-[hsl(var(--accent-foreground))]" />
+              </div>
+              <h4 className="font-semibold text-[hsl(var(--foreground))] mb-2">Universal Format</h4>
+              <p className="text-sm text-[hsl(var(--muted-foreground))]">
+                Works with statements from thousands of banks worldwide, in any layout or language, whether PDF or scanned image.
+              </p>
+            </div>
           </div>
         </div>
       </main>

@@ -66,7 +66,7 @@ export const SupportedBanks = () => {
     ];
 
     return (
-        <section className="py-12 px-6 md:py-20 bg-[hsl(var(--background))]">
+        <section className="py-12 px-6 md:py-25 bg-[hsl(var(--background))]">
             <div className="mx-auto max-w-7xl text-center">
                 <h2 className="text-2xl font-bold text-[hsl(var(--foreground))] mb-8">
                     Trusted compatibility with major global banks
