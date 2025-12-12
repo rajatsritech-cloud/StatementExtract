@@ -86,8 +86,20 @@ export const BankStatementConverter = () => {
       try {
         const { PDFProcessor } = await import("@/lib/pdfProcessor");
         console.log('📖 Processing file with backend API...');
-        const token = await getToken();
-        extracted = await PDFProcessor.processPDF(file, isSignedIn, token);
+        let token = await getToken();
+
+        try {
+          extracted = await PDFProcessor.processPDF(file, isSignedIn, token);
+        } catch (err: any) {
+          // Retry on token expiration (401)
+          if (err.message && (err.message.includes("Token has expired") || err.message.includes("401"))) {
+            console.log("🔄 Token expired, refreshing and retrying...");
+            token = await getToken(); // Fetch fresh token
+            extracted = await PDFProcessor.processPDF(file, isSignedIn, token);
+          } else {
+            throw err;
+          }
+        }
       } catch (error: any) {
         console.log('❌ Processing error:', error.message);
         throw error;
