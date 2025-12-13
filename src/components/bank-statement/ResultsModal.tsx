@@ -143,10 +143,8 @@ const DynamicTable = ({ transactions, currency = '$', columnNames, title = "Tran
   const { headers, rows } = useMemo(() => {
     if (!transactions || transactions.length === 0) return { headers: [], rows: [] };
 
-    const creditLabel = columnNames?.credit || "Money In";
-    const debitLabel = columnNames?.debit || "Money Out";
-
-    const headers = ["Date", "Description", creditLabel, debitLabel, "Balance"];
+    // Standardized Headers to avoid "Amount/Amount" confusion
+    const headers = ["Date", "Description", "Credit", "Debit", "Balance"];
 
     // Filter rows based on search term
     const filtered = transactions.filter(t =>
@@ -166,11 +164,11 @@ const DynamicTable = ({ transactions, currency = '$', columnNames, title = "Tran
       switch (sortConfig.key) {
         case 'Date': aValue = a.date; bValue = b.date; break;
         case 'Description': aValue = a.description; bValue = b.description; break;
-        case creditLabel:
+        case "Credit":
           aValue = a.moneyIn || (a.type === 'credit' ? a.amount : 0);
           bValue = b.moneyIn || (b.type === 'credit' ? b.amount : 0);
           break;
-        case debitLabel:
+        case "Debit":
           aValue = a.moneyOut || (a.type === 'debit' ? a.amount : 0);
           bValue = b.moneyOut || (b.type === 'debit' ? b.amount : 0);
           break;
@@ -222,11 +220,8 @@ const DynamicTable = ({ transactions, currency = '$', columnNames, title = "Tran
 
   // Helper to determine cell style based on header
   const getCellStyle = (header: string, content: string) => {
-    const creditLabel = columnNames?.credit || "Money In";
-    const debitLabel = columnNames?.debit || "Money Out";
-
-    if (header === creditLabel && content !== '-') return "text-green-600 font-medium";
-    if (header === debitLabel && content !== '-') return "text-red-600 font-medium";
+    if (header === "Credit" && content !== '-') return "text-green-600 font-medium";
+    if (header === "Debit" && content !== '-') return "text-red-600 font-medium";
     return "text-[hsl(var(--foreground))]";
   };
 
@@ -349,12 +344,7 @@ const getSimulatedProcessingSteps = (progress: number): ProcessingStep[] => {
       status: progress >= 85 ? 'complete' : progress >= 75 ? 'running' : 'pending',
       details: progress >= 85 ? 'Cleaning merchant names...' : undefined
     },
-    {
-      id: 'source_page_tracking',
-      name: 'Source Page Tracking',
-      status: progress >= 90 ? 'complete' : progress >= 85 ? 'running' : 'pending',
-      details: progress >= 90 ? 'Assigning page numbers...' : undefined
-    },
+
     {
       id: 'llm_validation',
       name: 'AI Validation',

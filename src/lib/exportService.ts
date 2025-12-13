@@ -9,8 +9,9 @@ export class ExportService {
       // Determine columns based on data
       const colNames = data.column_names || {};
       const hasMoneyInOut = transactions.some(t => t.moneyIn !== undefined || t.moneyOut !== undefined);
-      const hasSourcePage = transactions.some(t => t.source_page !== undefined);
       const hasNormalizedPayee = transactions.some(t => t.normalized_payee !== undefined);
+
+
 
       const dateHeader = colNames.date || 'Date';
       const descHeader = colNames.desc || colNames.description || 'Description';
@@ -32,10 +33,7 @@ export class ExportService {
       }
       headers.push(balanceHeader);
 
-      // Add Source Page column for audit trail
-      if (hasSourcePage) {
-        headers.push('Source Page');
-      }
+
 
       const rows = transactions.map(t => {
         const row = [t.date, t.description];
@@ -55,10 +53,7 @@ export class ExportService {
         }
         row.push(t.balance.toString());
 
-        // Add source page
-        if (hasSourcePage) {
-          row.push((t.source_page || 1).toString());
-        }
+
 
         return row.map(cell => `"${cell || ""}"`).join(','); // Handle potential nulls
       });
@@ -95,8 +90,9 @@ export class ExportService {
     const processTransactionsToSheet = (transactions: TransactionData[], includeCategory: boolean = false) => {
       const colNames = data.column_names || {};
       const hasMoneyInOut = transactions.some(t => t.moneyIn !== undefined || t.moneyOut !== undefined);
-      const hasSourcePage = transactions.some(t => t.source_page !== undefined);
       const hasNormalizedPayee = transactions.some(t => t.normalized_payee !== undefined);
+
+
 
       const dateHeader = colNames.date || 'Date';
       const descHeader = colNames.desc || colNames.description || 'Description';
@@ -127,10 +123,7 @@ export class ExportService {
         }
         row[balanceHeader] = t.balance;
 
-        // Add source page for audit trail
-        if (hasSourcePage) {
-          row['Source Page'] = t.source_page || 1;
-        }
+
 
         return row;
       });
