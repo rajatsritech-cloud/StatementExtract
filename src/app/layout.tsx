@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://statementextract.com"),
   title: {
     default: "Statement Extract – AI-Powered Document Processing for Modern Teams",
-    template: "%s | Statement Extractor",
+    template: "%s | Statement Extract",
   },
   description:
     "Extract structured data from any document—bank statements, invoices, contracts, healthcare records and more. Intelligent Document Processing with no templates, no training, just results.",

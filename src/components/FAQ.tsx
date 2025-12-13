@@ -31,7 +31,7 @@ const faqs = [
     points: [
       "Supports digital PDFs, scanned PDFs, and images (JPG, PNG).",
       "Handles invoices, contracts, healthcare records, bank statements, and other financial documents.",
-      "Intelligent Document Processing adapts to new layouts so you don’t have to maintain rigid templates for every format.",
+      "Intelligent Document Processing adapts to new layouts so you don't have to maintain rigid templates for every format.",
     ],
   },
   {

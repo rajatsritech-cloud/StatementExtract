@@ -172,9 +172,9 @@ export const Header = () => {
                         <div className="mb-5 flex items-start justify-between">
                           <div>
                             <p className="text-xs font-semibold tracking-[0.2em] text-[hsl(var(--muted-foreground))] mb-2">SOLUTIONS</p>
-                            <h3 className="text-sm font-semibold text-[hsl(var(--foreground))]">Financial Services</h3>
+                            <h3 className="text-sm font-semibold text-[hsl(var(--foreground))]">Bank Statement Processing</h3>
                             <p className="mt-1 text-xs text-[hsl(var(--muted-foreground))] max-w-md">
-                              Parse bank statements, pay stubs, tax forms, invoices, and more for finance and operations teams.
+                              Convert PDF bank statements to Excel, CSV, QuickBooks, and Xero for accountants and bookkeepers.
                             </p>
                           </div>
                         </div>
@@ -188,73 +188,47 @@ export const Header = () => {
                               <Building className="h-4 w-4" />
                             </div>
                             <div>
-                              <p className="text-sm font-semibold text-[hsl(var(--foreground))]">Banking & Lending</p>
-                              <p className="mt-0.5 text-xs text-[hsl(var(--muted-foreground))]">Bank statements, pay stubs, and tax returns.</p>
+                              <p className="text-sm font-semibold text-[hsl(var(--foreground))]">Bank Statement to Excel/CSV</p>
+                              <p className="mt-0.5 text-xs text-[hsl(var(--muted-foreground))]">Convert any bank PDF to structured data.</p>
                             </div>
                           </div>
 
-                          <div className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-3 opacity-60 cursor-default">
-                            <div className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[hsl(var(--muted))]/50 text-[hsl(var(--muted-foreground))]">
-                              <Shield className="h-4 w-4" />
+                          <div
+                            className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--primary))]/30 bg-[hsl(var(--background))] px-3 py-3 cursor-pointer transition-all duration-200 hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40 hover:shadow-glow"
+                            onClick={() => handleSolutionsItemClick('/convert-bank-statement-to-quickbooks-xero')}
+                          >
+                            <div className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] group-hover:bg-[hsl(var(--primary))] group-hover:text-[hsl(var(--primary-foreground))] transition-colors">
+                              <CreditCard className="h-4 w-4" />
                             </div>
                             <div>
-                              <p className="text-sm font-semibold text-[hsl(var(--foreground))] flex items-center gap-2">
-                                Insurance
-                                <span className="text-[10px] font-medium bg-[hsl(var(--muted))] px-1.5 py-0.5 rounded">Coming Soon</span>
-                              </p>
-                              <p className="mt-0.5 text-xs text-[hsl(var(--muted-foreground))]">Insurance policies, loss runs, and claims.</p>
+                              <p className="text-sm font-semibold text-[hsl(var(--foreground))]">QuickBooks & Xero Import</p>
+                              <p className="mt-0.5 text-xs text-[hsl(var(--muted-foreground))]">Ready-to-import formats for accounting.</p>
                             </div>
                           </div>
 
-                          <div className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-3 opacity-60 cursor-default">
-                            <div className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[hsl(var(--muted))]/50 text-[hsl(var(--muted-foreground))]">
+                          <div
+                            className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-3 cursor-pointer transition-all duration-200 hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40"
+                            onClick={() => handleSolutionsItemClick('/convert-bank-statement-to-csv-excel')}
+                          >
+                            <div className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[hsl(var(--muted))]/50 text-[hsl(var(--muted-foreground))] group-hover:bg-[hsl(var(--primary))]/10 group-hover:text-[hsl(var(--primary))] transition-colors">
                               <FileIcon className="h-4 w-4" />
                             </div>
                             <div>
-                              <p className="text-sm font-semibold text-[hsl(var(--foreground))] flex items-center gap-2">
-                                Real Estate
-                                <span className="text-[10px] font-medium bg-[hsl(var(--muted))] px-1.5 py-0.5 rounded">Coming Soon</span>
-                              </p>
-                              <p className="mt-0.5 text-xs text-[hsl(var(--muted-foreground))]">Rent rolls, closing statements, and more.</p>
+                              <p className="text-sm font-semibold text-[hsl(var(--foreground))]">Small Business Accounting</p>
+                              <p className="mt-0.5 text-xs text-[hsl(var(--muted-foreground))]">For CPAs, CAs, and bookkeepers.</p>
                             </div>
                           </div>
 
-                          <div className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-3 opacity-60 cursor-default">
-                            <div className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[hsl(var(--muted))]/50 text-[hsl(var(--muted-foreground))]">
-                              <Truck className="h-4 w-4" />
+                          <div
+                            className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-3 cursor-pointer transition-all duration-200 hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40"
+                            onClick={() => handleSolutionsItemClick('/convert-bank-statement-to-csv-excel')}
+                          >
+                            <div className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[hsl(var(--muted))]/50 text-[hsl(var(--muted-foreground))] group-hover:bg-[hsl(var(--primary))]/10 group-hover:text-[hsl(var(--primary))] transition-colors">
+                              <Shield className="h-4 w-4" />
                             </div>
                             <div>
-                              <p className="text-sm font-semibold text-[hsl(var(--foreground))] flex items-center gap-2">
-                                Logistics
-                                <span className="text-[10px] font-medium bg-[hsl(var(--muted))] px-1.5 py-0.5 rounded">Coming Soon</span>
-                              </p>
-                              <p className="mt-0.5 text-xs text-[hsl(var(--muted-foreground))]">Bills of lading and invoices.</p>
-                            </div>
-                          </div>
-
-                          <div className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-3 opacity-60 cursor-default">
-                            <div className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[hsl(var(--muted))]/50 text-[hsl(var(--muted-foreground))]">
-                              <Heart className="h-4 w-4" />
-                            </div>
-                            <div>
-                              <p className="text-sm font-semibold text-[hsl(var(--foreground))] flex items-center gap-2">
-                                Healthcare
-                                <span className="text-[10px] font-medium bg-[hsl(var(--muted))] px-1.5 py-0.5 rounded">Coming Soon</span>
-                              </p>
-                              <p className="mt-0.5 text-xs text-[hsl(var(--muted-foreground))]">EOBs, policies, and contracts.</p>
-                            </div>
-                          </div>
-
-                          <div className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-3 opacity-60 cursor-default">
-                            <div className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[hsl(var(--muted))]/50 text-[hsl(var(--muted-foreground))]">
-                              <Settings className="h-4 w-4" />
-                            </div>
-                            <div>
-                              <p className="text-sm font-semibold text-[hsl(var(--foreground))] flex items-center gap-2">
-                                Custom
-                                <span className="text-[10px] font-medium bg-[hsl(var(--muted))] px-1.5 py-0.5 rounded">Coming Soon</span>
-                              </p>
-                              <p className="mt-0.5 text-xs text-[hsl(var(--muted-foreground))]">Work with our team on any document.</p>
+                              <p className="text-sm font-semibold text-[hsl(var(--foreground))]">Financial Auditing</p>
+                              <p className="mt-0.5 text-xs text-[hsl(var(--muted-foreground))]">Transaction verification & reconciliation.</p>
                             </div>
                           </div>
                         </div>

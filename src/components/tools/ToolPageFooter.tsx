@@ -38,10 +38,10 @@ export function ToolPageFooter({ currentTool, relatedTools }: ToolPageFooterProp
                             <ArrowRight className="w-4 h-4" />
                         </Link>
                         <Link
-                            href="/convert-bank-statement-to-quickbooks-tally"
+                            href="/convert-bank-statement-to-quickbooks-xero"
                             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] text-[hsl(var(--foreground))] font-medium hover:border-[hsl(var(--primary))]/50 transition-colors"
                         >
-                            QuickBooks & Tally Export
+                            QuickBooks & Xero Export
                             <ArrowRight className="w-4 h-4" />
                         </Link>
                     </div>

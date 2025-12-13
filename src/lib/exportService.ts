@@ -591,4 +591,75 @@ ${vouchers}
     };
     reader.readAsDataURL(blob);
   }
+
+  /**
+   * Export to Xero CSV format
+   * Creates a CSV file that can be imported directly into Xero via Banking > Bank Statements
+   * Xero expects: Date, Amount, Payee, Description, Reference
+   */
+  static exportToXero(data: ExtractedData, filename: string = 'bank-statement-xero.csv'): void {
+    // Collect ALL transactions
+    let allTransactions: TransactionData[] = [];
+
+    if (data.transactions && data.transactions.length > 0) {
+      allTransactions = [...data.transactions];
+    }
+
+    if (data.sections && data.sections.length > 0) {
+      for (const section of data.sections) {
+        if (section.transactions && section.transactions.length > 0) {
+          allTransactions = [...allTransactions, ...section.transactions];
+        }
+      }
+    }
+
+    // Remove duplicates
+    const seen = new Set<string>();
+    allTransactions = allTransactions.filter(tx => {
+      const key = `${tx.date}|${tx.description}|${tx.moneyIn || 0}|${tx.moneyOut || 0}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+
+    // Xero CSV format headers
+    const headers = ['Date', 'Amount', 'Payee', 'Description', 'Reference'];
+
+    // Format transactions for Xero
+    const rows = allTransactions.map((tx, index) => {
+      // Calculate amount (positive for credits, negative for debits)
+      const amount = tx.moneyIn && tx.moneyIn > 0
+        ? tx.moneyIn
+        : tx.moneyOut && tx.moneyOut > 0
+          ? -tx.moneyOut
+          : (tx.type === 'credit' ? tx.amount : -tx.amount);
+
+      // Payee (use normalized if available)
+      const payee = tx.normalized_payee || tx.description.substring(0, 50);
+
+      // Reference (unique ID)
+      const reference = `TXN${String(index + 1).padStart(5, '0')}`;
+
+      return [
+        tx.date,
+        amount.toFixed(2),
+        `"${payee.replace(/"/g, '""')}"`, // Escape quotes in payee
+        `"${tx.description.replace(/"/g, '""')}"`, // Escape quotes in description
+        reference
+      ].join(',');
+    });
+
+    const csvContent = [headers.join(','), ...rows].join('\n');
+
+    // Create download
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }
 }

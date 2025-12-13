@@ -410,7 +410,7 @@ export const ResultsModal = ({ data, file, isProcessing = false, progress = 0, o
     }
   };
 
-  const handleExportTally = () => {
+  const handleExportXero = () => {
     if (isLoaded && !isSignedIn) {
       if (data) {
         localStorage.setItem("pending_extraction", JSON.stringify({
@@ -421,8 +421,8 @@ export const ResultsModal = ({ data, file, isProcessing = false, progress = 0, o
       }
       setShowLoginPrompt(true);
     } else if (data) {
-      ExportService.exportToTally(data);
-      toast.success("Tally file (.xml) downloaded!");
+      ExportService.exportToXero(data);
+      toast.success("Xero file (.csv) downloaded!");
     }
   };
 
@@ -589,17 +589,17 @@ export const ResultsModal = ({ data, file, isProcessing = false, progress = 0, o
                       QBO
                       {!isPro && <Crown className="h-3 w-3 ml-1 text-amber-500" />}
                     </Button>
-                    {/* Tally - Pro Feature */}
+                    {/* Xero - Pro Feature */}
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={isPro ? handleExportTally : () => setShowUpgradePrompt(true)}
+                      onClick={isPro ? handleExportXero : () => setShowUpgradePrompt(true)}
                       disabled={!isApproved}
-                      className={`h-8 text-xs px-3 ${isPro ? 'border-purple-500/50 text-purple-600 hover:bg-purple-500/10' : 'border-amber-500/50 text-amber-600 hover:bg-amber-500/10'}`}
-                      title={isPro ? "Export to Tally" : "Pro feature - Upgrade to unlock"}
+                      className={`h-8 text-xs px-3 ${isPro ? 'border-blue-500/50 text-blue-600 hover:bg-blue-500/10' : 'border-amber-500/50 text-amber-600 hover:bg-amber-500/10'}`}
+                      title={isPro ? "Export to Xero" : "Pro feature - Upgrade to unlock"}
                     >
                       {isPro ? <Download className="h-3.5 w-3.5 mr-1.5" /> : <Lock className="h-3.5 w-3.5 mr-1.5" />}
-                      Tally
+                      Xero
                       {!isPro && <Crown className="h-3 w-3 ml-1 text-amber-500" />}
                     </Button>
                   </div>
@@ -715,10 +715,10 @@ export const ResultsModal = ({ data, file, isProcessing = false, progress = 0, o
                       Pro Feature
                     </h3>
                     <p className="text-sm text-[hsl(var(--muted-foreground))] mb-4">
-                      QuickBooks (.qbo) and Tally (.xml) exports are available on <strong>Pro</strong> and <strong>Enterprise</strong> plans.
+                      QuickBooks (.qbo) and Xero (.csv) exports are available on <strong>Pro</strong> and <strong>Enterprise</strong> plans.
                     </p>
                     <ul className="text-xs text-left text-[hsl(var(--muted-foreground))] mb-6 space-y-1.5">
-                      <li className="flex items-center gap-2"><CheckCircle2 className="h-3.5 w-3.5 text-green-500" /> QuickBooks & Tally exports</li>
+                      <li className="flex items-center gap-2"><CheckCircle2 className="h-3.5 w-3.5 text-green-500" /> QuickBooks & Xero exports</li>
                       <li className="flex items-center gap-2"><CheckCircle2 className="h-3.5 w-3.5 text-green-500" /> Higher page limits (250+/month)</li>
                       <li className="flex items-center gap-2"><CheckCircle2 className="h-3.5 w-3.5 text-green-500" /> Priority processing</li>
                       <li className="flex items-center gap-2"><CheckCircle2 className="h-3.5 w-3.5 text-green-500" /> Detailed validation reports</li>
