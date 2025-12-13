@@ -33,14 +33,53 @@ export const metadata: Metadata = {
     template: "%s | Statement Extractor",
   },
   description:
-    "Extract structured data from any document—bank statements, invoices, contracts, healthcare records and more. Intelligent Document Processing with no templates, no training, just results",
+    "Extract structured data from any document—bank statements, invoices, contracts, healthcare records and more. Intelligent Document Processing with no templates, no training, just results.",
+  keywords: [
+    "document processing",
+    "bank statement converter",
+    "PDF to Excel",
+    "PDF to CSV",
+    "invoice extraction",
+    "contract analysis",
+    "OCR software",
+    "intelligent document processing",
+    "financial data extraction",
+    "automated data entry",
+    "document automation",
+    "AI document processing",
+    "bank statement to excel",
+    "convert PDF bank statement"
+  ],
+  authors: [{ name: "Statement Extract" }],
+  creator: "Statement Extract",
+  publisher: "Statement Extract",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   openGraph: {
     title: "Statement Extract – Intelligent Document Processing & Extraction",
     description:
       "Statement Extract is an AI-powered Intelligent Document Processing platform that converts any document—bank statements, invoices, contracts, healthcare records, forms, and more—into structured data instantly. No templates, no manual training, and no setup required. Built for scale, with secure APIs, fast processing, and industry-leading accuracy.",
     type: "website",
-    siteName: "Statement Extractor",
-    images: ["/assets/StatementExtract_Workflow_img.png"],
+    locale: "en_US",
+    siteName: "Statement Extract",
+    url: "https://statementextract.com",
+    images: [
+      {
+        url: "/assets/StatementExtract_Workflow_img.png",
+        width: 1200,
+        height: 630,
+        alt: "Statement Extract - AI Document Processing Platform",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
@@ -48,6 +87,7 @@ export const metadata: Metadata = {
     description:
       "Extract structured data from any document—bank statements, invoices, contracts, healthcare records and more. Intelligent Document Processing with no templates, no training, just results.",
     images: ["/assets/StatementExtract_Workflow_img.png"],
+    creator: "@statementextract",
   },
   appleWebApp: {
     title: "StatementExtract",
@@ -67,9 +107,16 @@ export const metadata: Metadata = {
     ],
   },
   manifest: "/site.webmanifest",
-
+  category: "technology",
   alternates: {
     canonical: "/",
+    languages: {
+      "en-US": "https://statementextract.com",
+      "en-GB": "https://statementextract.com", // UK - High CPC
+      "en-CA": "https://statementextract.com", // Canada - High CPC
+      "en-AU": "https://statementextract.com", // Australia - High CPC
+      "x-default": "https://statementextract.com",
+    },
   },
 };
 

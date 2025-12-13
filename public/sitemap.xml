@@ -116,4 +116,66 @@
   <priority>0.3</priority>
 </url>
 
+<!-- Free Developer Tools Hub -->
+<url>
+  <loc>https://statementextract.com/convert</loc>
+  <lastmod>2025-12-13</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.8</priority>
+</url>
+
+<!-- Image Compressor - High-CPC Long-tail Keywords -->
+<url>
+  <loc>https://statementextract.com/convert/image-compressor</loc>
+  <lastmod>2025-12-13</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.8</priority>
+</url>
+
+<!-- JSON to TOON Converter -->
+<url>
+  <loc>https://statementextract.com/convert/json-to-toon</loc>
+  <lastmod>2025-12-13</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.7</priority>
+</url>
+
+<!-- Batch Image Converter -->
+<url>
+  <loc>https://statementextract.com/convert/batch-converter</loc>
+  <lastmod>2025-12-13</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.7</priority>
+</url>
+
+<!-- HEIC to JPG -->
+<url>
+  <loc>https://statementextract.com/convert/batch-converter/heic-to-jpg</loc>
+  <lastmod>2025-12-13</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.7</priority>
+</url>
+
+<!-- AVIF Converters -->
+<url>
+  <loc>https://statementextract.com/convert/avif-converter/image-to-avif</loc>
+  <lastmod>2025-12-13</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.7</priority>
+</url>
+
+<url>
+  <loc>https://statementextract.com/convert/avif-converter/avif-to-png</loc>
+  <lastmod>2025-12-13</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.7</priority>
+</url>
+
+<url>
+  <loc>https://statementextract.com/convert/avif-converter/avif-to-webp</loc>
+  <lastmod>2025-12-13</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.7</priority>
+</url>
+
 </urlset>
