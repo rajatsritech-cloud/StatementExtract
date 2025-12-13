@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { UploadArea } from "@/components/bank-statement/UploadArea";
 import { FileText, Upload } from "lucide-react";
 import { ResultsModal } from "@/components/bank-statement/ResultsModal";
@@ -19,6 +19,7 @@ export const BankStatementConverter = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploadKey, setUploadKey] = useState(0);
   const { isSignedIn, isLoaded, getToken } = useAuth();
+  const processingRef = useRef(false);
 
   const handleFileUpload = useCallback(async (file: File) => {
     console.log('🚀 Starting file upload...');
@@ -54,6 +55,11 @@ export const BankStatementConverter = () => {
     }
 
     console.log('✅ File validation passed');
+
+    // Prevent double-submission (React Strict Mode / Fast clicks)
+    if (processingRef.current) return;
+    processingRef.current = true;
+
     setIsProcessing(true);
     setShowResults(true); // Show modal immediately
     setProcessingProgress(0);
@@ -121,7 +127,9 @@ export const BankStatementConverter = () => {
         console.log('📊 Setting extracted data...');
         setExtractedData(extracted);
         console.log('⏹️ Stopping processing...');
+        console.log('⏹️ Stopping processing...');
         setIsProcessing(false);
+        processingRef.current = false;
         console.log('👁️ Showing results modal...');
         setShowResults(true);
         console.log('🎉 Success toast...');
@@ -131,6 +139,7 @@ export const BankStatementConverter = () => {
     } catch (error) {
       console.error('❌ Processing error:', error);
       setIsProcessing(false);
+      processingRef.current = false;
       setSelectedFile(null); // Clear the selected file on error
 
       // Don't show any error message for OCR authentication - it's handled by the modal

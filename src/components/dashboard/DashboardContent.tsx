@@ -62,9 +62,12 @@ export const DashboardContent = () => {
     // Concurrency limit for parallel processing
     const MAX_CONCURRENT = 3;
     const activeCountRef = useRef<number>(0);
+    const processingIdsRef = useRef<Set<string>>(new Set());
 
     // Process a single document
     const processDocument = useCallback(async (docId: string, file: File) => {
+        if (processingIdsRef.current.has(docId)) return;
+        processingIdsRef.current.add(docId);
         activeCountRef.current++;
 
         try {

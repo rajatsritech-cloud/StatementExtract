@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import { X, Download, Copy, Eye, EyeOff, TrendingUp, TrendingDown, DollarSign, User, Mail, Building, CreditCard, Calendar, Wallet, ArrowUpCircle, ArrowDownCircle, FileText, Search, ArrowUpDown, Sparkles, CheckCircle2, Lock, Crown } from "lucide-react";
+import { X, Download, Copy, Eye, EyeOff, TrendingUp, TrendingDown, DollarSign, User, Mail, Building, CreditCard, Calendar, Wallet, ArrowUpCircle, ArrowDownCircle, FileText, Search, ArrowUpDown, Sparkles, CheckCircle2, Lock, Crown, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 // Assuming ExportService and ExtractedData are correctly defined elsewhere
@@ -134,6 +134,8 @@ interface DynamicTableProps {
 }
 
 const DynamicTable = ({ transactions, currency = '$', columnNames, title = "Transactions" }: DynamicTableProps) => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 10;
   const [searchTerm, setSearchTerm] = useState("");
   const [sortConfig, setSortConfig] = useState<{ key: string; direction: 'asc' | 'desc' } | null>(null);
 
@@ -197,6 +199,18 @@ const DynamicTable = ({ transactions, currency = '$', columnNames, title = "Tran
     return { headers, rows };
   }, [transactions, searchTerm, sortConfig, currency, columnNames]);
 
+  // Reset to first page when search or sort changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, sortConfig]);
+
+  // Pagination Logic
+  const totalPages = Math.ceil(rows.length / ITEMS_PER_PAGE);
+  const paginatedRows = rows.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
+
+  const goToNextPage = () => setCurrentPage(p => Math.min(totalPages, p + 1));
+  const goToPrevPage = () => setCurrentPage(p => Math.max(1, p - 1));
+
   const requestSort = (headerIndex: number) => {
     const header = headers[headerIndex];
     let direction: 'asc' | 'desc' = 'asc';
@@ -253,8 +267,8 @@ const DynamicTable = ({ transactions, currency = '$', columnNames, title = "Tran
               </tr>
             </thead>
             <tbody data-clarity-mask="true">
-              {rows.map((row, rowIndex) => (
-                <tr key={rowIndex} className="hover:bg-[hsl(var(--muted))]/30 transition-colors border-b border-[hsl(var(--border))] last:border-0">
+              {paginatedRows.map((row, rowIndex) => (
+                <tr key={rowIndex} className="hover:bg-[hsl(var(--muted))]/30 transition-colors border-b border-[hsl(var(--border))] last:border-0 text-zinc-600 dark:text-zinc-300">
                   {row.map((cell, cellIndex) => (
                     <td key={cellIndex} className={`px-4 py-3 ${getCellStyle(headers[cellIndex], cell)}`}>
                       {cell}
@@ -266,8 +280,25 @@ const DynamicTable = ({ transactions, currency = '$', columnNames, title = "Tran
           </table>
         </div>
       </div>
-      <div className="text-xs text-[hsl(var(--muted-foreground))] text-right">
-        Showing {rows.length} transactions
+
+      {/* Pagination Controls */}
+      <div className="flex items-center justify-between text-xs text-[hsl(var(--muted-foreground))]">
+        <div>
+          Showing {paginatedRows.length > 0 ? (currentPage - 1) * ITEMS_PER_PAGE + 1 : 0} to {Math.min(currentPage * ITEMS_PER_PAGE, rows.length)} of {rows.length} transactions
+        </div>
+        {totalPages > 1 && (
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" onClick={goToPrevPage} disabled={currentPage === 1} className="h-7 w-7 p-0">
+              {"<"}
+            </Button>
+            <span>
+              Page {currentPage} of {totalPages}
+            </span>
+            <Button variant="outline" size="sm" onClick={goToNextPage} disabled={currentPage === totalPages} className="h-7 w-7 p-0">
+              {">"}
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -584,28 +615,46 @@ export const ResultsModal = ({ data, file, isProcessing = false, progress = 0, o
                   </div>
 
                   {/* Sectioned Transaction Display */}
-                  {data.sections && data.sections.length > 0 ? (
-                    // Multi-section display - Clean / Flat Style
-                    <div className="space-y-8">
-                      {data.sections.map((section, idx) => (
-                        <div key={idx} className="space-y-2">
-                          <DynamicTable
-                            transactions={section.transactions}
-                            currency={data.userInfo.currency}
-                            columnNames={data.column_names}
-                            title={section.name}
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    // Fallback: Single table (backward compatible)
-                    data.transactions && (
+                  {/* Single Unified Table (Smart Reconciled) */}
+                  {data.transactions && data.transactions.length > 0 && (
+                    <div className="mb-8">
                       <DynamicTable
                         transactions={data.transactions}
                         currency={data.userInfo.currency}
                         columnNames={data.column_names}
+                        title="Statement Activity (Reconciled)"
                       />
+                    </div>
+                  )}
+
+                  {/* detailed Sections (Collapsible) */}
+                  {data.sections && data.sections.length > 0 && (
+                    // Only show sections if we have more than one, or if the single section differs from the main table
+                    !(data.sections.length === 1 && data.transactions && data.sections[0].transactions.length === data.transactions.length) && (
+                      <div className="space-y-4 border-t border-[hsl(var(--border))] pt-6 mt-4">
+                        <details className="group" open>
+                          <summary className="flex items-center gap-2 cursor-pointer select-none text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] transition-colors w-full">
+                            <div className="flex items-center gap-2 flex-1">
+                              <FileText className="h-4 w-4" />
+                              <h4 className="text-sm font-semibold uppercase tracking-wider">Review Data by Source Section</h4>
+                            </div>
+                            <ChevronDown className="h-4 w-4 transition-transform group-open:rotate-180" />
+                          </summary>
+
+                          <div className="space-y-8 mt-6 pl-2 border-l-2 border-[hsl(var(--muted))] animate-in fade-in slide-in-from-top-2 duration-200">
+                            {data.sections.map((section, idx) => (
+                              <div key={idx} className="space-y-2">
+                                <DynamicTable
+                                  transactions={section.transactions}
+                                  currency={data.userInfo.currency}
+                                  columnNames={data.column_names}
+                                  title={section.name}
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        </details>
+                      </div>
                     )
                   )}
 
