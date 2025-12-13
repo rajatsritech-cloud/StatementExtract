@@ -58,14 +58,8 @@ export const Hero = () => {
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row animate-fade-in delay-200 w-full sm:w-auto">
             <Link href="/convert-bank-statement-to-csv-excel" passHref className="w-full sm:w-auto">
               <Button size="lg" className="group gap-2 h-12 px-8 text-base shadow-glow w-full sm:w-auto">
-                Start Free Trial
+                Get Started
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </Button>
-            </Link>
-            <Link href="#how-it-works" passHref className="w-full sm:w-auto">
-              <Button size="lg" variant="outline" className="gap-2 h-12 px-8 text-base w-full sm:w-auto bg-[hsl(var(--background))]/50 backdrop-blur-sm hover:bg-[hsl(var(--muted))]">
-                <Zap className="h-4 w-4" />
-                See How It Works
               </Button>
             </Link>
           </div>
