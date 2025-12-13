@@ -148,9 +148,9 @@ const DynamicTable = ({ transactions, currency = '$', columnNames, title = "Tran
 
     // Filter rows based on search term
     const filtered = transactions.filter(t =>
-      t.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      t.date.includes(searchTerm) ||
-      t.amount.toString().includes(searchTerm)
+      (t.description || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (t.date || '').includes(searchTerm) ||
+      String(t.amount || '').includes(searchTerm)
     );
 
     // Sort rows
