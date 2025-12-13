@@ -151,36 +151,51 @@ export const BankStatementSEOContent = () => {
         <section className="py-12 px-6 md:py-20 bg-[hsl(var(--background))]">
             <div className="mx-auto max-w-4xl prose prose-lg dark:prose-invert">
                 <h2 className="text-3xl font-bold text-[hsl(var(--foreground))] mb-6">
-                    The Ultimate Guide to Converting Bank Statements to Excel
+                    The Ultimate Bank Statement to Excel Converter
                 </h2>
                 <p className="text-[hsl(var(--muted-foreground))] mb-6">
-                    Converting PDF bank statements to Excel or CSV is a critical task for accountants, lenders, and business owners.
-                    Manual data entry is slow and error-prone, while generic extraction tools often fail to recognize the complex table structures found in financial documents.
+                    Converting <strong>PDF bank statements to Excel</strong> or CSV is a critical task for accountants, lenders, and business owners.
+                    Manual data entry is slow, error-prone, and expensive. Our <strong>automated bank statement converter</strong> solves this by using advanced
+                    <strong>Financial OCR</strong> technology to extract every transaction with 100% accuracy.
                 </p>
 
                 <h3 className="text-2xl font-semibold text-[hsl(var(--foreground))] mb-4">
-                    Why Automated Extraction is Better
+                    Why Automated Extraction is Better than Manual Entry
                 </h3>
                 <p className="text-[hsl(var(--muted-foreground))] mb-6">
-                    Our specialized AI engine is trained on millions of bank statements from institutions like <strong>Chase, Wells Fargo, Bank of America, and HSBC</strong>.
-                    Unlike standard PDF converters, we understand the difference between a transaction date, a description, and a running balance.
+                    Our specialized AI engine is trained on millions of bank statements from major institutions like <strong>Chase, Wells Fargo, Bank of America, and HSBC</strong>.
+                    Unlike standard PDF converters, we understand the financial context:
                 </p>
-
-                <h3 className="text-2xl font-semibold text-[hsl(var(--foreground))] mb-4">
-                    Supported Formats
-                </h3>
                 <ul className="list-disc pl-6 text-[hsl(var(--muted-foreground))] mb-6 space-y-2">
-                    <li><strong>Digital PDFs:</strong> Statements downloaded directly from online banking.</li>
-                    <li><strong>Scanned Images:</strong> Paper statements scanned as JPG, PNG, or flattened PDF.</li>
-                    <li><strong>Multi-Page Documents:</strong> We automatically stitch together transactions that span multiple pages.</li>
+                    <li><strong>Smart Column Detection:</strong> We distinguish between "Description", "Reference Number", and "Transaction Date" columns automatically.</li>
+                    <li><strong>Credit/Debit Separation:</strong> We precisely identify money-in and money-out flows, even if they share a single "Amount" column in the PDF.</li>
+                    <li><strong>Running Balance Validation:</strong> Our algorithm mathematically verifies that <em>Opening Balance + Credits - Debits = Closing Balance</em>, ensuring zero errors.</li>
                 </ul>
 
                 <h3 className="text-2xl font-semibold text-[hsl(var(--foreground))] mb-4">
-                    Security & Privacy
+                    Convert Scanned PDFs and Images
+                </h3>
+                <p className="text-[hsl(var(--muted-foreground))] mb-6">
+                    Have paper statements? No problem. Our tool supports <strong>scanned PDF bank statements</strong> and image formats (JPG, PNG).
+                    Our Optical Character Recognition (OCR) engine flattens, deskews, and digitizes paper documents into editable Excel spreadsheets in seconds.
+                </p>
+
+                <h3 className="text-2xl font-semibold text-[hsl(var(--foreground))] mb-4">
+                    Supported Export Formats
+                </h3>
+                <ul className="list-disc pl-6 text-[hsl(var(--muted-foreground))] mb-6 space-y-2">
+                    <li><strong>Excel (.XLSX):</strong> Perfect for financial modeling, analysis, and custom reporting.</li>
+                    <li><strong>CSV (.CSV):</strong> Ideal for importing into <strong>Xero, Sage, Zoho Books</strong>, or custom ERP systems.</li>
+                    <li><strong>JSON (API):</strong> For developers building automated fintech pipelines or lending platforms.</li>
+                </ul>
+
+                <h3 className="text-2xl font-semibold text-[hsl(var(--foreground))] mb-4">
+                    Enterprise-Grade Security & Privacy
                 </h3>
                 <p className="text-[hsl(var(--muted-foreground))]">
-                    We treat your financial data with the highest level of security. All uploads are processed via encrypted channels
-                    and are automatically deleted from our processing servers after conversion. We are trusted by financial professionals worldwide.
+                    We treat your financial data with the highest level of security. All uploads are processed via <strong>256-bit SSL encryption</strong>.
+                    We adhere to strict data privacy policies: your files are <strong>automatically deleted</strong> from our processing servers immediately after conversion.
+                    Trusted by CPAs, mortgage brokers, and financial professionals worldwide.
                 </p>
             </div>
         </section>

@@ -10,7 +10,15 @@ import { ExtractedData } from "@/lib/pdfProcessor";
 import { ExportService } from "@/lib/exportService";
 import { useAuth } from "@clerk/clerk-react";
 
-export const BankStatementConverter = () => {
+interface BankStatementConverterProps {
+  titleSuffix?: React.ReactNode;
+  description?: string;
+}
+
+export const BankStatementConverter = ({
+  titleSuffix = <span className="bg-gradient-primary bg-clip-text text-transparent"> Excel or CSV</span>,
+  description = "World's most trusted Intelligent Document Processing bank statement converter, working with thousands of banks globally. Automatically extract transactions, balances, and references into clean Excel or CSV files with industry-leading accuracy."
+}: BankStatementConverterProps) => {
   // Trigger HMR update
   const [isProcessing, setIsProcessing] = useState(false);
   const [extractedData, setExtractedData] = useState<ExtractedData | null>(null);
@@ -204,12 +212,11 @@ export const BankStatementConverter = () => {
             <div className="text-left">
               <h1 className="mb-6 text-4xl font-bold tracking-tight text-[hsl(var(--foreground))] md:text-5xl lg:text-6xl animate-slide-up">
                 Accurately Convert PDF Bank Statements to
-                <span className="bg-gradient-primary bg-clip-text text-transparent"> Excel or CSV</span>
+                {titleSuffix}
               </h1>
 
               <p className="mb-8 max-w-xl text-lg text-[hsl(var(--muted-foreground))] animate-fade-in">
-                World's most trusted Intelligent Document Processing bank statement converter, working with thousands of banks globally.
-                Automatically extract transactions, balances, and references into clean Excel or CSV files with industry-leading accuracy.
+                {description}
               </p>
 
               {/* Feature Badges */}

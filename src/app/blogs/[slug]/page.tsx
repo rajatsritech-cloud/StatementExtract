@@ -32,6 +32,11 @@ export async function generateMetadata({ params }: PageParams): Promise<Metadata
     };
   }
 
+  const siteUrl = "https://statementextract.com";
+  const ogImage = post.coverImage
+    ? (post.coverImage.startsWith("http") ? post.coverImage : `${siteUrl}${post.coverImage}`)
+    : `${siteUrl}/assets/StatementExtract_Workflow_img.png`;
+
   return {
     title: `${post.title} | Statement Extract Blog`,
     description: post.summary || undefined,
@@ -40,23 +45,19 @@ export async function generateMetadata({ params }: PageParams): Promise<Metadata
       description: post.summary || undefined,
       type: "article",
       siteName: "Statement Extractor",
-      url: `/blogs/${slug}`,
+      url: `${siteUrl}/blogs/${slug}`,
       publishedTime: post.date || undefined,
       tags: post.tags && post.tags.length > 0 ? post.tags : undefined,
-      images: post.coverImage
-        ? [post.coverImage]
-        : ["/assets/StatementExtract_Workflow_img.png"],
+      images: [ogImage],
     },
     twitter: {
       card: "summary_large_image",
       title: post.title,
       description: post.summary || undefined,
-      images: post.coverImage
-        ? [post.coverImage]
-        : ["/assets/StatementExtract_Workflow_img.png"],
+      images: [ogImage],
     },
     alternates: {
-      canonical: `/blogs/${slug}`,
+      canonical: `${siteUrl}/blogs/${slug}`,
     },
   };
 }
