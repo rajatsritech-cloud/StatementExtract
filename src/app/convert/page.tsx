@@ -66,19 +66,53 @@ const tools = [
 export default function ConvertHubPage() {
     return (
         <main className="min-h-screen bg-[hsl(var(--background))]">
-            {/* Hero */}
-            <section className="py-16 md:py-24 px-6 text-center border-b border-[hsl(var(--border))]">
-                <h1 className="text-4xl md:text-5xl font-bold text-[hsl(var(--foreground))] mb-4">
-                    Free Online Image Tools
-                </h1>
-                <p className="text-lg text-[hsl(var(--muted-foreground))] max-w-2xl mx-auto">
-                    Convert and compress images instantly. No signup, no limits, 100% private — everything runs in your browser.
-                </p>
+            {/* Hero with Grid Background */}
+            <section className="relative py-16 md:py-24 px-6 text-center border-b border-[hsl(var(--border))] overflow-hidden">
+                {/* Grid SVG Background */}
+                <div className="absolute inset-0 pointer-events-none">
+                    <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <pattern id="grid-pattern" width="40" height="40" patternUnits="userSpaceOnUse">
+                                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" strokeWidth="1" className="text-[hsl(var(--border))]" strokeOpacity="0.5" />
+                            </pattern>
+                        </defs>
+                        <rect width="100%" height="100%" fill="url(#grid-pattern)" />
+                    </svg>
+                    {/* Gradient fade at bottom */}
+                    <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[hsl(var(--background))] to-transparent" />
+                    {/* Decorative floating blocks */}
+                    <div className="absolute top-12 left-[10%] w-16 h-16 rounded-xl bg-[hsl(var(--primary))]/5 border border-[hsl(var(--primary))]/10 rotate-12" />
+                    <div className="absolute top-24 right-[15%] w-12 h-12 rounded-lg bg-[hsl(var(--primary))]/8 border border-[hsl(var(--primary))]/15 -rotate-6" />
+                    <div className="absolute bottom-16 left-[20%] w-10 h-10 rounded-lg bg-[hsl(var(--primary))]/6 border border-[hsl(var(--primary))]/10 rotate-45" />
+                    <div className="absolute bottom-20 right-[25%] w-14 h-14 rounded-xl bg-[hsl(var(--primary))]/5 border border-[hsl(var(--primary))]/8 -rotate-12" />
+                </div>
+
+                {/* Content */}
+                <div className="relative z-10">
+                    <h1 className="text-4xl md:text-5xl font-bold text-[hsl(var(--foreground))] mb-4">
+                        Free Online Image Tools
+                    </h1>
+                    <p className="text-lg text-[hsl(var(--muted-foreground))] max-w-2xl mx-auto">
+                        Convert and compress images instantly. No signup, no limits, 100% private — everything runs in your browser.
+                    </p>
+                </div>
             </section>
 
-            {/* Tools Grid */}
-            <section className="py-12 md:py-16 px-6">
-                <div className="max-w-5xl mx-auto">
+            {/* Tools Grid with subtle background */}
+            <section className="relative py-12 md:py-16 px-6">
+                {/* Subtle dot pattern */}
+                <div className="absolute inset-0 pointer-events-none opacity-30">
+                    <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <pattern id="dots-pattern" width="24" height="24" patternUnits="userSpaceOnUse">
+                                <circle cx="2" cy="2" r="1" fill="currentColor" className="text-[hsl(var(--muted-foreground))]" />
+                            </pattern>
+                        </defs>
+                        <rect width="100%" height="100%" fill="url(#dots-pattern)" />
+                    </svg>
+                </div>
+
+                <div className="relative z-10 max-w-5xl mx-auto">
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {tools.map((tool, i) => (
                             <Link
@@ -113,8 +147,20 @@ export default function ConvertHubPage() {
             </section>
 
             {/* Features */}
-            <section className="py-12 md:py-16 px-6 bg-[hsl(var(--muted))]/30 border-y border-[hsl(var(--border))]">
-                <div className="max-w-5xl mx-auto">
+            <section className="relative py-12 md:py-16 px-6 bg-[hsl(var(--muted))]/30 border-y border-[hsl(var(--border))]">
+                {/* Grid background */}
+                <div className="absolute inset-0 pointer-events-none opacity-40">
+                    <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <pattern id="features-grid" width="60" height="60" patternUnits="userSpaceOnUse">
+                                <path d="M 60 0 L 0 0 0 60" fill="none" stroke="currentColor" strokeWidth="1" className="text-[hsl(var(--border))]" />
+                            </pattern>
+                        </defs>
+                        <rect width="100%" height="100%" fill="url(#features-grid)" />
+                    </svg>
+                </div>
+
+                <div className="relative z-10 max-w-5xl mx-auto">
                     <h2 className="text-2xl md:text-3xl font-bold text-center text-[hsl(var(--foreground))] mb-10">
                         Why Choose Our Tools?
                     </h2>

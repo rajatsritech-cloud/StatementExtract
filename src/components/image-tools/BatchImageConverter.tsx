@@ -16,6 +16,8 @@ interface BatchImageConverterProps {
     description: string;
 }
 
+const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20MB limit
+
 export const BatchImageConverter = ({ targetFormat, title, description }: BatchImageConverterProps) => {
     const [files, setFiles] = useState<File[]>([]);
     const [convertedFiles, setConvertedFiles] = useState<ConvertedFile[]>([]);
@@ -35,6 +37,7 @@ export const BatchImageConverter = ({ targetFormat, title, description }: BatchI
         setError(null);
         setConvertedFiles([]);
         setProgress(0);
+
         // Filter for image files
         const imageFiles = selectedFiles.filter(f =>
             f.type.startsWith('image/') ||
@@ -42,7 +45,16 @@ export const BatchImageConverter = ({ targetFormat, title, description }: BatchI
             f.name.toLowerCase().endsWith('.heif') ||
             f.name.toLowerCase().endsWith('.avif')
         );
-        setFiles(imageFiles);
+
+        // Check file size limit (20MB per file)
+        const oversizedFiles = imageFiles.filter(f => f.size > MAX_FILE_SIZE);
+        if (oversizedFiles.length > 0) {
+            setError(`${oversizedFiles.length} file(s) exceed the 20MB limit. Please remove oversized files.`);
+        }
+
+        // Only include files under 20MB
+        const validFiles = imageFiles.filter(f => f.size <= MAX_FILE_SIZE);
+        setFiles(validFiles);
     };
 
     const handleDrop = useCallback((e: React.DragEvent<HTMLDivElement>) => {

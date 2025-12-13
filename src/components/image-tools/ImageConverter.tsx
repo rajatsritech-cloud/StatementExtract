@@ -10,6 +10,8 @@ interface ImageConverterProps {
     description: string;
 }
 
+const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20MB limit
+
 export const ImageConverter = ({ targetFormat, sourceFormat = "AVIF", title, description }: ImageConverterProps) => {
     const [file, setFile] = useState<File | null>(null);
     const [preview, setPreview] = useState<string | null>(null);
@@ -30,6 +32,13 @@ export const ImageConverter = ({ targetFormat, sourceFormat = "AVIF", title, des
     const processFile = (selectedFile: File) => {
         setError(null);
         setConvertedUrl(null);
+
+        // Check file size limit (20MB)
+        if (selectedFile.size > MAX_FILE_SIZE) {
+            setError(`File too large. Maximum size is 20MB. Your file is ${(selectedFile.size / (1024 * 1024)).toFixed(1)}MB.`);
+            return;
+        }
+
         setFile(selectedFile);
         setOriginalSize(selectedFile.size);
 

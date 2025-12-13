@@ -13,6 +13,7 @@ import {
   Settings,
   CreditCard,
   Zap,
+  HelpCircle,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
@@ -263,14 +264,15 @@ export const Header = () => {
                 </div>
               )}
             </div>
-            <a href="#use-cases" className="text-sm font-medium text-[hsl(var(--foreground))] transition-colors hover:text-[hsl(var(--primary))]">
-              Use Cases
-            </a>
             <Link href="/blogs" className="text-sm font-medium text-[hsl(var(--foreground))] transition-colors hover:text-[hsl(var(--primary))]">
               Blogs
             </Link>
+
             <a href="#pricing" className="text-sm font-medium text-[hsl(var(--foreground))] transition-colors hover:text-[hsl(var(--primary))]">
               Pricing
+            </a>
+            <a href="/#faq" className="text-sm font-medium text-[hsl(var(--foreground))] transition-colors hover:text-[hsl(var(--primary))]">
+              FAQ
             </a>
           </nav>
 
@@ -392,17 +394,6 @@ export const Header = () => {
                 )}
               </div>
 
-              <a
-                href="#use-cases"
-                className="flex w-full items-center justify-between px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))]"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                <span className="flex items-center gap-3">
-                  <Zap className="h-4 w-4 text-[hsl(var(--primary))]" />
-                  <span>Use Cases</span>
-                </span>
-              </a>
-
               <Link
                 href="/blogs"
                 className="flex w-full items-center justify-between px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))]"
@@ -413,6 +404,17 @@ export const Header = () => {
                   <span>Blogs</span>
                 </span>
               </Link>
+
+              <a
+                href="/#faq"
+                className="flex w-full items-center justify-between px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))]"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                <span className="flex items-center gap-3">
+                  <HelpCircle className="h-4 w-4 text-[hsl(var(--primary))]" />
+                  <span>FAQ</span>
+                </span>
+              </a>
 
               <a
                 href="#pricing"

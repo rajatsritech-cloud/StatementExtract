@@ -131,7 +131,7 @@ export const FAQ = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="relative bg-[hsl(var(--background))] py-12 px-6 md:py-20 border-y border-[hsl(var(--border))]">
+    <section id="faq" className="relative bg-[hsl(var(--background))] py-12 px-6 md:py-20 border-y border-[hsl(var(--border))]">
       <div className="absolute inset-0 bg-grid-pattern-3 bg-size-40" />
 
       <div className="relative mx-auto max-w-7xl z-10">

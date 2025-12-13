@@ -9,6 +9,7 @@ interface ImageCompressorProps {
 }
 
 const TARGET_SIZES = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20MB limit
 
 export const ImageCompressor = ({ title, description }: ImageCompressorProps) => {
     const [file, setFile] = useState<File | null>(null);
@@ -31,6 +32,13 @@ export const ImageCompressor = ({ title, description }: ImageCompressorProps) =>
     const processFile = (selectedFile: File) => {
         setError(null);
         setCompressedUrl(null);
+
+        // Check file size limit (20MB)
+        if (selectedFile.size > MAX_FILE_SIZE) {
+            setError(`File too large. Maximum size is 20MB. Your file is ${(selectedFile.size / (1024 * 1024)).toFixed(1)}MB.`);
+            return;
+        }
+
         setFile(selectedFile);
         setOriginalSize(selectedFile.size);
 
@@ -188,7 +196,7 @@ export const ImageCompressor = ({ title, description }: ImageCompressorProps) =>
                 <label className="block text-sm font-medium text-[hsl(var(--foreground))] mb-3 text-center">
                     Target File Size
                 </label>
-                <div className="flex flex-wrap justify-center gap-2">
+                <div className="flex flex-wrap justify-center gap-2 mb-4">
                     {TARGET_SIZES.map((size) => (
                         <button
                             key={size}
@@ -201,6 +209,30 @@ export const ImageCompressor = ({ title, description }: ImageCompressorProps) =>
                             {size}KB
                         </button>
                     ))}
+                </div>
+
+                {/* Custom Size Input */}
+                <div className="flex items-center justify-center gap-3">
+                    <span className="text-sm text-[hsl(var(--muted-foreground))]">Or enter custom:</span>
+                    <div className="relative">
+                        <input
+                            type="number"
+                            min="1"
+                            max="10000"
+                            value={targetSize}
+                            onChange={(e) => {
+                                const val = parseInt(e.target.value);
+                                if (!isNaN(val) && val > 0 && val <= 10000) {
+                                    setTargetSize(val);
+                                }
+                            }}
+                            className="w-24 px-3 py-2 pr-8 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] text-[hsl(var(--foreground))] text-center font-medium focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))] focus:border-transparent"
+                            placeholder="Size"
+                        />
+                        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-[hsl(var(--muted-foreground))] pointer-events-none">
+                            KB
+                        </span>
+                    </div>
                 </div>
             </div>
 

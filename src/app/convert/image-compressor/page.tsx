@@ -4,9 +4,9 @@ import { ToolPageFooter } from "@/components/tools/ToolPageFooter";
 import { Zap, Shield, Globe, FileImage, CheckCircle } from "lucide-react";
 
 export const metadata: Metadata = {
-    title: "Free Image Compressor Online | Compress PNG to 100KB, 50KB, 20KB | Statement Extract",
-    description: "Compress PNG, JPG, WebP images to exact sizes - 100KB, 50KB, 20KB, 10KB. Free online compressor, no upload limits, 100% private. Works in browser.",
-    keywords: "compress png to 100kb, compress image to 50kb, compress png to 200kb, compress png free, compress image to 20kb, reduce image size online, compress png to 1mb, compress png to 500kb, compress png to 300kb, image compressor online free, reduce png file size",
+    title: "Free Image Compressor Online | Compress PNG to Any Size - 7KB, 10KB, 50KB, 100KB | Statement Extract",
+    description: "Compress PNG, JPG, WebP images to ANY exact size - 7KB, 10KB, 15KB, 20KB, 25KB, 50KB, 100KB, 200KB. Free online compressor, no upload limits, 100% private.",
+    keywords: "compress png to 100kb, compress png to 7kb, compress image to 50kb, compress png to 15kb, compress png to 25kb, compress image to 20kb, compress png to 10kb, compress png to 200kb, compress png to 500kb, compress png to 300kb, compress png to 30kb, compress png to 40kb, compress image to any size, reduce image size online free, image compressor kb",
     openGraph: {
         title: "Free Image Compressor - Compress PNG to 100KB, 50KB, 20KB",
         description: "Compress images to exact target sizes. Free, fast, and 100% private.",
@@ -42,12 +42,18 @@ const relatedTools = [
     { href: "/convert/batch-converter", title: "HEIC Batch Converter" },
 ];
 
-// Long-tail keyword target sizes
+// Long-tail keyword target sizes - including niche sizes for SEO
 const targetSizes = [
-    { size: "10KB", use: "Email signatures, tiny thumbnails, favicon images" },
-    { size: "20KB", use: "Profile pictures, small icons, status images" },
+    { size: "7KB", use: "Tiny icons, email signature logos, micro thumbnails" },
+    { size: "10KB", use: "Email signatures, favicon images, small avatars" },
+    { size: "15KB", use: "Chat avatars, small profile pictures, app icons" },
+    { size: "20KB", use: "Profile pictures, status images, small icons" },
+    { size: "25KB", use: "Social media icons, form upload images" },
+    { size: "30KB", use: "Forum signatures, small web graphics" },
     { size: "50KB", use: "Blog thumbnails, product icons, social avatars" },
-    { size: "100KB", use: "Website images, email attachments, document images" },
+    { size: "75KB", use: "Medium thumbnails, newsletter images" },
+    { size: "100KB", use: "Website images, email attachments, documents" },
+    { size: "150KB", use: "Featured blog images, social media posts" },
     { size: "200KB", use: "High-quality web images, presentations" },
     { size: "500KB", use: "Large banners, hero images, detailed graphics" },
 ];
@@ -149,10 +155,33 @@ export default function ImageCompressorPage() {
             <section className="py-12 md:py-16 px-6">
                 <div className="max-w-4xl mx-auto">
                     <h2 className="text-2xl font-bold text-[hsl(var(--foreground))] mb-8 text-center">
-                        Complete Guide: Compress PNG & Images to Specific Sizes
+                        Complete Guide: Compress PNG & Images to Any Size
                     </h2>
 
                     <div className="space-y-8 text-[hsl(var(--muted-foreground))]">
+                        {/* Compress to ANY Size - Niche SEO */}
+                        <div className="p-6 rounded-2xl bg-gradient-to-br from-[hsl(var(--primary))]/5 to-[hsl(var(--card))] border border-[hsl(var(--primary))]/20">
+                            <h3 className="text-xl font-semibold text-[hsl(var(--foreground))] mb-4">
+                                Compress PNG to Any Custom Size (7KB, 15KB, 25KB, etc.)
+                            </h3>
+                            <p className="mb-3">
+                                Need to <strong>compress PNG to 7KB</strong> for a strict file limit? Or <strong>compress image to 15KB</strong> for a form upload? Our tool lets you target <em>any size</em> — not just preset values. Whether you need exactly 7KB, 25KB, 35KB, or 75KB, our compressor will hit your target.
+                            </p>
+                            <p className="mb-3">
+                                Many competing tools only offer approximate compression. Ours uses iterative quality adjustment to achieve your <strong>exact target file size</strong> within a few kilobytes of precision.
+                            </p>
+                            <div className="mt-4 p-4 bg-[hsl(var(--background))] rounded-xl">
+                                <p className="text-sm font-medium text-[hsl(var(--foreground))] mb-2">Popular custom sizes:</p>
+                                <div className="flex flex-wrap gap-2">
+                                    {["5KB", "7KB", "8KB", "12KB", "15KB", "18KB", "25KB", "30KB", "35KB", "40KB", "60KB", "75KB", "80KB", "90KB", "150KB", "250KB", "300KB", "400KB"].map((size) => (
+                                        <span key={size} className="px-2 py-1 rounded-md bg-[hsl(var(--muted))] text-xs font-medium">
+                                            {size}
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
                         {/* Compress PNG to 100KB */}
                         <div className="p-6 rounded-2xl bg-[hsl(var(--card))] border border-[hsl(var(--border))]">
                             <h3 className="text-xl font-semibold text-[hsl(var(--foreground))] mb-4">
