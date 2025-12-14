@@ -179,6 +179,27 @@ const toolSections = [
                 icon: "TrendingDown",
                 badge: "Hot",
             },
+            {
+                title: "Debt Snowball Calculator",
+                description: "Visualize your debt-free date. Create a plan to pay off credit cards and loans faster.",
+                href: "/tools/debt-snowball-calculator",
+                icon: "TrendingDown",
+                badge: "Popular",
+            },
+            {
+                title: "FIRE Calculator",
+                description: "Financial Independence, Retire Early. See when you can retire based on savings rate.",
+                href: "/tools/fire-calculator",
+                icon: "Zap",
+                badge: "Hot",
+            },
+            {
+                title: "Rental Property ROI",
+                description: "Analyze cash flow, Cap Rate, and Cash-on-Cash return for real estate deals.",
+                href: "/tools/rental-roi-calculator",
+                icon: "Home",
+                badge: "Professional",
+            },
         ],
     },
     // 5. Developer Tools - Niche but engaged audience

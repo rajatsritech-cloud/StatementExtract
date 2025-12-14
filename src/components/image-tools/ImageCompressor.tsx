@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useCallback, useRef } from "react";
-import { Upload, Download, Image as ImageIcon, Loader2, CheckCircle2, Trash2, ArrowRight } from "lucide-react";
+import { Upload, Download, Image as ImageIcon, Loader2, CheckCircle2, Trash2, ArrowRight, Settings, Save } from "lucide-react";
+import { PrivacyBadge } from "@/components/ui/PrivacyBadge";
 
 interface ImageCompressorProps {
     title: string;

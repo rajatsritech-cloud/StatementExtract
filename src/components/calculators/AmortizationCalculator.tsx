@@ -101,7 +101,7 @@ export function AmortizationCalculator() {
         const totalPaid = schedule.reduce((sum, row) => sum + row.totalPayment, 0);
         const actualMonths = schedule.length;
         const monthsSaved = totalMonths - actualMonths;
-        const interestSaved = extra > 0 ? (monthlyPayment * totalMonths - loanAmount) - totalInterest : 0;
+        const interestSaved = extra > 0 ? (monthlyPayment * totalMonths - P) - totalInterest : 0;
 
         return {
             monthlyPayment,
