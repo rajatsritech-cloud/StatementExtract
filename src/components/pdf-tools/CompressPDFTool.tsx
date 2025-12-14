@@ -86,7 +86,7 @@ export function CompressPDFTool() {
                 addDefaultPage: false,
             });
 
-            const blob = new Blob([compressedBytes], { type: "application/pdf" });
+            const blob = new Blob([compressedBytes as any], { type: "application/pdf" });
             const url = URL.createObjectURL(blob);
 
             const originalSize = file.size;
