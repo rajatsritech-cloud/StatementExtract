@@ -3,6 +3,7 @@
 import { useState, useCallback, useRef } from "react";
 import { Upload, FileImage, Trash2, Download, Plus, ArrowUp, ArrowDown, RefreshCw, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PrivacyBadge } from "@/components/ui/PrivacyBadge";
 import { PDFDocument } from "pdf-lib";
 
 interface ImageFile {
@@ -217,61 +218,64 @@ export function JPGtoPDFTool() {
 
             {/* Upload Area */}
             {images.length === 0 ? (
-                <div
-                    onDrop={handleDrop}
-                    onDragOver={handleDragOver}
-                    onDragLeave={handleDragLeave}
-                    className={`relative border-2 border-dashed rounded-2xl p-8 md:p-12 text-center cursor-pointer transition-all duration-200 overflow-hidden ${isDragging
-                        ? "border-[hsl(var(--primary))] bg-[hsl(var(--primary))]/5"
-                        : "border-[hsl(var(--border))] hover:border-[hsl(var(--primary))]/50 hover:bg-[hsl(var(--muted))]/30"
-                        }`}
-                >
-                    {/* Dot Pattern Background */}
+                <>
                     <div
-                        className="absolute inset-0 opacity-30 pointer-events-none"
-                        style={{
-                            backgroundImage: `radial-gradient(circle at 1px 1px, hsl(var(--primary) / 0.3) 1px, transparent 0)`,
-                            backgroundSize: '24px 24px',
-                        }}
-                    />
+                        onDrop={handleDrop}
+                        onDragOver={handleDragOver}
+                        onDragLeave={handleDragLeave}
+                        className={`relative border-2 border-dashed rounded-2xl p-8 md:p-12 text-center cursor-pointer transition-all duration-200 overflow-hidden ${isDragging
+                            ? "border-[hsl(var(--primary))] bg-[hsl(var(--primary))]/5"
+                            : "border-[hsl(var(--border))] hover:border-[hsl(var(--primary))]/50 hover:bg-[hsl(var(--muted))]/30"
+                            }`}
+                    >
+                        {/* Dot Pattern Background */}
+                        <div
+                            className="absolute inset-0 opacity-30 pointer-events-none"
+                            style={{
+                                backgroundImage: `radial-gradient(circle at 1px 1px, hsl(var(--primary) / 0.3) 1px, transparent 0)`,
+                                backgroundSize: '24px 24px',
+                            }}
+                        />
 
-                    {/* Decorative Blocks */}
-                    <div className="absolute top-4 right-4 w-16 h-16 rounded-lg bg-gradient-to-br from-[hsl(var(--primary))]/10 to-transparent rotate-12 pointer-events-none" />
-                    <div className="absolute bottom-4 left-4 w-12 h-12 rounded-lg bg-gradient-to-tr from-[hsl(var(--primary))]/10 to-transparent -rotate-12 pointer-events-none" />
-                    <div className="absolute top-1/2 left-8 w-8 h-8 rounded-full bg-[hsl(var(--primary))]/5 pointer-events-none" />
+                        {/* Decorative Blocks */}
+                        <div className="absolute top-4 right-4 w-16 h-16 rounded-lg bg-gradient-to-br from-[hsl(var(--primary))]/10 to-transparent rotate-12 pointer-events-none" />
+                        <div className="absolute bottom-4 left-4 w-12 h-12 rounded-lg bg-gradient-to-tr from-[hsl(var(--primary))]/10 to-transparent -rotate-12 pointer-events-none" />
+                        <div className="absolute top-1/2 left-8 w-8 h-8 rounded-full bg-[hsl(var(--primary))]/5 pointer-events-none" />
 
-                    <input
-                        ref={fileInputRef}
-                        type="file"
-                        multiple
-                        accept="image/jpeg,image/png,image/webp,image/gif"
-                        onChange={(e) => handleFileSelect(e.target.files)}
-                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
-                    />
+                        <input
+                            ref={fileInputRef}
+                            type="file"
+                            multiple
+                            accept="image/jpeg,image/png,image/webp,image/gif"
+                            onChange={(e) => handleFileSelect(e.target.files)}
+                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
+                        />
 
-                    <div className="relative z-10 space-y-4">
-                        <div className="mx-auto w-20 h-20 rounded-2xl bg-gradient-to-br from-[hsl(var(--primary))]/20 to-[hsl(var(--primary))]/5 flex items-center justify-center shadow-lg">
-                            <FileImage className="w-10 h-10 text-[hsl(var(--primary))]" />
-                        </div>
-                        <div>
-                            <p className="text-xl font-semibold text-[hsl(var(--foreground))]">
-                                Drop your images here
+                        <div className="relative z-10 space-y-4">
+                            <div className="mx-auto w-20 h-20 rounded-2xl bg-gradient-to-br from-[hsl(var(--primary))]/20 to-[hsl(var(--primary))]/5 flex items-center justify-center shadow-lg">
+                                <FileImage className="w-10 h-10 text-[hsl(var(--primary))]" />
+                            </div>
+                            <div>
+                                <p className="text-xl font-semibold text-[hsl(var(--foreground))]">
+                                    Drop your images here
+                                </p>
+                                <p className="text-sm text-[hsl(var(--muted-foreground))] mt-1">
+                                    or click to browse
+                                </p>
+                            </div>
+                            <div className="flex flex-wrap justify-center gap-2 text-xs text-[hsl(var(--muted-foreground))]">
+                                <span className="px-2 py-1 rounded-full bg-[hsl(var(--muted))]">JPG</span>
+                                <span className="px-2 py-1 rounded-full bg-[hsl(var(--muted))]">PNG</span>
+                                <span className="px-2 py-1 rounded-full bg-[hsl(var(--muted))]">WebP</span>
+                                <span className="px-2 py-1 rounded-full bg-[hsl(var(--muted))]">GIF</span>
+                            </div>
+                            <p className="text-xs text-[hsl(var(--muted-foreground))]">
+                                Upload multiple images to combine into one PDF
                             </p>
-                            <p className="text-sm text-[hsl(var(--muted-foreground))] mt-1">
-                                or click to browse
-                            </p>
                         </div>
-                        <div className="flex flex-wrap justify-center gap-2 text-xs text-[hsl(var(--muted-foreground))]">
-                            <span className="px-2 py-1 rounded-full bg-[hsl(var(--muted))]">JPG</span>
-                            <span className="px-2 py-1 rounded-full bg-[hsl(var(--muted))]">PNG</span>
-                            <span className="px-2 py-1 rounded-full bg-[hsl(var(--muted))]">WebP</span>
-                            <span className="px-2 py-1 rounded-full bg-[hsl(var(--muted))]">GIF</span>
-                        </div>
-                        <p className="text-xs text-[hsl(var(--muted-foreground))]">
-                            Upload multiple images to combine into one PDF
-                        </p>
                     </div>
-                </div>
+                    <PrivacyBadge />
+                </>
             ) : (
                 <div className="space-y-6">
                     {/* Options Bar */}

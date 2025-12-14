@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useRef } from "react";
 import { Upload, Download, Image as ImageIcon, Loader2, CheckCircle2, Trash2, ArrowRight } from "lucide-react";
+import { PrivacyBadge } from "@/components/ui/PrivacyBadge";
 
 interface ImageConverterProps {
     targetFormat: "png" | "webp";
@@ -219,6 +220,9 @@ export const ImageConverter = ({ targetFormat, sourceFormat = "AVIF", title, des
                     </div>
                 )}
             </div>
+
+            {/* Privacy Badge */}
+            <PrivacyBadge />
 
             {/* Error Message */}
             {error && (

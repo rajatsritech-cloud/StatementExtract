@@ -172,6 +172,13 @@ const toolSections = [
                 icon: "Calculator",
                 badge: "New",
             },
+            {
+                title: "Amortization Calculator",
+                description: "Loan payment schedule with extra payment analysis. Mortgage, auto, student loans.",
+                href: "/tools/amortization-calculator",
+                icon: "TrendingDown",
+                badge: "Hot",
+            },
         ],
     },
     // 5. Developer Tools - Niche but engaged audience
@@ -182,11 +189,25 @@ const toolSections = [
         featured: false,
         tools: [
             {
+                title: "JSON to SQL Converter",
+                description: "Convert JSON to SQL INSERT & CREATE TABLE. PostgreSQL, MySQL, SQLite.",
+                href: "/convert/json-to-sql",
+                icon: "Database",
+                badge: "Hot",
+            },
+            {
+                title: "Image to Base64",
+                description: "Convert images to Base64 strings. Embed in HTML, CSS, Markdown.",
+                href: "/convert/image-to-base64",
+                icon: "FileImage",
+                badge: "New",
+            },
+            {
                 title: "JSON to TOON Converter",
                 description: "Convert JSON to Token-Oriented Object Notation. Save 60% on LLM tokens.",
                 href: "/convert/json-to-toon",
                 icon: "Code2",
-                badge: "Hot",
+                badge: null,
             },
         ],
     },

@@ -312,6 +312,9 @@ export const ImageCompressor = ({ title, description }: ImageCompressorProps) =>
                 )}
             </div>
 
+            {/* Privacy Badge */}
+            <PrivacyBadge />
+
             {/* Error Message */}
             {error && (
                 <div className="mt-4 p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-xl text-yellow-700 dark:text-yellow-400 text-sm">

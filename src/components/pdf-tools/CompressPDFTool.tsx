@@ -3,6 +3,7 @@
 import { useState, useCallback, useRef } from "react";
 import { FileUp, Download, Loader2, FileText, Trash2, CheckCircle, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PrivacyBadge } from "@/components/ui/PrivacyBadge";
 import { PDFDocument } from "pdf-lib";
 
 interface CompressedFile {
@@ -235,6 +236,9 @@ export function CompressPDFTool() {
                             </div>
                         </div>
                     </div>
+
+                    {/* Privacy Badge */}
+                    <PrivacyBadge />
 
                     {/* Error Message */}
                     {error && (

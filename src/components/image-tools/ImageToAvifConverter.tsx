@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useRef, useEffect } from "react";
 import { Upload, Download, Image as ImageIcon, Loader2, CheckCircle2, Trash2, ArrowRight, AlertTriangle } from "lucide-react";
+import { PrivacyBadge } from "@/components/ui/PrivacyBadge";
 
 interface ImageToAvifConverterProps {
     title: string;
@@ -284,6 +285,9 @@ export const ImageToAvifConverter = ({ title, description }: ImageToAvifConverte
                     )}
                 </div>
             </div>
+
+            {/* Privacy Badge */}
+            <PrivacyBadge />
 
             {/* Error Message */}
             {error && (

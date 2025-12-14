@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useRef } from "react";
 import { Upload, Download, Image as ImageIcon, Loader2, CheckCircle2, Trash2, ArrowRight, X, FileImage } from "lucide-react";
+import { PrivacyBadge } from "@/components/ui/PrivacyBadge";
 
 interface ConvertedFile {
     original: File;
@@ -311,6 +312,9 @@ export const BatchImageConverter = ({ targetFormat, title, description }: BatchI
                     )}
                 </div>
             </div>
+
+            {/* Privacy Badge */}
+            <PrivacyBadge />
 
             {/* Selected Files List */}
             {files.length > 0 && convertedFiles.length === 0 && (

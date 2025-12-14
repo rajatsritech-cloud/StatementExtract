@@ -3,6 +3,7 @@
 import { useState, useCallback } from "react";
 import { FileUp, X, GripVertical, Download, Loader2, FileText, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PrivacyBadge } from "@/components/ui/PrivacyBadge";
 import { PDFDocument } from "pdf-lib";
 
 interface PDFFile {
@@ -218,6 +219,9 @@ export function MergePDFTool() {
                     </p>
                 </div>
             </div>
+
+            {/* Privacy Badge */}
+            <PrivacyBadge />
 
             {/* Error Message */}
             {error && (
