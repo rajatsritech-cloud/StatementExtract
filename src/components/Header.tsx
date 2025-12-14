@@ -242,9 +242,9 @@ export const Header = () => {
               Blogs
             </Link>
 
-            <a href="#pricing" className="text-sm font-medium text-[hsl(var(--foreground))] transition-colors hover:text-[hsl(var(--primary))]">
-              Pricing
-            </a>
+            <Link href="/convert" className="text-sm font-medium text-[hsl(var(--foreground))] transition-colors hover:text-[hsl(var(--primary))]">
+              Tools
+            </Link>
             <a href="/#faq" className="text-sm font-medium text-[hsl(var(--foreground))] transition-colors hover:text-[hsl(var(--primary))]">
               FAQ
             </a>

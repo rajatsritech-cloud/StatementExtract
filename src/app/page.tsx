@@ -5,6 +5,7 @@ import { DocumentDemo } from "@/components/DocumentDemo";
 import { Features } from "@/components/Features";
 import { HowItWorks } from "@/components/HowItWorks";
 import { UseCases } from "@/components/UseCases";
+import { Pricing } from "@/components/Pricing";
 import { Integrations } from "@/components/Integrations";
 import { FAQ } from "@/components/FAQ";
 import { CTA } from "@/components/CTA";
@@ -19,6 +20,7 @@ export default function Home() {
       <Features />
       <HowItWorks />
       <UseCases />
+      <Pricing />
       <Integrations />
       <RecentBlogs />
       <FAQ />
