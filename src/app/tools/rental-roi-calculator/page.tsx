@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import { RentalROICalculator } from '@/components/calculators/RentalROICalculator';
+import { ToolPageFooter } from '@/components/tools/ToolPageFooter';
+import { Home, Percent, DollarSign, Calculator, Shield, Search, TrendingUp, Key } from "lucide-react";
 
 export const metadata: Metadata = {
     title: 'Free Rental Property Calculator | Cash Flow & ROI Analysis',
@@ -12,6 +14,13 @@ export const metadata: Metadata = {
         type: 'website',
     },
 };
+
+const relatedTools = [
+    { href: "/tools/amortization-calculator", title: "Amortization Calculator" },
+    { href: "/tools/debt-snowball-calculator", title: "Debt Snowball Calculator" },
+    { href: "/tools/markup-calculator", title: "Markup Calculator" },
+    { href: "/convert-bank-statement-to-csv-excel", title: "Bank Statement Converter" },
+];
 
 export default function RentalROIPage() {
     const jsonLd = {
@@ -61,7 +70,7 @@ export default function RentalROIPage() {
     };
 
     return (
-        <div className="min-h-screen bg-[hsl(var(--background))] py-12 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-[hsl(var(--background))]">
             {/* Schema Markup */}
             <script
                 type="application/ld+json"
@@ -72,7 +81,7 @@ export default function RentalROIPage() {
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
             />
 
-            <div className="max-w-6xl mx-auto">
+            <div className="py-12 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
                 <div className="text-center mb-10">
                     <h1 className="text-3xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[hsl(var(--primary))] to-green-600 mb-4">
                         Rental Property Calculator
@@ -83,50 +92,115 @@ export default function RentalROIPage() {
                 </div>
 
                 <RentalROICalculator />
+            </div>
 
-                {/* Content Section for SEO */}
-                <div className="mt-20 grid grid-cols-1 md:grid-cols-2 gap-12">
-                    <div className="space-y-6">
-                        <h2 className="text-2xl font-bold text-[hsl(var(--foreground))]">Key Investment Metrics</h2>
-                        <div className="space-y-4 text-[hsl(var(--muted-foreground))]">
-                            <div className="p-4 bg-[hsl(var(--card))] rounded-lg border border-[hsl(var(--border))]">
-                                <h3 className="font-semibold text-[hsl(var(--foreground))]">Cash Flow</h3>
-                                <p className="text-sm mt-1">
-                                    The profit you take home each month after all expenses and mortgage payments. Positive cash flow is essential for a sustainable rental portfolio.
-                                </p>
+            {/* Feature Grid - "Why Use This Tool?" */}
+            <section className="py-12 md:py-16 px-6 bg-[hsl(var(--muted))]/30 border-y border-[hsl(var(--border))]">
+                <div className="max-w-5xl mx-auto">
+                    <h2 className="text-2xl md:text-3xl font-bold text-center text-[hsl(var(--foreground))] mb-10">
+                        Real Estate Analysis Made Simple
+                    </h2>
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {[
+                            { icon: DollarSign, title: "Cash Flow Focused", desc: "Instantly see your monthly net profit after ALL expenses. No surprising losses." },
+                            { icon: Percent, title: "Cash-on-Cash ROI", desc: "Calculate the true return on your down payment and closing costs." },
+                            { icon: Search, title: "Detailed Expense Breakdowns", desc: "Factor in vacancy, maintenance, management, and taxes for accuracy." },
+                            { icon: Calculator, title: "Quick Deal Screening", desc: "Evaluate properties in seconds to decide if they are worth a deeper look." },
+                            { icon: Shield, title: "Privacy First", desc: "We don't store your property data. Analyze deals privately in your browser." },
+                            { icon: Key, title: "Cap Rate Analysis", desc: "Compare property performance objectively, independent of financing terms." },
+                        ].map((feature, i) => (
+                            <div key={i} className="p-6 rounded-2xl bg-[hsl(var(--card))] border border-[hsl(var(--border))]">
+                                <feature.icon className="w-8 h-8 text-[hsl(var(--primary))] mb-4" />
+                                <h3 className="font-semibold text-[hsl(var(--foreground))] mb-2">{feature.title}</h3>
+                                <p className="text-sm text-[hsl(var(--muted-foreground))]">{feature.desc}</p>
                             </div>
-                            <div className="p-4 bg-[hsl(var(--card))] rounded-lg border border-[hsl(var(--border))]">
-                                <h3 className="font-semibold text-[hsl(var(--foreground))]">Cap Rate (Capitalization Rate)</h3>
-                                <p className="text-sm mt-1">
-                                    NOI / Purchase Price. A way to compare the inherent profitability of different properties regardless of how they are financed.
-                                </p>
-                            </div>
-                            <div className="p-4 bg-[hsl(var(--card))] rounded-lg border border-[hsl(var(--border))]">
-                                <h3 className="font-semibold text-[hsl(var(--foreground))]">Cash-on-Cash Return</h3>
-                                <p className="text-sm mt-1">
-                                    Annual Cash Flow / Total Cash Invested. This tells you the yield on the actual money you put into the deal (Down Payment + Closing Costs + Repairs).
-                                </p>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* Rich Content - Metrics Comparison */}
+            <section className="py-12 md:py-16 px-6">
+                <div className="max-w-4xl mx-auto">
+                    <h2 className="text-2xl md:text-3xl font-bold text-center text-[hsl(var(--foreground))] mb-8">
+                        Key Investment Metrics Explained
+                    </h2>
+                    <div className="overflow-x-auto">
+                        <table className="w-full border-collapse rounded-xl overflow-hidden shadow-sm border border-[hsl(var(--border))]">
+                            <thead>
+                                <tr className="bg-[hsl(var(--primary))]">
+                                    <th className="px-6 py-4 text-left text-white font-semibold">Metric</th>
+                                    <th className="px-6 py-4 text-left text-white font-semibold">Formula</th>
+                                    <th className="px-6 py-4 text-left text-white font-semibold">Why it Matters</th>
+                                </tr>
+                            </thead>
+                            <tbody className="bg-[hsl(var(--card))]">
+                                {[
+                                    { metric: "Cash Flow", formula: "Income - Expenses - Debt Service", desc: "The money you keep each month." },
+                                    { metric: "Cap Rate", formula: "NOI / Purchase Price", desc: "Measures inherent property profitability (unleveraged)." },
+                                    { metric: "Cash-on-Cash", formula: "Annual Cash Flow / Cash Invested", desc: "Your actual return on the money you put down." },
+                                    { metric: "NOI", formula: "Income - Operating Expenses", desc: "Net Operating Income limits loan amounts." },
+                                ].map((row, i) => (
+                                    <tr key={i} className="border-b border-[hsl(var(--border))]/50 last:border-0 hover:bg-[hsl(var(--muted))]/30 transition-colors">
+                                        <td className="px-6 py-4 font-bold text-[hsl(var(--primary))]">{row.metric}</td>
+                                        <td className="px-6 py-4 text-[hsl(var(--muted-foreground))] font-mono text-xs md:text-sm">{row.formula}</td>
+                                        <td className="px-6 py-4 text-[hsl(var(--foreground))] text-sm">{row.desc}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            {/* Content Section */}
+            <section className="py-12 md:py-16 px-6 bg-[hsl(var(--muted))]/30 border-t border-[hsl(var(--border))]">
+                <div className="max-w-4xl mx-auto prose prose-lg dark:prose-invert">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                        <div className="space-y-6">
+                            <h2 className="text-2xl font-bold text-[hsl(var(--foreground))]">Key Investment Metrics</h2>
+                            <div className="space-y-4 text-[hsl(var(--muted-foreground))]">
+                                <div className="p-4 bg-[hsl(var(--card))] rounded-lg border border-[hsl(var(--border))]">
+                                    <h3 className="font-semibold text-[hsl(var(--foreground))]">Cash Flow</h3>
+                                    <p className="text-sm mt-1">
+                                        The profit you take home each month after all expenses and mortgage payments. Positive cash flow is essential for a sustainable rental portfolio.
+                                    </p>
+                                </div>
+                                <div className="p-4 bg-[hsl(var(--card))] rounded-lg border border-[hsl(var(--border))]">
+                                    <h3 className="font-semibold text-[hsl(var(--foreground))]">Cap Rate (Capitalization Rate)</h3>
+                                    <p className="text-sm mt-1">
+                                        NOI / Purchase Price. A way to compare the inherent profitability of different properties regardless of how they are financed.
+                                    </p>
+                                </div>
+                                <div className="p-4 bg-[hsl(var(--card))] rounded-lg border border-[hsl(var(--border))]">
+                                    <h3 className="font-semibold text-[hsl(var(--foreground))]">Cash-on-Cash Return</h3>
+                                    <p className="text-sm mt-1">
+                                        Annual Cash Flow / Total Cash Invested. This tells you the yield on the actual money you put into the deal (Down Payment + Closing Costs + Repairs).
+                                    </p>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div className="space-y-6">
-                        <h2 className="text-2xl font-bold text-[hsl(var(--foreground))]">Why Use This Calculator?</h2>
-                        <div className="space-y-4 text-[hsl(var(--muted-foreground))]">
-                            <p>
-                                Real estate investing is a numbers game. Emotions can lead to bad purchases. This calculator helps you objectively analyze a property's potential.
-                            </p>
-                            <ul className="list-disc pl-5 space-y-2">
-                                <li><strong>Catch Hidden Costs:</strong> We include fields for Vacancy, Maintenance, and Management to give you a realistic picture, not an optimistic one.</li>
-                                <li><strong>Leverage Analysis:</strong> See how different down payments and interest rates affect your cash flow.</li>
-                                <li><strong>Privacy Guaranteed:</strong> Your deal data is processed entirely in your browser. We don't store your potential property addresses or financial details.</li>
-                            </ul>
+                        <div className="space-y-6">
+                            <h2 className="text-2xl font-bold text-[hsl(var(--foreground))]">Why Use This Calculator?</h2>
+                            <div className="space-y-4 text-[hsl(var(--muted-foreground))]">
+                                <p>
+                                    Real estate investing is a numbers game. Emotions can lead to bad purchases. This calculator helps you objectively analyze a property's potential.
+                                </p>
+                                <ul className="list-disc pl-5 space-y-2">
+                                    <li><strong>Catch Hidden Costs:</strong> We include fields for Vacancy, Maintenance, and Management to give you a realistic picture, not an optimistic one.</li>
+                                    <li><strong>Leverage Analysis:</strong> See how different down payments and interest rates affect your cash flow.</li>
+                                    <li><strong>Privacy Guaranteed:</strong> Your deal data is processed entirely in your browser. We don't store your potential property addresses or financial details.</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
+            </section>
 
-                {/* FAQs */}
-                <div className="mt-20 border-t border-[hsl(var(--border))] pt-12">
+            {/* FAQs */}
+            <section className="py-12 md:py-16 px-6 border-t border-[hsl(var(--border))]">
+                <div className="max-w-3xl mx-auto">
                     <h2 className="text-2xl font-bold text-[hsl(var(--foreground))] text-center mb-8">Frequently Asked Questions</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div className="bg-[hsl(var(--card))] p-6 rounded-xl border border-[hsl(var(--border))]">
@@ -155,7 +229,12 @@ export default function RentalROIPage() {
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
+
+            <ToolPageFooter
+                currentTool="Rental Property ROI Calculator"
+                relatedTools={relatedTools}
+            />
         </div>
     );
 }

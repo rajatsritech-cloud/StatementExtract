@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import { DebtSnowballCalculator } from '@/components/calculators/DebtSnowballCalculator';
+import { ToolPageFooter } from '@/components/tools/ToolPageFooter';
+import { TrendingDown, Shield, Calendar, PiggyBank, Target, Zap, CheckCircle, Calculator } from "lucide-react";
 
 export const metadata: Metadata = {
     title: 'Free Debt Snowball Calculator | Visualize Your Debt-Free Date',
@@ -12,6 +14,13 @@ export const metadata: Metadata = {
         type: 'website',
     },
 };
+
+const relatedTools = [
+    { href: "/tools/amortization-calculator", title: "Amortization Calculator" },
+    { href: "/tools/fire-calculator", title: "FIRE Calculator" },
+    { href: "/tools/profit-margin-calculator", title: "Profit Margin Calculator" },
+    { href: "/convert-bank-statement-to-csv-excel", title: "Bank Statement Converter" },
+];
 
 export default function DebtSnowballPage() {
     const jsonLd = {
@@ -61,7 +70,7 @@ export default function DebtSnowballPage() {
     };
 
     return (
-        <div className="min-h-screen bg-[hsl(var(--background))] py-12 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-[hsl(var(--background))]">
             {/* Schema Markup */}
             <script
                 type="application/ld+json"
@@ -72,7 +81,7 @@ export default function DebtSnowballPage() {
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
             />
 
-            <div className="max-w-5xl mx-auto">
+            <div className="py-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
                 <div className="text-center mb-10">
                     <h1 className="text-3xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[hsl(var(--primary))] to-blue-600 mb-4">
                         Debt Snowball Calculator
@@ -83,44 +92,110 @@ export default function DebtSnowballPage() {
                 </div>
 
                 <DebtSnowballCalculator />
+            </div>
 
-                {/* Content Section for SEO */}
-                <div className="mt-20 grid grid-cols-1 md:grid-cols-2 gap-12">
-                    <div className="space-y-6">
-                        <h2 className="text-2xl font-bold text-[hsl(var(--foreground))]">How the Debt Snowball Works</h2>
-                        <div className="space-y-4 text-[hsl(var(--muted-foreground))]">
-                            <p>
-                                The concept is simple but powerful. Instead of worrying about interest rates, you focus on momentum.
-                            </p>
-                            <ul className="list-disc pl-5 space-y-2">
-                                <li><strong>List all your debts</strong> from smallest balance to largest.</li>
-                                <li><strong>Pay minimums</strong> on everything except the smallest debt.</li>
-                                <li><strong>Attack the smallest debt</strong> with every extra dollar you have.</li>
-                                <li><strong>Roll it over</strong>. Once the smallest debt is gone, take its payment and add it to the next smallest debt.</li>
-                            </ul>
-                            <p>
-                                As you pay off debts, your "snowball" payment gets bigger and bigger, crushing the larger debts at the end.
-                            </p>
-                        </div>
+            {/* Feature Grid - "Why Use This Tool?" */}
+            <section className="py-12 md:py-16 px-6 bg-[hsl(var(--muted))]/30 border-y border-[hsl(var(--border))]">
+                <div className="max-w-5xl mx-auto">
+                    <h2 className="text-2xl md:text-3xl font-bold text-center text-[hsl(var(--foreground))] mb-10">
+                        Why Use Our Debt Snowball Calculator?
+                    </h2>
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {[
+                            { icon: TrendingDown, title: "Visualize Freedom", desc: "See your debt balances drop over time with our interactive timeline chart." },
+                            { icon: Shield, title: "100% Private", desc: "Your financial data never leaves your browser. We don't store your debt info." },
+                            { icon: Target, title: "Snowball vs Avalanche", desc: "Focus on psychological wins (Snowball) to keep your momentum high." },
+                            { icon: Calendar, title: "Exact Payoff Date", desc: "Know the specific month and year you will become completely debt-free." },
+                            { icon: PiggyBank, title: "Extra Payment Power", desc: "See how adding just $50 or $100 extra per month slashes years off your debt." },
+                            { icon: Zap, title: "Instant Results", desc: "No signups, no loading. Get your personalized payoff plan in seconds." },
+                        ].map((feature, i) => (
+                            <div key={i} className="p-6 rounded-2xl bg-[hsl(var(--card))] border border-[hsl(var(--border))]">
+                                <feature.icon className="w-8 h-8 text-[hsl(var(--primary))] mb-4" />
+                                <h3 className="font-semibold text-[hsl(var(--foreground))] mb-2">{feature.title}</h3>
+                                <p className="text-sm text-[hsl(var(--muted-foreground))]">{feature.desc}</p>
+                            </div>
+                        ))}
                     </div>
+                </div>
+            </section>
 
-                    <div className="space-y-6">
-                        <h2 className="text-2xl font-bold text-[hsl(var(--foreground))]">Why Use This Calculator?</h2>
-                        <div className="space-y-4 text-[hsl(var(--muted-foreground))]">
-                            <p>
-                                Most people underestimate how much interest works against them, or how much faster they could be free with just a little extra payment.
-                            </p>
-                            <ul className="list-disc pl-5 space-y-2">
-                                <li><strong>Visual Motivation:</strong> See your exact debt-free date move closer as you add extra payments.</li>
-                                <li><strong>Privacy First:</strong> Unlike other financial apps, we don't ask for bank logins or store your data.</li>
-                                <li><strong>Simplicity:</strong> No complex spreadsheets. Just enter your numbers and get your plan.</li>
-                            </ul>
+            {/* Comparison Table Section */}
+            <section className="py-12 md:py-16 px-6">
+                <div className="max-w-4xl mx-auto">
+                    <h2 className="text-2xl md:text-3xl font-bold text-center text-[hsl(var(--foreground))] mb-8">
+                        Snowball vs. Avalanche: Which is Right for You?
+                    </h2>
+                    <div className="overflow-x-auto">
+                        <table className="w-full border-collapse rounded-xl overflow-hidden shadow-sm border border-[hsl(var(--border))]">
+                            <thead>
+                                <tr className="bg-[hsl(var(--primary))]">
+                                    <th className="px-6 py-4 text-left text-white font-semibold">Feature</th>
+                                    <th className="px-6 py-4 text-left text-white font-semibold">Debt Snowball ❄️</th>
+                                    <th className="px-6 py-4 text-left text-white font-semibold">Debt Avalanche 🏔️</th>
+                                </tr>
+                            </thead>
+                            <tbody className="bg-[hsl(var(--card))]">
+                                {[
+                                    { feature: "Primary Strategy", snowball: "Pay smallest balance first", avalanche: "Pay highest interest rate first" },
+                                    { feature: "Psychological Effect", snowball: "High motivation from quick wins", avalanche: "Logical satisfaction from saving money" },
+                                    { feature: "Total Interest Paid", snowball: "Slightly higher", avalanche: "Lowest possible" },
+                                    { feature: "Speed of First Payoff", snowball: "Very Fast", avalanche: "Slow (if highest rate is large balance)" },
+                                    { feature: "Best For", snowball: "People who need motivation to stick with it", avalanche: "People driven by pure math/efficiency" },
+                                ].map((row, i) => (
+                                    <tr key={i} className="border-b border-[hsl(var(--border))]/50 last:border-0 hover:bg-[hsl(var(--muted))]/30 transition-colors">
+                                        <td className="px-6 py-4 font-medium text-[hsl(var(--foreground))]">{row.feature}</td>
+                                        <td className="px-6 py-4 text-[hsl(var(--muted-foreground))]">{row.snowball}</td>
+                                        <td className="px-6 py-4 text-[hsl(var(--muted-foreground))]">{row.avalanche}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            {/* Rich Content Section */}
+            <section className="py-12 md:py-16 px-6 bg-[hsl(var(--muted))]/30 border-t border-[hsl(var(--border))]">
+                <div className="max-w-4xl mx-auto prose prose-lg dark:prose-invert">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                        <div className="space-y-6">
+                            <h2 className="text-2xl font-bold text-[hsl(var(--foreground))]">How the Debt Snowball Works</h2>
+                            <div className="space-y-4 text-[hsl(var(--muted-foreground))]">
+                                <p>
+                                    The concept is simple but powerful. Instead of worrying about interest rates, you focus on momentum.
+                                </p>
+                                <ul className="list-disc pl-5 space-y-2">
+                                    <li><strong>List all your debts</strong> from smallest balance to largest.</li>
+                                    <li><strong>Pay minimums</strong> on everything except the smallest debt.</li>
+                                    <li><strong>Attack the smallest debt</strong> with every extra dollar you have.</li>
+                                    <li><strong>Roll it over</strong>. Once the smallest debt is gone, take its payment and add it to the next smallest debt.</li>
+                                </ul>
+                                <p>
+                                    As you pay off debts, your "snowball" payment gets bigger and bigger, crushing the larger debts at the end.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="space-y-6">
+                            <h2 className="text-2xl font-bold text-[hsl(var(--foreground))]">Why Use This Calculator?</h2>
+                            <div className="space-y-4 text-[hsl(var(--muted-foreground))]">
+                                <p>
+                                    Most people underestimate how much interest works against them, or how much faster they could be free with just a little extra payment.
+                                </p>
+                                <ul className="list-disc pl-5 space-y-2">
+                                    <li><strong>Visual Motivation:</strong> See your exact debt-free date move closer as you add extra payments.</li>
+                                    <li><strong>Privacy First:</strong> Unlike other financial apps, we don't ask for bank logins or store your data.</li>
+                                    <li><strong>Simplicity:</strong> No complex spreadsheets. Just enter your numbers and get your plan.</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
+            </section>
 
-                {/* FAQs */}
-                <div className="mt-20 border-t border-[hsl(var(--border))] pt-12">
+            {/* FAQs */}
+            <section className="py-12 md:py-16 px-6 border-t border-[hsl(var(--border))]">
+                <div className="max-w-3xl mx-auto">
                     <h2 className="text-2xl font-bold text-[hsl(var(--foreground))] text-center mb-8">Frequently Asked Questions</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div className="bg-[hsl(var(--card))] p-6 rounded-xl border border-[hsl(var(--border))]">
@@ -149,7 +224,12 @@ export default function DebtSnowballPage() {
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
+
+            <ToolPageFooter
+                currentTool="Debt Snowball Calculator"
+                relatedTools={relatedTools}
+            />
         </div>
     );
 }

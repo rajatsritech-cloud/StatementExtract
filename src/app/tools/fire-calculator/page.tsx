@@ -1,10 +1,12 @@
 import type { Metadata } from 'next';
 import { FIRECalculator } from '@/components/calculators/FIRECalculator';
+import { ToolPageFooter } from '@/components/tools/ToolPageFooter';
+import { TrendingUp, Shield, Calendar, Target, Zap, DollarSign, Activity, Lock } from "lucide-react";
 
 export const metadata: Metadata = {
     title: 'FIRE Calculator | Financial Independence Retire Early Planner',
-    description: 'Plan your early retirement with our free FIRE Calculator. Based on the 4% rule and your savings rate, find out exactly when you will reach financial independence.',
-    keywords: 'fire calculator, financial independence retire early, early retirement calculator, 4% rule calculator, savings rate calculator, retirement projection, fire movement',
+    description: 'Plan your early retirement with our free FIRE Calculator. Based on the 4% rule and your savings rate, find out exactly when you will be debt-free. 100% client-side data privacy.',
+    keywords: 'fire calculator, financial independence retire early, early retirement calculator, 4% rule calculator, savings rate calculator, retirement projection, fire movement, retire early calculator',
     authors: [{ name: 'Statement Extract' }],
     openGraph: {
         title: 'FIRE Calculator | When Can You Retire?',
@@ -12,6 +14,13 @@ export const metadata: Metadata = {
         type: 'website',
     },
 };
+
+const relatedTools = [
+    { href: "/tools/rental-roi-calculator", title: "Rental ROI Calculator" },
+    { href: "/tools/amortization-calculator", title: "Amortization Calculator" },
+    { href: "/tools/debt-snowball-calculator", title: "Debt Snowball Calculator" },
+    { href: "/tools/profit-margin-calculator", title: "Profit Margin Calculator" },
+];
 
 export default function FIREPage() {
     const jsonLd = {
@@ -61,7 +70,7 @@ export default function FIREPage() {
     };
 
     return (
-        <div className="min-h-screen bg-[hsl(var(--background))] py-12 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-[hsl(var(--background))]">
             {/* Schema Markup */}
             <script
                 type="application/ld+json"
@@ -72,7 +81,7 @@ export default function FIREPage() {
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
             />
 
-            <div className="max-w-5xl mx-auto">
+            <div className="py-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
                 <div className="text-center mb-10">
                     <h1 className="text-3xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[hsl(var(--primary))] to-purple-600 mb-4">
                         FIRE Calculator
@@ -83,44 +92,115 @@ export default function FIREPage() {
                 </div>
 
                 <FIRECalculator />
+            </div>
 
-                {/* Content Section for SEO */}
-                <div className="mt-20 grid grid-cols-1 md:grid-cols-2 gap-12">
-                    <div className="space-y-6">
-                        <h2 className="text-2xl font-bold text-[hsl(var(--foreground))]">Understanding the Approach</h2>
-                        <div className="space-y-4 text-[hsl(var(--muted-foreground))]">
-                            <p>
-                                FIRE (Financial Independence, Retire Early) is a movement dedicated to extreme savings and investment that allows proponents to retire far earlier than traditional budgets and retirement plans.
-                            </p>
-                            <h3 className="font-semibold text-[hsl(var(--foreground))]">The Core Formula</h3>
-                            <ul className="list-disc pl-5 space-y-2">
-                                <li><strong>Expenses vs. Income:</strong> It's not about how much you earn, but how much you keep.</li>
-                                <li><strong>The Multiple of 25:</strong> To be safe, you generally need 25 times your annual expenses invested.</li>
-                                <li><strong>Compounding:</strong> Time in the market does the heavy lifting.</li>
-                            </ul>
-                        </div>
+            {/* Feature Grid - "Why Use This Tool?" */}
+            <section className="py-12 md:py-16 px-6 bg-[hsl(var(--muted))]/30 border-y border-[hsl(var(--border))]">
+                <div className="max-w-5xl mx-auto">
+                    <h2 className="text-2xl md:text-3xl font-bold text-center text-[hsl(var(--foreground))] mb-10">
+                        Why Use Our FIRE Calculator?
+                    </h2>
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {[
+                            { icon: Target, title: "Find Your Number", desc: "Instantly calculate your 'FI Number'—the exact portfolio size needed to retire forever." },
+                            { icon: Activity, title: "Savings Rate Power", desc: "Visualize how increasing your savings rate by even 5% drastically cuts working years." },
+                            { icon: Shield, title: "Privacy First", desc: "No data collection. Your financial details are processed locally in your browser." },
+                            { icon: TrendingUp, title: "Visual Projection", desc: "See your net worth grow over time with our interactive 60-year projection chart." },
+                            { icon: Calendar, title: "Accurate Timeline", desc: "Get a realistic estimate of the age and year you can hand in your resignation." },
+                            { icon: Lock, title: "Safe Withdrawal", desc: "Built on the researched 'Safe Withdrawal Rate' principles (The 4% Rule)." },
+                        ].map((feature, i) => (
+                            <div key={i} className="p-6 rounded-2xl bg-[hsl(var(--card))] border border-[hsl(var(--border))]">
+                                <feature.icon className="w-8 h-8 text-[hsl(var(--primary))] mb-4" />
+                                <h3 className="font-semibold text-[hsl(var(--foreground))] mb-2">{feature.title}</h3>
+                                <p className="text-sm text-[hsl(var(--muted-foreground))]">{feature.desc}</p>
+                            </div>
+                        ))}
                     </div>
+                </div>
+            </section>
 
-                    <div className="space-y-6">
-                        <h2 className="text-2xl font-bold text-[hsl(var(--foreground))]">Types of FIRE</h2>
-                        <div className="space-y-4 text-[hsl(var(--muted-foreground))]">
-                            <ul className="space-y-4">
-                                <li>
-                                    <strong className="text-[hsl(var(--foreground))]">Lean FIRE:</strong> Living on a strict budget (e.g., spending &#60;$40k/year) to retire as quickly as possible.
-                                </li>
-                                <li>
-                                    <strong className="text-[hsl(var(--foreground))]">Fat FIRE:</strong> Saving a significantly larger amount (e.g., $2.5M+) to support a lavish lifestyle in retirement.
-                                </li>
-                                <li>
-                                    <strong className="text-[hsl(var(--foreground))]">Coast FIRE:</strong> Saving enough early so that compound interest will carry you to retirement without further contributions, allowing you to "coast" in a lower-stress job.
-                                </li>
-                            </ul>
+            {/* Rich Content - Savings Rate Impact Table */}
+            <section className="py-12 md:py-16 px-6">
+                <div className="max-w-4xl mx-auto">
+                    <h2 className="text-2xl md:text-3xl font-bold text-center text-[hsl(var(--foreground))] mb-8">
+                        The Power of Savings Rate
+                    </h2>
+                    <p className="text-center text-[hsl(var(--muted-foreground))] mb-8 max-w-2xl mx-auto">
+                        Assuming you start from $0 net worth and earn a 5% inflation-adjusted investment return, here is how long it takes to reach Financial Independence based on how much of your take-home pay you save.
+                    </p>
+                    <div className="overflow-x-auto">
+                        <table className="w-full border-collapse rounded-xl overflow-hidden shadow-sm border border-[hsl(var(--border))]">
+                            <thead>
+                                <tr className="bg-[hsl(var(--primary))]">
+                                    <th className="px-6 py-4 text-left text-white font-semibold">Savings Rate</th>
+                                    <th className="px-6 py-4 text-left text-white font-semibold">Years to Retirement</th>
+                                </tr>
+                            </thead>
+                            <tbody className="bg-[hsl(var(--card))]">
+                                {[
+                                    { rate: "10%", years: "51 years" },
+                                    { rate: "25%", years: "32 years" },
+                                    { rate: "40%", years: "22 years" },
+                                    { rate: "50%", years: "17 years" },
+                                    { rate: "65%", years: "10.5 years" },
+                                    { rate: "80%", years: "5.5 years" },
+                                ].map((row, i) => (
+                                    <tr key={i} className="border-b border-[hsl(var(--border))]/50 last:border-0 hover:bg-[hsl(var(--muted))]/30 transition-colors">
+                                        <td className="px-6 py-4 font-bold text-[hsl(var(--primary))]">{row.rate}</td>
+                                        <td className="px-6 py-4 text-[hsl(var(--foreground))] font-medium">{row.years}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                    <p className="text-center text-xs text-[hsl(var(--muted-foreground))] mt-4">
+                        *Based on the 'Shockingly Simple Math Behind Early Retirement' by Mr. Money Mustache. Assumes 4% withdrawal rate.
+                    </p>
+                </div>
+            </section>
+
+            {/* Content Section */}
+            <section className="py-12 md:py-16 px-6 bg-[hsl(var(--muted))]/30 border-t border-[hsl(var(--border))]">
+                <div className="max-w-4xl mx-auto prose prose-lg dark:prose-invert">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                        <div className="space-y-6">
+                            <h2 className="text-2xl font-bold text-[hsl(var(--foreground))]">Understanding the Approach</h2>
+                            <div className="space-y-4 text-[hsl(var(--muted-foreground))]">
+                                <p>
+                                    FIRE (Financial Independence, Retire Early) is a movement dedicated to extreme savings and investment that allows proponents to retire far earlier than traditional budgets and retirement plans.
+                                </p>
+                                <h3 className="font-semibold text-[hsl(var(--foreground))]">The Core Formula</h3>
+                                <ul className="list-disc pl-5 space-y-2">
+                                    <li><strong>Expenses vs. Income:</strong> It's not about how much you earn, but how much you keep.</li>
+                                    <li><strong>The Multiple of 25:</strong> To be safe, you generally need 25 times your annual expenses invested.</li>
+                                    <li><strong>Compounding:</strong> Time in the market does the heavy lifting.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div className="space-y-6">
+                            <h2 className="text-2xl font-bold text-[hsl(var(--foreground))]">Types of FIRE</h2>
+                            <div className="space-y-4 text-[hsl(var(--muted-foreground))]">
+                                <ul className="space-y-4">
+                                    <li>
+                                        <strong className="text-[hsl(var(--foreground))]">Lean FIRE:</strong> Living on a strict budget (e.g., spending &#60;$40k/year) to retire as quickly as possible.
+                                    </li>
+                                    <li>
+                                        <strong className="text-[hsl(var(--foreground))]">Fat FIRE:</strong> Saving a significantly larger amount (e.g., $2.5M+) to support a lavish lifestyle in retirement.
+                                    </li>
+                                    <li>
+                                        <strong className="text-[hsl(var(--foreground))]">Coast FIRE:</strong> Saving enough early so that compound interest will carry you to retirement without further contributions.
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
+            </section>
 
-                {/* FAQs */}
-                <div className="mt-20 border-t border-[hsl(var(--border))] pt-12">
+            {/* FAQs */}
+            <section className="py-12 md:py-16 px-6 border-t border-[hsl(var(--border))]">
+                <div className="max-w-3xl mx-auto">
                     <h2 className="text-2xl font-bold text-[hsl(var(--foreground))] text-center mb-8">Frequently Asked Questions</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div className="bg-[hsl(var(--card))] p-6 rounded-xl border border-[hsl(var(--border))]">
@@ -149,7 +229,12 @@ export default function FIREPage() {
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
+
+            <ToolPageFooter
+                currentTool="FIRE Calculator"
+                relatedTools={relatedTools}
+            />
         </div>
     );
 }
