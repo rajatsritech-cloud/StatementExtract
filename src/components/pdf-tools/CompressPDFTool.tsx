@@ -127,12 +127,12 @@ export function CompressPDFTool() {
     return (
         <div className="max-w-3xl mx-auto">
             {/* Header */}
-            <div className="text-center mb-8">
-                <h1 className="text-3xl md:text-4xl font-bold text-[hsl(var(--foreground))] mb-3">
+            <div className="text-center mb-4">
+                <h1 className="text-2xl md:text-3xl font-bold text-[hsl(var(--foreground))] mb-2">
                     Compress PDF to Any Size
                 </h1>
-                <p className="text-[hsl(var(--muted-foreground))] max-w-xl mx-auto text-lg">
-                    Reduce PDF to 100KB, 500KB, 1MB, or any target size. Perfect for email attachments. 100% free and private.
+                <p className="text-[hsl(var(--muted-foreground))] max-w-xl mx-auto">
+                    Reduce PDF to 100KB, 500KB, 1MB, or any target size. Perfect for email. 100% private.
                 </p>
             </div>
 

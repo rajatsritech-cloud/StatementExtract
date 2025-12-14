@@ -5,193 +5,228 @@
       xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 
-<!-- Homepage -->
 <url>
   <loc>https://statementextract.com/</loc>
-  <lastmod>2025-12-11</lastmod>
+  <lastmod>2025-12-14</lastmod>
   <changefreq>daily</changefreq>
   <priority>1.0</priority>
 </url>
 
-<!-- Main Product Page -->
 <url>
   <loc>https://statementextract.com/convert-bank-statement-to-csv-excel</loc>
-  <lastmod>2025-12-11</lastmod>
+  <lastmod>2025-12-14</lastmod>
   <changefreq>daily</changefreq>
   <priority>1.0</priority>
 </url>
 
-<!-- QuickBooks/Tally Integration Page - High CPC -->
 <url>
   <loc>https://statementextract.com/convert-bank-statement-to-quickbooks-tally</loc>
-  <lastmod>2025-12-13</lastmod>
+  <lastmod>2025-12-14</lastmod>
   <changefreq>daily</changefreq>
   <priority>1.0</priority>
 </url>
 
-<!-- QuickBooks/Xero Integration Page - US Market -->
 <url>
   <loc>https://statementextract.com/convert-bank-statement-to-quickbooks-xero</loc>
-  <lastmod>2025-12-13</lastmod>
+  <lastmod>2025-12-14</lastmod>
   <changefreq>daily</changefreq>
   <priority>1.0</priority>
 </url>
 
-<!-- Blog Index -->
+<url>
+  <loc>https://statementextract.com/convert</loc>
+  <lastmod>2025-12-14</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>1.0</priority>
+</url>
+
+<url>
+  <loc>https://statementextract.com/convert/merge-pdf</loc>
+  <lastmod>2025-12-14</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>1.0</priority>
+</url>
+
+<url>
+  <loc>https://statementextract.com/convert/compress-pdf</loc>
+  <lastmod>2025-12-14</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>1.0</priority>
+</url>
+
+<url>
+  <loc>https://statementextract.com/convert/split-pdf</loc>
+  <lastmod>2025-12-14</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>1.0</priority>
+</url>
+
+<url>
+  <loc>https://statementextract.com/convert/jpg-to-pdf</loc>
+  <lastmod>2025-12-14</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>1.0</priority>
+</url>
+
+<url>
+  <loc>https://statementextract.com/convert/image-compressor</loc>
+  <lastmod>2025-12-14</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>1.0</priority>
+</url>
+
+<url>
+  <loc>https://statementextract.com/convert/json-to-toon</loc>
+  <lastmod>2025-12-14</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>1.0</priority>
+</url>
+
+<url>
+  <loc>https://statementextract.com/convert/batch-converter</loc>
+  <lastmod>2025-12-14</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>1.0</priority>
+</url>
+
+<url>
+  <loc>https://statementextract.com/convert/batch-converter/heic-to-jpg</loc>
+  <lastmod>2025-12-14</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>1.0</priority>
+</url>
+
+<url>
+  <loc>https://statementextract.com/convert/avif-converter/image-to-avif</loc>
+  <lastmod>2025-12-14</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>1.0</priority>
+</url>
+
+<url>
+  <loc>https://statementextract.com/convert/avif-converter/avif-to-png</loc>
+  <lastmod>2025-12-14</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>1.0</priority>
+</url>
+
+<url>
+  <loc>https://statementextract.com/convert/avif-converter/avif-to-webp</loc>
+  <lastmod>2025-12-14</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>1.0</priority>
+</url>
+
+<url>
+  <loc>https://statementextract.com/tools/profit-margin-calculator</loc>
+  <lastmod>2025-12-14</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>1.0</priority>
+</url>
+
+<url>
+  <loc>https://statementextract.com/tools/gst-vat-calculator</loc>
+  <lastmod>2025-12-14</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>1.0</priority>
+</url>
+
+<url>
+  <loc>https://statementextract.com/tools/markup-calculator</loc>
+  <lastmod>2025-12-14</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>1.0</priority>
+</url>
+
 <url>
   <loc>https://statementextract.com/blogs</loc>
-  <lastmod>2025-12-11</lastmod>
+  <lastmod>2025-12-14</lastmod>
   <changefreq>daily</changefreq>
   <priority>1.0</priority>
 </url>
 
-<!-- Blog Posts -->
 <url>
   <loc>https://statementextract.com/blogs/bank-statement-converter-pdf-to-excel-csv</loc>
-  <lastmod>2025-12-11</lastmod>
+  <lastmod>2025-12-14</lastmod>
   <changefreq>monthly</changefreq>
   <priority>1.0</priority>
 </url>
 
 <url>
   <loc>https://statementextract.com/blogs/bank-statement-analysis-loan-underwriting-automation</loc>
-  <lastmod>2025-12-11</lastmod>
+  <lastmod>2025-12-14</lastmod>
   <changefreq>monthly</changefreq>
   <priority>1.0</priority>
 </url>
 
 <url>
   <loc>https://statementextract.com/blogs/idp-vs-ocr-document-processing</loc>
-  <lastmod>2025-12-11</lastmod>
+  <lastmod>2025-12-14</lastmod>
   <changefreq>monthly</changefreq>
   <priority>1.0</priority>
 </url>
 
 <url>
   <loc>https://statementextract.com/blogs/bank-statement-pdf-to-excel-using-ai</loc>
-  <lastmod>2025-12-11</lastmod>
+  <lastmod>2025-12-14</lastmod>
   <changefreq>monthly</changefreq>
   <priority>1.0</priority>
 </url>
 
 <url>
   <loc>https://statementextract.com/blogs/ultimate-guide-accurate-bank-statement-extraction-ocr-ai</loc>
-  <lastmod>2025-12-11</lastmod>
+  <lastmod>2025-12-14</lastmod>
   <changefreq>monthly</changefreq>
   <priority>1.0</priority>
 </url>
 
 <url>
   <loc>https://statementextract.com/blogs/ai-bank-statement-data-extraction-no-templates</loc>
-  <lastmod>2025-12-11</lastmod>
+  <lastmod>2025-12-14</lastmod>
   <changefreq>monthly</changefreq>
   <priority>1.0</priority>
 </url>
 
 <url>
   <loc>https://statementextract.com/blogs/best-bank-statement-extraction-software-comparison</loc>
-  <lastmod>2025-12-11</lastmod>
+  <lastmod>2025-12-14</lastmod>
   <changefreq>monthly</changefreq>
   <priority>1.0</priority>
 </url>
 
-<!-- About Page -->
 <url>
   <loc>https://statementextract.com/about</loc>
-  <lastmod>2025-12-11</lastmod>
+  <lastmod>2025-12-14</lastmod>
   <changefreq>monthly</changefreq>
   <priority>1.0</priority>
 </url>
 
-<!-- Footer/Legal Pages - Lower Priority -->
+<url>
+  <loc>https://statementextract.com/pricing</loc>
+  <lastmod>2025-12-14</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>1.0</priority>
+</url>
+
 <url>
   <loc>https://statementextract.com/careers</loc>
-  <lastmod>2025-12-11</lastmod>
+  <lastmod>2025-12-14</lastmod>
   <changefreq>monthly</changefreq>
   <priority>0.5</priority>
 </url>
 
 <url>
   <loc>https://statementextract.com/privacy-policy</loc>
-  <lastmod>2025-12-11</lastmod>
+  <lastmod>2025-12-14</lastmod>
   <changefreq>yearly</changefreq>
   <priority>0.3</priority>
 </url>
 
 <url>
   <loc>https://statementextract.com/terms</loc>
-  <lastmod>2025-12-11</lastmod>
+  <lastmod>2025-12-14</lastmod>
   <changefreq>yearly</changefreq>
   <priority>0.3</priority>
-</url>
-
-<url>
-  <loc>https://statementextract.com/contact</loc>
-  <lastmod>2025-12-11</lastmod>
-  <changefreq>yearly</changefreq>
-  <priority>0.3</priority>
-</url>
-
-<!-- Free Developer Tools Hub -->
-<url>
-  <loc>https://statementextract.com/convert</loc>
-  <lastmod>2025-12-13</lastmod>
-  <changefreq>weekly</changefreq>
-  <priority>0.8</priority>
-</url>
-
-<!-- Image Compressor - High-CPC Long-tail Keywords -->
-<url>
-  <loc>https://statementextract.com/convert/image-compressor</loc>
-  <lastmod>2025-12-13</lastmod>
-  <changefreq>weekly</changefreq>
-  <priority>0.8</priority>
-</url>
-
-<!-- JSON to TOON Converter -->
-<url>
-  <loc>https://statementextract.com/convert/json-to-toon</loc>
-  <lastmod>2025-12-13</lastmod>
-  <changefreq>weekly</changefreq>
-  <priority>0.7</priority>
-</url>
-
-<!-- Batch Image Converter -->
-<url>
-  <loc>https://statementextract.com/convert/batch-converter</loc>
-  <lastmod>2025-12-13</lastmod>
-  <changefreq>weekly</changefreq>
-  <priority>0.7</priority>
-</url>
-
-<!-- HEIC to JPG -->
-<url>
-  <loc>https://statementextract.com/convert/batch-converter/heic-to-jpg</loc>
-  <lastmod>2025-12-13</lastmod>
-  <changefreq>weekly</changefreq>
-  <priority>0.7</priority>
-</url>
-
-<!-- AVIF Converters -->
-<url>
-  <loc>https://statementextract.com/convert/avif-converter/image-to-avif</loc>
-  <lastmod>2025-12-13</lastmod>
-  <changefreq>weekly</changefreq>
-  <priority>0.7</priority>
-</url>
-
-<url>
-  <loc>https://statementextract.com/convert/avif-converter/avif-to-png</loc>
-  <lastmod>2025-12-13</lastmod>
-  <changefreq>weekly</changefreq>
-  <priority>0.7</priority>
-</url>
-
-<url>
-  <loc>https://statementextract.com/convert/avif-converter/avif-to-webp</loc>
-  <lastmod>2025-12-13</lastmod>
-  <changefreq>weekly</changefreq>
-  <priority>0.7</priority>
 </url>
 
 </urlset>

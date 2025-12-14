@@ -101,8 +101,8 @@ export default function CompressPDFPage() {
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
             />
 
-            {/* Tool Section */}
-            <section className="py-12 md:py-20 px-6 border-b border-[hsl(var(--border))]">
+            {/* Tool Section - Visible Above the Fold */}
+            <section className="py-6 md:py-10 px-6 border-b border-[hsl(var(--border))]">
                 <CompressPDFTool />
             </section>
 

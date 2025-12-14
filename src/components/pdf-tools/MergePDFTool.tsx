@@ -132,7 +132,7 @@ export function MergePDFTool() {
             }
 
             const mergedPdfBytes = await mergedPdf.save();
-            const blob = new Blob([mergedPdfBytes], { type: "application/pdf" });
+            const blob = new Blob([mergedPdfBytes.buffer as BlobPart], { type: "application/pdf" });
             const url = URL.createObjectURL(blob);
 
             const link = document.createElement("a");
@@ -155,12 +155,12 @@ export function MergePDFTool() {
     return (
         <div className="max-w-3xl mx-auto">
             {/* Header */}
-            <div className="text-center mb-8">
-                <h1 className="text-3xl md:text-4xl font-bold text-[hsl(var(--foreground))] mb-3">
+            <div className="text-center mb-4">
+                <h1 className="text-2xl md:text-3xl font-bold text-[hsl(var(--foreground))] mb-2">
                     Merge PDF Files Online
                 </h1>
                 <p className="text-[hsl(var(--muted-foreground))] max-w-xl mx-auto">
-                    Combine multiple PDF documents into one. Drag to reorder pages. 100% free, private, and secure — all processing happens in your browser.
+                    Combine multiple PDFs into one. Drag to reorder. 100% free and private.
                 </p>
             </div>
 
@@ -170,8 +170,8 @@ export function MergePDFTool() {
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 className={`relative border-2 border-dashed rounded-2xl p-8 md:p-12 text-center cursor-pointer transition-all duration-200 overflow-hidden ${isDragging
-                        ? "border-[hsl(var(--primary))] bg-[hsl(var(--primary))]/5"
-                        : "border-[hsl(var(--border))] hover:border-[hsl(var(--primary))]/50 hover:bg-[hsl(var(--muted))]/30"
+                    ? "border-[hsl(var(--primary))] bg-[hsl(var(--primary))]/5"
+                    : "border-[hsl(var(--border))] hover:border-[hsl(var(--primary))]/50 hover:bg-[hsl(var(--muted))]/30"
                     }`}
             >
                 {/* Dot Pattern Background */}

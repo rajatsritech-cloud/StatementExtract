@@ -1,22 +1,12 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import {
-    FileSpreadsheet,
-    FileImage,
-    Minimize2,
-    ArrowRight,
     Zap,
     Shield,
     Globe,
-    Images,
-    Code2,
-    Calculator,
-    Receipt,
-    Building2,
-    FileText,
-    TrendingUp,
-    Layers
+    ArrowRight,
 } from "lucide-react";
+import { ConvertPageClient } from "@/components/tools/ConvertPageClient";
 
 export const metadata: Metadata = {
     title: "Free Online Tools | Finance, Bookkeeping & Image Converters | Statement Extract",
@@ -33,184 +23,229 @@ export const metadata: Metadata = {
     },
 };
 
+// Use string names for icons to allow serialization to Client Component
+// Ordered by traffic priority: highest traffic first
 const toolSections = [
+    // 1. PDF Tools - Extremely high traffic (merge, compress, split are top searches)
+    {
+        title: "PDF Tools",
+        description: "Essential PDF utilities for document management",
+        icon: "Layers",
+        featured: true,
+        tools: [
+            {
+                title: "Merge PDF",
+                description: "Combine multiple PDF files into one document. Drag to reorder. 100% private.",
+                href: "/convert/merge-pdf",
+                icon: "Layers",
+                badge: "Popular",
+            },
+            {
+                title: "Compress PDF",
+                description: "Reduce PDF file size while maintaining quality. Perfect for email attachments.",
+                href: "/convert/compress-pdf",
+                icon: "Minimize2",
+                badge: "Popular",
+            },
+            {
+                title: "Split PDF",
+                description: "Extract pages or split a PDF into multiple documents.",
+                href: "/convert/split-pdf",
+                icon: "FileText",
+                badge: "New",
+            },
+            {
+                title: "JPG to PDF",
+                description: "Convert JPG, PNG images to PDF. Combine multiple photos into one PDF.",
+                href: "/convert/jpg-to-pdf",
+                icon: "FileImage",
+                badge: "Hot",
+            },
+        ],
+    },
+    // 2. Finance & Bookkeeping - Flagship product, high-value traffic
     {
         title: "Finance & Bookkeeping Tools",
         description: "AI-powered tools for accountants, CPAs, and financial professionals",
-        icon: Calculator,
-        featured: true,
+        icon: "Calculator",
+        featured: false,
         tools: [
             {
                 title: "Bank Statement to Excel/CSV",
                 description: "AI-powered extraction from any bank PDF to structured Excel or CSV. Perfect for reconciliation.",
                 href: "/convert-bank-statement-to-csv-excel",
-                icon: FileSpreadsheet,
+                icon: "FileSpreadsheet",
                 badge: "Flagship",
             },
             {
                 title: "Bank Statement to QuickBooks",
                 description: "Convert bank statements to QuickBooks-ready IIF format for seamless import.",
                 href: "/convert-bank-statement-to-quickbooks-xero",
-                icon: Building2,
+                icon: "Building2",
                 badge: "Popular",
             },
             {
                 title: "Bank Statement to Xero",
                 description: "Export bank transactions in Xero-compatible format. Save hours of manual entry.",
                 href: "/convert-bank-statement-to-quickbooks-xero",
-                icon: TrendingUp,
+                icon: "TrendingUp",
                 badge: null,
             },
             {
                 title: "PDF to Excel Converter",
                 description: "Extract tables and data from any PDF into editable Excel spreadsheets.",
                 href: "/convert-bank-statement-to-csv-excel",
-                icon: FileText,
+                icon: "FileText",
                 badge: null,
             },
             {
                 title: "Receipt Scanner to Excel",
                 description: "Scan receipts and invoices, extract data to Excel for expense tracking.",
                 href: "/convert-bank-statement-to-csv-excel",
-                icon: Receipt,
+                icon: "Receipt",
                 badge: "Coming Soon",
             },
         ],
     },
+    // 3. Image Converters - Good volume, evergreen traffic
     {
         title: "Image Converters",
         description: "Fast, free image conversion tools that run entirely in your browser",
-        icon: FileImage,
+        icon: "FileImage",
         featured: false,
         tools: [
             {
                 title: "HEIC & AVIF Batch Converter",
                 description: "Batch convert iPhone HEIC photos and AVIF images to PNG or JPG.",
                 href: "/convert/batch-converter",
-                icon: Images,
+                icon: "Images",
                 badge: "Popular",
             },
             {
                 title: "Image to AVIF Converter",
                 description: "Convert PNG, JPG, WebP to AVIF for up to 50% smaller files.",
                 href: "/convert/avif-converter/image-to-avif",
-                icon: FileImage,
+                icon: "FileImage",
                 badge: null,
             },
             {
                 title: "AVIF to PNG Converter",
                 description: "Convert AVIF images to universally compatible PNG format.",
                 href: "/convert/avif-converter/avif-to-png",
-                icon: FileImage,
+                icon: "FileImage",
                 badge: null,
             },
             {
                 title: "Image Compressor",
                 description: "Compress images to exact sizes: 10KB, 20KB, 50KB, or 100KB.",
                 href: "/convert/image-compressor",
-                icon: Minimize2,
+                icon: "Minimize2",
                 badge: null,
             },
         ],
     },
+    // 4. Finance Calculators - Good CPC, growing traffic
+    {
+        title: "Finance Calculators",
+        description: "Essential business calculators for pricing, margins, and financial analysis",
+        icon: "Calculator",
+        featured: false,
+        tools: [
+            {
+                title: "Profit Margin Calculator",
+                description: "Calculate gross margin, net margin, and markup percentage instantly.",
+                href: "/tools/profit-margin-calculator",
+                icon: "TrendingUp",
+                badge: "New",
+            },
+            {
+                title: "GST/VAT Calculator",
+                description: "Calculate GST, VAT, and sales tax for any country. Add or remove tax.",
+                href: "/tools/gst-vat-calculator",
+                icon: "Receipt",
+                badge: "New",
+            },
+            {
+                title: "Markup Calculator",
+                description: "Calculate markup percentage, selling price, and profit. Includes markup vs margin conversion.",
+                href: "/tools/markup-calculator",
+                icon: "Calculator",
+                badge: "New",
+            },
+        ],
+    },
+    // 5. Developer Tools - Niche but engaged audience
     {
         title: "Developer Tools",
         description: "Specialized tools for developers and data processing",
-        icon: Code2,
+        icon: "Code2",
         featured: false,
         tools: [
             {
                 title: "JSON to TOON Converter",
                 description: "Convert JSON to Token-Oriented Object Notation. Save 60% on LLM tokens.",
                 href: "/convert/json-to-toon",
-                icon: Code2,
+                icon: "Code2",
                 badge: "Hot",
             },
         ],
     },
-    {
-        title: "Excel Converters",
-        description: "Convert Excel spreadsheets to various formats with perfect formatting",
-        icon: FileSpreadsheet,
-        featured: false,
-        tools: [
-            {
-                title: "Excel to PDF",
-                description: "Convert Excel spreadsheets to PDF with perfect formatting preservation. No broken tables.",
-                href: "#",
-                icon: FileSpreadsheet,
-                badge: "Coming Soon",
-            },
-            {
-                title: "Excel to Word",
-                description: "Transform Excel data into professional Word documents. Perfect for reports.",
-                href: "#",
-                icon: FileText,
-                badge: "Coming Soon",
-            },
-            {
-                title: "Excel to PowerPoint",
-                description: "Convert Excel spreadsheets into PowerPoint presentations for data visualization.",
-                href: "#",
-                icon: FileSpreadsheet,
-                badge: "Coming Soon",
-            },
-        ],
-    },
+    // 6. PDF Converters - Coming Soon section
     {
         title: "PDF Converters",
         description: "Extract and convert PDF content to editable formats",
-        icon: FileText,
+        icon: "FileText",
         featured: false,
         tools: [
             {
                 title: "PDF to Excel",
                 description: "Extract data from PDF files into editable Excel spreadsheets. Fast and accurate.",
                 href: "#",
-                icon: FileSpreadsheet,
+                icon: "FileSpreadsheet",
                 badge: "Coming Soon",
             },
             {
                 title: "PDF to Word",
                 description: "Convert PDF documents to editable Word files while preserving formatting.",
                 href: "#",
-                icon: FileText,
+                icon: "FileText",
                 badge: "Coming Soon",
             },
             {
                 title: "PDF to PowerPoint",
                 description: "Transform PDF content into editable PowerPoint presentations.",
                 href: "#",
-                icon: FileText,
+                icon: "FileText",
                 badge: "Coming Soon",
             },
         ],
     },
+    // 7. Excel Converters - Coming Soon section
     {
-        title: "PDF Tools",
-        description: "Essential PDF utilities for document management",
-        icon: Layers,
+        title: "Excel Converters",
+        description: "Convert Excel spreadsheets to various formats with perfect formatting",
+        icon: "FileSpreadsheet",
         featured: false,
         tools: [
             {
-                title: "Merge PDF",
-                description: "Combine multiple PDF files into one document. Drag to reorder. 100% private.",
-                href: "/convert/merge-pdf",
-                icon: Layers,
-                badge: "New",
-            },
-            {
-                title: "Compress PDF",
-                description: "Reduce PDF file size while maintaining quality. Perfect for email attachments.",
-                href: "/convert/compress-pdf",
-                icon: Minimize2,
-                badge: "New",
-            },
-            {
-                title: "Split PDF",
-                description: "Extract pages or split a PDF into multiple documents.",
+                title: "Excel to PDF",
+                description: "Convert Excel spreadsheets to PDF with perfect formatting preservation. No broken tables.",
                 href: "#",
-                icon: FileText,
+                icon: "FileSpreadsheet",
+                badge: "Coming Soon",
+            },
+            {
+                title: "Excel to Word",
+                description: "Transform Excel data into professional Word documents. Perfect for reports.",
+                href: "#",
+                icon: "FileText",
+                badge: "Coming Soon",
+            },
+            {
+                title: "Excel to PowerPoint",
+                description: "Convert Excel spreadsheets into PowerPoint presentations for data visualization.",
+                href: "#",
+                icon: "FileSpreadsheet",
                 badge: "Coming Soon",
             },
         ],
@@ -220,129 +255,43 @@ const toolSections = [
 export default function ConvertHubPage() {
     return (
         <main className="min-h-screen bg-[hsl(var(--background))]">
-            {/* Hero with Grid Background */}
-            <section className="relative py-16 md:py-24 px-6 text-center border-b border-[hsl(var(--border))] overflow-hidden">
-                {/* Grid SVG Background */}
-                <div className="absolute inset-0 pointer-events-none">
-                    <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <pattern id="grid-pattern" width="40" height="40" patternUnits="userSpaceOnUse">
-                                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" strokeWidth="1" className="text-[hsl(var(--border))]" strokeOpacity="0.5" />
-                            </pattern>
-                        </defs>
-                        <rect width="100%" height="100%" fill="url(#grid-pattern)" />
-                    </svg>
-                    <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[hsl(var(--background))] to-transparent" />
-                    <div className="absolute top-12 left-[10%] w-16 h-16 rounded-xl bg-[hsl(var(--primary))]/5 border border-[hsl(var(--primary))]/10 rotate-12" />
-                    <div className="absolute top-24 right-[15%] w-12 h-12 rounded-lg bg-[hsl(var(--primary))]/8 border border-[hsl(var(--primary))]/15 -rotate-6" />
-                    <div className="absolute bottom-16 left-[20%] w-10 h-10 rounded-lg bg-[hsl(var(--primary))]/6 border border-[hsl(var(--primary))]/10 rotate-45" />
-                    <div className="absolute bottom-20 right-[25%] w-14 h-14 rounded-xl bg-[hsl(var(--primary))]/5 border border-[hsl(var(--primary))]/8 -rotate-12" />
-                </div>
-
-                <div className="relative z-10">
-                    <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[hsl(var(--primary))]/30 bg-[hsl(var(--primary))]/10 px-4 py-1.5">
-                        <Zap className="h-4 w-4 text-[hsl(var(--primary))]" />
-                        <span className="text-sm font-medium text-[hsl(var(--primary))]">
-                            All Tools 100% Free
-                        </span>
+            {/* Category Filter - Above Hero */}
+            <ConvertPageClient toolSections={toolSections} heroContent={
+                /* Hero with Grid Background */
+                <section className="relative py-16 md:py-24 px-6 text-center border-b border-[hsl(var(--border))] overflow-hidden">
+                    {/* Grid SVG Background */}
+                    <div className="absolute inset-0 pointer-events-none">
+                        <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <pattern id="grid-pattern" width="40" height="40" patternUnits="userSpaceOnUse">
+                                    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" strokeWidth="1" className="text-[hsl(var(--border))]" strokeOpacity="0.5" />
+                                </pattern>
+                            </defs>
+                            <rect width="100%" height="100%" fill="url(#grid-pattern)" />
+                        </svg>
+                        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[hsl(var(--background))] to-transparent" />
+                        <div className="absolute top-12 left-[10%] w-16 h-16 rounded-xl bg-[hsl(var(--primary))]/5 border border-[hsl(var(--primary))]/10 rotate-12" />
+                        <div className="absolute top-24 right-[15%] w-12 h-12 rounded-lg bg-[hsl(var(--primary))]/8 border border-[hsl(var(--primary))]/15 -rotate-6" />
+                        <div className="absolute bottom-16 left-[20%] w-10 h-10 rounded-lg bg-[hsl(var(--primary))]/6 border border-[hsl(var(--primary))]/10 rotate-45" />
+                        <div className="absolute bottom-20 right-[25%] w-14 h-14 rounded-xl bg-[hsl(var(--primary))]/5 border border-[hsl(var(--primary))]/8 -rotate-12" />
                     </div>
-                    <h1 className="text-4xl md:text-5xl font-bold text-[hsl(var(--foreground))] mb-4">
-                        Free Online Tools for <span className="bg-gradient-primary bg-clip-text text-transparent">Finance & Productivity</span>
-                    </h1>
-                    <p className="text-lg text-[hsl(var(--muted-foreground))] max-w-3xl mx-auto">
-                        Convert bank statements, images, and data instantly. Trusted by accountants, CPAs, and bookkeepers worldwide. No signup, no watermarks.
-                    </p>
-                </div>
-            </section>
 
-            {/* Tool Sections */}
-            {toolSections.map((section, sectionIndex) => (
-                <section
-                    key={sectionIndex}
-                    className={`relative py-12 md:py-16 px-6 ${section.featured ? 'bg-[hsl(var(--muted))]/30' : ''} ${sectionIndex > 0 ? 'border-t border-[hsl(var(--border))]' : ''}`}
-                >
-                    <div className="max-w-6xl mx-auto">
-                        {/* Section Header */}
-                        <div className="flex items-center gap-4 mb-8">
-                            <div className={`p-3 rounded-xl ${section.featured ? 'bg-[hsl(var(--primary))]' : 'bg-[hsl(var(--primary))]/10'}`}>
-                                <section.icon className={`w-6 h-6 ${section.featured ? 'text-white' : 'text-[hsl(var(--primary))]'}`} />
-                            </div>
-                            <div>
-                                <h2 className="text-2xl font-bold text-[hsl(var(--foreground))]">
-                                    {section.title}
-                                    {section.featured && (
-                                        <span className="ml-3 px-2 py-0.5 text-xs font-medium rounded-full bg-[hsl(var(--primary))] text-white">
-                                            Most Used
-                                        </span>
-                                    )}
-                                </h2>
-                                <p className="text-sm text-[hsl(var(--muted-foreground))]">{section.description}</p>
-                            </div>
+                    <div className="relative z-10">
+                        <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[hsl(var(--primary))]/30 bg-[hsl(var(--primary))]/10 px-4 py-1.5">
+                            <Zap className="h-4 w-4 text-[hsl(var(--primary))]" />
+                            <span className="text-sm font-medium text-[hsl(var(--primary))]">
+                                All Tools 100% Free
+                            </span>
                         </div>
-
-                        {/* Tools Grid */}
-                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {section.tools.map((tool, toolIndex) => {
-                                const CardContent = (
-                                    <>
-                                        <div className="flex items-start justify-between mb-4">
-                                            <div className="p-3 rounded-xl bg-[hsl(var(--primary))]/10">
-                                                <tool.icon className="w-6 h-6 text-[hsl(var(--primary))]" />
-                                            </div>
-                                            {tool.badge && (
-                                                <span className={`px-2 py-1 text-xs font-medium rounded-full ${tool.badge === "Flagship"
-                                                    ? "bg-gradient-primary text-white"
-                                                    : tool.badge === "Coming Soon"
-                                                        ? "bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))]"
-                                                        : "bg-[hsl(var(--primary))] text-white"
-                                                    }`}>
-                                                    {tool.badge}
-                                                </span>
-                                            )}
-                                        </div>
-                                        <h3 className={`text-lg font-semibold text-[hsl(var(--foreground))] mb-2 transition-colors ${tool.badge !== "Coming Soon" ? "group-hover:text-[hsl(var(--primary))]" : ""
-                                            }`}>
-                                            {tool.title}
-                                        </h3>
-                                        <p className="text-sm text-[hsl(var(--muted-foreground))] mb-4">
-                                            {tool.description}
-                                        </p>
-                                        <div className={`flex items-center text-sm font-medium ${tool.badge === "Coming Soon"
-                                            ? "text-[hsl(var(--muted-foreground))]"
-                                            : "text-[hsl(var(--primary))]"
-                                            }`}>
-                                            {tool.badge === "Coming Soon" ? "Get Notified" : "Try it free"}
-                                            <ArrowRight className={`w-4 h-4 ml-1 ${tool.badge !== "Coming Soon" ? "group-hover:translate-x-1" : ""
-                                                } transition-transform`} />
-                                        </div>
-                                    </>
-                                );
-
-                                if (tool.badge === "Coming Soon") {
-                                    return (
-                                        <div
-                                            key={toolIndex}
-                                            className="group p-6 rounded-2xl bg-[hsl(var(--card))] border border-[hsl(var(--border))] opacity-70 cursor-not-allowed"
-                                        >
-                                            {CardContent}
-                                        </div>
-                                    );
-                                }
-
-                                return (
-                                    <Link
-                                        key={toolIndex}
-                                        href={tool.href}
-                                        className="group p-6 rounded-2xl bg-[hsl(var(--card))] border border-[hsl(var(--border))] transition-all hover:border-[hsl(var(--primary))] hover:shadow-lg"
-                                    >
-                                        {CardContent}
-                                    </Link>
-                                );
-                            })}
-                        </div>
+                        <h1 className="text-4xl md:text-5xl font-bold text-[hsl(var(--foreground))] mb-4">
+                            Free Online Tools for <span className="bg-gradient-primary bg-clip-text text-transparent">Finance & Productivity</span>
+                        </h1>
+                        <p className="text-lg text-[hsl(var(--muted-foreground))] max-w-3xl mx-auto">
+                            Convert bank statements, images, and data instantly. Trusted by accountants, CPAs, and bookkeepers worldwide. No signup, no watermarks.
+                        </p>
                     </div>
                 </section>
-            ))}
+            } />
 
             {/* Features */}
             <section className="relative py-12 md:py-16 px-6 border-t border-[hsl(var(--border))]">
