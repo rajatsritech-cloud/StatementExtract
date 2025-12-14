@@ -293,7 +293,7 @@ export default function ConvertHubPage() {
                         <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[hsl(var(--primary))]/30 bg-[hsl(var(--primary))]/10 px-4 py-1.5">
                             <Zap className="h-4 w-4 text-[hsl(var(--primary))]" />
                             <span className="text-sm font-medium text-[hsl(var(--primary))]">
-                                All Tools 100% Free
+                                All Tools 100% Free and Private
                             </span>
                         </div>
                         <h1 className="text-4xl md:text-5xl font-bold text-[hsl(var(--foreground))] mb-4">
