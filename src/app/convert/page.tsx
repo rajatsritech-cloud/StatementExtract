@@ -232,36 +232,7 @@ const toolSections = [
             },
         ],
     },
-    // 6. PDF Converters - Coming Soon section
-    {
-        title: "PDF Converters",
-        description: "Extract and convert PDF content to editable formats",
-        icon: "FileText",
-        featured: false,
-        tools: [
-            {
-                title: "PDF to Excel",
-                description: "Extract data from PDF files into editable Excel spreadsheets. Fast and accurate.",
-                href: "#",
-                icon: "FileSpreadsheet",
-                badge: "Coming Soon",
-            },
-            {
-                title: "PDF to Word",
-                description: "Convert PDF documents to editable Word files while preserving formatting.",
-                href: "#",
-                icon: "FileText",
-                badge: "Coming Soon",
-            },
-            {
-                title: "PDF to PowerPoint",
-                description: "Transform PDF content into editable PowerPoint presentations.",
-                href: "#",
-                icon: "FileText",
-                badge: "Coming Soon",
-            },
-        ],
-    },
+
     // 7. Excel Converters - Coming Soon section
     {
         title: "Excel Converters",
