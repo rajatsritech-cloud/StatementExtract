@@ -192,14 +192,14 @@ export function BlogsPageClient({ posts }: BlogsPageClientProps) {
                                 href={`/blogs/${post.slug}`}
                                 className="group flex flex-col h-full bg-[hsl(var(--card))] rounded-2xl border border-[hsl(var(--border))] overflow-hidden transition-all duration-300 hover:border-[hsl(var(--primary))]/50 hover:shadow-lg hover:-translate-y-1"
                             >
-                                {/* Image Container - uniform height, fills space (cover), aligned top */}
-                                <div className="h-48 w-full relative bg-[hsl(var(--muted))]">
+                                {/* Image Container - edge to edge, full quality */}
+                                <div className="aspect-[16/9] w-full relative bg-[hsl(var(--muted))] overflow-hidden">
                                     {post.coverImage ? (
                                         <>
                                             <img
                                                 src={post.coverImage}
                                                 alt={post.title}
-                                                className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                                                className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                                             />
                                             {/* AI-Generated Image Disclosure */}
                                             <div className="absolute bottom-2 right-2 flex items-center gap-1 bg-black/50 backdrop-blur-sm text-white/80 text-[9px] px-1.5 py-0.5 rounded">
