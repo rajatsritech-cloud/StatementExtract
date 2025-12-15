@@ -238,38 +238,7 @@ const toolSections = [
                 badge: null,
             },
         ],
-    },
-
-    // 7. Excel Converters - Coming Soon section
-    {
-        title: "Excel Converters",
-        description: "Convert Excel spreadsheets to various formats with perfect formatting",
-        icon: "FileSpreadsheet",
-        featured: false,
-        tools: [
-            {
-                title: "Excel to PDF",
-                description: "Convert Excel spreadsheets to PDF with perfect formatting preservation. No broken tables.",
-                href: "#",
-                icon: "FileSpreadsheet",
-                badge: "Coming Soon",
-            },
-            {
-                title: "Excel to Word",
-                description: "Transform Excel data into professional Word documents. Perfect for reports.",
-                href: "#",
-                icon: "FileText",
-                badge: "Coming Soon",
-            },
-            {
-                title: "Excel to PowerPoint",
-                description: "Convert Excel spreadsheets into PowerPoint presentations for data visualization.",
-                href: "#",
-                icon: "FileSpreadsheet",
-                badge: "Coming Soon",
-            },
-        ],
-    },
+    }
 ];
 
 export default function ConvertHubPage() {
