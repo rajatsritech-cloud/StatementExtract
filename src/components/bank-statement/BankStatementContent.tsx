@@ -190,13 +190,26 @@ export const BankStatementSEOContent = () => {
                 </ul>
 
                 <h3 className="text-2xl font-semibold text-[hsl(var(--foreground))] mb-4">
-                    Enterprise-Grade Security & Privacy
+                    Enterprise-Grade Security &amp; Privacy
                 </h3>
-                <p className="text-[hsl(var(--muted-foreground))]">
+                <p className="text-[hsl(var(--muted-foreground))] mb-8">
                     We treat your financial data with the highest level of security. All uploads are processed via <strong>256-bit SSL encryption</strong>.
                     We adhere to strict data privacy policies: your files are <strong>automatically deleted</strong> from our processing servers immediately after conversion.
                     Trusted by CPAs, mortgage brokers, and financial professionals worldwide.
                 </p>
+
+                <h3 className="text-2xl font-semibold text-[hsl(var(--foreground))] mb-4">
+                    Related Free Finance Tools
+                </h3>
+                <p className="text-[hsl(var(--muted-foreground))] mb-4">
+                    Looking for more finance tools? Try our free calculators:
+                </p>
+                <ul className="list-disc pl-6 text-[hsl(var(--muted-foreground))] space-y-2">
+                    <li><a href="/tools/financial-ratio-calculator" className="text-[hsl(var(--primary))] hover:underline">Financial Ratio Calculator</a> – Calculate 20+ key business ratios</li>
+                    <li><a href="/tools/profit-margin-calculator" className="text-[hsl(var(--primary))] hover:underline">Profit Margin Calculator</a> – Calculate gross, operating, and net margins</li>
+                    <li><a href="/tools/amortization-calculator" className="text-[hsl(var(--primary))] hover:underline">Amortization Calculator</a> – See loan payments and extra payment savings</li>
+                    <li><a href="/tools/fire-calculator" className="text-[hsl(var(--primary))] hover:underline">FIRE Calculator</a> – Plan your path to financial independence</li>
+                </ul>
             </div>
         </section>
     );

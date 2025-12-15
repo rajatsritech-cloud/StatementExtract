@@ -40,11 +40,10 @@ const tiers = [
             { name: "Priority processing", included: true },
             { name: "24/7 email support", included: true },
         ],
-        cta: "Coming Soon",
-        href: "#",
+        cta: "Subscribe Now",
+        href: "mailto:support@statementextract.com?subject=Pro%20Plan%20Subscription&body=Hi%20Statement%20Extract%20Team%2C%0A%0AI%27d%20like%20to%20subscribe%20to%20the%20Pro%20plan%20(%2419%2Fmonth).%0A%0APlease%20send%20me%20payment%20instructions.%0A%0AThank%20you!",
         popular: true,
         icon: Crown,
-        comingSoon: true,
     },
     {
         name: "Custom",

@@ -140,8 +140,8 @@ const howToSchema = {
 const relatedTools = [
     { href: "/tools/profit-margin-calculator", title: "Profit Margin Calculator" },
     { href: "/tools/gst-vat-calculator", title: "GST/VAT Calculator" },
+    { href: "/tools/financial-ratio-calculator", title: "Financial Ratio Calculator" },
     { href: "/convert-bank-statement-to-csv-excel", title: "Bank Statement to Excel" },
-    { href: "/convert/jpg-to-pdf", title: "JPG to PDF" },
 ];
 
 // Industry markup rates for SEO content

@@ -17,9 +17,9 @@ export const metadata: Metadata = {
 
 const relatedTools = [
     { href: "/tools/amortization-calculator", title: "Amortization Calculator" },
+    { href: "/tools/fire-calculator", title: "FIRE Calculator" },
+    { href: "/tools/financial-ratio-calculator", title: "Financial Ratio Calculator" },
     { href: "/tools/debt-snowball-calculator", title: "Debt Snowball Calculator" },
-    { href: "/tools/markup-calculator", title: "Markup Calculator" },
-    { href: "/convert-bank-statement-to-csv-excel", title: "Bank Statement Converter" },
 ];
 
 export default function RentalROIPage() {

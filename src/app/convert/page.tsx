@@ -105,13 +105,6 @@ const toolSections = [
                 icon: "FileText",
                 badge: null,
             },
-            {
-                title: "Receipt Scanner to Excel",
-                description: "Scan receipts and invoices, extract data to Excel for expense tracking.",
-                href: "/convert-bank-statement-to-csv-excel",
-                icon: "Receipt",
-                badge: "Coming Soon",
-            },
         ],
     },
     // 3. Image Converters - Good volume, evergreen traffic

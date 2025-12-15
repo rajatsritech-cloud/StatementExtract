@@ -18,8 +18,8 @@ export const metadata: Metadata = {
 const relatedTools = [
     { href: "/tools/amortization-calculator", title: "Amortization Calculator" },
     { href: "/tools/fire-calculator", title: "FIRE Calculator" },
-    { href: "/tools/profit-margin-calculator", title: "Profit Margin Calculator" },
-    { href: "/convert-bank-statement-to-csv-excel", title: "Bank Statement Converter" },
+    { href: "/tools/financial-ratio-calculator", title: "Financial Ratio Calculator" },
+    { href: "/tools/rental-roi-calculator", title: "Rental ROI Calculator" },
 ];
 
 export default function DebtSnowballPage() {

@@ -164,10 +164,10 @@ const marginMarkupTable = [
 ];
 
 const relatedTools = [
+    { href: "/tools/markup-calculator", title: "Markup Calculator" },
+    { href: "/tools/financial-ratio-calculator", title: "Financial Ratio Calculator" },
+    { href: "/tools/gst-vat-calculator", title: "GST/VAT Calculator" },
     { href: "/convert-bank-statement-to-csv-excel", title: "Bank Statement to Excel" },
-    { href: "/convert/merge-pdf", title: "Merge PDF" },
-    { href: "/convert/compress-pdf", title: "Compress PDF" },
-    { href: "/convert/split-pdf", title: "Split PDF" },
 ];
 
 export default function ProfitMarginCalculatorPage() {

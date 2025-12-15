@@ -155,9 +155,9 @@ const countryTaxRates = [
 
 const relatedTools = [
     { href: "/tools/profit-margin-calculator", title: "Profit Margin Calculator" },
+    { href: "/tools/markup-calculator", title: "Markup Calculator" },
+    { href: "/tools/financial-ratio-calculator", title: "Financial Ratio Calculator" },
     { href: "/convert-bank-statement-to-csv-excel", title: "Bank Statement to Excel" },
-    { href: "/convert/merge-pdf", title: "Merge PDF" },
-    { href: "/convert/compress-pdf", title: "Compress PDF" },
 ];
 
 export default function GSTVATCalculatorPage() {

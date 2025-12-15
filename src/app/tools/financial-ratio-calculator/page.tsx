@@ -156,9 +156,9 @@ const ratioCategories = [
 
 const relatedTools = [
     { href: "/tools/profit-margin-calculator", title: "Profit Margin Calculator" },
+    { href: "/tools/fire-calculator", title: "FIRE Calculator" },
+    { href: "/tools/rental-roi-calculator", title: "Rental ROI Calculator" },
     { href: "/tools/amortization-calculator", title: "Amortization Calculator" },
-    { href: "/tools/debt-snowball-calculator", title: "Debt Snowball Calculator" },
-    { href: "/convert-bank-statement-to-csv-excel", title: "Bank Statement Converter" },
 ];
 
 export default function FinancialRatioCalculatorPage() {

@@ -117,9 +117,9 @@ const howToSchema = {
 };
 
 const relatedTools = [
-    { href: "/tools/profit-margin-calculator", title: "Profit Margin Calculator" },
-    { href: "/tools/markup-calculator", title: "Markup Calculator" },
-    { href: "/tools/gst-vat-calculator", title: "GST/VAT Calculator" },
+    { href: "/tools/debt-snowball-calculator", title: "Debt Snowball Calculator" },
+    { href: "/tools/fire-calculator", title: "FIRE Calculator" },
+    { href: "/tools/rental-roi-calculator", title: "Rental ROI Calculator" },
     { href: "/convert-bank-statement-to-csv-excel", title: "Bank Statement to Excel" },
 ];
 

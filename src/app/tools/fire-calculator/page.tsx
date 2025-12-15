@@ -18,8 +18,8 @@ export const metadata: Metadata = {
 const relatedTools = [
     { href: "/tools/rental-roi-calculator", title: "Rental ROI Calculator" },
     { href: "/tools/amortization-calculator", title: "Amortization Calculator" },
+    { href: "/tools/financial-ratio-calculator", title: "Financial Ratio Calculator" },
     { href: "/tools/debt-snowball-calculator", title: "Debt Snowball Calculator" },
-    { href: "/tools/profit-margin-calculator", title: "Profit Margin Calculator" },
 ];
 
 export default function FIREPage() {

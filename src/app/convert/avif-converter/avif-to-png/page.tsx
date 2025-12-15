@@ -153,7 +153,7 @@ export default function AvifToPngPage() {
                             { q: "Is this AVIF to PNG converter free?", a: "Yes, it's 100% free with no limits or signup required." },
                             { q: "Are my images uploaded to a server?", a: "No. All conversion happens in your browser. Your files never leave your device." },
                             { q: "What browsers support this tool?", a: "Chrome, Edge, Firefox, and Safari all support our converter." },
-                            { q: "Can I convert multiple images at once?", a: "Currently, you can convert one image at a time. Batch conversion is coming soon." },
+                            { q: "Can I convert multiple images at once?", a: "Yes! Use our Batch Converter tool for converting multiple images at once." },
                             { q: "Does conversion reduce image quality?", a: "No. PNG is a lossless format, so your image quality is fully preserved." },
                         ].map((faq, i) => (
                             <div key={i} className="p-6 rounded-2xl bg-[hsl(var(--card))] border border-[hsl(var(--border))]">

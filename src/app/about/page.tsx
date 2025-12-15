@@ -218,7 +218,7 @@ export default function AboutPage() {
               <li>Bills of Lading</li>
               <li>Passports</li>
               <li>Bank Statements</li>
-              <li className="text-xs text-[hsl(var(--primary))]">More formats coming soon</li>
+              <li className="text-xs text-[hsl(var(--primary))]">And many more formats</li>
             </ul>
           </div>
 
