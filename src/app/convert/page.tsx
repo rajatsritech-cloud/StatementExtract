@@ -207,6 +207,13 @@ const toolSections = [
                 icon: "Home",
                 badge: "Professional",
             },
+            {
+                title: "Financial Ratio Calculator",
+                description: "Calculate 20+ key ratios: liquidity, profitability, leverage, efficiency. Industry benchmarks included.",
+                href: "/tools/financial-ratio-calculator",
+                icon: "PieChart",
+                badge: "New",
+            },
         ],
     },
     // 5. Developer Tools - Niche but engaged audience
