@@ -69,6 +69,19 @@ export default function FIREPage() {
         ],
     };
 
+    // HowTo Schema for step-by-step instructions
+    const howToSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'HowTo',
+        name: 'How to Calculate Your FIRE Number',
+        step: [
+            { '@type': 'HowToStep', name: 'Enter Current Finances', text: 'Input your age, annual income, annual expenses, and current net worth.' },
+            { '@type': 'HowToStep', name: 'Set Investment Return', text: 'Enter your expected annual investment return (7% is a common inflation-adjusted estimate).' },
+            { '@type': 'HowToStep', name: 'View Your FI Number', text: 'See the portfolio size needed to retire (typically 25x annual expenses).' },
+            { '@type': 'HowToStep', name: 'Find Your FIRE Date', text: 'Discover the year and age when you can achieve financial independence.' }
+        ]
+    };
+
     return (
         <div className="min-h-screen bg-[hsl(var(--background))]">
             {/* Schema Markup */}
@@ -79,6 +92,10 @@ export default function FIREPage() {
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
             />
 
             <div className="py-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">

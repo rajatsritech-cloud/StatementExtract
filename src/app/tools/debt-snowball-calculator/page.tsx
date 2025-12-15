@@ -69,6 +69,19 @@ export default function DebtSnowballPage() {
         ],
     };
 
+    // HowTo Schema for step-by-step instructions
+    const howToSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'HowTo',
+        name: 'How to Use the Debt Snowball Calculator',
+        step: [
+            { '@type': 'HowToStep', name: 'Add Your Debts', text: 'Enter each debt with its name, balance, interest rate, and minimum payment.' },
+            { '@type': 'HowToStep', name: 'Set Extra Payment', text: 'Enter any extra monthly amount you can put toward debt payoff.' },
+            { '@type': 'HowToStep', name: 'View Payoff Timeline', text: 'See your debt-free date and the order in which debts will be eliminated.' },
+            { '@type': 'HowToStep', name: 'Track Progress', text: 'Return monthly to update balances and stay motivated.' }
+        ]
+    };
+
     return (
         <div className="min-h-screen bg-[hsl(var(--background))]">
             {/* Schema Markup */}
@@ -79,6 +92,10 @@ export default function DebtSnowballPage() {
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
             />
 
             <div className="py-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">

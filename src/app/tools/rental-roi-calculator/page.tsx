@@ -69,6 +69,19 @@ export default function RentalROIPage() {
         ],
     };
 
+    // HowTo Schema for step-by-step instructions
+    const howToSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'HowTo',
+        name: 'How to Calculate Rental Property ROI',
+        step: [
+            { '@type': 'HowToStep', name: 'Enter Property Details', text: 'Input purchase price, down payment, and monthly rent.' },
+            { '@type': 'HowToStep', name: 'Add Operating Expenses', text: 'Enter taxes, insurance, maintenance, vacancy rate, and management fees.' },
+            { '@type': 'HowToStep', name: 'Set Financing Terms', text: 'Input your loan interest rate and term for accurate mortgage calculations.' },
+            { '@type': 'HowToStep', name: 'Analyze Results', text: 'Review Cash Flow, Cap Rate, and Cash-on-Cash Return to evaluate the deal.' }
+        ]
+    };
+
     return (
         <div className="min-h-screen bg-[hsl(var(--background))]">
             {/* Schema Markup */}
@@ -79,6 +92,10 @@ export default function RentalROIPage() {
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
             />
 
             <div className="py-12 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">

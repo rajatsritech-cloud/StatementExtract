@@ -107,6 +107,19 @@ const faqSchema = {
     ]
 };
 
+// HowTo Schema for step-by-step instructions
+const howToSchema = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "How to Calculate Financial Ratios",
+    "step": [
+        { "@type": "HowToStep", "name": "Enter Balance Sheet Data", "text": "Input your current assets, liabilities, equity, and other balance sheet items." },
+        { "@type": "HowToStep", "name": "Enter Income Statement Data", "text": "Add revenue, cost of goods sold, operating income, and net income." },
+        { "@type": "HowToStep", "name": "Add Market Data (Optional)", "text": "For valuation ratios, enter share price and shares outstanding." },
+        { "@type": "HowToStep", "name": "Analyze Results", "text": "Review 20+ calculated ratios with color-coded benchmarks across 5 categories." }
+    ]
+};
+
 // Ratio categories for SEO content
 const ratioCategories = [
     {
@@ -159,6 +172,10 @@ export default function FinancialRatioCalculatorPage() {
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
             />
 
             {/* Calculator Tool Section - Visible Above the Fold */}

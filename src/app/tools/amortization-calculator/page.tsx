@@ -103,6 +103,19 @@ const faqSchema = {
     ]
 };
 
+// HowTo Schema for step-by-step instructions
+const howToSchema = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "How to Calculate Your Loan Amortization Schedule",
+    "step": [
+        { "@type": "HowToStep", "name": "Enter Loan Details", "text": "Input your loan amount, interest rate, and loan term (in years or months)." },
+        { "@type": "HowToStep", "name": "Add Extra Payments (Optional)", "text": "Enter any extra monthly payments you plan to make toward principal." },
+        { "@type": "HowToStep", "name": "View Results", "text": "See your monthly payment, total interest, and payoff date instantly." },
+        { "@type": "HowToStep", "name": "Download Schedule", "text": "Export your full amortization schedule to CSV for Excel or Google Sheets." }
+    ]
+};
+
 const relatedTools = [
     { href: "/tools/profit-margin-calculator", title: "Profit Margin Calculator" },
     { href: "/tools/markup-calculator", title: "Markup Calculator" },
@@ -120,6 +133,10 @@ export default function AmortizationCalculatorPage() {
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
             />
 
             <section className="py-6 md:py-10 px-6 border-b border-[hsl(var(--border))]">
