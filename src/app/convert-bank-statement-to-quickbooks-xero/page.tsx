@@ -10,27 +10,23 @@ import { RedirectIfAuthenticated } from "@/components/RedirectIfAuthenticated";
 import { RecentBlogs } from "@/components/RecentBlogs";
 
 export const metadata: Metadata = {
-    title: "Bank Statement to QuickBooks & Xero Converter | Convert PDF to QBO/CSV",
-    description: "Securely convert PDF bank statements to QuickBooks (.QBO) and Xero-compatible CSV formats. Automate data entry for QuickBooks Online, QuickBooks Desktop, and Xero. 99%+ Accuracy.",
+    title: "Convert Bank Statement PDF to QuickBooks & Xero (CSV/QBO) | 99% Accuracy",
+    description: "Instantly convert PDF bank statements to QuickBooks Online (.QBO) and Xero CSV. No manual entry. Trusted by accountants for high-volume reconciliation.",
     keywords: [
-        "Convert PDF to QuickBooks",
-        "Bank Statement to QuickBooks Converter",
-        "Import PDF to QuickBooks Online",
-        "Convert Bank Statement to QBO",
-        "Xero Bank Statement Import",
-        "PDF to Xero CSV",
-        "Automated Bank Statement Extraction",
-        "QuickBooks Web Connect File Generator",
-        "Best Bank Statement Converter for Accountants",
-        "Bank statement to Xero",
-        "QuickBooks bank feed",
-        "Xero bank reconciliation",
-        "Chase bank statement to QuickBooks",
-        "Wells Fargo PDF to Xero"
+        "Convert PDF to QuickBooks Online",
+        "PDF to QBO Converter",
+        "Bank Statement to Xero CSV",
+        "PDF to Excel Bank Statement",
+        "Automated Bank Reconciliation",
+        "QuickBooks Web Connect File",
+        "Scanned Bank Statement to Excel",
+        "Chase PDF to QuickBooks",
+        "Wells Fargo to Xero",
+        "Bank of America Statement Converter"
     ],
     openGraph: {
-        title: "Convert PDF Bank Statements to QuickBooks & Xero",
-        description: "The fastest way to import bank statements into QuickBooks and Xero. Convert PDFs to .QBO and CSV instantly.",
+        title: "Convert Bank Statement PDF to QuickBooks & Xero (CSV/QBO)",
+        description: "Stop typing. Start extracting. Turn PDF statements into QuickBooks and Xero ready files in seconds.",
         type: "website",
         url: "/convert-bank-statement-to-quickbooks-xero"
     },
@@ -50,26 +46,33 @@ export default function BankStatementXeroPage() {
                         "@context": "https://schema.org",
                         "@type": "SoftwareApplication",
                         "name": "Bank Statement to QuickBooks/Xero Converter",
-                        "description": "Convert PDF bank statements to QuickBooks QBO and Xero-compatible CSV formats automatically.",
+                        "headline": "Convert PDF Statements to QuickBooks & Xero",
+                        "description": "AI-powered tool to convert PDF bank statements into QuickBooks (.QBO) and Xero (.CSV) formats with 99.9% accuracy.",
                         "url": "https://statementextract.com/convert-bank-statement-to-quickbooks-xero",
                         "applicationCategory": "BusinessApplication",
-                        "operatingSystem": "Web Browser",
+                        "operatingSystem": "Web Browser, Windows, macOS, iOS, Android",
                         "offers": {
                             "@type": "Offer",
                             "price": "0",
-                            "priceCurrency": "USD"
+                            "priceCurrency": "USD",
+                            "priceValidUntil": "2025-12-31"
                         },
                         "featureList": [
-                            "PDF to QBO Conversion",
+                            "PDF to QBO (Web Connect) Conversion",
                             "PDF to Xero CSV Conversion",
-                            "Bank feed integration",
-                            "99%+ Accuracy",
-                            "Secure processing"
+                            "Automatic Bank Reconciliation",
+                            "High Accuracy OCR for Scanned Docs",
+                            "Secure & Private Processing"
                         ],
                         "aggregateRating": {
                             "@type": "AggregateRating",
                             "ratingValue": "4.9",
                             "ratingCount": "1847"
+                        },
+                        "author": {
+                            "@type": "Organization",
+                            "name": "Statement Extract",
+                            "url": "https://statementextract.com"
                         }
                     })
                 }}

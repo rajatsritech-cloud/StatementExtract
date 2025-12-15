@@ -114,6 +114,8 @@ export const BankStatementFAQQBO = () => {
     );
 };
 
+import Link from "next/link";
+
 export const BankStatementSEOContentQBO = () => {
     return (
         <section className="py-12 px-6 md:py-20 bg-[hsl(var(--background))]">
@@ -122,7 +124,7 @@ export const BankStatementSEOContentQBO = () => {
                     Automate Your Accounting: PDF to QuickBooks & Tally Converter
                 </h2>
                 <p className="text-[hsl(var(--muted-foreground))] mb-6">
-                    Streamline your accounting workflow by converting PDF bank statements directly into <strong>QuickBooks Online (.QBO)</strong> and <strong>Tally XML</strong> formats.
+                    Streamline your accounting workflow by converting PDF bank statements directly into <strong>QuickBooks Online (.QBO)</strong> and <strong>Tally-compatible XML</strong> formats.
                     Eliminate manual data entry errors, save hours of typing, and reconcile your accounts in minutes.
                 </p>
 
@@ -131,35 +133,36 @@ export const BankStatementSEOContentQBO = () => {
                 </h3>
                 <p className="text-[hsl(var(--muted-foreground))] mb-6">
                     Our tool generates <strong>Web Connect (.QBO)</strong> files that are certified compatible with QuickBooks.
-                    Instead of dealing with messy CSV mapping, simply upload the .QBO file to your "Bank Feeds" center.
+                    Instead of dealing with messy <Link href="/blogs/bank-statement-converter-pdf-to-excel-csv" className="text-primary hover:underline">CSV mapping</Link>, simply upload the .QBO file to your "Bank Feeds" center.
                     QuickBooks will automatically match transactions to your existing records, identifying duplicates and categorizing expenses.
                 </p>
 
                 <h3 className="text-2xl font-semibold text-[hsl(var(--foreground))] mb-4">
-                    Generate Tally XML Vouchers Automatically
+                    Import Bank Statements into Tally Prime
                 </h3>
                 <p className="text-[hsl(var(--muted-foreground))] mb-6">
-                    For Indian businesses and accountants using <strong>Tally Prime or ERP 9</strong>, manual voucher entry is a thing of the past.
-                    We convert your PDF bank statement directly into <strong>Tally XML format</strong>.
-                    Supports standard ledgers, "Payment" and "Receipt" voucher types, and precise date formatting (DD-MM-YYYY).
+                    For businesses using <strong>Tally</strong>, we generate clean XML Voucher files that match Tally's import format perfectly.
+                    Simply use the "Import Data" feature in Tally Prime.
+                    Our tool ensures all ledgers are mapped correctly, identifying <Link href="/blogs/idp-vs-ocr-document-processing" className="text-primary hover:underline">duplicates</Link> and categorizing expenses automatically.
                 </p>
 
                 <h3 className="text-2xl font-semibold text-[hsl(var(--foreground))] mb-4">
                     How it Works
                 </h3>
                 <ul className="list-disc pl-6 text-[hsl(var(--muted-foreground))] mb-6 space-y-2">
-                    <li><strong>Upload:</strong> Drag and drop your PDF bank statement (scanned or digital).</li>
-                    <li><strong>Extract:</strong> Our AI extracts specific fields like Cheque No, Transaction Date, and Narration.</li>
-                    <li><strong>Convert:</strong> Select "QuickBooks" or "Tally" as your output format.</li>
+                    <li><strong>Upload:</strong> Drag and drop your <Link href="/blogs/bank-statement-pdf-to-excel-using-ai" className="text-primary hover:underline">PDF bank statement</Link> (scanned or digital).</li>
+                    <li><strong>Extract:</strong> Our <Link href="/blogs/ultimate-guide-accurate-bank-statement-extraction-ocr-ai" className="text-primary hover:underline">AI extracts</Link> transaction dates, descriptions, amounts, and running balances.</li>
+                    <li><strong>Convert:</strong> Select "QuickBooks" or "Tally XML" as your output format.</li>
                     <li><strong>Import:</strong> Load the file directly into your accounting software. Zero manual typing.</li>
                 </ul>
 
                 <h3 className="text-2xl font-semibold text-[hsl(var(--foreground))] mb-4">
-                    Why CPAs and Bookkeepers Trust Us
+                    Trusted by CAs and Accounts Across India & Global
                 </h3>
                 <p className="text-[hsl(var(--muted-foreground))]">
                     We understand that one decimal error can ruin a reconciliation. Our <strong>Triple-Check Validation</strong> engine verifies
                     open/close balances against transaction totals before letting you download, guaranteeing 100% mathematical consistency.
+                    Thousands of accountants trust Statement Extract for their daily <Link href="/blogs/best-bank-statement-extraction-software-comparison" className="text-primary hover:underline">bank statement processing</Link> needs.
                 </p>
             </div>
         </section>

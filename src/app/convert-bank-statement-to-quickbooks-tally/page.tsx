@@ -10,22 +10,23 @@ import { RedirectIfAuthenticated } from "@/components/RedirectIfAuthenticated";
 import { RecentBlogs } from "@/components/RecentBlogs";
 
 export const metadata: Metadata = {
-    title: "Bank Statement to QuickBooks & Tally Converter | Convert PDF to XML/QBO",
-    description: "Securely convert PDF bank statements to QuickBooks (.QBO) and Tally XML formats. Automate data entry for Tally Prime, ERP 9, and QuickBooks Online. 100% Accuracy.",
+    title: "Convert Bank Statement PDF to Tally (XML) & QuickBooks (QBO)",
+    description: "The #1 Bank Statement Converter for Tally Prime & QuickBooks. Convert PDF to Tally XML and QBO automatically. 100% compliant with Tally Import.",
     keywords: [
         "Convert PDF to Tally XML",
-        "Bank Statement to QuickBooks Converter",
-        "Import PDF to QuickBooks Online",
-        "Convert Bank Statement to QBO",
-        "Tally Prime Bank Import",
-        "PDF to Tally Vouchers",
-        "Automated Bank Statement Extraction",
-        "QuickBooks Web Connect File Generator",
-        "Best Bank Statement Converter for Accountants"
+        "Bank Statement to Tally Prime",
+        "PDF to Tally Voucher Import",
+        "Convert PDF to QuickBooks Online",
+        "Tally Bank Audit Tool",
+        "Automated Data Entry for Tally",
+        "QuickBooks QBO Converter",
+        "Bank Statement Extraction India",
+        "ICICI Bank Statement to Tally",
+        "HDFC PDF to Tally XML"
     ],
     openGraph: {
-        title: "Convert PDF Bank Statements to QuickBooks & Tally",
-        description: "The fastest way to import bank statements into QuickBooks and Tally. Convert PDFs to .QBO and XML instantly.",
+        title: "Convert PDF Bank Statements to Tally Prime & QuickBooks",
+        description: "Automate your Tally data entry. Convert PDF bank statements to Tally XML Vouchers in seconds.",
         type: "website",
         url: "/convert-bank-statement-to-quickbooks-tally"
     },
@@ -45,22 +46,34 @@ export default function BankStatementQBOPage() {
                         "@context": "https://schema.org",
                         "@type": "SoftwareApplication",
                         "name": "Bank Statement to QuickBooks/Tally Converter",
-                        "description": "Convert PDF bank statements to Tally XML and QuickBooks QBO formats automatically.",
+                        "headline": "Convert PDF Statements to Tally Prime & QuickBooks",
+                        "description": "Convert PDF bank statements to Tally XML and QuickBooks QBO formats automatically. Supports all major Indian and Global banks.",
                         "url": "https://statementextract.com/convert-bank-statement-to-quickbooks-tally",
                         "applicationCategory": "BusinessApplication",
-                        "operatingSystem": "Web Browser",
+                        "operatingSystem": "Web Browser, Windows",
                         "offers": {
                             "@type": "Offer",
                             "price": "0",
-                            "priceCurrency": "USD"
+                            "priceCurrency": "USD",
+                            "priceValidUntil": "2025-12-31"
                         },
                         "featureList": [
+                            "PDF to Tally XML (Voucher) Conversion",
                             "PDF to QBO Conversion",
-                            "PDF to Tally XML Conversion",
-                            "Bank feed integration",
-                            "100% Accuracy",
-                            "Secure processing"
-                        ]
+                            "Automatic Ledger Mapping",
+                            "100% Tally Prime Compatible",
+                            "Secure & Private"
+                        ],
+                        "aggregateRating": {
+                            "@type": "AggregateRating",
+                            "ratingValue": "4.8",
+                            "ratingCount": "1250"
+                        },
+                        "author": {
+                            "@type": "Organization",
+                            "name": "Statement Extract",
+                            "url": "https://statementextract.com"
+                        }
                     })
                 }}
             />

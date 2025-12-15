@@ -118,6 +118,8 @@ export const BankStatementFAQXero = () => {
     );
 };
 
+import Link from "next/link";
+
 export const BankStatementSEOContentXero = () => {
     return (
         <section className="py-12 px-6 md:py-20 bg-[hsl(var(--background))]">
@@ -135,7 +137,7 @@ export const BankStatementSEOContentXero = () => {
                 </h3>
                 <p className="text-[hsl(var(--muted-foreground))] mb-6">
                     Our tool generates <strong>Web Connect (.QBO)</strong> files that are certified compatible with QuickBooks.
-                    Instead of dealing with messy CSV mapping, simply upload the .QBO file to your "Bank Feeds" center.
+                    Instead of dealing with messy <Link href="/blogs/bank-statement-converter-pdf-to-excel-csv" className="text-primary hover:underline">CSV mapping</Link>, simply upload the .QBO file to your "Bank Feeds" center.
                     QuickBooks will automatically match transactions to your existing records, identifying duplicates and categorizing expenses.
                 </p>
 
@@ -152,8 +154,8 @@ export const BankStatementSEOContentXero = () => {
                     How it Works
                 </h3>
                 <ul className="list-disc pl-6 text-[hsl(var(--muted-foreground))] mb-6 space-y-2">
-                    <li><strong>Upload:</strong> Drag and drop your PDF bank statement (scanned or digital).</li>
-                    <li><strong>Extract:</strong> Our AI extracts transaction dates, descriptions, amounts, and running balances.</li>
+                    <li><strong>Upload:</strong> Drag and drop your <Link href="/blogs/bank-statement-pdf-to-excel-using-ai" className="text-primary hover:underline">PDF bank statement</Link> (scanned or digital).</li>
+                    <li><strong>Extract:</strong> Our <Link href="/blogs/ultimate-guide-accurate-bank-statement-extraction-ocr-ai" className="text-primary hover:underline">AI extracts</Link> transaction dates, descriptions, amounts, and running balances.</li>
                     <li><strong>Convert:</strong> Select "QuickBooks" or "Xero" as your output format.</li>
                     <li><strong>Import:</strong> Load the file directly into your accounting software. Zero manual typing.</li>
                 </ul>
@@ -164,7 +166,7 @@ export const BankStatementSEOContentXero = () => {
                 <p className="text-[hsl(var(--muted-foreground))]">
                     We understand that one decimal error can ruin a reconciliation. Our <strong>Triple-Check Validation</strong> engine verifies
                     open/close balances against transaction totals before letting you download, guaranteeing 99%+ mathematical consistency.
-                    Thousands of accountants trust Statement Extract for their daily bank statement processing needs.
+                    Thousands of accountants trust Statement Extract for their daily <Link href="/blogs/best-bank-statement-extraction-software-comparison" className="text-primary hover:underline">bank statement processing</Link> needs.
                 </p>
             </div>
         </section>

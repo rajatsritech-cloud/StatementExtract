@@ -384,8 +384,44 @@ export default async function BlogPostPage({ params }: PageParams) {
   // preprocess content to normalize embeds (twitter blockquote -> url, youtube iframe -> watch URL)
   const processedContent = preprocessContentForEmbeds(content);
 
+  const siteUrl = "https://statementextract.com";
+  const ogImage = coverImage
+    ? (coverImage.startsWith("http") ? coverImage : `${siteUrl}${coverImage}`)
+    : `${siteUrl}/assets/StatementExtract_Workflow_img.png`;
+
+  const blogSchema = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": title,
+    "image": [ogImage],
+    "datePublished": date,
+    "dateModified": date, // Assuming no separate modified date for now
+    "author": {
+      "@type": "Organization",
+      "name": "Statement Extract",
+      "url": "https://statementextract.com"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Statement Extract",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://statementextract.com/favicon-512x512.png"
+      }
+    },
+    "description": summary,
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": `${siteUrl}/blogs/${slug}`
+    }
+  };
+
   return (
     <main className="min-h-screen bg-[hsl(var(--background))]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogSchema) }}
+      />
       <section className="border-b border-[hsl(var(--border))]">
         <div className="mx-auto flex max-w-4xl flex-col gap-5 px-6 py-14 text-left animate-fade-in md:py-16">
           <nav className="flex items-center gap-2 text-xs font-medium text-[hsl(var(--muted-foreground))]">
