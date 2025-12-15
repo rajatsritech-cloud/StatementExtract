@@ -587,11 +587,20 @@ export default async function BlogPostPage({ params }: PageParams) {
                     <div className="aspect-[16/9] w-full rounded-2xl bg-gray-100 sm:aspect-[2/1] lg:aspect-[3/2] overflow-hidden relative">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       {post.coverImage ? (
-                        <img
-                          src={post.coverImage}
-                          alt={post.title}
-                          className="absolute inset-0 h-full w-full object-fill transition-transform duration-200 group-hover:scale-[1.02]"
-                        />
+                        <>
+                          <img
+                            src={post.coverImage}
+                            alt={post.title}
+                            className="absolute inset-0 h-full w-full object-fill transition-transform duration-200 group-hover:scale-[1.02]"
+                          />
+                          {/* AI-Generated Image Disclosure */}
+                          <div className="absolute bottom-2 right-2 flex items-center gap-1 bg-black/50 backdrop-blur-sm text-white/80 text-[9px] px-1.5 py-0.5 rounded">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="h-2.5 w-2.5" aria-hidden="true">
+                              <path fillRule="evenodd" d="M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0ZM9 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM6.75 8a.75.75 0 0 0 0 1.5h.75v1.75a.75.75 0 0 0 1.5 0v-2.5A.75.75 0 0 0 8.25 8h-1.5Z" clipRule="evenodd" />
+                            </svg>
+                            <span>AI generated</span>
+                          </div>
+                        </>
                       ) : (
                         <div className="flex h-full w-full items-center justify-center text-xs text-gray-400">
                           No cover image

@@ -195,11 +195,20 @@ export function BlogsPageClient({ posts }: BlogsPageClientProps) {
                                 {/* Image Container - uniform height, fills space (cover), aligned top */}
                                 <div className="h-48 w-full relative bg-[hsl(var(--muted))]">
                                     {post.coverImage ? (
-                                        <img
-                                            src={post.coverImage}
-                                            alt={post.title}
-                                            className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
-                                        />
+                                        <>
+                                            <img
+                                                src={post.coverImage}
+                                                alt={post.title}
+                                                className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                                            />
+                                            {/* AI-Generated Image Disclosure */}
+                                            <div className="absolute bottom-2 right-2 flex items-center gap-1 bg-black/50 backdrop-blur-sm text-white/80 text-[9px] px-1.5 py-0.5 rounded">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="h-2.5 w-2.5" aria-hidden="true">
+                                                    <path fillRule="evenodd" d="M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0ZM9 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM6.75 8a.75.75 0 0 0 0 1.5h.75v1.75a.75.75 0 0 0 1.5 0v-2.5A.75.75 0 0 0 8.25 8h-1.5Z" clipRule="evenodd" />
+                                                </svg>
+                                                <span>AI generated</span>
+                                            </div>
+                                        </>
                                     ) : (
                                         <div className="absolute inset-0 flex items-center justify-center text-[hsl(var(--muted-foreground))] bg-[hsl(var(--muted))]">
                                             <BookOpen className="w-12 h-12 opacity-20" />
