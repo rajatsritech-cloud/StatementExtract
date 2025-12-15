@@ -10,6 +10,7 @@ import Link from "next/link";
 import LazyTweet from "@/components/LazyTweet";
 import { BlogNewsletterSignup } from "@/components/BlogNewsletterSignup";
 import { BlogInlineCTA } from "@/components/BlogInlineCTA";
+import { TableOfContents } from "@/components/blogs/TableOfContents";
 import styles from "./page.module.css";
 
 // Disable ISR (Incremental Static Regeneration)
@@ -431,102 +432,35 @@ export default async function BlogPostPage({ params }: PageParams) {
       </section>
       <section className={`${styles['blog-light-theme']} bg-[hsl(var(--background))]`}>
         <div className="mx-auto max-w-6xl px-6 py-12 lg:py-16 lg:grid lg:grid-cols-[minmax(0,260px)_minmax(0,1fr)] lg:gap-10 animate-slide-up">
-          <aside className="mb-10 self-start lg:mb-0 lg:sticky lg:top-28">
-            <div className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-5 shadow-sm">
-              <h2 className="text-xs font-semibold tracking-wide text-[hsl(var(--muted-foreground))] uppercase text-left">
-                TABLE OF CONTENTS
-              </h2>
-              <nav
-                aria-label="Table of contents"
-                className={`mt-4 text-left text-sm lg:max-h-[calc(100vh-10rem)] lg:overflow-y-auto lg:pr-1 ${styles['toc-scroll']}`}
-              >
-                <div className="lg:hidden">
-                  <details className="group rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))]">
-                    <summary className="flex cursor-pointer items-center justify-between px-3 py-2 text-xs font-medium text-[hsl(var(--muted-foreground))]">
-                      <span>Table of contents</span>
-                      <svg
-                        aria-hidden="true"
-                        className="h-3 w-3 text-[hsl(var(--muted-foreground))] group-open:rotate-90 transition-transform"
-                        viewBox="0 0 16 16"
-                        fill="none"
-                      >
-                        <path
-                          d="M5 3.5L10 8L5 12.5"
-                          stroke="currentColor"
-                          strokeWidth="1.4"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </summary>
-                    <div className="border-t border-[hsl(var(--border))] px-3 py-3">
-                      {headings.length === 0 && (
-                        <p className="text-xs text-[hsl(var(--muted-foreground))]">
-                          This article has no section headings yet.
-                        </p>
-                      )}
-                      {headings.length > 0 && (
-                        <ul className="mt-2 space-y-2">
-                          {headings.map((heading) => (
-                            <li key={heading.id} className="group">
-                              <a
-                                href={`#${heading.id}`}
-                                className="flex items-start gap-2 text-[hsl(var(--muted-foreground))] transition-colors hover:text-[hsl(var(--primary))]"
-                              >
-                                <span className="inline-flex mt-2 h-1.5 w-1.5 rounded-full bg-[hsl(var(--primary))]/60 group-hover:bg-[hsl(var(--primary))]" />
-                                <span className="flex-1 text-xs leading-snug">
-                                  {heading.text}
-                                </span>
-                              </a>
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                    </div>
-                  </details>
-                </div>
+          <TableOfContents headings={headings} />
 
-                <div className="hidden pr-1 lg:block">
-                  {headings.length === 0 && (
-                    <p className="text-xs text-[hsl(var(--muted-foreground))]">
-                      This article has no section headings yet.
-                    </p>
-                  )}
-                  {headings.length > 0 && (
-                    <ul className="space-y-2">
-                      {headings.map((heading) => (
-                        <li key={heading.id} className="group">
-                          <a
-                            href={`#${heading.id}`}
-                            className="flex items-start gap-2 text-[hsl(var(--muted-foreground))] transition-colors hover:text-[hsl(var(--primary))]"
-                          >
-                            <span className="inline-flex mt-2 h-1.5 w-1.5 rounded-full bg-[hsl(var(--primary))]/60 group-hover:bg-[hsl(var(--primary))]" />
-                            <span className="flex-1 text-xs md:text-sm leading-snug">
-                              {heading.text}
-                            </span>
-                            <svg
-                              aria-hidden="true"
-                              className="hidden h-3 w-3 text-[hsl(var(--muted-foreground))] group-hover:text-[hsl(var(--primary))] sm:block"
-                              viewBox="0 0 16 16"
-                              fill="none"
-                            >
-                              <path
-                                d="M5 3.5L10 8L5 12.5"
-                                stroke="currentColor"
-                                strokeWidth="1.4"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              />
-                            </svg>
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              </nav>
-            </div>
-          </aside>
+          {/* Mobile TOC - Keep simplified collapsible or move above content if needed, refining style */}
+          <div className="lg:hidden mb-8">
+            <details className="group rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--card))]">
+              <summary className="flex cursor-pointer items-center justify-between px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))]">
+                <span>Table of Contents</span>
+                <svg
+                  aria-hidden="true"
+                  className="h-4 w-4 text-[hsl(var(--muted-foreground))] group-open:rotate-90 transition-transform"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                >
+                  <path d="M5 3.5L10 8L5 12.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </summary>
+              <div className="border-t border-[hsl(var(--border))] px-4 py-3 bg-[hsl(var(--muted))]/30">
+                <ul className="space-y-2">
+                  {headings.map((heading) => (
+                    <li key={heading.id}>
+                      <a href={`#${heading.id}`} className="block text-sm text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))]">
+                        {heading.text}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </details>
+          </div>
 
           <div className="space-y-10">
             {summary && (
