@@ -62,12 +62,9 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
                     <span>Table of Contents</span>
                 </h2>
 
-                {/* Decorative backdrop line */}
-                <div className="absolute left-0 top-10 bottom-0 w-[2px] bg-[hsl(var(--border))]/50" />
-
-                <div className="max-h-[calc(100vh-12rem)] overflow-y-auto pr-4 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+                <div className="max-h-[calc(100vh-12rem)] overflow-y-auto pr-4 scrollbar-hide border-r border-[hsl(var(--border))]/50" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
                     <nav aria-label="Table of contents" className="relative">
-                        <ul className="space-y-0.5">
+                        <ul className="space-y-0.5 border-l border-[hsl(var(--border))]">
                             {headings.map((heading) => {
                                 const isActive = activeId === heading.id;
                                 return (
@@ -80,11 +77,10 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
                                                     behavior: "smooth",
                                                 });
                                                 setActiveId(heading.id);
-                                                // Update URL hash without jumping
                                                 window.history.pushState(null, "", `#${heading.id}`);
                                             }}
                                             className={`
-                      block pl-4 py-1.5 text-sm transition-all duration-200 border-l-2
+                      block pl-4 py-1.5 text-sm transition-all duration-200 border-l-2 -ml-[1px]
                       ${isActive
                                                     ? "border-[hsl(var(--primary))] text-[hsl(var(--primary))] font-semibold bg-[hsl(var(--primary))]/5"
                                                     : "border-transparent text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] hover:border-[hsl(var(--muted-foreground))]/50"
