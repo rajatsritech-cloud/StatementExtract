@@ -92,6 +92,13 @@ const toolSections = [
                 badge: null,
             },
             {
+                title: "QBO to CSV Converter",
+                description: "Convert QuickBooks .qbo files to CSV/Excel online for free. Open QBO files in Excel.",
+                href: "/convert/qbo-to-csv",
+                icon: "FileSpreadsheet",
+                badge: "Free",
+            },
+            {
                 title: "PDF to Excel Converter",
                 description: "Extract tables and data from any PDF into editable Excel spreadsheets.",
                 href: "/convert-bank-statement-to-csv-excel",

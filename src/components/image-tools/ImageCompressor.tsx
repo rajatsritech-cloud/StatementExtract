@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { Upload, Download, Image as ImageIcon, Loader2, CheckCircle2, Trash2, ArrowRight, Settings, Save } from "lucide-react";
 import { PrivacyBadge } from "@/components/ui/PrivacyBadge";
 
@@ -22,6 +22,15 @@ export const ImageCompressor = ({ title, description }: ImageCompressorProps) =>
     const [compressedSize, setCompressedSize] = useState<number>(0);
     const [targetSize, setTargetSize] = useState<number>(50);
     const inputRef = useRef<HTMLInputElement>(null);
+    const actionsRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (file) {
+            setTimeout(() => {
+                actionsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        }
+    }, [file]);
 
     const handleFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFile = e.target.files?.[0];
@@ -325,7 +334,7 @@ export const ImageCompressor = ({ title, description }: ImageCompressorProps) =>
 
             {/* Action Buttons */}
             {file && !compressedUrl && (
-                <div className="mt-6 flex gap-3 justify-center">
+                <div className="mt-6 flex gap-3 justify-center" ref={actionsRef}>
                     <button
                         onClick={reset}
                         className="px-6 py-3 rounded-xl border border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))] transition-colors flex items-center gap-2"

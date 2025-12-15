@@ -1,32 +1,29 @@
 "use client";
 
 import { useState, useCallback, useRef, useEffect } from "react";
-import { FileUp, X, GripVertical, Download, Loader2, FileText, Plus, Trash2 } from "lucide-react";
+import { FileUp, X, Download, Loader2, FileSpreadsheet, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PrivacyBadge } from "@/components/ui/PrivacyBadge";
-import { PDFDocument } from "pdf-lib";
 
-interface PDFFile {
+interface QboFile {
     id: string;
     file: File;
     name: string;
-    pageCount: number | null;
     size: string;
 }
 
-export function MergePDFTool() {
-    const [files, setFiles] = useState<PDFFile[]>([]);
+export function QboToCsvTool() {
+    const [files, setFiles] = useState<QboFile[]>([]);
     const [isDragging, setIsDragging] = useState(false);
-    const [isMerging, setIsMerging] = useState(false);
+    const [isProcessing, setIsProcessing] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
-
     const fileListRef = useRef<HTMLDivElement>(null);
-    const prevFileCount = useRef(0);
 
     // Auto-scroll to file list when files are added
+    const prevFileCount = useRef(0);
     useEffect(() => {
         if (files.length > prevFileCount.current) {
+            // New files were added
             setTimeout(() => {
                 fileListRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }, 100);
@@ -40,38 +37,27 @@ export function MergePDFTool() {
         return (bytes / (1024 * 1024)).toFixed(1) + " MB";
     };
 
-    const loadPDFInfo = async (file: File): Promise<PDFFile> => {
-        try {
-            const arrayBuffer = await file.arrayBuffer();
-            const pdfDoc = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
-            return {
-                id: crypto.randomUUID(),
-                file,
-                name: file.name,
-                pageCount: pdfDoc.getPageCount(),
-                size: formatFileSize(file.size),
-            };
-        } catch {
-            return {
-                id: crypto.randomUUID(),
-                file,
-                name: file.name,
-                pageCount: null,
-                size: formatFileSize(file.size),
-            };
-        }
-    };
-
-    const handleFiles = useCallback(async (fileList: FileList | File[]) => {
+    const handleFiles = useCallback((fileList: FileList | File[]) => {
         setError(null);
-        const pdfFiles = Array.from(fileList).filter(f => f.type === "application/pdf" || f.name.toLowerCase().endsWith(".pdf"));
+        const qboFiles = Array.from(fileList).filter(f =>
+            f.name.toLowerCase().endsWith(".qbo") ||
+            f.name.toLowerCase().endsWith(".ofx") ||
+            f.type === "application/vnd.intu.qbo" ||
+            f.type === "text/xml"
+        );
 
-        if (pdfFiles.length === 0) {
-            setError("Please select PDF files only.");
+        if (qboFiles.length === 0) {
+            setError("Please select .qbo or .ofx files only.");
             return;
         }
 
-        const newFiles = await Promise.all(pdfFiles.map(loadPDFInfo));
+        const newFiles = qboFiles.map(file => ({
+            id: crypto.randomUUID(),
+            file,
+            name: file.name,
+            size: formatFileSize(file.size),
+        }));
+
         setFiles(prev => [...prev, ...newFiles]);
     }, []);
 
@@ -106,75 +92,114 @@ export function MergePDFTool() {
         setError(null);
     };
 
-    // Drag and drop reordering
-    const handleDragStart = (index: number) => {
-        setDraggedIndex(index);
-    };
+    const parseQBO = async (file: File): Promise<string> => {
+        const text = await file.text();
 
-    const handleDragEnd = () => {
-        setDraggedIndex(null);
-    };
+        // Basic regex parsing for QBO/OFX SGML format
+        // This is robust enough for standard QBO files
+        const transactions: any[] = [];
 
-    const handleDragOverItem = (e: React.DragEvent, index: number) => {
-        e.preventDefault();
-        if (draggedIndex === null || draggedIndex === index) return;
+        // Find all STMTTRN blocks
+        const trnRegex = /<STMTTRN>([\s\S]*?)<\/STMTTRN>/g;
+        let match;
 
-        const newFiles = [...files];
-        const [draggedItem] = newFiles.splice(draggedIndex, 1);
-        newFiles.splice(index, 0, draggedItem);
-        setFiles(newFiles);
-        setDraggedIndex(index);
-    };
+        while ((match = trnRegex.exec(text)) !== null) {
+            const block = match[1];
 
-    const mergePDFs = async () => {
-        if (files.length < 2) {
-            setError("Please add at least 2 PDF files to merge.");
-            return;
+            const getDate = (tag: string) => {
+                const m = block.match(new RegExp(`<${tag}>\\s*([^<\r\n]+)`));
+                if (!m) return "";
+                // Format YYYYMMDDHHMMSS... to YYYY-MM-DD
+                const d = m[1].trim();
+                if (d.length >= 8) {
+                    return `${d.slice(0, 4)}-${d.slice(4, 6)}-${d.slice(6, 8)}`;
+                }
+                return d;
+            };
+
+            const getValue = (tag: string) => {
+                const m = block.match(new RegExp(`<${tag}>\\s*([^<\r\n]+)`));
+                return m ? m[1].trim() : "";
+            };
+
+            transactions.push({
+                Date: getDate("DTPOSTED"),
+                Amount: getValue("TRNAMT"),
+                Name: getValue("NAME"),
+                Memo: getValue("MEMO"),
+                Type: getValue("TRNTYPE"),
+                CheckNum: getValue("CHECKNUM"),
+                RefNum: getValue("REFNUM") || getValue("FITID"),
+            });
         }
 
-        setIsMerging(true);
+        if (transactions.length === 0) {
+            throw new Error(`No transactions found in ${file.name}`);
+        }
+
+        // Convert to CSV
+        const headers = ["Date", "Amount", "Name", "Memo", "Type", "CheckNum", "RefNum"];
+        const csvRows = [headers.join(",")];
+
+        for (const t of transactions) {
+            const row = headers.map(h => {
+                const val = t[h] || "";
+                // Escape quotes and wrap in quotes if contains comma
+                if (val.includes(",") || val.includes('"')) {
+                    return `"${val.replace(/"/g, '""')}"`;
+                }
+                return val;
+            });
+            csvRows.push(row.join(","));
+        }
+
+        return csvRows.join("\n");
+    };
+
+    const convertFiles = async () => {
+        if (files.length === 0) return;
+
+        setIsProcessing(true);
         setError(null);
 
         try {
-            const mergedPdf = await PDFDocument.create();
+            // Process each file
+            for (const qboFile of files) {
+                try {
+                    const csvContent = await parseQBO(qboFile.file);
 
-            for (const pdfFile of files) {
-                const arrayBuffer = await pdfFile.file.arrayBuffer();
-                const pdfDoc = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
-                const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
-                copiedPages.forEach((page) => mergedPdf.addPage(page));
+                    // Create download
+                    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement("a");
+                    link.href = url;
+                    link.download = `${qboFile.name.replace(/\.[^/.]+$/, "")}.csv`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
+
+                } catch (err) {
+                    console.error(err);
+                    setError(`Failed to process ${qboFile.name}. It might not be a valid QBO file.`);
+                }
             }
-
-            const mergedPdfBytes = await mergedPdf.save();
-            const blob = new Blob([mergedPdfBytes.buffer as BlobPart], { type: "application/pdf" });
-            const url = URL.createObjectURL(blob);
-
-            const link = document.createElement("a");
-            link.href = url;
-            link.download = "merged-document.pdf";
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
         } catch (err) {
-            console.error("Merge error:", err);
-            setError("Failed to merge PDFs. Some files may be corrupted or password-protected.");
+            setError("An error occurred during conversion.");
         } finally {
-            setIsMerging(false);
+            setIsProcessing(false);
         }
     };
-
-    const totalPages = files.reduce((sum, f) => sum + (f.pageCount || 0), 0);
 
     return (
         <div className="max-w-3xl mx-auto">
             {/* Header */}
             <div className="text-center mb-4">
                 <h1 className="text-2xl md:text-3xl font-bold text-[hsl(var(--foreground))] mb-2">
-                    Merge PDF Files Online
+                    Convert QBO to CSV Online
                 </h1>
                 <p className="text-[hsl(var(--muted-foreground))] max-w-xl mx-auto">
-                    Combine multiple PDFs into one. Drag to reorder. 100% free and private.
+                    Extract transactions from QuickBooks files to Excel/CSV. 100% free and private.
                 </p>
             </div>
 
@@ -197,14 +222,9 @@ export function MergePDFTool() {
                     }}
                 />
 
-                {/* Decorative Blocks */}
-                <div className="absolute top-4 right-4 w-16 h-16 rounded-lg bg-gradient-to-br from-[hsl(var(--primary))]/10 to-transparent rotate-12 pointer-events-none" />
-                <div className="absolute bottom-4 left-4 w-12 h-12 rounded-lg bg-gradient-to-tr from-[hsl(var(--primary))]/10 to-transparent -rotate-12 pointer-events-none" />
-                <div className="absolute top-1/2 left-8 w-8 h-8 rounded-full bg-[hsl(var(--primary))]/5 pointer-events-none" />
-
                 <input
                     type="file"
-                    accept=".pdf,application/pdf"
+                    accept=".qbo,.ofx,application/vnd.intu.qbo,text/xml"
                     multiple
                     onChange={handleFileInput}
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
@@ -216,20 +236,17 @@ export function MergePDFTool() {
                     </div>
                     <div>
                         <p className="text-xl font-semibold text-[hsl(var(--foreground))]">
-                            Drop your PDF files here
+                            Drop your QBO files here
                         </p>
                         <p className="text-sm text-[hsl(var(--muted-foreground))] mt-1">
                             or click to browse
                         </p>
                     </div>
                     <div className="flex flex-wrap justify-center gap-2 text-xs text-[hsl(var(--muted-foreground))]">
-                        <span className="px-2 py-1 rounded-full bg-[hsl(var(--muted))]">PDF</span>
-                        <span className="px-2 py-1 rounded-full bg-[hsl(var(--muted))]">Multiple files</span>
-                        <span className="px-2 py-1 rounded-full bg-[hsl(var(--muted))]">Drag to reorder</span>
+                        <span className="px-2 py-1 rounded-full bg-[hsl(var(--muted))]">.QBO</span>
+                        <span className="px-2 py-1 rounded-full bg-[hsl(var(--muted))]">.OFX</span>
+                        <span className="px-2 py-1 rounded-full bg-[hsl(var(--muted))]">Client-side only</span>
                     </div>
-                    <p className="text-xs text-[hsl(var(--muted-foreground))]">
-                        Select multiple PDF files to combine into one document
-                    </p>
                 </div>
             </div>
 
@@ -249,7 +266,6 @@ export function MergePDFTool() {
                     <div className="flex items-center justify-between mb-4">
                         <h2 className="font-semibold text-[hsl(var(--foreground))]">
                             {files.length} file{files.length > 1 ? "s" : ""} selected
-                            {totalPages > 0 && <span className="text-[hsl(var(--muted-foreground))] font-normal"> • {totalPages} pages total</span>}
                         </h2>
                         <Button variant="ghost" size="sm" onClick={clearAll} className="text-[hsl(var(--muted-foreground))]">
                             <Trash2 className="w-4 h-4 mr-1" /> Clear All
@@ -260,24 +276,17 @@ export function MergePDFTool() {
                         {files.map((file, index) => (
                             <div
                                 key={file.id}
-                                draggable
-                                onDragStart={() => handleDragStart(index)}
-                                onDragEnd={handleDragEnd}
-                                onDragOver={(e) => handleDragOverItem(e, index)}
-                                className={`flex items-center gap-3 p-4 rounded-xl bg-[hsl(var(--card))] border border-[hsl(var(--border))] cursor-move transition-all ${draggedIndex === index ? "opacity-50 scale-[0.98]" : ""
-                                    }`}
+                                className="flex items-center gap-3 p-4 rounded-xl bg-[hsl(var(--card))] border border-[hsl(var(--border))]"
                             >
-                                <GripVertical className="w-5 h-5 text-[hsl(var(--muted-foreground))] shrink-0" />
                                 <div className="p-2 rounded-lg bg-[hsl(var(--primary))]/10">
-                                    <FileText className="w-5 h-5 text-[hsl(var(--primary))]" />
+                                    <FileSpreadsheet className="w-5 h-5 text-[hsl(var(--primary))]" />
                                 </div>
                                 <div className="flex-1 min-w-0">
                                     <p className="font-medium text-[hsl(var(--foreground))] truncate">{file.name}</p>
                                     <p className="text-xs text-[hsl(var(--muted-foreground))]">
-                                        {file.size} {file.pageCount && `• ${file.pageCount} page${file.pageCount > 1 ? "s" : ""}`}
+                                        {file.size}
                                     </p>
                                 </div>
-                                <span className="text-sm text-[hsl(var(--muted-foreground))] font-medium">#{index + 1}</span>
                                 <button
                                     onClick={() => removeFile(file.id)}
                                     className="p-1.5 rounded-lg hover:bg-[hsl(var(--muted))] transition-colors"
@@ -292,7 +301,7 @@ export function MergePDFTool() {
                     <label className="mt-4 flex items-center justify-center gap-2 p-4 rounded-xl border-2 border-dashed border-[hsl(var(--border))] cursor-pointer hover:border-[hsl(var(--primary))]/50 transition-colors">
                         <input
                             type="file"
-                            accept=".pdf,application/pdf"
+                            accept=".qbo,.ofx"
                             multiple
                             onChange={handleFileInput}
                             className="hidden"
@@ -301,21 +310,21 @@ export function MergePDFTool() {
                         <span className="text-[hsl(var(--primary))] font-medium">Add more files</span>
                     </label>
 
-                    {/* Merge Button */}
+                    {/* Convert Button */}
                     <Button
-                        onClick={mergePDFs}
-                        disabled={isMerging || files.length < 2}
+                        onClick={convertFiles}
+                        disabled={isProcessing}
                         className="w-full mt-6 h-14 text-lg bg-gradient-primary shadow-glow hover:opacity-90"
                     >
-                        {isMerging ? (
+                        {isProcessing ? (
                             <>
                                 <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                                Merging PDFs...
+                                Converting...
                             </>
                         ) : (
                             <>
                                 <Download className="w-5 h-5 mr-2" />
-                                Merge & Download PDF
+                                Convert to CSV & Download
                             </>
                         )}
                     </Button>

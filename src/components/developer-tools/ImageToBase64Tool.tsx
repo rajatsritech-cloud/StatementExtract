@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { FileImage, Copy, Download, RefreshCw, CheckCircle, Upload, Code2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PrivacyBadge } from "@/components/ui/PrivacyBadge";
@@ -17,6 +17,15 @@ export function ImageToBase64Tool() {
     const [isDragging, setIsDragging] = useState(false);
     const [previewUrl, setPreviewUrl] = useState<string>("");
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const outputRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (base64Output) {
+            setTimeout(() => {
+                outputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        }
+    }, [base64Output]);
 
     const handleFile = useCallback((file: File) => {
         if (!file.type.startsWith("image/")) {
@@ -183,7 +192,7 @@ export function ImageToBase64Tool() {
                     </div>
                 </div>
             ) : (
-                <div className="space-y-6">
+                <div className="space-y-6" ref={outputRef}>
                     {/* Preview & Info */}
                     <div className="flex flex-col md:flex-row gap-6 p-6 rounded-2xl bg-[hsl(var(--card))] border border-[hsl(var(--border))]">
                         {/* Image Preview */}

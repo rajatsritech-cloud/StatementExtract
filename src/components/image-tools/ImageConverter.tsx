@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { Upload, Download, Image as ImageIcon, Loader2, CheckCircle2, Trash2, ArrowRight } from "lucide-react";
 import { PrivacyBadge } from "@/components/ui/PrivacyBadge";
 
@@ -22,6 +22,15 @@ export const ImageConverter = ({ targetFormat, sourceFormat = "AVIF", title, des
     const [originalSize, setOriginalSize] = useState<number>(0);
     const [convertedSize, setConvertedSize] = useState<number>(0);
     const inputRef = useRef<HTMLInputElement>(null);
+    const actionsRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (file) {
+            setTimeout(() => {
+                actionsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        }
+    }, [file]);
 
     const handleFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFile = e.target.files?.[0];
@@ -233,7 +242,7 @@ export const ImageConverter = ({ targetFormat, sourceFormat = "AVIF", title, des
 
             {/* Action Buttons */}
             {file && !convertedUrl && (
-                <div className="mt-6 flex gap-3 justify-center">
+                <div className="mt-6 flex gap-3 justify-center" ref={actionsRef}>
                     <button
                         onClick={reset}
                         className="px-6 py-3 rounded-xl border border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))] transition-colors flex items-center gap-2"

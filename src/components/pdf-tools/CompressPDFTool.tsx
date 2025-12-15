@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { FileUp, Download, Loader2, FileText, Trash2, CheckCircle, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PrivacyBadge } from "@/components/ui/PrivacyBadge";
@@ -25,6 +25,15 @@ export function CompressPDFTool() {
     const [result, setResult] = useState<CompressedFile | null>(null);
     const [error, setError] = useState<string | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
+    const fileSelectionRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (file) {
+            setTimeout(() => {
+                fileSelectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        }
+    }, [file]);
 
     const formatFileSize = (bytes: number): string => {
         if (bytes < 1024) return bytes + " B";
@@ -250,7 +259,7 @@ export function CompressPDFTool() {
 
                     {/* Selected File */}
                     {file && (
-                        <div className="mt-6 space-y-6">
+                        <div className="mt-6 space-y-6" ref={fileSelectionRef}>
                             {/* File Info */}
                             <div className="flex items-center gap-4 p-4 rounded-xl bg-[hsl(var(--card))] border border-[hsl(var(--border))]">
                                 <div className="p-3 rounded-lg bg-[hsl(var(--primary))]/10">

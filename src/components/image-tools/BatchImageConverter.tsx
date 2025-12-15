@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { Upload, Download, Image as ImageIcon, Loader2, CheckCircle2, Trash2, ArrowRight, X, FileImage } from "lucide-react";
 import { PrivacyBadge } from "@/components/ui/PrivacyBadge";
 
@@ -26,6 +26,17 @@ export const BatchImageConverter = ({ targetFormat, title, description }: BatchI
     const [progress, setProgress] = useState(0);
     const [error, setError] = useState<string | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
+    const listRef = useRef<HTMLDivElement>(null);
+    const prevCount = useRef(0);
+
+    useEffect(() => {
+        if (files.length > prevCount.current) {
+            setTimeout(() => {
+                listRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        }
+        prevCount.current = files.length;
+    }, [files.length]);
 
     const handleFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFiles = Array.from(e.target.files || []);
@@ -318,7 +329,7 @@ export const BatchImageConverter = ({ targetFormat, title, description }: BatchI
 
             {/* Selected Files List */}
             {files.length > 0 && convertedFiles.length === 0 && (
-                <div className="mt-6 space-y-2">
+                <div className="mt-6 space-y-2" ref={listRef}>
                     <div className="flex items-center justify-between mb-3">
                         <h3 className="text-sm font-medium text-[hsl(var(--foreground))]">Selected Files</h3>
                         <button

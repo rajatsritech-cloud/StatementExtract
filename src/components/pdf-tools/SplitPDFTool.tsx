@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { FileUp, Download, Loader2, FileText, Trash2, CheckCircle, AlertCircle, Scissors, FileOutput } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PrivacyBadge } from "@/components/ui/PrivacyBadge";
@@ -27,6 +27,16 @@ export function SplitPDFTool() {
     const [results, setResults] = useState<SplitResult[]>([]);
     const [error, setError] = useState<string | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
+    const fileSectionRef = useRef<HTMLDivElement>(null);
+
+    // Auto-scroll when file is selected
+    useEffect(() => {
+        if (file) {
+            setTimeout(() => {
+                fileSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        }
+    }, [file]);
 
     const formatFileSize = (bytes: number): string => {
         if (bytes < 1024) return bytes + " B";
@@ -292,7 +302,7 @@ export function SplitPDFTool() {
 
                     {/* File Selected - Split Options */}
                     {file && (
-                        <div className="space-y-6">
+                        <div className="space-y-6" ref={fileSectionRef}>
                             {/* File Info */}
                             <div className="flex items-center gap-4 p-4 rounded-xl bg-[hsl(var(--card))] border border-[hsl(var(--border))]">
                                 <div className="p-3 rounded-lg bg-[hsl(var(--primary))]/10">

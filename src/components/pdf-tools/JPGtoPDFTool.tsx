@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { Upload, FileImage, Trash2, Download, Plus, ArrowUp, ArrowDown, RefreshCw, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PrivacyBadge } from "@/components/ui/PrivacyBadge";
@@ -24,6 +24,17 @@ export function JPGtoPDFTool() {
     const [orientation, setOrientation] = useState<Orientation>("auto");
     const [isDragging, setIsDragging] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const optionsRef = useRef<HTMLDivElement>(null);
+    const prevImageCount = useRef(0);
+
+    useEffect(() => {
+        if (images.length > prevImageCount.current) {
+            setTimeout(() => {
+                optionsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        }
+        prevImageCount.current = images.length;
+    }, [images.length]);
 
     const pageSizes = {
         a4: { width: 595.28, height: 841.89 },
@@ -277,7 +288,7 @@ export function JPGtoPDFTool() {
                     <PrivacyBadge />
                 </>
             ) : (
-                <div className="space-y-6">
+                <div className="space-y-6" ref={optionsRef}>
                     {/* Options Bar */}
                     <div className="flex flex-wrap items-center justify-between gap-4 p-4 rounded-xl bg-[hsl(var(--muted))]/30 border border-[hsl(var(--border))]">
                         <div className="flex flex-wrap items-center gap-4">

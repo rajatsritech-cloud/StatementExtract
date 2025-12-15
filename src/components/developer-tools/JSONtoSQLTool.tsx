@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { Database, Copy, Download, RefreshCw, CheckCircle, AlertCircle, Code2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PrivacyBadge } from "@/components/ui/PrivacyBadge";
@@ -16,6 +16,15 @@ export function JSONtoSQLTool() {
     const [outputType, setOutputType] = useState<OutputType>("both");
     const [error, setError] = useState<string | null>(null);
     const [copied, setCopied] = useState(false);
+    const outputRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (sqlOutput) {
+            setTimeout(() => {
+                outputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        }
+    }, [sqlOutput]);
 
     const dialectConfig = {
         mysql: { name: "MySQL", quote: "`", stringQuote: "'" },
@@ -298,7 +307,7 @@ export function JSONtoSQLTool() {
                 </div>
 
                 {/* SQL Output */}
-                <div className="space-y-3">
+                <div className="space-y-3" ref={outputRef}>
                     <div className="flex items-center justify-between">
                         <label className="text-sm font-semibold text-[hsl(var(--foreground))] flex items-center gap-2">
                             <Database className="w-4 h-4 text-[hsl(var(--primary))]" />

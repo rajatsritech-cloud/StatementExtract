@@ -20,6 +20,15 @@ export const ImageToAvifConverter = ({ title, description }: ImageToAvifConverte
     const [avifSupported, setAvifSupported] = useState<boolean | null>(null);
     const [quality, setQuality] = useState<number>(80);
     const inputRef = useRef<HTMLInputElement>(null);
+    const actionsRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (file) {
+            setTimeout(() => {
+                actionsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        }
+    }, [file]);
 
     // Check AVIF encoding support
     useEffect(() => {
@@ -298,7 +307,7 @@ export const ImageToAvifConverter = ({ title, description }: ImageToAvifConverte
 
             {/* Action Buttons */}
             {file && !convertedUrl && (
-                <div className="mt-6 flex gap-3 justify-center">
+                <div className="mt-6 flex gap-3 justify-center" ref={actionsRef}>
                     <button
                         onClick={reset}
                         className="px-6 py-3 rounded-xl border border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))] transition-colors flex items-center gap-2"
