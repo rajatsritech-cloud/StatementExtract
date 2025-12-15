@@ -506,15 +506,30 @@ export default async function BlogPostPage({ params }: PageParams) {
             )}
 
             {coverImage && (
-              <div className="relative aspect-video w-full overflow-hidden rounded-3xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] shadow-sm">
-                <Image
-                  src={coverImage}
-                  alt={title}
-                  fill
-                  className=""
-                  priority
-                  sizes="(max-width: 1024px) 100vw, 860px"
-                />
+              <div className="space-y-2">
+                <div className="relative aspect-video w-full overflow-hidden rounded-3xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] shadow-sm">
+                  <Image
+                    src={coverImage}
+                    alt={title}
+                    fill
+                    className=""
+                    priority
+                    sizes="(max-width: 1024px) 100vw, 860px"
+                  />
+                </div>
+                {/* AI-Generated Image Disclosure for Google Compliance */}
+                <div className="flex items-center justify-end gap-1.5 text-[10px] text-[hsl(var(--muted-foreground))]">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 16 16"
+                    fill="currentColor"
+                    className="h-3 w-3"
+                    aria-hidden="true"
+                  >
+                    <path fillRule="evenodd" d="M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0ZM9 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM6.75 8a.75.75 0 0 0 0 1.5h.75v1.75a.75.75 0 0 0 1.5 0v-2.5A.75.75 0 0 0 8.25 8h-1.5Z" clipRule="evenodd" />
+                  </svg>
+                  <span>Image generated with AI</span>
+                </div>
               </div>
             )}
 
