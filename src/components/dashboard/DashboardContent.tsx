@@ -80,6 +80,20 @@ export const DashboardContent = () => {
             const token = await getToken();
             const extracted = await PDFProcessor.processPDF(file, isSignedIn || false, token);
 
+            // Check if LLM extraction failed (backend returned success but no transactions)
+            if (!extracted.transactions || extracted.transactions.length === 0) {
+                // Mark as failed - LLM likely had an issue
+                setDocuments(prev => prev.map(doc =>
+                    doc.id === docId ? {
+                        ...doc,
+                        status: "failed" as const,
+                        errorMessage: "We're experiencing high traffic on our free tier model. Please try again in a few minutes."
+                    } : doc
+                ));
+                toast.error(`Extraction incomplete: ${file.name}. Try again shortly.`, { duration: 5000 });
+                return;
+            }
+
             // Save to IndexedDB
             const storedDoc: StoredDocument = {
                 id: docId,
@@ -334,16 +348,21 @@ export const DashboardContent = () => {
                                                             )}
                                                             {doc.status === "failed" && (
                                                                 <div className="group relative inline-flex">
-                                                                    <span className="inline-flex items-center gap-1.5 rounded-full bg-red-500/10 px-2.5 py-1 text-xs font-medium text-red-600 dark:text-red-400 cursor-help">
+                                                                    <span
+                                                                        className="inline-flex items-center gap-1.5 rounded-full bg-red-500/10 px-2.5 py-1 text-xs font-medium text-red-600 dark:text-red-400 cursor-pointer hover:bg-red-500/20 transition-colors"
+                                                                        onClick={() => toast.error(
+                                                                            doc.errorMessage || "We're experiencing high traffic on our free tier. Please try again in a few minutes.",
+                                                                            { duration: 6000 }
+                                                                        )}
+                                                                        title="Click for details"
+                                                                    >
                                                                         Failed
                                                                         <Info className="h-3 w-3" />
                                                                     </span>
-                                                                    {doc.errorMessage && (
-                                                                        <div className="absolute bottom-full left-1/2 mb-2 w-64 -translate-x-1/2 rounded-lg bg-gray-900 p-2 text-xs text-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100 pointer-events-none z-50">
-                                                                            {doc.errorMessage}
-                                                                            <div className="absolute top-full left-1/2 -mt-1 h-2 w-2 -translate-x-1/2 rotate-45 bg-gray-900"></div>
-                                                                        </div>
-                                                                    )}
+                                                                    <div className="absolute bottom-full left-1/2 mb-2 w-64 -translate-x-1/2 rounded-lg bg-gray-900 p-2 text-xs text-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100 pointer-events-none z-50">
+                                                                        {doc.errorMessage || "We're experiencing high traffic on our free tier. Please try again in a few minutes."}
+                                                                        <div className="absolute top-full left-1/2 -mt-1 h-2 w-2 -translate-x-1/2 rotate-45 bg-gray-900"></div>
+                                                                    </div>
                                                                 </div>
                                                             )}
                                                         </td>

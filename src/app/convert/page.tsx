@@ -99,6 +99,13 @@ const toolSections = [
                 badge: "Free",
             },
             {
+                title: "CSV to QBO Converter",
+                description: "Convert CSV bank exports to QuickBooks .qbo format. Map columns and import to QuickBooks.",
+                href: "/convert/csv-to-qbo",
+                icon: "FileSpreadsheet",
+                badge: "New",
+            },
+            {
                 title: "PDF to Excel Converter",
                 description: "Extract tables and data from any PDF into editable Excel spreadsheets.",
                 href: "/convert-bank-statement-to-csv-excel",

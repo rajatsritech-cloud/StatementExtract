@@ -126,6 +126,37 @@ export class StorageService {
         });
     }
 
+    /**
+     * Update transactions for an existing document (for inline edits)
+     */
+    static async updateDocumentTransactions(id: string, transactions: ExtractedData['transactions']): Promise<void> {
+        const db = await this.openDB();
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction([STORE_NAME], 'readwrite');
+            const store = transaction.objectStore(STORE_NAME);
+
+            // First get the existing document
+            const getRequest = store.get(id);
+            getRequest.onsuccess = () => {
+                const doc = getRequest.result as StoredDocument | undefined;
+                if (!doc) {
+                    reject(new Error('Document not found'));
+                    return;
+                }
+
+                // Update transactions
+                doc.data.transactions = transactions;
+                doc.timestamp = Date.now(); // Update timestamp
+
+                // Save back
+                const putRequest = store.put(doc);
+                putRequest.onsuccess = () => resolve();
+                putRequest.onerror = () => reject(putRequest.error);
+            };
+            getRequest.onerror = () => reject(getRequest.error);
+        });
+    }
+
     private static async pruneDocuments(keepCount: number): Promise<void> {
         const docs = await this.getDocuments();
         if (docs.length <= keepCount) return;

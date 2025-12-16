@@ -1,15 +1,16 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
-import { X, Download, Copy, Eye, EyeOff, TrendingUp, TrendingDown, DollarSign, User, Mail, Building, CreditCard, Calendar, Wallet, ArrowUpCircle, ArrowDownCircle, FileText, Search, ArrowUpDown, Sparkles, CheckCircle2, Lock, Crown, ChevronDown } from "lucide-react";
+import { useState, useMemo, useEffect, useCallback, useRef } from "react";
+import { X, Download, Copy, Eye, EyeOff, TrendingUp, TrendingDown, DollarSign, User, Mail, Building, CreditCard, Calendar, Wallet, ArrowUpCircle, ArrowDownCircle, FileText, Search, ArrowUpDown, Sparkles, CheckCircle2, Lock, Crown, ChevronDown, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 // Assuming ExportService and ExtractedData are correctly defined elsewhere
 import { ExportService } from "@/lib/exportService";
 import { ExtractedData, PDFProcessor } from "@/lib/pdfProcessor";
 import { toast } from "react-hot-toast";
-import { useAuth, SignInButton } from "@clerk/clerk-react";
+import { useAuth } from "@clerk/clerk-react";
 import { useUsage } from "@/hooks/useUsage";
+import { StorageService } from "@/lib/storageService";
 import { PrivacyNotice } from "@/components/PrivacyNotice";
 import { ProcessingPipeline, ProcessingStep, getDefaultProcessingSteps, updateStepsFromResponse } from "./ProcessingPipeline";
 
@@ -18,6 +19,7 @@ interface ResultsModalProps {
   file: File | null;
   isProcessing?: boolean;
   progress?: number;
+  documentId?: string; // For persisting edits to IndexedDB
   onClose: () => void;
   onTryAnother: () => void;
   onExport: (format: 'csv' | 'excel') => void;
@@ -125,26 +127,107 @@ const UserInfoAndSummary = ({ userInfo }: UserInfoAndSummaryProps) => {
 };
 
 
-// --- Dynamic Table Component ---
+// --- Dynamic Table Component (Editable) ---
 interface DynamicTableProps {
   transactions: ExtractedData['transactions'];
   currency?: string;
   columnNames?: { [key: string]: string };
   title?: string;
+  onDataChange?: (transactions: ExtractedData['transactions']) => void;
 }
 
-const DynamicTable = ({ transactions, currency = '$', columnNames, title = "Transactions" }: DynamicTableProps) => {
+const DynamicTable = ({ transactions: initialTransactions, currency = '$', columnNames, title = "Transactions", onDataChange }: DynamicTableProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMS_PER_PAGE = 10;
   const [searchTerm, setSearchTerm] = useState("");
   const [sortConfig, setSortConfig] = useState<{ key: string; direction: 'asc' | 'desc' } | null>(null);
+  const [transactions, setTransactions] = useState(initialTransactions);
+  const [editingCell, setEditingCell] = useState<{ rowIndex: number; field: string } | null>(null);
+  const [editValue, setEditValue] = useState("");
+  const [editedTransactionsSet] = useState(() => new WeakSet<object>());
+  const [editedCount, setEditedCount] = useState(0); // Track count for UI display
+  const [visibleColumns, setVisibleColumns] = useState<Set<string>>(new Set(["Date", "Description", "Credit", "Debit", "Balance"]));
+  const [showColumnMenu, setShowColumnMenu] = useState(false);
+  const [dateFormat, setDateFormat] = useState("original");
+  const [newRowIndex, setNewRowIndex] = useState<number | null>(null);
+  const [pendingDeleteIndex, setPendingDeleteIndex] = useState<number | null>(null);
+  const tableContainerRef = useRef<HTMLDivElement>(null);
+
+  const ALL_COLUMNS = ["Date", "Description", "Credit", "Debit", "Balance", "Type"];
+  const DATE_FORMATS = [
+    { value: "original", label: "Original" },
+    { value: "YYYY-MM-DD", label: "YYYY-MM-DD" },
+    { value: "MM/DD/YYYY", label: "MM/DD/YYYY" },
+    { value: "DD/MM/YYYY", label: "DD/MM/YYYY" },
+  ];
+
+  // Toggle column visibility
+  const toggleColumn = (col: string) => {
+    setVisibleColumns(prev => {
+      const next = new Set(prev);
+      if (next.has(col) && next.size > 1) next.delete(col);
+      else next.add(col);
+      return next;
+    });
+  };
+
+  // Close column menu when clicking outside
+  useEffect(() => {
+    if (!showColumnMenu) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('[data-column-menu]')) {
+        setShowColumnMenu(false);
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [showColumnMenu]);
+
+  // Format date based on selection
+  const formatDateValue = (dateStr: string): string => {
+    if (!dateStr || dateFormat === "original") return dateStr;
+    const match = dateStr.match(/(\d{1,4})[-\/](\d{1,2})[-\/](\d{1,4})/);
+    if (!match) return dateStr;
+    let y: string, m: string, d: string;
+    if (match[1].length === 4) { y = match[1]; m = match[2]; d = match[3]; }
+    else { m = match[1]; d = match[2]; y = match[3]; }
+    m = m.padStart(2, '0'); d = d.padStart(2, '0');
+    switch (dateFormat) {
+      case "YYYY-MM-DD": return `${y}-${m}-${d}`;
+      case "MM/DD/YYYY": return `${m}/${d}/${y}`;
+      case "DD/MM/YYYY": return `${d}/${m}/${y}`;
+      default: return dateStr;
+    }
+  };
+
+  // Add new row
+  const addNewRow = () => {
+    const newTxn = { date: new Date().toISOString().split('T')[0], description: "New Transaction", amount: 0, balance: 0, type: 'debit' as const, moneyIn: 0, moneyOut: 0 };
+    const updated = [...transactions, newTxn];
+    setTransactions(updated);
+    if (onDataChange) onDataChange(updated);
+    setNewRowIndex(updated.length - 1);
+    // Scroll to bottom after render
+    setTimeout(() => {
+      if (tableContainerRef.current) {
+        tableContainerRef.current.scrollTop = tableContainerRef.current.scrollHeight;
+      }
+    }, 50);
+    // Clear highlight after 2 seconds
+    setTimeout(() => setNewRowIndex(null), 2000);
+  };
+
+  // Sync with parent if initial transactions change
+  useEffect(() => {
+    setTransactions(initialTransactions);
+  }, [initialTransactions]);
 
   // Convert transactions to rows for display
-  const { headers, rows } = useMemo(() => {
-    if (!transactions || transactions.length === 0) return { headers: [], rows: [] };
+  const { headers, filteredData } = useMemo(() => {
+    if (!transactions || transactions.length === 0) return { headers: [], filteredData: [] };
 
-    // Standardized Headers to avoid "Amount/Amount" confusion
-    const headers = ["Date", "Description", "Credit", "Debit", "Balance"];
+    const headers = ALL_COLUMNS.filter(c => visibleColumns.has(c));
 
     // Filter rows based on search term
     const filtered = transactions.filter(t =>
@@ -160,7 +243,6 @@ const DynamicTable = ({ transactions, currency = '$', columnNames, title = "Tran
       let aValue: any = '';
       let bValue: any = '';
 
-      // Map sort keys to values
       switch (sortConfig.key) {
         case 'Date': aValue = a.date; bValue = b.date; break;
         case 'Description': aValue = a.description; bValue = b.description; break;
@@ -181,21 +263,8 @@ const DynamicTable = ({ transactions, currency = '$', columnNames, title = "Tran
       return 0;
     });
 
-    const rows = sorted.map(t => {
-      const moneyIn = t.moneyIn !== undefined ? t.moneyIn : (t.type === 'credit' ? t.amount : 0);
-      const moneyOut = t.moneyOut !== undefined ? t.moneyOut : (t.type === 'debit' ? t.amount : 0);
-
-      return [
-        t.date,
-        t.description,
-        moneyIn > 0 ? formatCurrency(moneyIn, currency) : '-',
-        moneyOut > 0 ? formatCurrency(moneyOut, currency) : '-',
-        formatCurrency(t.balance, currency)
-      ];
-    });
-
-    return { headers, rows };
-  }, [transactions, searchTerm, sortConfig, currency, columnNames]);
+    return { headers, filteredData: sorted };
+  }, [transactions, searchTerm, sortConfig, visibleColumns, ALL_COLUMNS]);
 
   // Reset to first page when search or sort changes
   useEffect(() => {
@@ -203,55 +272,229 @@ const DynamicTable = ({ transactions, currency = '$', columnNames, title = "Tran
   }, [searchTerm, sortConfig]);
 
   // Pagination Logic
-  const totalPages = Math.ceil(rows.length / ITEMS_PER_PAGE);
-  const paginatedRows = rows.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(filteredData.length / ITEMS_PER_PAGE);
+  const paginatedData = filteredData.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
 
-  const goToNextPage = () => setCurrentPage(p => Math.min(totalPages, p + 1));
-  const goToPrevPage = () => setCurrentPage(p => Math.max(1, p - 1));
-
-  const requestSort = (headerIndex: number) => {
-    const header = headers[headerIndex];
+  const requestSort = (headerKey: string) => {
     let direction: 'asc' | 'desc' = 'asc';
-    if (sortConfig && sortConfig.key === header && sortConfig.direction === 'asc') {
+    if (sortConfig && sortConfig.key === headerKey && sortConfig.direction === 'asc') {
       direction = 'desc';
     }
-    setSortConfig({ key: header, direction });
+    setSortConfig({ key: headerKey, direction });
+  };
+
+  // Start editing a cell
+  const startEdit = (rowIndex: number, field: string, currentValue: string | number) => {
+    setEditingCell({ rowIndex, field });
+    setEditValue(String(currentValue ?? ""));
+  };
+
+  // Save edit
+  const saveEdit = (originalIndex: number, field: string) => {
+    const newTransactions = [...transactions];
+    const txn = { ...newTransactions[originalIndex] };
+
+    // Update the appropriate field
+    switch (field) {
+      case 'Date':
+        txn.date = editValue;
+        break;
+      case 'Description':
+        txn.description = editValue;
+        break;
+      case 'Credit':
+        const creditVal = parseFloat(editValue.replace(/[^-\d.]/g, '')) || 0;
+        txn.moneyIn = creditVal;
+        if (creditVal > 0) {
+          txn.type = 'credit';
+          txn.amount = creditVal;
+        }
+        break;
+      case 'Debit':
+        const debitVal = parseFloat(editValue.replace(/[^-\d.]/g, '')) || 0;
+        txn.moneyOut = debitVal;
+        if (debitVal > 0) {
+          txn.type = 'debit';
+          txn.amount = debitVal;
+        }
+        break;
+      case 'Balance':
+        txn.balance = parseFloat(editValue.replace(/[^-\d.]/g, '')) || 0;
+        break;
+    }
+
+    newTransactions[originalIndex] = txn;
+    setTransactions(newTransactions);
+    // Mark transaction as edited using WeakSet
+    if (!editedTransactionsSet.has(txn)) {
+      editedTransactionsSet.add(txn);
+      setEditedCount(c => c + 1);
+    }
+    setEditingCell(null);
+    setEditValue("");
+
+    // Notify parent of changes
+    if (onDataChange) {
+      onDataChange(newTransactions);
+    }
+  };
+
+  // Cancel edit
+  const cancelEdit = () => {
+    setEditingCell(null);
+    setEditValue("");
+  };
+
+  // Delete row - show confirmation first
+  const requestDelete = (originalIndex: number) => {
+    setPendingDeleteIndex(originalIndex);
+  };
+
+  const confirmDelete = () => {
+    if (pendingDeleteIndex === null) return;
+    const deletedTxn = transactions[pendingDeleteIndex];
+    const newTransactions = transactions.filter((_, i) => i !== pendingDeleteIndex);
+    setTransactions(newTransactions);
+
+    // Update edited count if deleted transaction was edited
+    if (editedTransactionsSet.has(deletedTxn)) {
+      setEditedCount(c => Math.max(0, c - 1));
+    }
+
+    if (onDataChange) {
+      onDataChange(newTransactions);
+    }
+    setPendingDeleteIndex(null);
+  };
+
+  const cancelDelete = () => {
+    setPendingDeleteIndex(null);
+  };
+
+  // Get cell value for display
+  const getCellValue = (t: any, header: string): string => {
+    const moneyIn = t.moneyIn !== undefined ? t.moneyIn : (t.type === 'credit' ? t.amount : 0);
+    const moneyOut = t.moneyOut !== undefined ? t.moneyOut : (t.type === 'debit' ? t.amount : 0);
+
+    switch (header) {
+      case 'Date': return formatDateValue(t.date);
+      case 'Description': return t.description;
+      case 'Credit': return moneyIn > 0 ? formatCurrency(moneyIn, currency) : '-';
+      case 'Debit': return moneyOut > 0 ? formatCurrency(moneyOut, currency) : '-';
+      case 'Balance': return formatCurrency(t.balance, currency);
+      case 'Type': return t.type || 'debit';
+      default: return '';
+    }
+  };
+
+  // Get raw value for editing
+  const getRawValue = (t: any, header: string): string => {
+    const moneyIn = t.moneyIn !== undefined ? t.moneyIn : (t.type === 'credit' ? t.amount : 0);
+    const moneyOut = t.moneyOut !== undefined ? t.moneyOut : (t.type === 'debit' ? t.amount : 0);
+
+    switch (header) {
+      case 'Date': return t.date || '';
+      case 'Description': return t.description || '';
+      case 'Credit': return moneyIn > 0 ? String(moneyIn) : '';
+      case 'Debit': return moneyOut > 0 ? String(moneyOut) : '';
+      case 'Balance': return String(t.balance || 0);
+      case 'Type': return t.type || 'debit';
+      default: return '';
+    }
   };
 
   // Helper to determine cell style based on header
-  const getCellStyle = (header: string, content: string) => {
-    if (header === "Credit" && content !== '-') return "text-green-600 font-medium";
-    if (header === "Debit" && content !== '-') return "text-red-600 font-medium";
-    return "text-[hsl(var(--foreground))]";
+  const getCellStyle = (header: string, content: string, isEdited: boolean) => {
+    let base = "text-[hsl(var(--foreground))]";
+    if (header === "Credit" && content !== '-') base = "text-green-600 font-medium";
+    if (header === "Debit" && content !== '-') base = "text-red-600 font-medium";
+    if (isEdited) base += " bg-amber-500/5";
+    return base;
   };
 
   if (transactions.length === 0) return <div className="text-center py-8 text-[hsl(var(--muted-foreground))]">No transaction data found.</div>;
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
+      {/* Header with title and controls */}
       <div className="flex items-center justify-between">
-        <h4 className="font-medium text-[hsl(var(--foreground))]">{title}</h4>
-        <div className="relative w-64">
-          <Search className="absolute left-2 top-2.5 h-4 w-4 text-[hsl(var(--muted-foreground))]" />
-          <Input
-            placeholder="Search transactions..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-8 h-9"
-          />
+        <div className="flex items-center gap-3">
+          <h4 className="font-semibold text-[hsl(var(--foreground))]">{title}</h4>
+          {editedCount > 0 && (
+            <span className="text-xs px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-600 font-medium">
+              {editedCount} edited
+            </span>
+          )}
+        </div>
+        <div className="flex items-center gap-2">
+          {/* Date Format */}
+          <select
+            value={dateFormat}
+            onChange={(e) => setDateFormat(e.target.value)}
+            className="text-xs px-2 py-1.5 rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--background))] text-[hsl(var(--foreground))] focus:ring-1 focus:ring-[hsl(var(--primary))] outline-none"
+          >
+            {DATE_FORMATS.map(f => (
+              <option key={f.value} value={f.value}>{f.label}</option>
+            ))}
+          </select>
+
+          {/* Column Toggle */}
+          <div className="relative" data-column-menu>
+            <button
+              onClick={(e) => { e.stopPropagation(); setShowColumnMenu(!showColumnMenu); }}
+              className="flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-md border border-[hsl(var(--border))] hover:bg-[hsl(var(--muted))] transition-colors"
+            >
+              <Eye className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Columns</span>
+              <ChevronDown className="w-3 h-3" />
+            </button>
+            {showColumnMenu && (
+              <div className="absolute right-0 top-full mt-1 z-50 w-40 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--card))] shadow-xl py-1.5">
+                {ALL_COLUMNS.map(col => (
+                  <label key={col} className="flex items-center gap-2 px-3 py-1.5 hover:bg-[hsl(var(--muted))] cursor-pointer text-xs">
+                    <input type="checkbox" checked={visibleColumns.has(col)} onChange={() => toggleColumn(col)} className="rounded border-[hsl(var(--border))] text-[hsl(var(--primary))] focus:ring-[hsl(var(--primary))]" />
+                    {col}
+                  </label>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Search */}
+          <div className="relative">
+            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[hsl(var(--muted-foreground))]" />
+            <Input
+              placeholder="Search..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-8 h-8 w-36 text-xs"
+            />
+          </div>
         </div>
       </div>
 
+      {/* Edit hint banner */}
+      <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[hsl(var(--primary))]/5 border border-[hsl(var(--primary))]/20">
+        <div className="flex items-center gap-1.5 text-xs text-[hsl(var(--primary))]">
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+          </svg>
+          <span className="font-medium">Click any cell to edit</span>
+        </div>
+        <span className="text-xs text-[hsl(var(--muted-foreground))]">•</span>
+        <span className="text-xs text-[hsl(var(--muted-foreground))]">Changes will be included in export</span>
+      </div>
+
       <div className="rounded-lg border border-[hsl(var(--border))] overflow-hidden">
-        <div className="overflow-x-auto">
+        <div ref={tableContainerRef} className="overflow-auto max-h-[400px] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[hsl(var(--border))] [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-[hsl(var(--muted-foreground))]" style={{ scrollbarWidth: 'thin', scrollbarColor: 'hsl(var(--border)) transparent' }}>
           <table className="w-full text-sm text-left">
             <thead className="bg-[hsl(var(--muted))]/50 text-[hsl(var(--foreground))]">
               <tr>
                 {headers.map((header, index) => (
                   <th
                     key={index}
-                    className="px-4 py-3 font-semibold border-b border-[hsl(var(--border))] whitespace-nowrap cursor-pointer hover:bg-[hsl(var(--muted))]"
-                    onClick={() => requestSort(index)}
+                    className="px-4 py-3 font-semibold border-b border-[hsl(var(--border))] whitespace-nowrap cursor-pointer hover:bg-[hsl(var(--muted))] sticky top-0 bg-[hsl(var(--muted))]/80 backdrop-blur-sm"
+                    onClick={() => requestSort(header)}
                   >
                     <div className="flex items-center gap-1">
                       {header}
@@ -259,45 +502,108 @@ const DynamicTable = ({ transactions, currency = '$', columnNames, title = "Tran
                     </div>
                   </th>
                 ))}
+                <th className="w-10 px-2 py-3"></th>
               </tr>
             </thead>
             <tbody data-clarity-mask="true">
-              {paginatedRows.map((row, rowIndex) => (
-                <tr key={rowIndex} className="hover:bg-[hsl(var(--muted))]/30 transition-colors border-b border-[hsl(var(--border))] last:border-0 text-zinc-600 dark:text-zinc-300">
-                  {row.map((cell, cellIndex) => (
-                    <td key={cellIndex} className={`px-4 py-3 ${getCellStyle(headers[cellIndex], cell)}`}>
-                      {cell}
+              {filteredData.map((t, rowIndex) => {
+                const originalIndex = transactions.findIndex(orig => orig === t);
+                const isEdited = editedTransactionsSet.has(t);
+                const isNewRow = newRowIndex === originalIndex;
+
+                return (
+                  <tr
+                    key={rowIndex}
+                    className={`hover:bg-[hsl(var(--muted))]/30 transition-colors border-b border-[hsl(var(--border))] last:border-0 ${isEdited ? "bg-amber-500/5" : ""} ${isNewRow ? "bg-green-500/20 animate-pulse" : ""}`}
+                  >
+                    {headers.map((header, cellIndex) => {
+                      const isEditing = editingCell?.rowIndex === originalIndex && editingCell?.field === header;
+                      const cellValue = getCellValue(t, header);
+
+                      return (
+                        <td key={cellIndex} className={`px-4 py-3 ${getCellStyle(header, cellValue, isEdited)}`}>
+                          {isEditing ? (
+                            <div className="flex items-center gap-1">
+                              <input
+                                autoFocus
+                                value={editValue}
+                                onChange={(e) => setEditValue(e.target.value)}
+                                onKeyDown={(e) => {
+                                  if (e.key === 'Enter') saveEdit(originalIndex, header);
+                                  if (e.key === 'Escape') cancelEdit();
+                                }}
+                                className="flex-1 px-2 py-1 rounded border border-[hsl(var(--primary))] bg-[hsl(var(--background))] text-[hsl(var(--foreground))] outline-none text-sm min-w-[80px]"
+                              />
+                              <button onClick={() => saveEdit(originalIndex, header)} className="p-1 rounded hover:bg-green-500/10 text-green-500">
+                                <CheckCircle2 className="w-3 h-3" />
+                              </button>
+                              <button onClick={cancelEdit} className="p-1 rounded hover:bg-red-500/10 text-red-500">
+                                <X className="w-3 h-3" />
+                              </button>
+                            </div>
+                          ) : (
+                            <span
+                              onClick={() => startEdit(originalIndex, header, getRawValue(t, header))}
+                              className="cursor-pointer hover:text-[hsl(var(--primary))] transition-colors"
+                            >
+                              {cellValue}
+                            </span>
+                          )}
+                        </td>
+                      );
+                    })}
+                    <td className="px-2 py-2">
+                      <button
+                        onClick={() => requestDelete(originalIndex)}
+                        className="p-1 rounded hover:bg-red-500/10 text-[hsl(var(--muted-foreground))] hover:text-red-500 transition-colors"
+                        title="Delete row"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
                     </td>
-                  ))}
-                </tr>
-              ))}
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
       </div>
 
-      {/* Pagination Controls */}
+      {/* Delete Confirmation Modal */}
+      {pendingDeleteIndex !== null && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-xl shadow-2xl p-6 max-w-sm w-full mx-4 animate-in fade-in zoom-in-95">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-500/10">
+                <Trash2 className="h-5 w-5 text-red-500" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-[hsl(var(--foreground))]">Delete Transaction?</h3>
+                <p className="text-sm text-[hsl(var(--muted-foreground))]">This action cannot be undone.</p>
+              </div>
+            </div>
+            <div className="flex gap-3 justify-end">
+              <Button variant="outline" size="sm" onClick={cancelDelete}>
+                Cancel
+              </Button>
+              <Button variant="destructive" size="sm" onClick={confirmDelete} className="bg-red-500 hover:bg-red-600 text-white">
+                Delete
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Footer info */}
       <div className="flex items-center justify-between text-xs text-[hsl(var(--muted-foreground))]">
         <div>
-          Showing {paginatedRows.length > 0 ? (currentPage - 1) * ITEMS_PER_PAGE + 1 : 0} to {Math.min(currentPage * ITEMS_PER_PAGE, rows.length)} of {rows.length} transactions
+          {filteredData.length} transactions
         </div>
-        {totalPages > 1 && (
-          <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" onClick={goToPrevPage} disabled={currentPage === 1} className="h-7 w-7 p-0">
-              {"<"}
-            </Button>
-            <span>
-              Page {currentPage} of {totalPages}
-            </span>
-            <Button variant="outline" size="sm" onClick={goToNextPage} disabled={currentPage === totalPages} className="h-7 w-7 p-0">
-              {">"}
-            </Button>
-          </div>
-        )}
       </div>
     </div>
   );
 };
+
 
 // --- Helper: Generate simulated processing steps based on progress ---
 const getSimulatedProcessingSteps = (progress: number): ProcessingStep[] => {
@@ -356,14 +662,44 @@ const getSimulatedProcessingSteps = (progress: number): ProcessingStep[] => {
 };
 
 // --- Main Component ---
-export const ResultsModal = ({ data, file, isProcessing = false, progress = 0, onClose, onTryAnother, onExport }: ResultsModalProps) => {
+export const ResultsModal = ({ data, file, isProcessing = false, progress = 0, documentId, onClose, onTryAnother, onExport }: ResultsModalProps) => {
   const [showPdf, setShowPdf] = useState(false);
   const [isApproved, setIsApproved] = useState(true);
   const [fileUrl, setFileUrl] = useState<string | null>(null);
   const [showLoginPrompt, setShowLoginPrompt] = useState(false);
   const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
+  const [editedTransactions, setEditedTransactions] = useState<ExtractedData['transactions'] | null>(null);
   const { isSignedIn, isLoaded } = useAuth();
   const { usage } = useUsage();
+
+  // Get the current transactions (edited or original)
+  const currentTransactions = editedTransactions || data?.transactions || [];
+
+  // Create data object with potentially edited transactions for export
+  const editedData = useMemo(() => {
+    if (!data) return null;
+    return {
+      ...data,
+      transactions: currentTransactions
+    };
+  }, [data, currentTransactions]);
+
+  // Handle transaction edits from table
+  const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const handleTransactionsChange = useCallback((newTransactions: ExtractedData['transactions']) => {
+    setEditedTransactions(newTransactions);
+
+    // Debounced save to IndexedDB
+    if (documentId) {
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+      }
+      saveTimeoutRef.current = setTimeout(() => {
+        StorageService.updateDocumentTransactions(documentId, newTransactions)
+          .catch(err => console.error('Failed to persist edits:', err));
+      }, 1000); // 1 second debounce
+    }
+  }, [documentId]);
 
   // Determine if user has Pro tier (pro, enterprise, or admin)
   const isPro = !!(usage?.tier && ['pro', 'enterprise', 'admin'].includes(usage.tier.toLowerCase()));
@@ -381,56 +717,61 @@ export const ResultsModal = ({ data, file, isProcessing = false, progress = 0, o
   const handleExport = (format: 'csv' | 'excel') => {
     if (isLoaded && !isSignedIn) {
       // Save data to localStorage so it can be recovered after login
-      if (data) {
+      if (editedData) {
         localStorage.setItem("pending_extraction", JSON.stringify({
-          data: data,
+          data: editedData,
           fileName: file?.name || "Extracted Statement.pdf",
           date: new Date().toLocaleDateString()
         }));
       }
       setShowLoginPrompt(true);
-    } else {
-      onExport(format);
+    } else if (editedData) {
+      // Export with edited data
+      import("@/lib/exportService").then(({ ExportService }) => {
+        if (format === 'csv') ExportService.exportToCSV(editedData);
+        else ExportService.exportToExcel(editedData);
+        toast.success(`Exported as ${format.toUpperCase()}`);
+      });
     }
   };
 
   const handleExportQBO = () => {
     if (isLoaded && !isSignedIn) {
-      if (data) {
+      if (editedData) {
         localStorage.setItem("pending_extraction", JSON.stringify({
-          data: data,
+          data: editedData,
           fileName: file?.name || "Extracted Statement.pdf",
           date: new Date().toLocaleDateString()
         }));
       }
       setShowLoginPrompt(true);
-    } else if (data) {
-      ExportService.exportToQBO(data);
+    } else if (editedData) {
+      ExportService.exportToQBO(editedData);
       toast.success("QuickBooks file (.qbo) downloaded!");
     }
   };
 
   const handleExportXero = () => {
     if (isLoaded && !isSignedIn) {
-      if (data) {
+      if (editedData) {
         localStorage.setItem("pending_extraction", JSON.stringify({
-          data: data,
+          data: editedData,
           fileName: file?.name || "Extracted Statement.pdf",
           date: new Date().toLocaleDateString()
         }));
       }
       setShowLoginPrompt(true);
-    } else if (data) {
-      ExportService.exportToXero(data);
+    } else if (editedData) {
+      ExportService.exportToXero(editedData);
       toast.success("Xero file (.csv) downloaded!");
     }
   };
 
   const handleCopyToClipboard = () => {
     if (isLoaded && !isSignedIn) {
-      if (data) {
+      if (editedData) {
         localStorage.setItem("pending_extraction", JSON.stringify({
-          data: data,
+          data: editedData,
           fileName: file?.name || "Extracted Statement.pdf",
           date: new Date().toLocaleDateString()
         }));
@@ -439,11 +780,11 @@ export const ResultsModal = ({ data, file, isProcessing = false, progress = 0, o
       return;
     }
     try {
-      if (!data) {
+      if (!editedData) {
         toast.error("No data to copy.");
         return;
       }
-      ExportService.copyToClipboard(data);
+      ExportService.copyToClipboard(editedData);
       toast.success("Data copied to clipboard!");
     } catch (error) {
       console.error('Failed to copy to clipboard:', error);
@@ -609,10 +950,11 @@ export const ResultsModal = ({ data, file, isProcessing = false, progress = 0, o
                   {data.transactions && data.transactions.length > 0 && (
                     <div className="mb-8">
                       <DynamicTable
-                        transactions={data.transactions}
+                        transactions={currentTransactions}
                         currency={data.userInfo.currency}
                         columnNames={data.column_names}
                         title="Statement Activity (Reconciled)"
+                        onDataChange={handleTransactionsChange}
                       />
                     </div>
                   )}

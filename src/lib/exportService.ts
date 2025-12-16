@@ -61,15 +61,14 @@ export class ExportService {
       return [headers.join(','), ...rows].join('\n');
     };
 
-    if (data.sections && data.sections.length > 0) {
-      // Multi-section: Append with headers
-      const sectionsContent = data.sections.map(section => {
-        const tableCsv = processTransactionsToCSV(section.transactions);
-        return `"${section.name}"\n${tableCsv}`;
-      });
-      csvContent = sectionsContent.join('\n\n');
-    } else {
+    // Always use data.transactions as primary source (contains edited data)
+    // Only use sections for informational purposes if no main transactions
+    if (data.transactions && data.transactions.length > 0) {
       csvContent = processTransactionsToCSV(data.transactions);
+    } else if (data.sections && data.sections.length > 0) {
+      // Fallback: Combine all sections
+      const allTxns = data.sections.flatMap(s => s.transactions);
+      csvContent = processTransactionsToCSV(allTxns);
     }
 
     // Create download link
@@ -145,69 +144,26 @@ export class ExportService {
     summarySheet["!cols"] = [{ wch: 20 }, { wch: 40 }];
     XLSX.utils.book_append_sheet(workbook, summarySheet, "Summary");
 
-    // Sheet 2: All Transactions (Consolidated - preferred by accountants for import)
-    if (data.sections && data.sections.length > 0) {
-      const allTransactions: any[] = [];
-      data.sections.forEach(section => {
-        section.transactions.forEach(t => {
-          allTransactions.push({
-            ...t,
-            category: section.name
-          });
-        });
-      });
-
-      // Sort by date
-      allTransactions.sort((a, b) => {
-        const dateA = new Date(a.date).getTime();
-        const dateB = new Date(b.date).getTime();
-        return dateA - dateB;
-      });
-
-      const allRows = processTransactionsToSheet(allTransactions, true);
-      const allSheet = XLSX.utils.json_to_sheet(allRows);
+    // Sheet 2: All Transactions (always use data.transactions as primary - contains edited data)
+    if (data.transactions && data.transactions.length > 0) {
+      const rows = processTransactionsToSheet(data.transactions);
+      const worksheet = XLSX.utils.json_to_sheet(rows);
 
       // Auto-width columns
-      const maxDescLen = allRows.reduce((w, r) => {
+      const maxDescLen = rows.reduce((w, r) => {
         const descKey = data.column_names?.desc || data.column_names?.description || 'Description';
         return Math.max(w, (r[descKey] as string)?.length || 0);
       }, 10);
-      allSheet["!cols"] = [{ wch: 12 }, { wch: Math.min(maxDescLen, 50) }, { wch: 20 }, { wch: 14 }, { wch: 14 }, { wch: 14 }];
+      worksheet["!cols"] = [{ wch: 12 }, { wch: Math.min(maxDescLen, 50) }, { wch: 14 }, { wch: 14 }, { wch: 14 }];
 
-      XLSX.utils.book_append_sheet(workbook, allSheet, "All Transactions");
-
-      // Individual category sheets
-      data.sections.forEach(section => {
-        const rows = processTransactionsToSheet(section.transactions);
-        const worksheet = XLSX.utils.json_to_sheet(rows);
-
-        // Auto-width columns
-        const max_desc = rows.reduce((w, r) => {
-          const descKey = data.column_names?.desc || data.column_names?.description || 'Description';
-          return Math.max(w, (r[descKey] as string)?.length || 0);
-        }, 10);
-
-        const cols = [{ wch: 12 }, { wch: Math.min(max_desc, 50) }, { wch: 14 }, { wch: 14 }, { wch: 14 }];
-        worksheet["!cols"] = cols;
-
-        // Sanitize sheet name (max 31 chars, no special chars)
-        let sheetName = section.name.replace(/[\\/?*[\]]/g, "").slice(0, 31) || "Sheet";
-        // Check for duplicate sheet names
-        let uniqueName = sheetName;
-        let counter = 1;
-        while (workbook.SheetNames.includes(uniqueName)) {
-          uniqueName = `${sheetName.slice(0, 28)} ${counter}`;
-          counter++;
-        }
-
-        XLSX.utils.book_append_sheet(workbook, worksheet, uniqueName);
-      });
-    } else {
-      // Fallback: Single sheet for transactions
-      const rows = processTransactionsToSheet(data.transactions);
+      XLSX.utils.book_append_sheet(workbook, worksheet, "All Transactions");
+    } else if (data.sections && data.sections.length > 0) {
+      // Fallback: Combine all sections if no main transactions
+      const allTransactions = data.sections.flatMap(s => s.transactions);
+      const rows = processTransactionsToSheet(allTransactions);
       const worksheet = XLSX.utils.json_to_sheet(rows);
       worksheet["!cols"] = [{ wch: 12 }, { wch: 50 }, { wch: 14 }, { wch: 14 }, { wch: 14 }];
-      XLSX.utils.book_append_sheet(workbook, worksheet, "Transactions");
+      XLSX.utils.book_append_sheet(workbook, worksheet, "All Transactions");
     }
 
     XLSX.writeFile(workbook, filename);

@@ -40,11 +40,41 @@ function TopLoaderContent() {
             const target = e.target as HTMLElement;
             const link = target.closest("a");
 
-            if (link && link.href && !link.href.startsWith("#") && !link.target) {
+            // Only proceed if it's an anchor element
+            if (!link || !link.href) return;
+
+            // Skip if: 
+            // - Has target="_blank" (opens in new tab)
+            // - Is a hash link (same page anchor)
+            // - Is download link
+            // - Is mailto or tel link
+            // - Is javascript: link
+            // - Has data-no-progress attribute
+            if (
+                link.target === "_blank" ||
+                link.href.startsWith("#") ||
+                link.hasAttribute("download") ||
+                link.href.startsWith("mailto:") ||
+                link.href.startsWith("tel:") ||
+                link.href.startsWith("javascript:") ||
+                link.dataset.noProgress === "true"
+            ) {
+                return;
+            }
+
+            try {
                 const url = new URL(link.href);
-                if (url.origin === window.location.origin && url.pathname !== pathname) {
+
+                // Only trigger for same-origin navigation to a different pathname
+                if (
+                    url.origin === window.location.origin &&
+                    url.pathname !== pathname &&
+                    !url.hash // Skip if it's just a hash change
+                ) {
                     handleStart();
                 }
+            } catch {
+                // Invalid URL, skip
             }
         };
 
