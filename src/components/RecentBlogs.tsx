@@ -35,7 +35,7 @@ export async function RecentBlogs() {
                                             <img
                                                 src={post.coverImage}
                                                 alt={post.title}
-                                                className="absolute inset-0 h-full w-full object-fill transition-transform duration-200 group-hover:scale-[1.02]"
+                                                className="absolute inset-0 h-full w-full object-cover transition-transform duration-200 group-hover:scale-[1.02]"
                                             />
                                             {/* AI-Generated Image Disclosure */}
                                             <div className="absolute bottom-2 right-2 flex items-center gap-1 bg-black/50 backdrop-blur-sm text-white/80 text-[9px] px-1.5 py-0.5 rounded">

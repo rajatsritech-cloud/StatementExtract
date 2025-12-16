@@ -1,8 +1,39 @@
 import { Metadata } from "next";
+import dynamic from "next/dynamic";
 import { BankStatementConverter } from "@/components/BankStatementConverter";
-import { BankStatementFeatures, SupportedBanks, BankStatementFAQ, BankStatementSEOContent } from "@/components/bank-statement/BankStatementContent";
-import { HowItWorks } from "@/components/HowItWorks";
-import { CTA } from "@/components/CTA";
+
+// Dynamic imports for below-fold components
+const BankStatementFeatures = dynamic(() => import("@/components/bank-statement/BankStatementContent").then(mod => ({ default: mod.BankStatementFeatures })), {
+  loading: () => <div className="min-h-[400px] bg-[hsl(var(--background))]" />,
+});
+
+const SupportedBanks = dynamic(() => import("@/components/bank-statement/BankStatementContent").then(mod => ({ default: mod.SupportedBanks })), {
+  loading: () => <div className="min-h-[300px] bg-[hsl(var(--background))]" />,
+});
+
+const BankStatementFAQ = dynamic(() => import("@/components/bank-statement/BankStatementContent").then(mod => ({ default: mod.BankStatementFAQ })), {
+  loading: () => <div className="min-h-[400px] bg-[hsl(var(--background))]" />,
+});
+
+const BankStatementSEOContent = dynamic(() => import("@/components/bank-statement/BankStatementContent").then(mod => ({ default: mod.BankStatementSEOContent })), {
+  loading: () => <div className="min-h-[300px] bg-[hsl(var(--background))]" />,
+});
+
+const HowItWorks = dynamic(() => import("@/components/HowItWorks").then(mod => ({ default: mod.HowItWorks })), {
+  loading: () => <div className="min-h-[400px] bg-[hsl(var(--background))]" />,
+});
+
+const CTA = dynamic(() => import("@/components/CTA").then(mod => ({ default: mod.CTA })), {
+  loading: () => <div className="min-h-[200px] bg-[hsl(var(--background))]" />,
+});
+
+const RecentBlogs = dynamic(() => import("@/components/RecentBlogs").then(mod => ({ default: mod.RecentBlogs })), {
+  loading: () => <div className="min-h-[400px] bg-[hsl(var(--background))]" />,
+});
+
+const RedirectIfAuthenticated = dynamic(() => import("@/components/RedirectIfAuthenticated").then(mod => ({ default: mod.RedirectIfAuthenticated })), {
+  loading: () => null,
+});
 
 export const metadata: Metadata = {
   title: "Bank Statement Converter - Convert PDF Bank Statements to CSV/Excel | Free Online Tool",
@@ -65,9 +96,6 @@ export const metadata: Metadata = {
     },
   },
 };
-
-import { RedirectIfAuthenticated } from "@/components/RedirectIfAuthenticated";
-import { RecentBlogs } from "@/components/RecentBlogs";
 
 // Enhanced Schema.org data for better rich snippets
 const schemaData = {
