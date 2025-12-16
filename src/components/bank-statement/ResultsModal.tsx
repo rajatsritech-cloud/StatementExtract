@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { ExportService } from "@/lib/exportService";
 import { ExtractedData, PDFProcessor } from "@/lib/pdfProcessor";
 import { toast } from "react-hot-toast";
-import { useAuth } from "@clerk/clerk-react";
+import { useAuth, SignInButton } from "@clerk/clerk-react";
 import { useUsage } from "@/hooks/useUsage";
 import { StorageService } from "@/lib/storageService";
 import { PrivacyNotice } from "@/components/PrivacyNotice";
