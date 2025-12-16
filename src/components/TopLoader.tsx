@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 
-export function TopLoader() {
+function TopLoaderContent() {
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const [loading, setLoading] = useState(false);
@@ -82,3 +82,12 @@ export function TopLoader() {
         </div>
     );
 }
+
+export function TopLoader() {
+    return (
+        <Suspense fallback={null}>
+            <TopLoaderContent />
+        </Suspense>
+    );
+}
+

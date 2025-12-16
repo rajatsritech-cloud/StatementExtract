@@ -157,33 +157,18 @@ export const Pricing = () => {
                                 </ul>
 
                                 {/* CTA Button */}
-                                {tier.comingSoon ? (
-                                    <div className="space-y-2">
-                                        <Button
-                                            size="lg"
-                                            disabled
-                                            className="w-full gap-2 bg-[hsl(var(--muted))] cursor-not-allowed opacity-70"
-                                        >
-                                            {tier.cta}
-                                        </Button>
-                                        <p className="text-xs text-center text-[hsl(var(--primary))] font-medium">
-                                            🚀 Beta Phase — Launching Soon!
-                                        </p>
-                                    </div>
-                                ) : (
-                                    <Link href={tier.href} className="block">
-                                        <Button
-                                            size="lg"
-                                            className={`w-full group gap-2 ${tier.popular
-                                                ? "bg-gradient-primary hover:opacity-90 shadow-glow"
-                                                : "bg-[hsl(var(--secondary))] hover:bg-[hsl(var(--secondary))]/80"
-                                                }`}
-                                        >
-                                            {tier.cta}
-                                            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                                        </Button>
-                                    </Link>
-                                )}
+                                <Link href={tier.href} className="block">
+                                    <Button
+                                        size="lg"
+                                        className={`w-full group gap-2 ${tier.popular
+                                            ? "bg-gradient-primary hover:opacity-90 shadow-glow"
+                                            : "bg-[hsl(var(--secondary))] hover:bg-[hsl(var(--secondary))]/80"
+                                            }`}
+                                    >
+                                        {tier.cta}
+                                        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                                    </Button>
+                                </Link>
                             </div>
                         );
                     })}
