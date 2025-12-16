@@ -13,8 +13,8 @@ import {
 } from "lucide-react";
 
 export const metadata: Metadata = {
-    title: "CSV to OFX Converter Free Online | QuickBooks, Xero, Sage Import | Statement Extract",
-    description: "Free CSV to OFX converter online. Convert bank CSV files to OFX, QBO, or QFX format for QuickBooks, Xero, Sage, Wave import. Map columns, preview, export. 100% private.",
+    title: "CSV / Excel to OFX Converter Free Online | QuickBooks, Xero, Sage Import | Statement Extract",
+    description: "Free CSV and Excel to OFX converter online. Convert bank files (CSV, XLS, XLSX) to OFX, QBO, or QFX format for QuickBooks, Xero, Sage, Wave import. Map columns, preview, export. 100% private.",
     keywords: "csv to ofx converter, csv to ofx free, csv to qbo converter, csv to ofx online, convert csv to quickbooks, bank csv to ofx, csv to ofx for xero, import csv to accounting software, ofx file converter",
     openGraph: {
         title: "CSV to OFX Converter Free Online | Import to QuickBooks & Xero",
@@ -30,8 +30,8 @@ export const metadata: Metadata = {
 const schemaData = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    "name": "CSV to OFX Converter",
-    "description": "Convert CSV bank transaction files to OFX, QBO, or QFX format for import into QuickBooks, Xero, Sage, and other accounting software.",
+    "name": "CSV / Excel to OFX Converter",
+    "description": "Convert CSV/Excel bank transaction files to OFX, QBO, or QFX format for import into QuickBooks, Xero, Sage, and other accounting software.",
     "applicationCategory": "FinanceApplication",
     "operatingSystem": "Any",
     "offers": {
@@ -128,7 +128,7 @@ export default function CsvToOfxPage() {
             <section className="py-12 md:py-16 px-6 bg-[hsl(var(--muted))]/30">
                 <div className="max-w-5xl mx-auto">
                     <h2 className="text-2xl md:text-3xl font-bold text-center text-[hsl(var(--foreground))] mb-10">
-                        Why Use Our Free CSV to OFX Converter?
+                        Why Use Our Free CSV / Excel to OFX Converter?
                     </h2>
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {[
@@ -153,11 +153,11 @@ export default function CsvToOfxPage() {
             <section className="py-12 md:py-16 px-6">
                 <div className="max-w-3xl mx-auto">
                     <h2 className="text-2xl md:text-3xl font-bold text-center text-[hsl(var(--foreground))] mb-10">
-                        How to Convert CSV to OFX Online
+                        How to Convert CSV / Excel to OFX Online
                     </h2>
                     <div className="space-y-6">
                         {[
-                            { step: 1, title: "Upload Your CSV File", desc: "Drag and drop or click to select your bank CSV export file." },
+                            { step: 1, title: "Upload Your File", desc: "Drag and drop or click to select your bank CSV or Excel (XLSX/XLS) file." },
                             { step: 2, title: "Map Your Columns", desc: "Match Date, Description, and Amount/Credit/Debit columns. We auto-detect common formats." },
                             { step: 3, title: "Preview Transactions", desc: "Review the parsed transactions to ensure correct mapping before export." },
                             { step: 4, title: "Download OFX/QBO/QFX", desc: "Choose your format and download. Import into QuickBooks, Xero, or Sage instantly." },
@@ -200,10 +200,10 @@ export default function CsvToOfxPage() {
             <section className="py-12 md:py-16 px-6">
                 <div className="max-w-4xl mx-auto prose prose-lg dark:prose-invert">
                     <h2 className="text-2xl font-bold text-[hsl(var(--foreground))] mb-6">
-                        The Best Free CSV to OFX Converter Online
+                        The Best Free CSV/Excel to OFX Converter Online
                     </h2>
                     <p className="text-[hsl(var(--muted-foreground))] mb-4">
-                        Need to import bank transactions into accounting software but only have a CSV file? Our <strong>free CSV to OFX converter</strong> transforms any CSV bank export into OFX, QBO, or QFX format in seconds. Unlike other tools that require subscriptions or uploads to external servers, our converter runs <strong>100% in your browser</strong>—your financial data never leaves your device.
+                        Need to import bank transactions into accounting software but only have a CSV or Excel file? Our <strong>free CSV/Excel to OFX converter</strong> transforms any bank export into OFX, QBO, or QFX format in seconds. Unlike other tools that require subscriptions or uploads to external servers, our converter runs <strong>100% in your browser</strong>—your financial data never leaves your device.
                     </p>
                     <p className="text-[hsl(var(--muted-foreground))] mb-4">
                         Whether you're an accountant importing client data into QuickBooks, a bookkeeper migrating to Xero, or a business owner setting up Wave or Sage, this <strong>CSV to OFX converter free</strong> tool handles it all. Smart column detection automatically identifies Date, Amount, and Description fields from virtually any bank's CSV format.
@@ -269,6 +269,6 @@ export default function CsvToOfxPage() {
                 currentTool="CSV to OFX"
                 relatedTools={relatedTools}
             />
-        </main>
+        </main >
     );
 }

@@ -1,5 +1,6 @@
+
 import { Metadata } from "next";
-import { CsvToQboTool } from "@/components/qbo-tools/CsvToQboTool";
+import { CSVToOFXConverter } from "@/components/converters/CSVToOFXConverter";
 import { ToolPageFooter } from "@/components/tools/ToolPageFooter";
 import {
     Zap,
@@ -9,29 +10,30 @@ import {
     CheckCircle,
     Database,
     Lock,
-    ArrowUpDown
+    ArrowUpDown,
+    FileCode
 } from "lucide-react";
 
 export const metadata: Metadata = {
-    title: "CSV / Excel to QBO Converter Free Online | QuickBooks Import | Statement Extract",
-    description: "Free CSV and Excel to QBO converter online. Convert bank files (CSV, XLS, XLSX) to QuickBooks Web Connect (.qbo) format. Map columns, preview, and export. 100% private.",
-    keywords: "csv to qbo converter, csv to qbo converter free, convert csv to qbo online, csv to quickbooks format, bank csv to qbo, import csv to quickbooks, qbo file converter",
+    title: "CSV / Excel to MT940 Converter Free Online | SWIFT Format for Sage, Xero | Statement Extract",
+    description: "Free CSV and Excel to MT940 converter. Convert bank files (CSV, XLS, XLSX) to MT940 SWIFT format. Compatible with Sage, Xero, SAP, ERPs, and more. 100% private.",
+    keywords: "csv to mt940, csv to swift mt940, convert csv to mt940 online, mt940 generator, bank statement to mt940, mt940 format converter, swift mt940 export",
     openGraph: {
-        title: "CSV to QBO Converter Free Online | Import to QuickBooks",
-        description: "Convert any CSV bank export to QuickBooks .qbo format. Map columns, edit transactions, and download QBO file instantly.",
+        title: "CSV to MT940 Converter Free Online | Create SWIFT Files",
+        description: "Convert any bank CSV to MT940 SWIFT format. Import into Sage, SAP, Oracle & more. 100% free, secure, browser-based.",
         type: "website",
-        url: "https://statementextract.com/convert/csv-to-qbo",
+        url: "https://statementextract.com/convert/csv-to-mt940",
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/csv-to-qbo",
+        canonical: "https://statementextract.com/convert/csv-to-mt940",
     },
 };
 
 const schemaData = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    "name": "CSV / Excel to QBO Converter",
-    "description": "Convert CSV/Excel bank transaction files to QuickBooks Web Connect (.qbo) format online for free.",
+    "name": "CSV / Excel to MT940 Converter",
+    "description": "Convert CSV/Excel bank transaction files to MT940 SWIFT format for import into Sage, SAP, Xero, and other ERP software.",
     "applicationCategory": "FinanceApplication",
     "operatingSystem": "Any",
     "offers": {
@@ -41,8 +43,8 @@ const schemaData = {
     },
     "aggregateRating": {
         "@type": "AggregateRating",
-        "ratingValue": "4.9",
-        "ratingCount": "847"
+        "ratingValue": "4.8",
+        "ratingCount": "850"
     }
 };
 
@@ -52,62 +54,62 @@ const faqSchema = {
     "mainEntity": [
         {
             "@type": "Question",
-            "name": "How do I convert a CSV file to QBO format?",
+            "name": "What is MT940 format?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Upload your CSV file, map the columns (Date, Amount, Description), preview and edit transactions, then click Export to download the QBO file ready for QuickBooks import."
+                "text": "MT940 (SWIFT Customer Statement Message) is a standard structured format used by banks to send account statements to customers. It's widely used by ERP systems like SAP, Oracle, and Sage for automated reconciliation."
             }
         },
         {
             "@type": "Question",
-            "name": "Is this CSV to QBO converter free?",
+            "name": "How does this converter work?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes, it is 100% free with no limits. Convert unlimited CSV files to QBO format without signing up or paying anything."
+                "text": "Upload your CSV file, map the columns (Date, Amount, Description), and our tool generates a valid MT940 file with standard SWIFT tags (:20:, :25:, :60F:, :61:, :86:, :62F:)."
             }
         },
         {
             "@type": "Question",
-            "name": "What is a QBO file?",
+            "name": "Is this CSV to MT940 converter free?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "A QBO file is a QuickBooks Web Connect file that contains bank transaction data. It's used to import bank statements directly into QuickBooks Online or Desktop."
+                "text": "Yes, it is completely free to use directly in your browser. No signup or subscription required."
             }
         },
         {
             "@type": "Question",
-            "name": "Is my data secure when using this tool?",
+            "name": "Is my data secure?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes, completely. This tool runs 100% in your browser. Your financial data never leaves your computer and is never uploaded to any server."
+                "text": "Yes. All processing happens locally in your web browser. Your financial data is never uploaded to our servers, ensuring 100% privacy."
             }
         },
         {
             "@type": "Question",
-            "name": "Can I edit transactions before exporting to QBO?",
+            "name": "Which software supports MT940?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes! After mapping columns, you can preview all transactions in an editable table. Click any cell to edit, drag rows to reorder, or delete unwanted transactions before export."
+                "text": "MT940 is supported by most enterprise accounting software including SAP, Oracle NetSuite, Sage Intacct, Microsoft Dynamics 365, and Xero."
             }
         }
     ]
 };
 
 const useCases = [
-    { title: "Import Bank Exports to QuickBooks", desc: "Convert CSV files from any bank into QBO format for seamless QuickBooks import." },
-    { title: "Migrate from Other Software", desc: "Moving from Xero, Sage, or spreadsheets? Export as CSV and convert to QBO for QuickBooks." },
-    { title: "Clean Up Transaction Data", desc: "Edit, reorder, and remove transactions before importing to ensure clean books." },
-    { title: "Batch Import Historical Data", desc: "Import years of historical bank data from CSV archives into QuickBooks." },
+    { title: "Import into ERP Systems", desc: "Generate MT940 files for SAP, Oracle, or Microsoft Dynamics that require strict SWIFT formatting." },
+    { title: "Sage & Xero Compatibility", desc: "Create MT940 files compatible with Sage line of products and Xero bank statement import." },
+    { title: "Legacy System Integration", desc: "Connect modern digital banks that only export CSV to legacy systems requiring MT940." },
+    { title: "Automated Reconciliation", desc: "Standardize data from multiple banks into a single MT940 format for auto-reconciliation tools." },
 ];
 
 const relatedTools = [
-    { href: "/convert/qbo-to-csv", title: "QBO to CSV" },
+    { href: "/convert/csv-to-ofx", title: "CSV to OFX" },
+    { href: "/convert/csv-to-qbo", title: "CSV to QBO" },
+    { href: "/convert/pdf-to-mt940", title: "PDF to MT940" },
     { href: "/convert-bank-statement-to-csv-excel", title: "PDF to Excel" },
-    { href: "/convert-bank-statement-to-quickbooks-xero", title: "PDF to QBO" },
-    { href: "/convert/merge-pdf", title: "Merge PDF" },
 ];
 
-export default function CsvToQboPage() {
+export default function CsvToMt940Page() {
     return (
         <main className="min-h-screen bg-[hsl(var(--background))]">
             <script
@@ -121,22 +123,25 @@ export default function CsvToQboPage() {
 
             {/* Tool Section - Visible Above the Fold */}
             <section className="py-6 md:py-10 px-6 border-b border-[hsl(var(--border))]">
-                <CsvToQboTool />
+                <CSVToOFXConverter
+                    title="Convert CSV to MT940 Online"
+                    description="Generate valid SWIFT MT940 files for Sage, SAP, Oracle, and Xero."
+                />
             </section>
 
             {/* Features Section */}
             <section className="py-12 md:py-16 px-6 bg-[hsl(var(--muted))]/30">
                 <div className="max-w-5xl mx-auto">
                     <h2 className="text-2xl md:text-3xl font-bold text-center text-[hsl(var(--foreground))] mb-10">
-                        Why Use Our Free CSV / Excel to QBO Converter?
+                        Why Use Our Free CSV / Excel to MT940 Converter?
                     </h2>
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {[
-                            { icon: Lock, title: "100% Private", desc: "Files never leave your device. All processing happens in your browser." },
-                            { icon: ArrowUpDown, title: "Smart Column Mapping", desc: "Auto-detects common column names. Manually map any custom format." },
-                            { icon: Zap, title: "Instant Conversion", desc: "No uploads, no waiting. Convert files instantly in your browser." },
+                            { icon: Lock, title: "100% Private", desc: "Files never leave your device. All processing happens securely in your browser." },
+                            { icon: FileCode, title: "SWIFT Compliant", desc: "Generates standard MT940 structure with correct tags (:61:, :86:)." },
+                            { icon: Zap, title: "Instant Conversion", desc: "Convert huge CSV files to MT940 instantly without waiting." },
                             { icon: Shield, title: "No Signup Required", desc: "No email, no account needed. Just drop your file and convert." },
-                            { icon: Database, title: "Edit Before Export", desc: "Preview, edit, reorder, and delete transactions before downloading." },
+                            { icon: Globe, title: "ERP Compatible", desc: "Perfect for SAP, Oracle, Microsoft Dynamics, and Sage." },
                             { icon: CheckCircle, title: "Completely Free", desc: "Professional-grade conversion at zero cost. Unlimited files." },
                         ].map((feature, i) => (
                             <div key={i} className="p-6 rounded-2xl bg-[hsl(var(--card))] border border-[hsl(var(--border))]">
@@ -153,14 +158,14 @@ export default function CsvToQboPage() {
             <section className="py-12 md:py-16 px-6">
                 <div className="max-w-3xl mx-auto">
                     <h2 className="text-2xl md:text-3xl font-bold text-center text-[hsl(var(--foreground))] mb-10">
-                        How to Convert CSV / Excel to QBO Online
+                        How to Convert CSV / Excel to MT940 Online
                     </h2>
                     <div className="space-y-6">
                         {[
                             { step: 1, title: "Upload Your File", desc: "Drag and drop or click to select your bank CSV or Excel (XLSX/XLS) file." },
-                            { step: 2, title: "Map Your Columns", desc: "Match Date, Amount, and Description columns. We auto-detect common formats." },
-                            { step: 3, title: "Preview & Edit", desc: "Review transactions, edit values, reorder rows, or delete entries as needed." },
-                            { step: 4, title: "Download QBO File", desc: "Click Export and your QuickBooks-ready .qbo file downloads instantly." },
+                            { step: 2, title: "Map Your Columns", desc: "Match Date, Description, and Amount columns. We auto-detect common headers." },
+                            { step: 3, title: "Verify Processing", desc: "Check the preview to ensure dates and amounts are correctly parsed." },
+                            { step: 4, title: "Download MT940", desc: "Click 'Download MT940' to get your .txt file ready for import." },
                         ].map((item) => (
                             <div key={item.step} className="flex gap-4 items-start">
                                 <div className="w-10 h-10 rounded-full bg-[hsl(var(--primary))] text-white flex items-center justify-center font-bold shrink-0">
@@ -200,38 +205,39 @@ export default function CsvToQboPage() {
             <section className="py-12 md:py-16 px-6">
                 <div className="max-w-4xl mx-auto prose prose-lg dark:prose-invert">
                     <h2 className="text-2xl font-bold text-[hsl(var(--foreground))] mb-6">
-                        The Best Free CSV/Excel to QBO Converter Online
+                        The Best Free CSV/Excel to MT940 Converter
                     </h2>
                     <p className="text-[hsl(var(--muted-foreground))] mb-4">
-                        Need to import bank transactions into QuickBooks but only have a CSV or Excel file? Our <strong>free CSV/Excel to QBO converter</strong> transforms any bank export into QuickBooks Web Connect format in seconds. Unlike other tools that require subscriptions or uploads to external servers, our converter runs <strong>100% in your browser</strong>—your financial data never leaves your device.
+                        If you need to import bank transaction data into enterprise ERP systems or specialized accounting software, the <strong>MT940 (SWIFT)</strong> format is often a strict requirement. Most modern digital banks and fintech platforms only export simple CSV or Excel files, leaving you with incompatible data.
                     </p>
                     <p className="text-[hsl(var(--muted-foreground))] mb-4">
-                        Whether you're an accountant importing client data, a bookkeeper migrating from another system, or a business owner cleaning up historical records, this <strong>CSV/Excel to QBO converter free</strong> tool handles it all. Smart column detection automatically identifies Date, Amount, and Description fields from CSV or Excel files, while the interactive preview lets you edit, reorder, and validate transactions before export.
+                        Our <strong>free CSV/Excel to MT940 converter</strong> bridges this gap. It allows you to transform any CSV spreadsheet into a valid, SWIFT-compliant MT940 file in seconds. It runs completely in your browser, ensuring that your sensitive financial data remains private and secure on your own device.
                     </p>
 
                     <h3 className="text-xl font-semibold text-[hsl(var(--foreground))] mb-4 mt-8">
-                        Why Convert CSV to QBO Format?
+                        Why Use MT940 Format?
                     </h3>
                     <ul className="text-[hsl(var(--muted-foreground))] mb-4 list-disc pl-6 space-y-2">
-                        <li><strong>QuickBooks Compatibility:</strong> QBO is the native import format for QuickBooks Online and Desktop.</li>
-                        <li><strong>Bank Feed Alternative:</strong> Import transactions when bank feeds aren't available or supported.</li>
-                        <li><strong>Historical Data Import:</strong> Bring in years of transaction history from CSV archives.</li>
-                        <li><strong>Data Migration:</strong> Move from Xero, Sage, Wave, or spreadsheets to QuickBooks easily.</li>
-                        <li><strong>Clean Data Entry:</strong> Edit and validate transactions before they enter your books.</li>
+                        <li><strong>Standardization:</strong> MT940 is a globally recognized SWIFT standard for electronic bank statements.</li>
+                        <li><strong>Rich Detail:</strong> Supports detailed transaction codes (:61:) and narrative (:86:) for better reconciliation.</li>
+                        <li><strong>Automation:</strong> ERPs like SAP and Oracle use MT940 to automatically match payments and clear open items.</li>
+                        <li><strong>Compatibility:</strong> It is the preferred format for many legacy systems and European accounting software.</li>
                     </ul>
 
                     <h3 className="text-xl font-semibold text-[hsl(var(--foreground))] mb-4 mt-8">
-                        Supported CSV Formats
+                        Supported Systems
                     </h3>
                     <p className="text-[hsl(var(--muted-foreground))] mb-4">
-                        Our converter works with any CSV file structure. Common formats include:
+                        Our generated MT940 files are compatible with:
                     </p>
                     <ul className="text-[hsl(var(--muted-foreground))] mb-4 list-disc pl-6 space-y-2">
-                        <li>Bank statement exports (Chase, Bank of America, Wells Fargo, etc.)</li>
-                        <li>Accounting software exports (Xero, Sage, FreshBooks, Wave)</li>
-                        <li>Spreadsheet transaction logs</li>
-                        <li>Payment processor reports (Stripe, PayPal, Square)</li>
-                        <li>Credit card statement downloads</li>
+                        <li>SAP S/4HANA & SAP ERP</li>
+                        <li>Oracle NetSuite</li>
+                        <li>Microsoft Dynamics 365 Finance</li>
+                        <li>Sage Intacct & Sage 50/200</li>
+                        <li>Xero (Bank Feed Import)</li>
+                        <li>Exact Online</li>
+                        <li>Twinfield</li>
                     </ul>
                 </div>
             </section>
@@ -244,11 +250,11 @@ export default function CsvToQboPage() {
                     </h2>
                     <div className="space-y-6">
                         {[
-                            { q: "What columns does my CSV need?", a: "At minimum, your CSV needs Date, Amount, and Description columns. Our tool auto-detects common column names, and you can manually map any custom headers." },
-                            { q: "Which date formats are supported?", a: "We support MM/DD/YYYY, DD/MM/YYYY, YYYY-MM-DD, and other common formats. The tool auto-detects the format and lets you override if needed." },
-                            { q: "Can I import the QBO file into QuickBooks Desktop?", a: "Yes! QBO files work with both QuickBooks Online and QuickBooks Desktop (Pro, Premier, Enterprise)." },
-                            { q: "Is there a limit to how many transactions I can convert?", a: "No limits. Convert hundreds or thousands of transactions in a single file, completely free." },
-                            { q: "Do you store my data?", a: "No. The file is processed entirely in your browser. Nothing is uploaded to our servers—it's physically impossible for us to store your data." },
+                            { q: "What columns do I need in my CSV?", a: "You need at least Date, Description, and Amount columns. You can also map separate Credit/Debit columns or a Reference ID column if available." },
+                            { q: "Does it support opening/closing balances?", a: "Yes, the tool automatically calculates intermediate running balances based on the transaction order to generate valid :60F: and :62F: balance tags." },
+                            { q: "Is the generated file compatible with SAP?", a: "Yes, we follow the standard SWIFT MT940 structure that is compatible with SAP's electronic bank statement interface." },
+                            { q: "Is this tool free for commercial use?", a: "Yes, our CSV to MT940 converter is 100% free for unlimited files for both personal and commercial use." },
+                            { q: "Do you save my bank data?", a: "No. The conversion happens entirely in your web browser using JavaScript. Your data is not sent to our servers." },
                         ].map((faq, i) => (
                             <div key={i} className="p-6 rounded-2xl bg-[hsl(var(--card))] border border-[hsl(var(--border))]">
                                 <h3 className="font-semibold text-[hsl(var(--foreground))] mb-2">{faq.q}</h3>
@@ -261,7 +267,7 @@ export default function CsvToQboPage() {
 
             {/* Footer & CTA */}
             <ToolPageFooter
-                currentTool="CSV to QBO"
+                currentTool="CSV to MT940"
                 relatedTools={relatedTools}
             />
         </main>

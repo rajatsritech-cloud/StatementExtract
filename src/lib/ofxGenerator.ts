@@ -10,6 +10,7 @@ export interface OFXTransaction {
     date: string;          // Date in YYYY-MM-DD or MM/DD/YYYY format
     name?: string;         // Payee name
     memo?: string;         // Memo/Description
+    description?: string;  // Additional Description
     amount: number;        // Positive for credits, negative for debits
     fitid?: string;        // Unique transaction ID (auto-generated if not provided)
     checkNum?: string;     // Check number (optional)
@@ -26,7 +27,7 @@ export interface OFXConfig {
     closingBalance?: number;
 }
 
-export type ExportFormat = 'ofx' | 'qbo' | 'qfx';
+export type ExportFormat = 'ofx' | 'qbo' | 'qfx' | 'mt940';
 
 // Format date to OFX standard (YYYYMMDDHHMMSS)
 function formatOFXDate(dateStr: string): string {
@@ -204,6 +205,92 @@ ${transactionXML}
 }
 
 /**
+ * Generate MT940 file content (SWIFT)
+ */
+export function generateMT940(
+    transactions: OFXTransaction[],
+    config: OFXConfig = {}
+): string {
+    const accountId = config.accountId || '000000000';
+    const currency = config.currency || 'USD';
+    const bankId = config.bankId || '999999999';
+
+    // Sort transactions by date
+    const sorted = [...transactions].sort((a, b) => {
+        // Handle various date formats for sorting
+        const d1 = new Date(a.date.replace(/(\d{2})[-/](\d{2})[-/](\d{4})/, '$3-$1-$2')); // Attempt US format conversion
+        const d2 = new Date(b.date.replace(/(\d{2})[-/](\d{2})[-/](\d{4})/, '$3-$1-$2'));
+        const t1 = isNaN(d1.getTime()) ? new Date(a.date).getTime() : d1.getTime();
+        const t2 = isNaN(d2.getTime()) ? new Date(b.date).getTime() : d2.getTime();
+        return t1 - t2;
+    });
+
+    const now = new Date();
+    const sequenceNum = Math.floor(Math.random() * 99999).toString().padStart(5, '0');
+
+    // Header Block
+    let mt940 = `{1:F01${bankId}XX0000000000}{2:I940${accountId}N}{4:\r\n`;
+    mt940 += `:20:${now.getFullYear()}${(now.getMonth() + 1).toString().padStart(2, '0')}${now.getDate().toString().padStart(2, '0')}EXPORT\r\n`;
+    mt940 += `:25:${accountId}\r\n`;
+    mt940 += `:28C:${sequenceNum}/1\r\n`;
+
+    // Calculate opening balance (assumed 0 if not provided or calculated backwards)
+    // For simplicity in CSV converter, we might start at 0 or use config
+    let currentBalance = config.closingBalance !== undefined && config.includeBalance ?
+        (config.closingBalance - sorted.reduce((sum, t) => sum + t.amount, 0)) : 0;
+
+    const openingDate = sorted.length > 0 ? sorted[0].date : new Date().toISOString().split('T')[0];
+    const openDateObj = new Date(openingDate);
+    // Format YYMMDD
+    const openDateStr = `${openDateObj.getFullYear().toString().substring(2)}${(openDateObj.getMonth() + 1).toString().padStart(2, '0')}${openDateObj.getDate().toString().padStart(2, '0')}`;
+
+    // 60F: Opening Balance
+    const openSign = currentBalance >= 0 ? 'C' : 'D';
+    const openAmt = Math.abs(currentBalance).toFixed(2).replace('.', ',');
+    mt940 += `:60F:${openSign}${openDateStr}${currency}${openAmt}\r\n`;
+
+    // Transactions
+    sorted.forEach(tx => {
+        // Parse date for YYMMDD
+        // Try multiple formats again or use the sorted date logic
+        let d = new Date(tx.date);
+        if (isNaN(d.getTime())) {
+            // Basic parsing attempt only valid if standard formats
+            d = new Date(); // Fallback
+        }
+        const yymmdd = `${d.getFullYear().toString().substring(2)}${(d.getMonth() + 1).toString().padStart(2, '0')}${d.getDate().toString().padStart(2, '0')}`;
+
+        const sign = tx.amount >= 0 ? 'C' : 'D';
+        const amt = Math.abs(tx.amount).toFixed(2).replace('.', ',');
+        const typeChar = 'N'; // Non-ref
+        const typeCode = 'MSC'; // Misc
+        const ref = (tx.checkNum || tx.fitid || 'NONREF').substring(0, 16);
+
+        // :61:
+        mt940 += `:61:${yymmdd}${sign}${amt}${typeChar}${typeCode}${ref}\r\n`;
+
+        // :86: Description
+        const desc = (tx.description || tx.name || tx.memo || 'Transfer').substring(0, 65);
+        mt940 += `:86:${desc}\r\n`;
+
+        currentBalance += tx.amount;
+    });
+
+    // 62F: Closing Balance
+    const closeDate = sorted.length > 0 ? sorted[sorted.length - 1].date : openDateStr; // Or now
+    const dClose = new Date(closeDate);
+    const closeDateStr = `${dClose.getFullYear().toString().substring(2)}${(dClose.getMonth() + 1).toString().padStart(2, '0')}${dClose.getDate().toString().padStart(2, '0')}`;
+
+    const closeSign = currentBalance >= 0 ? 'C' : 'D';
+    const closeAmt = Math.abs(currentBalance).toFixed(2).replace('.', ',');
+
+    mt940 += `:62F:${closeSign}${closeDateStr}${currency}${closeAmt}\r\n`;
+    mt940 += `-}`;
+
+    return mt940;
+}
+
+/**
  * Generate and download OFX/QBO/QFX file
  */
 export function downloadOFXFile(
@@ -212,10 +299,16 @@ export function downloadOFXFile(
     config: OFXConfig = {},
     format: ExportFormat = 'ofx'
 ): void {
-    const content = generateOFX(transactions, config, format);
+    let content = '';
+
+    if (format === 'mt940') {
+        content = generateMT940(transactions, config);
+    } else {
+        content = generateOFX(transactions, config, format);
+    }
 
     // Determine file extension
-    const ext = format;
+    let ext = format === 'mt940' ? 'txt' : format;
     const finalFilename = filename.includes('.')
         ? filename.replace(/\.[^.]+$/, `.${ext}`)
         : `${filename}.${ext}`;

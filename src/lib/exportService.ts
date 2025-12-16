@@ -618,4 +618,113 @@ ${vouchers}
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
   }
+  /**
+   * Export to MT940 SWIFT format
+   * Standard format for electronic bank statements used by many ERPs and accounting systems
+   */
+  static exportToMT940(data: ExtractedData, filename: string = 'bank-statement-mt940.txt'): void {
+    const accountId = data.userInfo?.accountNumber || 'ACCOUNT123';
+    const statementId = '00001'; // Sequence number
+    const currency = data.userInfo?.currency && data.userInfo.currency.length === 3 ? data.userInfo.currency : 'USD';
+
+    // Format date for MT940 (YYMMDD)
+    const formatMT940Date = (dateStr: string): string => {
+      const parts = dateStr.split(/[-/]/);
+      if (parts.length >= 3) {
+        const year = parts[0].length === 4 ? parts[0].substring(2) : parts[2].substring(2);
+        const month = parts[0].length === 4 ? parts[1] : parts[0];
+        const day = parts[0].length === 4 ? parts[2] : parts[1];
+        return `${year}${month.padStart(2, '0')}${day.padStart(2, '0')}`;
+      }
+      const now = new Date();
+      const y = String(now.getFullYear()).substring(2);
+      const m = String(now.getMonth() + 1).padStart(2, '0');
+      const d = String(now.getDate()).padStart(2, '0');
+      return `${y}${m}${d}`;
+    };
+
+    // Helper for balance formatting (CDATE + CCY + AMOUNT)
+    const formatBalance = (amount: number, dateStr: string, ccy: string) => {
+      const type = amount >= 0 ? 'C' : 'D';
+      const absAmount = Math.abs(amount).toFixed(2).replace('.', ',');
+      return `${type}${formatMT940Date(dateStr)}${ccy}${absAmount}`;
+    };
+
+    // Collect ALL transactions and sort by date
+    let allTransactions: TransactionData[] = [];
+    if (data.transactions) allTransactions.push(...data.transactions);
+    if (data.sections) data.sections.forEach(s => allTransactions.push(...s.transactions));
+
+    // Deduplicate
+    const seen = new Set<string>();
+    allTransactions = allTransactions.filter(tx => {
+      const key = `${tx.date}|${tx.description}|${tx.amount}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+
+    // Determine Opening and Closing Balances
+    const openingBalance = data.userInfo?.accountSummary?.beginningBalance || 0;
+    const closingBalance = data.userInfo?.accountSummary?.endingBalance || 0;
+
+    // Get date range
+    const dates = allTransactions.map(t => t.date).filter(d => d).sort();
+    const startDate = dates.length > 0 ? dates[0] : new Date().toISOString().split('T')[0];
+    const endDate = dates.length > 0 ? dates[dates.length - 1] : new Date().toISOString().split('T')[0];
+
+    // Build blocks
+    let mt940 = '';
+
+    // Header Blocks {1:}{2:}{4:
+    mt940 += '{1:F01BANKDEFMAXXX0000000000}{2:I940BANKDEFMAXXXN}{4:\r\n';
+
+    // :20: Transaction Reference Number (TRN)
+    mt940 += `:20:${formatMT940Date(startDate)}STATEMENT\r\n`;
+
+    // :25: Account Identification
+    mt940 += `:25:${accountId}\r\n`;
+
+    // :28C: Statement Number / Sequence Number
+    mt940 += `:28C:${statementId}/1\r\n`;
+
+    // :60F: Opening Balance
+    mt940 += `:60F:${formatBalance(openingBalance, startDate, currency)}\r\n`;
+
+    // Process Transactions
+    allTransactions.forEach(tx => {
+      const amount = tx.moneyIn || (tx.type === 'credit' ? tx.amount : 0) || -(tx.moneyOut || (tx.type === 'debit' ? tx.amount : 0));
+      const absAmount = Math.abs(amount).toFixed(2).replace('.', ',');
+      const sign = amount >= 0 ? 'C' : 'D';
+      const date = formatMT940Date(tx.date);
+      const ref = 'NMSC'; // Non-ref
+
+      // :61: Statement Line
+      // Format: YYMMDD (Date) + MMDD (Entry Date - optional, can be same) + D/C + Currency (First Letter optional? Usually just C/D then amount in SWIFT/MT940 standard usually doesn't strictly need currency code, but some variations do. Standard is D/C + Amount but often logic implies currency from header. Standard field 61 struc: 6!n[4!n]2a[1!a]15d1!a3!c16x//16x)
+      // Simplified: Date(6) + D/C(1-2) + Amount(1-15) + N(1) + 3char code + Reference
+      // Code 'TRF' = Transfer, 'MSC' = Misc
+      mt940 += `:61:${date}${sign}${absAmount}NMSCNONREF\r\n`;
+
+      // :86: Information to Account Owner
+      mt940 += `:86:${tx.normalized_payee || tx.description}\r\n`;
+    });
+
+    // :62F: Closing Balance
+    mt940 += `:62F:${formatBalance(closingBalance, endDate, currency)}\r\n`;
+
+    // Footer Block
+    mt940 += '-}';
+
+    // Create Download
+    const blob = new Blob([mt940], { type: 'text/plain;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }
 }
+

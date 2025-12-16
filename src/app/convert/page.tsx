@@ -113,6 +113,20 @@ const toolSections = [
                 badge: "New",
             },
             {
+                title: "CSV to MT940 Converter",
+                description: "Convert CSV bank exports to MT940 SWIFT format. Map columns and generate standard MT940 files.",
+                href: "/convert/csv-to-mt940",
+                icon: "FileSpreadsheet",
+                badge: "New",
+            },
+            {
+                title: "PDF to MT940 Converter",
+                description: "Convert PDF bank statements to MT940 SWIFT format. Compatible with Sage, Xero, and ERPs.",
+                href: "/convert/pdf-to-mt940",
+                icon: "FileSpreadsheet",
+                badge: "New",
+            },
+            {
                 title: "PDF to Excel Converter",
                 description: "Extract tables and data from any PDF into editable Excel spreadsheets.",
                 href: "/convert-bank-statement-to-csv-excel",

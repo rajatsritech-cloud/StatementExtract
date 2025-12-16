@@ -14,6 +14,7 @@ import {
     ExportFormat
 } from "@/lib/ofxGenerator";
 import { toast } from "react-hot-toast";
+import * as XLSX from "xlsx";
 
 interface ColumnMapping {
     date: string;
@@ -76,7 +77,15 @@ const scrollbarStyles = "scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track
 const inputStyles = "w-full p-2 text-sm rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] text-[hsl(var(--foreground))] font-medium focus:ring-2 focus:ring-[hsl(var(--primary))] focus:border-transparent outline-none transition-all";
 const tableInputStyles = "w-full p-1 text-sm border border-[hsl(var(--border))] bg-[hsl(var(--background))] text-[hsl(var(--foreground))] rounded focus:ring-1 focus:ring-[hsl(var(--primary))] outline-none";
 
-export function CSVToOFXConverter() {
+interface CSVToOFXConverterProps {
+    title?: string;
+    description?: string;
+}
+
+export function CSVToOFXConverter({
+    title = "Convert CSV to OFX Online",
+    description = "Import bank transactions into QuickBooks, Xero, Sage, or Wave."
+}: CSVToOFXConverterProps) {
     const [file, setFile] = useState<File | null>(null);
     const [csvData, setCsvData] = useState<{ headers: string[]; rows: Record<string, string>[] } | null>(null);
     const [mapping, setMapping] = useState<ColumnMapping>({
@@ -108,32 +117,81 @@ export function CSVToOFXConverter() {
     const [showColumnMenu, setShowColumnMenu] = useState(false);
 
     const handleFile = useCallback((uploadedFile: File) => {
-        if (!uploadedFile.name.endsWith('.csv') && !uploadedFile.type.includes('csv')) {
-            toast.error('Please upload a CSV file');
+        const isCSV = uploadedFile.name.endsWith('.csv') || uploadedFile.type.includes('csv');
+        const isExcel = uploadedFile.name.endsWith('.xlsx') || uploadedFile.name.endsWith('.xls') || uploadedFile.type.includes('sheet') || uploadedFile.type.includes('excel');
+
+        if (!isCSV && !isExcel) {
+            toast.error('Please upload a CSV or Excel file');
             return;
         }
         setFile(uploadedFile);
+
         const reader = new FileReader();
-        reader.onload = (e) => {
-            const text = e.target?.result as string;
-            const parsed = parseCSV(text);
-            setCsvData(parsed);
-            const detected = autoDetectColumns(parsed.headers);
-            setMapping({
-                date: detected.date || '',
-                description: detected.description || '',
-                amount: detected.amount || '',
-                credit: detected.credit || '',
-                debit: detected.debit || '',
-                name: detected.name || '',
-                memo: detected.memo || '',
-                checkNum: detected.checkNum || '',
-                fitid: detected.fitid || '',
-                type: detected.type || ''
-            });
-            toast.success(`Loaded ${parsed.rows.length} transactions`);
-        };
-        reader.readAsText(uploadedFile);
+
+        if (isExcel) {
+            reader.onload = (e) => {
+                const data = e.target?.result;
+                const workbook = XLSX.read(data, { type: 'binary' });
+                const firstSheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[firstSheetName];
+                const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' }) as string[][];
+
+                if (jsonData.length < 2) {
+                    toast.error('Excel file appears empty or invalid');
+                    return;
+                }
+
+                // Convert array of arrays to headers + rows object expected by parser logic
+                // Ensure headers are strings
+                const headers = jsonData[0].map(h => String(h || ''));
+                const rows = jsonData.slice(1).map(row => {
+                    const rowObj: Record<string, string> = {};
+                    headers.forEach((h, i) => {
+                        rowObj[h] = String(row[i] || '');
+                    });
+                    return rowObj;
+                });
+
+                setCsvData({ headers, rows });
+                const detected = autoDetectColumns(headers);
+                setMapping({
+                    date: detected.date || '',
+                    description: detected.description || '',
+                    amount: detected.amount || '',
+                    credit: detected.credit || '',
+                    debit: detected.debit || '',
+                    name: detected.name || '',
+                    memo: detected.memo || '',
+                    checkNum: detected.checkNum || '',
+                    fitid: detected.fitid || '',
+                    type: detected.type || ''
+                });
+                toast.success(`Loaded ${rows.length} transactions from Excel`);
+            };
+            reader.readAsBinaryString(uploadedFile);
+        } else {
+            // CSV Handling
+            reader.onload = (e) => {
+                const text = e.target?.result as string;
+                const parsed = parseCSV(text);
+                setCsvData(parsed);
+                const detected = autoDetectColumns(parsed.headers);
+                setMapping({
+                    date: detected.date || '',
+                    description: detected.description || '',
+                    amount: detected.amount || '',
+                    credit: detected.credit || '',
+                    debit: detected.debit || '',
+                    name: detected.name || '',
+                    memo: detected.memo || '',
+                    checkNum: detected.checkNum || '',
+                    fitid: detected.fitid || '',
+                    type: detected.type || ''
+                });
+                toast.success(`Loaded ${parsed.rows.length} transactions`);
+            };
+            reader.readAsText(uploadedFile);
+        }
     }, []);
 
     const rawTransactions = useMemo(() => {
@@ -196,8 +254,8 @@ export function CSVToOFXConverter() {
     return (
         <div className="w-full max-w-7xl mx-auto space-y-6">
             <div className="text-center mb-4">
-                <h1 className="text-2xl md:text-3xl font-bold text-[hsl(var(--foreground))] mb-2">Convert CSV to OFX Online</h1>
-                <p className="text-[hsl(var(--muted-foreground))]">Import bank transactions into QuickBooks, Xero, Sage, or Wave.</p>
+                <h1 className="text-2xl md:text-3xl font-bold text-[hsl(var(--foreground))] mb-2">{title}</h1>
+                <p className="text-[hsl(var(--muted-foreground))]">{description || "Import bank transactions from CSV or Excel."}</p>
             </div>
 
             {!csvData ? (
@@ -221,7 +279,7 @@ export function CSVToOFXConverter() {
 
                         <input
                             type="file"
-                            accept=".csv,text/csv"
+                            accept=".csv,text/csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                             onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])}
                             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
                         />
@@ -232,7 +290,7 @@ export function CSVToOFXConverter() {
                             </div>
                             <div>
                                 <p className="text-xl font-semibold text-[hsl(var(--foreground))]">
-                                    Drop your CSV file here
+                                    Drop your CSV or Excel file here
                                 </p>
                                 <p className="text-sm text-[hsl(var(--muted-foreground))] mt-1">
                                     or click to browse
@@ -240,7 +298,8 @@ export function CSVToOFXConverter() {
                             </div>
                             <div className="flex flex-wrap justify-center gap-2 text-xs text-[hsl(var(--muted-foreground))]">
                                 <span className="px-2 py-1 rounded-full bg-[hsl(var(--muted))]">.CSV</span>
-                                <span className="px-2 py-1 rounded-full bg-[hsl(var(--muted))]">Bank Exports</span>
+                                <span className="px-2 py-1 rounded-full bg-[hsl(var(--muted))]">.XLSX</span>
+                                <span className="px-2 py-1 rounded-full bg-[hsl(var(--muted))]">.XLS</span>
                                 <span className="px-2 py-1 rounded-full bg-[hsl(var(--muted))]">100% Private</span>
                             </div>
                         </div>
@@ -470,6 +529,14 @@ export function CSVToOFXConverter() {
                                 className="border-[hsl(var(--primary))] text-[hsl(var(--primary))] hover:bg-[hsl(var(--primary))]/10"
                             >
                                 <Download className="h-4 w-4 mr-2" /> Download QBO
+                            </Button>
+                            <Button
+                                onClick={() => handleExport('mt940')}
+                                disabled={!isMappingValid}
+                                variant="outline"
+                                className="border-[hsl(var(--primary))] text-[hsl(var(--primary))] hover:bg-[hsl(var(--primary))]/10"
+                            >
+                                <Download className="h-4 w-4 mr-2" /> Download MT940
                             </Button>
                         </div>
                     </div>

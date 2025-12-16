@@ -767,6 +767,22 @@ export const ResultsModal = ({ data, file, isProcessing = false, progress = 0, d
     }
   };
 
+  const handleExportMT940 = () => {
+    if (isLoaded && !isSignedIn) {
+      if (editedData) {
+        localStorage.setItem("pending_extraction", JSON.stringify({
+          data: editedData,
+          fileName: file?.name || "Extracted Statement.pdf",
+          date: new Date().toLocaleDateString()
+        }));
+      }
+      setShowLoginPrompt(true);
+    } else if (editedData) {
+      ExportService.exportToMT940(editedData);
+      toast.success("MT940 file downloaded!");
+    }
+  };
+
   const handleCopyToClipboard = () => {
     if (isLoaded && !isSignedIn) {
       if (editedData) {
@@ -917,6 +933,19 @@ export const ResultsModal = ({ data, file, isProcessing = false, progress = 0, d
                     <Button variant="outline" size="sm" onClick={() => handleExport('excel')} disabled={!isApproved} className="h-8 text-xs px-3">
                       <Download className="h-3.5 w-3.5 mr-1.5" />Excel
                     </Button>
+                    {/* MT940 - Pro Feature */}
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={isPro ? handleExportMT940 : () => setShowUpgradePrompt(true)}
+                      disabled={!isApproved}
+                      className={`h-8 text-xs px-3 ${isPro ? 'border-purple-500/50 text-purple-600 hover:bg-purple-500/10' : 'border-amber-500/50 text-amber-600 hover:bg-amber-500/10'}`}
+                      title={isPro ? "Export to MT940" : "Pro feature - Upgrade to unlock"}
+                    >
+                      {isPro ? <Download className="h-3.5 w-3.5 mr-1.5" /> : <Lock className="h-3.5 w-3.5 mr-1.5" />}
+                      MT940
+                      {!isPro && <Crown className="h-3 w-3 ml-1 text-amber-500" />}
+                    </Button>
                     {/* QBO - Pro Feature */}
                     <Button
                       variant="outline"
@@ -1050,34 +1079,83 @@ export const ResultsModal = ({ data, file, isProcessing = false, progress = 0, d
                     </button>
                   </div>
                   <div className="text-center mt-2">
-                    <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-amber-500/10">
-                      <Crown className="h-6 w-6 text-amber-500" />
+                    <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-blue-500/10">
+                      <Mail className="h-6 w-6 text-blue-500" />
                     </div>
                     <h3 className="text-lg font-bold text-[hsl(var(--foreground))] mb-2">
-                      Pro Feature
+                      Ways to Get This Format
                     </h3>
-                    <p className="text-sm text-[hsl(var(--muted-foreground))] mb-4">
-                      QuickBooks (.qbo) and Xero (.csv) exports are available on <strong>Pro</strong> and <strong>Enterprise</strong> plans.
-                    </p>
-                    <ul className="text-xs text-left text-[hsl(var(--muted-foreground))] mb-6 space-y-1.5">
-                      <li className="flex items-center gap-2"><CheckCircle2 className="h-3.5 w-3.5 text-green-500" /> QuickBooks & Xero exports</li>
-                      <li className="flex items-center gap-2"><CheckCircle2 className="h-3.5 w-3.5 text-green-500" /> Higher page limits (250+/month)</li>
-                      <li className="flex items-center gap-2"><CheckCircle2 className="h-3.5 w-3.5 text-green-500" /> Priority processing</li>
-                      <li className="flex items-center gap-2"><CheckCircle2 className="h-3.5 w-3.5 text-green-500" /> Detailed validation reports</li>
-                    </ul>
-                    <div className="space-y-3">
-                      <Button
-                        className="w-full gap-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 shadow-lg"
-                        onClick={() => window.open('/dashboard', '_blank')}
-                      >
-                        <Crown className="h-4 w-4" /> Upgrade to Pro
-                      </Button>
+
+                    <div className="space-y-4 text-left">
+                      {/* Option 1: Upgrade */}
+                      <div className="p-3 rounded-lg border border-blue-500/20 bg-blue-500/5">
+                        <p className="text-sm font-semibold text-[hsl(var(--foreground))] mb-1">
+                          Option 1: Go Pro (Direct Export)
+                        </p>
+                        <p className="text-xs text-[hsl(var(--muted-foreground))] mb-3">
+                          Get direct PDF to QBO, Xero, and MT940 exports. Contact support to upgrade.
+                        </p>
+                        <Button
+                          size="sm"
+                          className="w-full gap-2 bg-blue-600 hover:bg-blue-700 text-white h-8"
+                          onClick={() => window.location.href = 'mailto:support@statementextract.com?subject=Upgrade Inquiry - Statement Extract'}
+                        >
+                          <Mail className="h-3.5 w-3.5" /> Contact Support
+                        </Button>
+                      </div>
+
+                      {/* Option 2: Free Alternatives */}
+                      <div className="p-3 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--muted))]/30">
+                        <p className="text-sm font-semibold text-[hsl(var(--foreground))] mb-1">
+                          Option 2: Use Free Tools
+                        </p>
+                        <p className="text-xs text-[hsl(var(--muted-foreground))] mb-3">
+                          Download as <strong>CSV / Excel</strong> (Free) and convert it using our free tools.
+                        </p>
+                        <div className="grid grid-cols-2 gap-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-7 text-[10px]"
+                            onClick={() => window.open('/convert/csv-to-qbo', '_blank')}
+                          >
+                            CSV / Excel to QBO
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-7 text-[10px]"
+                            onClick={() => window.open('/convert/csv-to-ofx', '_blank')}
+                          >
+                            CSV / Excel to OFX
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-7 text-[10px] col-span-2"
+                            onClick={() => window.open('/convert/csv-to-mt940', '_blank')}
+                          >
+                            CSV / Excel to MT940
+                          </Button>
+                        </div>
+                        <Button
+                          variant="link"
+                          size="sm"
+                          className="w-full h-auto p-0 mt-2 text-[10px] text-[hsl(var(--primary))]"
+                          onClick={() => window.open('/convert', '_blank')}
+                        >
+                          View All Free Tools
+                        </Button>
+                      </div>
+                    </div>
+
+                    <div className="mt-4">
                       <Button
                         variant="ghost"
                         onClick={() => setShowUpgradePrompt(false)}
-                        className="w-full text-sm"
+                        className="w-full text-sm h-8"
                       >
-                        Maybe Later
+                        Close
                       </Button>
                     </div>
                   </div>

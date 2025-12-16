@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PrivacyBadge } from "@/components/ui/PrivacyBadge";
+import * as XLSX from "xlsx";
 
 // Column mapping for QBO format
 interface ColumnMapping {
@@ -173,44 +174,94 @@ export function CsvToQboTool() {
     const handleFiles = useCallback((fileList: FileList | File[]) => {
         setError(null);
         const file = Array.from(fileList).find(f =>
-            f.name.toLowerCase().endsWith(".csv") || f.type === "text/csv"
+            f.name.toLowerCase().endsWith(".csv") ||
+            f.type === "text/csv" ||
+            f.name.toLowerCase().endsWith(".xlsx") ||
+            f.name.toLowerCase().endsWith(".xls") ||
+            f.type.includes("sheet") ||
+            f.type.includes("excel")
         );
 
         if (!file) {
-            setError("Please select a CSV file.");
+            setError("Please select a CSV or Excel file.");
             return;
         }
 
         setFileName(file.name);
 
+        setFileName(file.name);
+
         const reader = new FileReader();
-        reader.onload = (e) => {
-            try {
-                const text = e.target?.result as string;
-                const { headers, data } = parseCSV(text);
 
-                setCsvHeaders(headers);
-                setCsvData(data);
-                setManualEdits({});
+        if (file.name.toLowerCase().endsWith(".csv") || file.type === "text/csv") {
+            reader.onload = (e) => {
+                try {
+                    const text = e.target?.result as string;
+                    const { headers, data } = parseCSV(text);
 
-                // Auto-map columns
-                const autoMapping = autoMapColumns(headers);
-                setMapping(autoMapping);
+                    setCsvHeaders(headers);
+                    setCsvData(data);
+                    setManualEdits({});
 
-                // Auto-detect date format
-                if (autoMapping.date !== null) {
-                    const dates = data.slice(0, 10).map(row => row[autoMapping.date!]).filter(Boolean);
-                    const detected = detectDateFormat(dates);
-                    setDetectedFormat(detected);
-                    setDateFormat(detected);
+                    // Auto-map columns
+                    const autoMapping = autoMapColumns(headers);
+                    setMapping(autoMapping);
+
+                    // Auto-detect date format
+                    if (autoMapping.date !== null) {
+                        const dates = data.slice(0, 10).map(row => row[autoMapping.date!]).filter(Boolean);
+                        const detected = detectDateFormat(dates);
+                        setDetectedFormat(detected);
+                        setDateFormat(detected);
+                    }
+
+                    setHasFile(true);
+                } catch (err) {
+                    setError("Failed to parse CSV file. Please check the format.");
                 }
+            };
+            reader.readAsText(file);
+        } else {
+            // Excel Handling
+            reader.onload = (e) => {
+                try {
+                    const data = e.target?.result;
+                    const workbook = XLSX.read(data, { type: 'binary' });
+                    const firstSheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[firstSheetName];
+                    const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' }) as string[][];
 
-                setHasFile(true);
-            } catch (err) {
-                setError("Failed to parse CSV file. Please check the format.");
-            }
-        };
-        reader.readAsText(file);
+                    if (jsonData.length < 2) {
+                        setError("Excel file appears empty or invalid (requires header and data).");
+                        return;
+                    }
+
+                    const headers = jsonData[0].map(h => String(h || ''));
+                    const filteredData = jsonData.slice(1).map(row =>
+                        headers.map((_, i) => String(row[i] || ''))
+                    ).filter(row => row.some(cell => cell.trim()));
+
+                    setCsvHeaders(headers);
+                    setCsvData(filteredData);
+                    setManualEdits({});
+
+                    const autoMapping = autoMapColumns(headers);
+                    setMapping(autoMapping);
+
+                    if (autoMapping.date !== null) {
+                        const dates = filteredData.slice(0, 10).map(row => row[autoMapping.date!]).filter(Boolean);
+                        const detected = detectDateFormat(dates);
+                        setDetectedFormat(detected);
+                        setDateFormat(detected);
+                    }
+
+                    setHasFile(true);
+                } catch (err) {
+                    setError("Failed to parse Excel file.");
+                }
+            };
+            reader.readAsBinaryString(file);
+        }
     }, []);
 
     // Generate QBO file with proper XML format
@@ -425,7 +476,7 @@ NEWFILEUID:NONE
                         <input
                             ref={fileInputRef}
                             type="file"
-                            accept=".csv,text/csv"
+                            accept=".csv,text/csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                             onChange={(e) => e.target.files && handleFiles(e.target.files)}
                             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
                         />
@@ -436,7 +487,7 @@ NEWFILEUID:NONE
                             </div>
                             <div>
                                 <p className="text-xl font-semibold text-[hsl(var(--foreground))]">
-                                    Drop your CSV file here
+                                    Drop CSV or Excel here
                                 </p>
                                 <p className="text-sm text-[hsl(var(--muted-foreground))] mt-1">
                                     or click to browse
@@ -444,8 +495,9 @@ NEWFILEUID:NONE
                             </div>
                             <div className="flex flex-wrap justify-center gap-2 text-xs text-[hsl(var(--muted-foreground))]">
                                 <span className="px-2 py-1 rounded-full bg-[hsl(var(--muted))]">.CSV</span>
-                                <span className="px-2 py-1 rounded-full bg-[hsl(var(--muted))]">Bank Exports</span>
-                                <span className="px-2 py-1 rounded-full bg-[hsl(var(--muted))]">100% Private</span>
+                                <span className="px-2 py-1 rounded-full bg-[hsl(var(--muted))]">.XLSX</span>
+                                <span className="px-2 py-1 rounded-full bg-[hsl(var(--muted))]">.XLS</span>
+                                <span className="px-2 py-1 rounded-full bg-[hsl(var(--muted))]">Private</span>
                             </div>
                         </div>
                     </div>
@@ -454,235 +506,239 @@ NEWFILEUID:NONE
             )}
 
             {/* Mapping + Preview (shown when file is loaded) */}
-            {hasFile && (
-                <div className="space-y-6">
-                    {/* Top Bar */}
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                            <FileSpreadsheet className="w-5 h-5 text-[hsl(var(--primary))]" />
-                            <span className="font-medium text-[hsl(var(--foreground))]">{fileName}</span>
-                            <span className="text-sm text-[hsl(var(--muted-foreground))]">
-                                ({csvData.length} rows)
-                            </span>
-                        </div>
-                        <Button variant="ghost" size="sm" onClick={reset}>
-                            <X className="w-4 h-4 mr-1" /> Start Over
-                        </Button>
-                    </div>
-
-                    {/* Column Mapping Panel */}
-                    <div className="p-4 rounded-xl bg-[hsl(var(--card))] border border-[hsl(var(--border))]">
-                        <div className="flex items-center gap-2 mb-4">
-                            <Settings2 className="w-4 h-4 text-[hsl(var(--primary))]" />
-                            <span className="font-medium text-[hsl(var(--foreground))]">Column Mapping</span>
-                            {!isMappingValid && (
-                                <span className="text-xs text-amber-500 ml-2">(Map Date, Amount, and Description)</span>
-                            )}
+            {
+                hasFile && (
+                    <div className="space-y-6">
+                        {/* Top Bar */}
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                                <FileSpreadsheet className="w-5 h-5 text-[hsl(var(--primary))]" />
+                                <span className="font-medium text-[hsl(var(--foreground))]">{fileName}</span>
+                                <span className="text-sm text-[hsl(var(--muted-foreground))]">
+                                    ({csvData.length} rows)
+                                </span>
+                            </div>
+                            <Button variant="ghost" size="sm" onClick={reset}>
+                                <X className="w-4 h-4 mr-1" /> Start Over
+                            </Button>
                         </div>
 
-                        <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-6">
-                            {/* Date Column */}
-                            <div>
-                                <label className="block text-xs font-medium text-[hsl(var(--muted-foreground))] mb-1">
-                                    Date <span className="text-red-500">*</span>
-                                </label>
-                                <select
-                                    value={mapping.date ?? ""}
-                                    onChange={(e) => setMapping(prev => ({ ...prev, date: e.target.value ? parseInt(e.target.value) : null }))}
-                                    className="w-full p-2 text-sm rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] text-[hsl(var(--foreground))]"
-                                >
-                                    <option value="">Select...</option>
-                                    {csvHeaders.map((h, i) => (
-                                        <option key={i} value={i}>{h}</option>
-                                    ))}
-                                </select>
+                        {/* Column Mapping Panel */}
+                        <div className="p-4 rounded-xl bg-[hsl(var(--card))] border border-[hsl(var(--border))]">
+                            <div className="flex items-center gap-2 mb-4">
+                                <Settings2 className="w-4 h-4 text-[hsl(var(--primary))]" />
+                                <span className="font-medium text-[hsl(var(--foreground))]">Column Mapping</span>
+                                {!isMappingValid && (
+                                    <span className="text-xs text-amber-500 ml-2">(Map Date, Amount, and Description)</span>
+                                )}
                             </div>
 
-                            {/* Date Format */}
-                            <div>
-                                <label className="block text-xs font-medium text-[hsl(var(--muted-foreground))] mb-1">
-                                    Format {detectedFormat && <span className="text-[hsl(var(--primary))]">✓</span>}
-                                </label>
-                                <select
-                                    value={dateFormat}
-                                    onChange={(e) => setDateFormat(e.target.value)}
-                                    className="w-full p-2 text-sm rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] text-[hsl(var(--foreground))]"
-                                >
-                                    {DATE_FORMATS.map(f => (
-                                        <option key={f.label} value={f.label}>{f.label}</option>
-                                    ))}
-                                </select>
-                            </div>
+                            <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-6">
+                                {/* Date Column */}
+                                <div>
+                                    <label className="block text-xs font-medium text-[hsl(var(--muted-foreground))] mb-1">
+                                        Date <span className="text-red-500">*</span>
+                                    </label>
+                                    <select
+                                        value={mapping.date ?? ""}
+                                        onChange={(e) => setMapping(prev => ({ ...prev, date: e.target.value ? parseInt(e.target.value) : null }))}
+                                        className="w-full p-2 text-sm rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] text-[hsl(var(--foreground))]"
+                                    >
+                                        <option value="">Select...</option>
+                                        {csvHeaders.map((h, i) => (
+                                            <option key={i} value={i}>{h}</option>
+                                        ))}
+                                    </select>
+                                </div>
 
-                            {/* Amount */}
-                            <div>
-                                <label className="block text-xs font-medium text-[hsl(var(--muted-foreground))] mb-1">
-                                    Amount <span className="text-red-500">*</span>
-                                </label>
-                                <select
-                                    value={mapping.amount ?? ""}
-                                    onChange={(e) => setMapping(prev => ({ ...prev, amount: e.target.value ? parseInt(e.target.value) : null }))}
-                                    className="w-full p-2 text-sm rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] text-[hsl(var(--foreground))]"
-                                >
-                                    <option value="">Select...</option>
-                                    {csvHeaders.map((h, i) => (
-                                        <option key={i} value={i}>{h}</option>
-                                    ))}
-                                </select>
-                            </div>
+                                {/* Date Format */}
+                                <div>
+                                    <label className="block text-xs font-medium text-[hsl(var(--muted-foreground))] mb-1">
+                                        Format {detectedFormat && <span className="text-[hsl(var(--primary))]">✓</span>}
+                                    </label>
+                                    <select
+                                        value={dateFormat}
+                                        onChange={(e) => setDateFormat(e.target.value)}
+                                        className="w-full p-2 text-sm rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] text-[hsl(var(--foreground))]"
+                                    >
+                                        {DATE_FORMATS.map(f => (
+                                            <option key={f.label} value={f.label}>{f.label}</option>
+                                        ))}
+                                    </select>
+                                </div>
 
-                            {/* Description */}
-                            <div>
-                                <label className="block text-xs font-medium text-[hsl(var(--muted-foreground))] mb-1">
-                                    Description <span className="text-red-500">*</span>
-                                </label>
-                                <select
-                                    value={mapping.description ?? ""}
-                                    onChange={(e) => setMapping(prev => ({ ...prev, description: e.target.value ? parseInt(e.target.value) : null }))}
-                                    className="w-full p-2 text-sm rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] text-[hsl(var(--foreground))]"
-                                >
-                                    <option value="">Select...</option>
-                                    {csvHeaders.map((h, i) => (
-                                        <option key={i} value={i}>{h}</option>
-                                    ))}
-                                </select>
-                            </div>
+                                {/* Amount */}
+                                <div>
+                                    <label className="block text-xs font-medium text-[hsl(var(--muted-foreground))] mb-1">
+                                        Amount <span className="text-red-500">*</span>
+                                    </label>
+                                    <select
+                                        value={mapping.amount ?? ""}
+                                        onChange={(e) => setMapping(prev => ({ ...prev, amount: e.target.value ? parseInt(e.target.value) : null }))}
+                                        className="w-full p-2 text-sm rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] text-[hsl(var(--foreground))]"
+                                    >
+                                        <option value="">Select...</option>
+                                        {csvHeaders.map((h, i) => (
+                                            <option key={i} value={i}>{h}</option>
+                                        ))}
+                                    </select>
+                                </div>
 
-                            {/* Type (Optional) */}
-                            <div>
-                                <label className="block text-xs font-medium text-[hsl(var(--muted-foreground))] mb-1">
-                                    Type
-                                </label>
-                                <select
-                                    value={mapping.type ?? ""}
-                                    onChange={(e) => setMapping(prev => ({ ...prev, type: e.target.value ? parseInt(e.target.value) : null }))}
-                                    className="w-full p-2 text-sm rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] text-[hsl(var(--foreground))]"
-                                >
-                                    <option value="">Auto</option>
-                                    {csvHeaders.map((h, i) => (
-                                        <option key={i} value={i}>{h}</option>
-                                    ))}
-                                </select>
-                            </div>
+                                {/* Description */}
+                                <div>
+                                    <label className="block text-xs font-medium text-[hsl(var(--muted-foreground))] mb-1">
+                                        Description <span className="text-red-500">*</span>
+                                    </label>
+                                    <select
+                                        value={mapping.description ?? ""}
+                                        onChange={(e) => setMapping(prev => ({ ...prev, description: e.target.value ? parseInt(e.target.value) : null }))}
+                                        className="w-full p-2 text-sm rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] text-[hsl(var(--foreground))]"
+                                    >
+                                        <option value="">Select...</option>
+                                        {csvHeaders.map((h, i) => (
+                                            <option key={i} value={i}>{h}</option>
+                                        ))}
+                                    </select>
+                                </div>
 
-                            {/* Memo (Optional) */}
-                            <div>
-                                <label className="block text-xs font-medium text-[hsl(var(--muted-foreground))] mb-1">
-                                    Memo
-                                </label>
-                                <select
-                                    value={mapping.memo ?? ""}
-                                    onChange={(e) => setMapping(prev => ({ ...prev, memo: e.target.value ? parseInt(e.target.value) : null }))}
-                                    className="w-full p-2 text-sm rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] text-[hsl(var(--foreground))]"
-                                >
-                                    <option value="">None</option>
-                                    {csvHeaders.map((h, i) => (
-                                        <option key={i} value={i}>{h}</option>
-                                    ))}
-                                </select>
+                                {/* Type (Optional) */}
+                                <div>
+                                    <label className="block text-xs font-medium text-[hsl(var(--muted-foreground))] mb-1">
+                                        Type
+                                    </label>
+                                    <select
+                                        value={mapping.type ?? ""}
+                                        onChange={(e) => setMapping(prev => ({ ...prev, type: e.target.value ? parseInt(e.target.value) : null }))}
+                                        className="w-full p-2 text-sm rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] text-[hsl(var(--foreground))]"
+                                    >
+                                        <option value="">Auto</option>
+                                        {csvHeaders.map((h, i) => (
+                                            <option key={i} value={i}>{h}</option>
+                                        ))}
+                                    </select>
+                                </div>
+
+                                {/* Memo (Optional) */}
+                                <div>
+                                    <label className="block text-xs font-medium text-[hsl(var(--muted-foreground))] mb-1">
+                                        Memo
+                                    </label>
+                                    <select
+                                        value={mapping.memo ?? ""}
+                                        onChange={(e) => setMapping(prev => ({ ...prev, memo: e.target.value ? parseInt(e.target.value) : null }))}
+                                        className="w-full p-2 text-sm rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] text-[hsl(var(--foreground))]"
+                                    >
+                                        <option value="">None</option>
+                                        {csvHeaders.map((h, i) => (
+                                            <option key={i} value={i}>{h}</option>
+                                        ))}
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    {/* Transactions Table (always visible) */}
-                    <div>
-                        <div className="text-sm text-[hsl(var(--muted-foreground))] flex items-center gap-2 mb-3">
-                            <GripVertical className="w-4 h-4" />
-                            <span>Drag rows to reorder. Click cells to edit.</span>
-                        </div>
+                        {/* Transactions Table (always visible) */}
+                        <div>
+                            <div className="text-sm text-[hsl(var(--muted-foreground))] flex items-center gap-2 mb-3">
+                                <GripVertical className="w-4 h-4" />
+                                <span>Drag rows to reorder. Click cells to edit.</span>
+                            </div>
 
-                        <div className="overflow-x-auto rounded-xl border border-[hsl(var(--border))]">
-                            <table className="w-full text-sm">
-                                <thead className="bg-[hsl(var(--muted))]/50">
-                                    <tr>
-                                        <th className="w-8 px-2 py-3"></th>
-                                        <th className="px-4 py-3 text-left font-medium text-[hsl(var(--foreground))]">Date</th>
-                                        <th className="px-4 py-3 text-left font-medium text-[hsl(var(--foreground))]">Amount</th>
-                                        <th className="px-4 py-3 text-left font-medium text-[hsl(var(--foreground))]">Description</th>
-                                        <th className="px-4 py-3 text-left font-medium text-[hsl(var(--foreground))]">Type</th>
-                                        <th className="px-4 py-3 text-left font-medium text-[hsl(var(--foreground))]">Memo</th>
-                                        <th className="w-10 px-2 py-3"></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {transactions.length === 0 ? (
+                            <div className="overflow-x-auto rounded-xl border border-[hsl(var(--border))]">
+                                <table className="w-full text-sm">
+                                    <thead className="bg-[hsl(var(--muted))]/50">
                                         <tr>
-                                            <td colSpan={7} className="px-4 py-8 text-center text-[hsl(var(--muted-foreground))]">
-                                                {isMappingValid ? "No transactions found" : "Map Date, Amount, and Description columns to preview transactions"}
-                                            </td>
+                                            <th className="w-8 px-2 py-3"></th>
+                                            <th className="px-4 py-3 text-left font-medium text-[hsl(var(--foreground))]">Date</th>
+                                            <th className="px-4 py-3 text-left font-medium text-[hsl(var(--foreground))]">Amount</th>
+                                            <th className="px-4 py-3 text-left font-medium text-[hsl(var(--foreground))]">Description</th>
+                                            <th className="px-4 py-3 text-left font-medium text-[hsl(var(--foreground))]">Type</th>
+                                            <th className="px-4 py-3 text-left font-medium text-[hsl(var(--foreground))]">Memo</th>
+                                            <th className="w-10 px-2 py-3"></th>
                                         </tr>
-                                    ) : (
-                                        transactions.map((txn, idx) => (
-                                            <tr
-                                                key={txn.id}
-                                                draggable
-                                                onDragStart={() => handleDragStart(idx)}
-                                                onDragOver={(e) => handleDragOver(e, idx)}
-                                                onDragEnd={handleDragEnd}
-                                                className={`border-t border-[hsl(var(--border))] ${draggedRow === idx ? "bg-[hsl(var(--primary))]/10" : "hover:bg-[hsl(var(--muted))]/30"} transition-colors`}
-                                            >
-                                                <td className="px-2 py-2 cursor-grab">
-                                                    <GripVertical className="w-4 h-4 text-[hsl(var(--muted-foreground))]" />
-                                                </td>
-                                                {(["date", "amount", "description", "type", "memo"] as const).map(field => (
-                                                    <td key={field} className="px-4 py-2">
-                                                        {editingCell?.row === idx && editingCell?.field === field ? (
-                                                            <input
-                                                                autoFocus
-                                                                value={txn[field]}
-                                                                onChange={(e) => updateTransaction(txn.id, field, e.target.value)}
-                                                                onBlur={() => setEditingCell(null)}
-                                                                onKeyDown={(e) => e.key === "Enter" && setEditingCell(null)}
-                                                                className="w-full px-2 py-1 rounded border border-[hsl(var(--primary))] bg-[hsl(var(--background))] text-[hsl(var(--foreground))] outline-none"
-                                                            />
-                                                        ) : (
-                                                            <span
-                                                                onClick={() => setEditingCell({ row: idx, field })}
-                                                                className="cursor-pointer hover:text-[hsl(var(--primary))] transition-colors"
-                                                            >
-                                                                {txn[field] || <span className="text-[hsl(var(--muted-foreground))]">—</span>}
-                                                            </span>
-                                                        )}
-                                                    </td>
-                                                ))}
-                                                <td className="px-2 py-2">
-                                                    <button
-                                                        onClick={() => deleteTransaction(idx)}
-                                                        className="p-1 rounded hover:bg-red-500/10 text-[hsl(var(--muted-foreground))] hover:text-red-500 transition-colors"
-                                                    >
-                                                        <Trash2 className="w-4 h-4" />
-                                                    </button>
+                                    </thead>
+                                    <tbody>
+                                        {transactions.length === 0 ? (
+                                            <tr>
+                                                <td colSpan={7} className="px-4 py-8 text-center text-[hsl(var(--muted-foreground))]">
+                                                    {isMappingValid ? "No transactions found" : "Map Date, Amount, and Description columns to preview transactions"}
                                                 </td>
                                             </tr>
-                                        ))
-                                    )}
-                                </tbody>
-                            </table>
+                                        ) : (
+                                            transactions.map((txn, idx) => (
+                                                <tr
+                                                    key={txn.id}
+                                                    draggable
+                                                    onDragStart={() => handleDragStart(idx)}
+                                                    onDragOver={(e) => handleDragOver(e, idx)}
+                                                    onDragEnd={handleDragEnd}
+                                                    className={`border-t border-[hsl(var(--border))] ${draggedRow === idx ? "bg-[hsl(var(--primary))]/10" : "hover:bg-[hsl(var(--muted))]/30"} transition-colors`}
+                                                >
+                                                    <td className="px-2 py-2 cursor-grab">
+                                                        <GripVertical className="w-4 h-4 text-[hsl(var(--muted-foreground))]" />
+                                                    </td>
+                                                    {(["date", "amount", "description", "type", "memo"] as const).map(field => (
+                                                        <td key={field} className="px-4 py-2">
+                                                            {editingCell?.row === idx && editingCell?.field === field ? (
+                                                                <input
+                                                                    autoFocus
+                                                                    value={txn[field]}
+                                                                    onChange={(e) => updateTransaction(txn.id, field, e.target.value)}
+                                                                    onBlur={() => setEditingCell(null)}
+                                                                    onKeyDown={(e) => e.key === "Enter" && setEditingCell(null)}
+                                                                    className="w-full px-2 py-1 rounded border border-[hsl(var(--primary))] bg-[hsl(var(--background))] text-[hsl(var(--foreground))] outline-none"
+                                                                />
+                                                            ) : (
+                                                                <span
+                                                                    onClick={() => setEditingCell({ row: idx, field })}
+                                                                    className="cursor-pointer hover:text-[hsl(var(--primary))] transition-colors"
+                                                                >
+                                                                    {txn[field] || <span className="text-[hsl(var(--muted-foreground))]">—</span>}
+                                                                </span>
+                                                            )}
+                                                        </td>
+                                                    ))}
+                                                    <td className="px-2 py-2">
+                                                        <button
+                                                            onClick={() => deleteTransaction(idx)}
+                                                            className="p-1 rounded hover:bg-red-500/10 text-[hsl(var(--muted-foreground))] hover:text-red-500 transition-colors"
+                                                        >
+                                                            <Trash2 className="w-4 h-4" />
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            ))
+                                        )}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
 
-                    {/* Export Button */}
-                    <Button
-                        onClick={exportQBO}
-                        disabled={isProcessing || transactions.length === 0}
-                        className="w-full h-14 text-lg bg-gradient-primary shadow-glow hover:opacity-90"
-                    >
-                        {isProcessing ? (
-                            <><Loader2 className="w-5 h-5 mr-2 animate-spin" /> Generating...</>
-                        ) : (
-                            <><Download className="w-5 h-5 mr-2" /> Export as QBO ({transactions.length} transactions)</>
-                        )}
-                    </Button>
-                </div>
-            )}
+                        {/* Export Button */}
+                        <Button
+                            onClick={exportQBO}
+                            disabled={isProcessing || transactions.length === 0}
+                            className="w-full h-14 text-lg bg-gradient-primary shadow-glow hover:opacity-90"
+                        >
+                            {isProcessing ? (
+                                <><Loader2 className="w-5 h-5 mr-2 animate-spin" /> Generating...</>
+                            ) : (
+                                <><Download className="w-5 h-5 mr-2" /> Export as QBO ({transactions.length} transactions)</>
+                            )}
+                        </Button>
+                    </div>
+                )
+            }
 
             {/* Error Message */}
-            {error && (
-                <div className="mt-4 p-4 rounded-lg bg-red-500/10 border border-red-500/30 text-red-500 text-sm flex items-center gap-2">
-                    <AlertCircle className="w-5 h-5 flex-shrink-0" />
-                    {error}
-                </div>
-            )}
-        </div>
+            {
+                error && (
+                    <div className="mt-4 p-4 rounded-lg bg-red-500/10 border border-red-500/30 text-red-500 text-sm flex items-center gap-2">
+                        <AlertCircle className="w-5 h-5 flex-shrink-0" />
+                        {error}
+                    </div>
+                )
+            }
+        </div >
     );
 }
