@@ -513,5 +513,5 @@ export function csvToOFXTransactions(
                 type
             };
         })
-        .filter((tx): tx is OFXTransaction => tx !== null);
+        .filter((tx) => tx !== null) as OFXTransaction[];
 }
