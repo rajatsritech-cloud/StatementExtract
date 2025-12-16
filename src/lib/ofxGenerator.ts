@@ -122,7 +122,7 @@ export function generateOFX(
         const name = nameVal.substring(0, 32); // OFX name limit
 
         // Use provided memo or default to description
-        const memo = tx.memo || tx.description;
+        const memo = tx.memo || tx.description || "";
 
         const fitid = generateFitId(tx, index);
         const checkNumTag = tx.checkNum ? `\n<CHECKNUM>${tx.checkNum}` : '';
