@@ -106,6 +106,13 @@ const toolSections = [
                 badge: "New",
             },
             {
+                title: "CSV to OFX Converter",
+                description: "Convert bank CSV files to OFX, QBO, or QFX format for QuickBooks, Xero, Sage & more.",
+                href: "/convert/csv-to-ofx",
+                icon: "FileSpreadsheet",
+                badge: "New",
+            },
+            {
                 title: "PDF to Excel Converter",
                 description: "Extract tables and data from any PDF into editable Excel spreadsheets.",
                 href: "/convert-bank-statement-to-csv-excel",

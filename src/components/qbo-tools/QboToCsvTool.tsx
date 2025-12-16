@@ -196,10 +196,10 @@ export function QboToCsvTool() {
             {/* Header */}
             <div className="text-center mb-4">
                 <h1 className="text-2xl md:text-3xl font-bold text-[hsl(var(--foreground))] mb-2">
-                    Convert QBO to CSV Online
+                    QBO to CSV Converter
                 </h1>
                 <p className="text-[hsl(var(--muted-foreground))] max-w-xl mx-auto">
-                    Extract transactions from QuickBooks files to Excel/CSV. 100% free and private.
+                    Convert <strong>.qbo to csv</strong> online. Extract transactions from QuickBooks files to Excel. 100% free and private.
                 </p>
             </div>
 
