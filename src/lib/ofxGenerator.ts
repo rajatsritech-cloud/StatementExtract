@@ -118,7 +118,7 @@ export function generateOFX(
         const amount = tx.amount.toFixed(2);
 
         // Use provided name or fallback to description
-        const nameVal = tx.name || tx.description;
+        const nameVal = tx.name || tx.description || "";
         const name = nameVal.substring(0, 32); // OFX name limit
 
         // Use provided memo or default to description
