@@ -410,6 +410,7 @@ export default async function BlogPostPage({ params }: PageParams) {
       }
     },
     "description": summary,
+    "keywords": tags.join(", "),
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": `${siteUrl}/blogs/${slug}`
@@ -473,15 +474,37 @@ export default async function BlogPostPage({ params }: PageParams) {
             </h1>
 
             {(date || tags.length > 0) && (
-              <div className="flex flex-wrap items-center gap-3 text-xs md:text-sm text-[hsl(var(--muted-foreground))]">
+              <div className="flex flex-col items-start gap-4 mt-2">
                 {date && (
-                  <span className="inline-flex items-center rounded-full border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-1">
-                    {date}
-                  </span>
+                  <div className="flex items-center gap-2 text-sm text-[hsl(var(--muted-foreground))]">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="h-4 w-4"
+                    >
+                      <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
+                      <line x1="16" x2="16" y1="2" y2="6" />
+                      <line x1="8" x2="8" y1="2" y2="6" />
+                      <line x1="3" x2="21" y1="10" y2="10" />
+                    </svg>
+                    <time dateTime={date}>
+                      {new Date(date).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })}
+                    </time>
+                  </div>
                 )}
+
                 {tags.length > 0 && (
                   <div className="flex flex-wrap items-center gap-2">
-                    {tags.map((tag) => (
+                    {tags.slice(0, 3).map((tag) => (
                       <span
                         key={tag}
                         className="inline-flex items-center rounded-full bg-[hsl(var(--primary))]/10 px-3 py-1 text-[0.7rem] font-semibold uppercase tracking-wide text-[hsl(var(--primary))]"
