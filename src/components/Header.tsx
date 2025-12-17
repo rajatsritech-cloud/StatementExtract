@@ -56,13 +56,12 @@ export const Header = () => {
     }, 250);
   };
 
-  const handleSolutionsItemClick = (path: string) => {
+  const closeDropdown = () => {
     if (hoverTimeoutRef.current) {
       clearTimeout(hoverTimeoutRef.current);
       hoverTimeoutRef.current = null;
     }
     setIsSolutionsHovered(false);
-    router.push(path);
   };
 
   const pathname = usePathname();
@@ -114,57 +113,63 @@ export const Header = () => {
                         <div>
                           <p className="text-xs font-semibold tracking-[0.2em] text-[hsl(var(--muted-foreground))] mb-4">COMPANY</p>
                           <div className="grid grid-cols-2 gap-3">
-                            <div
+                            <Link
+                              href="/about"
                               className="group flex flex-col items-center justify-center gap-2 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))] text-center transition-all duration-200 cursor-pointer hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40 hover:shadow-glow"
-                              onClick={() => handleSolutionsItemClick("/about")}
+                              onClick={closeDropdown}
                             >
                               <div className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] group-hover:bg-[hsl(var(--primary))] group-hover:text-[hsl(var(--primary-foreground))] transition-colors">
                                 <Building className="h-4 w-4" />
                               </div>
                               <span>About Us</span>
-                            </div>
-                            <div
+                            </Link>
+                            <Link
+                              href="/contact"
                               className="group flex flex-col items-center justify-center gap-2 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))] text-center transition-all duration-200 cursor-pointer hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40 hover:shadow-glow"
-                              onClick={() => handleSolutionsItemClick("/contact")}
+                              onClick={closeDropdown}
                             >
                               <div className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] group-hover:bg-[hsl(var(--primary))] group-hover:text-[hsl(var(--primary-foreground))] transition-colors">
                                 <Mail className="h-4 w-4" />
                               </div>
                               <span>Contact Us</span>
-                            </div>
-                            <div
+                            </Link>
+                            <Link
+                              href="/privacy-policy"
                               className="group flex flex-col items-center justify-center gap-2 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))] text-center transition-all duration-200 cursor-pointer hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40 hover:shadow-glow"
-                              onClick={() => handleSolutionsItemClick("/privacy-policy")}
+                              onClick={closeDropdown}
                             >
                               <div className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] group-hover:bg-[hsl(var(--primary))] group-hover:text-[hsl(var(--primary-foreground))] transition-colors">
                                 <Shield className="h-4 w-4" />
                               </div>
                               <span>Privacy Policy</span>
-                            </div>
-                            <div
+                            </Link>
+                            <Link
+                              href="/terms"
                               className="group flex flex-col items-center justify-center gap-2 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))] text-center transition-all duration-200 cursor-pointer hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40 hover:shadow-glow"
-                              onClick={() => handleSolutionsItemClick("/terms")}
+                              onClick={closeDropdown}
                             >
                               <div className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] group-hover:bg-[hsl(var(--primary))] group-hover:text-[hsl(var(--primary-foreground))] transition-colors">
                                 <Settings className="h-4 w-4" />
                               </div>
                               <span>Terms</span>
-                            </div>
+                            </Link>
                           </div>
                         </div>
                         <div className="mt-6 flex gap-3">
-                          <button
-                            onClick={() => handleSolutionsItemClick('/convert-bank-statement-to-csv-excel')}
-                            className="bg-gradient-button text-[hsl(var(--primary-foreground))] px-5 py-2.5 rounded-lg text-sm font-semibold shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200"
+                          <Link
+                            href="/convert-bank-statement-to-csv-excel"
+                            onClick={closeDropdown}
+                            className="bg-gradient-button text-[hsl(var(--primary-foreground))] px-5 py-2.5 rounded-lg text-sm font-semibold shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200 inline-block text-center"
                           >
                             Try for Free
-                          </button>
-                          <button
-                            onClick={() => handleSolutionsItemClick('/about')}
-                            className="bg-[hsl(var(--muted))] text-[hsl(var(--foreground))] border border-[hsl(var(--border))] px-5 py-2.5 rounded-lg text-sm font-semibold hover:bg-[hsl(var(--secondary))] hover:border-[hsl(var(--primary))]/50 transition-all duration-200 hover:-translate-y-0.5"
+                          </Link>
+                          <Link
+                            href="/about"
+                            onClick={closeDropdown}
+                            className="bg-[hsl(var(--muted))] text-[hsl(var(--foreground))] border border-[hsl(var(--border))] px-5 py-2.5 rounded-lg text-sm font-semibold hover:bg-[hsl(var(--secondary))] hover:border-[hsl(var(--primary))]/50 transition-all duration-200 hover:-translate-y-0.5 inline-block text-center"
                           >
                             Learn More
-                          </button>
+                          </Link>
                         </div>
                       </div>
 
@@ -181,9 +186,10 @@ export const Header = () => {
                         </div>
 
                         <div className="grid grid-cols-2 gap-3">
-                          <div
+                          <Link
+                            href="/convert-bank-statement-to-csv-excel"
                             className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--primary))]/30 bg-[hsl(var(--background))] px-3 py-3 cursor-pointer transition-all duration-200 hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40 hover:shadow-glow"
-                            onClick={() => handleSolutionsItemClick('/convert-bank-statement-to-csv-excel')}
+                            onClick={closeDropdown}
                           >
                             <div className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] group-hover:bg-[hsl(var(--primary))] group-hover:text-[hsl(var(--primary-foreground))] transition-colors">
                               <Building className="h-4 w-4" />
@@ -192,11 +198,12 @@ export const Header = () => {
                               <p className="text-sm font-semibold text-[hsl(var(--foreground))]">Bank Statement to Excel/CSV</p>
                               <p className="mt-0.5 text-xs text-[hsl(var(--muted-foreground))]">Convert any bank PDF to structured data.</p>
                             </div>
-                          </div>
+                          </Link>
 
-                          <div
+                          <Link
+                            href="/convert-bank-statement-to-quickbooks-xero"
                             className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--primary))]/30 bg-[hsl(var(--background))] px-3 py-3 cursor-pointer transition-all duration-200 hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40 hover:shadow-glow"
-                            onClick={() => handleSolutionsItemClick('/convert-bank-statement-to-quickbooks-xero')}
+                            onClick={closeDropdown}
                           >
                             <div className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] group-hover:bg-[hsl(var(--primary))] group-hover:text-[hsl(var(--primary-foreground))] transition-colors">
                               <CreditCard className="h-4 w-4" />
@@ -205,11 +212,12 @@ export const Header = () => {
                               <p className="text-sm font-semibold text-[hsl(var(--foreground))]">QuickBooks & Xero Import</p>
                               <p className="mt-0.5 text-xs text-[hsl(var(--muted-foreground))]">Ready-to-import formats for accounting.</p>
                             </div>
-                          </div>
+                          </Link>
 
-                          <div
+                          <Link
+                            href="/convert-bank-statement-to-csv-excel"
                             className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-3 cursor-pointer transition-all duration-200 hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40"
-                            onClick={() => handleSolutionsItemClick('/convert-bank-statement-to-csv-excel')}
+                            onClick={closeDropdown}
                           >
                             <div className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[hsl(var(--muted))]/50 text-[hsl(var(--muted-foreground))] group-hover:bg-[hsl(var(--primary))]/10 group-hover:text-[hsl(var(--primary))] transition-colors">
                               <FileIcon className="h-4 w-4" />
@@ -218,11 +226,12 @@ export const Header = () => {
                               <p className="text-sm font-semibold text-[hsl(var(--foreground))]">Small Business Accounting</p>
                               <p className="mt-0.5 text-xs text-[hsl(var(--muted-foreground))]">For CPAs, CAs, and bookkeepers.</p>
                             </div>
-                          </div>
+                          </Link>
 
-                          <div
+                          <Link
+                            href="/convert-bank-statement-to-csv-excel"
                             className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-3 cursor-pointer transition-all duration-200 hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40"
-                            onClick={() => handleSolutionsItemClick('/convert-bank-statement-to-csv-excel')}
+                            onClick={closeDropdown}
                           >
                             <div className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[hsl(var(--muted))]/50 text-[hsl(var(--muted-foreground))] group-hover:bg-[hsl(var(--primary))]/10 group-hover:text-[hsl(var(--primary))] transition-colors">
                               <Shield className="h-4 w-4" />
@@ -231,7 +240,7 @@ export const Header = () => {
                               <p className="text-sm font-semibold text-[hsl(var(--foreground))]">Financial Auditing</p>
                               <p className="mt-0.5 text-xs text-[hsl(var(--muted-foreground))]">Transaction verification & reconciliation.</p>
                             </div>
-                          </div>
+                          </Link>
                         </div>
                       </div>
                     </div>
@@ -246,9 +255,9 @@ export const Header = () => {
             <Link href="/convert" className="text-sm font-medium text-[hsl(var(--foreground))] transition-colors hover:text-[hsl(var(--primary))]">
               Tools
             </Link>
-            <a href="/#faq" className="text-sm font-medium text-[hsl(var(--foreground))] transition-colors hover:text-[hsl(var(--primary))]">
+            <Link href="/#faq" className="text-sm font-medium text-[hsl(var(--foreground))] transition-colors hover:text-[hsl(var(--primary))]">
               FAQ
-            </a>
+            </Link>
           </nav>
 
           <div className="flex items-center gap-2 lg:gap-4">
@@ -355,17 +364,17 @@ export const Header = () => {
                   <div className="bg-[hsl(var(--muted))]/30 px-4 py-2 space-y-1">
                     <div className="mb-2">
                       <p className="text-[10px] font-semibold tracking-wider text-[hsl(var(--muted-foreground))] uppercase px-2 py-1">Company</p>
-                      <button onClick={() => { setIsMobileMenuOpen(false); router.push('/about'); }} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">About Us</button>
-                      <button onClick={() => { setIsMobileMenuOpen(false); router.push('/contact'); }} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Contact Us</button>
-                      <button onClick={() => { setIsMobileMenuOpen(false); router.push('/privacy-policy'); }} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Privacy Policy</button>
-                      <button onClick={() => { setIsMobileMenuOpen(false); router.push('/terms'); }} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Terms</button>
+                      <Link href="/about" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">About Us</Link>
+                      <Link href="/contact" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Contact Us</Link>
+                      <Link href="/privacy-policy" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Privacy Policy</Link>
+                      <Link href="/terms" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Terms</Link>
                     </div>
                     <div>
                       <p className="text-[10px] font-semibold tracking-wider text-[hsl(var(--muted-foreground))] uppercase px-2 py-1">Solutions</p>
-                      <button onClick={() => { setIsMobileMenuOpen(false); router.push('/convert-bank-statement-to-csv-excel'); }} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Bank Statement to Excel/CSV</button>
-                      <button onClick={() => { setIsMobileMenuOpen(false); router.push('/convert-bank-statement-to-quickbooks-xero'); }} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">QuickBooks & Xero Import</button>
-                      <button onClick={() => { setIsMobileMenuOpen(false); router.push('/convert-bank-statement-to-csv-excel'); }} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Small Business Accounting</button>
-                      <button onClick={() => { setIsMobileMenuOpen(false); router.push('/convert-bank-statement-to-csv-excel'); }} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Financial Auditing</button>
+                      <Link href="/convert-bank-statement-to-csv-excel" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Bank Statement to Excel/CSV</Link>
+                      <Link href="/convert-bank-statement-to-quickbooks-xero" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">QuickBooks & Xero Import</Link>
+                      <Link href="/convert-bank-statement-to-csv-excel" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Small Business Accounting</Link>
+                      <Link href="/convert-bank-statement-to-csv-excel" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Financial Auditing</Link>
                     </div>
                   </div>
                 )}
@@ -382,7 +391,7 @@ export const Header = () => {
                 </span>
               </Link>
 
-              <a
+              <Link
                 href="/#faq"
                 className="flex w-full items-center justify-between px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))]"
                 onClick={() => setIsMobileMenuOpen(false)}
@@ -391,7 +400,7 @@ export const Header = () => {
                   <HelpCircle className="h-4 w-4 text-[hsl(var(--primary))]" />
                   <span>FAQ</span>
                 </span>
-              </a>
+              </Link>
 
               <Link
                 href="/convert"

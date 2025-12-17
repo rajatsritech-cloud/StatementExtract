@@ -70,8 +70,8 @@ export const Footer = () => {
                   Free Tools
                 </Link>
               </li>
-              <li><a href="/#use-cases" className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors">Use Cases</a></li>
-              <li><a href="/#pricing" className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors">Pricing</a></li>
+              <li><Link href="/#use-cases" className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors">Use Cases</Link></li>
+              <li><Link href="/#pricing" className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors">Pricing</Link></li>
             </ul>
           </div>
 

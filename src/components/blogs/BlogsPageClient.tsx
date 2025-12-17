@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useRef, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { BlogPostMeta } from "@/lib/blogs";
 import { ArrowRight, BookOpen, ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -196,10 +197,12 @@ export function BlogsPageClient({ posts }: BlogsPageClientProps) {
                                 <div className="aspect-[16/9] w-full relative bg-[hsl(var(--muted))] overflow-hidden">
                                     {post.coverImage ? (
                                         <>
-                                            <img
+                                            <Image
                                                 src={post.coverImage}
                                                 alt={post.title}
+                                                fill
                                                 className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                             />
                                             {/* AI-Generated Image Disclosure */}
                                             <div className="absolute bottom-2 right-2 flex items-center gap-1 bg-black/50 backdrop-blur-sm text-white/80 text-[9px] px-1.5 py-0.5 rounded">

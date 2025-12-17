@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { getAllPosts } from "@/lib/blogs";
 
 export async function RecentBlogs() {
@@ -32,10 +33,12 @@ export async function RecentBlogs() {
                                     {/* eslint-disable-next-line @next/next/no-img-element */}
                                     {post.coverImage ? (
                                         <>
-                                            <img
+                                            <Image
                                                 src={post.coverImage}
                                                 alt={post.title}
+                                                fill
                                                 className="absolute inset-0 h-full w-full object-cover transition-transform duration-200 group-hover:scale-[1.02]"
+                                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                             />
                                             {/* AI-Generated Image Disclosure */}
                                             <div className="absolute bottom-2 right-2 flex items-center gap-1 bg-black/50 backdrop-blur-sm text-white/80 text-[9px] px-1.5 py-0.5 rounded">
