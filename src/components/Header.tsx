@@ -355,14 +355,16 @@ export const Header = () => {
                     <div className="mb-2">
                       <p className="text-[10px] font-semibold tracking-wider text-[hsl(var(--muted-foreground))] uppercase px-2 py-1">Company</p>
                       <button onClick={() => { setIsMobileMenuOpen(false); router.push('/about'); }} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">About Us</button>
-                      <button onClick={() => { setIsMobileMenuOpen(false); }} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Contact Us</button>
+                      <button onClick={() => { setIsMobileMenuOpen(false); router.push('/careers'); }} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Careers</button>
                       <button onClick={() => { setIsMobileMenuOpen(false); router.push('/privacy-policy'); }} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Privacy Policy</button>
+                      <button onClick={() => { setIsMobileMenuOpen(false); router.push('/terms'); }} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Terms</button>
                     </div>
                     <div>
                       <p className="text-[10px] font-semibold tracking-wider text-[hsl(var(--muted-foreground))] uppercase px-2 py-1">Solutions</p>
-                      <button onClick={() => { setIsMobileMenuOpen(false); router.push('/convert-bank-statement-to-csv-excel'); }} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Banking & Lending</button>
-                      <button onClick={() => { setIsMobileMenuOpen(false); router.push('/convert-bank-statement-to-csv-excel'); }} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Insurance</button>
-                      <button onClick={() => { setIsMobileMenuOpen(false); router.push('/convert-bank-statement-to-csv-excel'); }} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Real Estate</button>
+                      <button onClick={() => { setIsMobileMenuOpen(false); router.push('/convert-bank-statement-to-csv-excel'); }} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Bank Statement to Excel/CSV</button>
+                      <button onClick={() => { setIsMobileMenuOpen(false); router.push('/convert-bank-statement-to-quickbooks-xero'); }} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">QuickBooks & Xero Import</button>
+                      <button onClick={() => { setIsMobileMenuOpen(false); router.push('/convert-bank-statement-to-csv-excel'); }} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Small Business Accounting</button>
+                      <button onClick={() => { setIsMobileMenuOpen(false); router.push('/convert-bank-statement-to-csv-excel'); }} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Financial Auditing</button>
                     </div>
                   </div>
                 )}
@@ -390,16 +392,16 @@ export const Header = () => {
                 </span>
               </a>
 
-              <a
-                href="#pricing"
+              <Link
+                href="/convert"
                 className="flex w-full items-center justify-between px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))]"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 <span className="flex items-center gap-3">
-                  <CreditCard className="h-4 w-4 text-[hsl(var(--primary))]" />
-                  <span>Pricing</span>
+                  <Zap className="h-4 w-4 text-[hsl(var(--primary))]" />
+                  <span>Tools</span>
                 </span>
-              </a>
+              </Link>
 
               {/* Mobile Theme Toggle */}
               <div className="flex items-center justify-between px-4 py-3">
@@ -433,12 +435,12 @@ export const Header = () => {
                 <SignedOut>
                   <div suppressHydrationWarning className="grid grid-cols-2 gap-3">
                     <SignInButton mode="modal">
-                      <Button variant="outline" className="w-full justify-center">
+                      <Button variant="outline" className="w-full justify-center" onClick={() => setIsMobileMenuOpen(false)}>
                         Sign In
                       </Button>
                     </SignInButton>
                     <SignUpButton mode="modal">
-                      <Button className="w-full justify-center bg-gradient-button text-white shadow-lg">
+                      <Button className="w-full justify-center bg-gradient-button text-white shadow-lg" onClick={() => setIsMobileMenuOpen(false)}>
                         Get Started
                       </Button>
                     </SignUpButton>

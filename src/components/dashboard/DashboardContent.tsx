@@ -4,6 +4,7 @@ import { useState, useCallback, useRef, useEffect } from "react";
 import { UploadArea } from "@/components/bank-statement/UploadArea";
 import { ResultsModal } from "@/components/bank-statement/ResultsModal";
 import { UploadModal } from "@/components/dashboard/UploadModal";
+import { PortalTooltip } from "@/components/ui/portal-tooltip";
 import { ExtractedData } from "@/lib/pdfProcessor";
 import { toast } from "react-hot-toast";
 import { useAuth, UserButton } from "@clerk/clerk-react";
@@ -347,23 +348,20 @@ export const DashboardContent = () => {
                                                                 </span>
                                                             )}
                                                             {doc.status === "failed" && (
-                                                                <div className="group relative inline-flex">
+                                                                <PortalTooltip
+                                                                    content={doc.errorMessage || "We're experiencing high traffic on our free tier. Please try again in a few minutes."}
+                                                                >
                                                                     <span
                                                                         className="inline-flex items-center gap-1.5 rounded-full bg-red-500/10 px-2.5 py-1 text-xs font-medium text-red-600 dark:text-red-400 cursor-pointer hover:bg-red-500/20 transition-colors"
                                                                         onClick={() => toast.error(
                                                                             doc.errorMessage || "We're experiencing high traffic on our free tier. Please try again in a few minutes.",
                                                                             { duration: 6000 }
                                                                         )}
-                                                                        title="Click for details"
                                                                     >
                                                                         Failed
                                                                         <Info className="h-3 w-3" />
                                                                     </span>
-                                                                    <div className="absolute bottom-full left-1/2 mb-2 w-64 -translate-x-1/2 rounded-lg bg-gray-900 p-2 text-xs text-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100 pointer-events-none z-50">
-                                                                        {doc.errorMessage || "We're experiencing high traffic on our free tier. Please try again in a few minutes."}
-                                                                        <div className="absolute top-full left-1/2 -mt-1 h-2 w-2 -translate-x-1/2 rotate-45 bg-gray-900"></div>
-                                                                    </div>
-                                                                </div>
+                                                                </PortalTooltip>
                                                             )}
                                                         </td>
                                                         <td className="py-3 px-4 align-middle">
