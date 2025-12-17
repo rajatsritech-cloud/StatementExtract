@@ -89,10 +89,10 @@ export const Footer = () => {
               </li>
               <li>
                 <Link
-                  href="/careers"
+                  href="/contact"
                   className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors"
                 >
-                  Careers
+                  Contact Us
                 </Link>
               </li>
               <li>

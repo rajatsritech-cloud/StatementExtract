@@ -1,71 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Loader2, CheckCircle2, AlertCircle } from "lucide-react";
+import { ContactForm } from "@/components/ContactForm";
 
 export default function AboutPage() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    company: "",
-    help_needed: "",
-    details: "",
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { id, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [id === "use-case" ? "help_needed" : id]: value,
-    }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setSubmitStatus("idle");
-
-    try {
-      // Determine API URL
-      let apiUrl = process.env.NEXT_PUBLIC_API_URL;
-      if (!apiUrl) {
-        apiUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:8000' : '';
-      }
-
-      const response = await fetch(`${apiUrl}/api/v1/contact/submit`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to send message");
-      }
-
-      setSubmitStatus("success");
-      setFormData({
-        name: "",
-        email: "",
-        company: "",
-        help_needed: "",
-        details: "",
-      });
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      setSubmitStatus("error");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   return (
     <div className="relative mx-auto max-w-6xl px-6 py-12 space-y-16">
       {/* Hero / Pricing CTA */}
@@ -131,19 +70,14 @@ export default function AboutPage() {
           </h2>
           <p className="text-sm text-[hsl(var(--muted-foreground))] mb-3">
             Statement Extractor is an AI-assisted workflow for document-heavy finance operations.
-            We focus first on bank statements and related financial documents, turning unstructured
-            PDFs into clean, machine-readable tables you can trust.
+            We focus exclusively on financial documents, turning unstructured PDFs into clean,
+            machine-readable tables you can trust.
           </p>
           <p className="text-sm text-[hsl(var(--muted-foreground))] mb-3">
             Instead of manually keying in transactions or maintaining fragile spreadsheet macros,
-            you upload your statements, review detected data, and export directly to CSV or Excel.
-            Behind the scenes, we combine parsing rules, document templates, and intelligent checks
-            to keep your output consistent.
-          </p>
-          <p className="text-sm text-[hsl(var(--muted-foreground))]">
-            Over time, our goal is to support more financial documents from invoices and receipts
-            to account summaries and KYC paperwork so that finance and operations teams can run
-            on accurate data instead of manual admin.
+            you upload your statements, review detected data, and export directly to CSV, Excel,
+            or QuickBooks (QBO) format. Behind the scenes, we combine parsing rules, document templates,
+            and intelligent checks to keep your output consistent.
           </p>
         </div>
 
@@ -153,9 +87,9 @@ export default function AboutPage() {
               Our vision
             </h3>
             <p className="text-sm text-[hsl(var(--muted-foreground))]">
-              We believe document understanding should be as standard as spreadsheets. Any company,
+              We believe financial data access should be instant and error-free. Any company,
               regardless of size, should be able to plug in document automation as easily as they
-              plug in a database.
+              plug in a bank feed.
             </p>
           </div>
 
@@ -165,27 +99,16 @@ export default function AboutPage() {
             </h3>
             <ul className="space-y-2 text-sm text-[hsl(var(--muted-foreground))]">
               <li>
-                Start narrow: bank statements first, then expand to adjacent financial documents.
+                Start narrow: bank statements first, then credit card and loan documents.
               </li>
               <li>
-                Ship fast: small, opinionated workflows instead of huge, months-long projects.
+                Ship fast: small, opinionated workflows instead of huge, complex ERP implementations.
               </li>
               <li>
                 Stay transparent: clear exports, logs, and checks so you always know where
                 numbers came from.
               </li>
             </ul>
-          </div>
-
-          <div>
-            <h3 className="text-sm font-semibold text-[hsl(var(--foreground))] mb-2 uppercase tracking-wide">
-              Early-stage, customer-led
-            </h3>
-            <p className="text-sm text-[hsl(var(--muted-foreground))]">
-              Statement Extractor is in its early chapters. We work closely with a small group of
-              teams to refine the product, add new banks and formats, and prioritize the workflows
-              that remove the most manual effort.
-            </p>
           </div>
         </div>
       </section>
@@ -199,77 +122,45 @@ export default function AboutPage() {
             </h2>
             <p className="text-sm text-[hsl(var(--muted-foreground))] max-w-xl">
               Whether you are cleaning up historical statements or building a repeatable process for
-              incoming documents, Statement Extractor sits between your PDFs and the tools where you
-              actually do your work.
+              incoming documents, Statement Extractor sits between your PDFs and your accounting software.
             </p>
           </div>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 text-sm">
+        <div className="grid gap-6 md:grid-cols-3 text-sm">
           <div className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-5">
             <h3 className="text-xs font-semibold tracking-[0.2em] text-[hsl(var(--muted-foreground))] mb-3">
-              DATA CAPTURE
+              SUPPORTED DOCUMENTS
             </h3>
             <ul className="space-y-1 text-[hsl(var(--muted-foreground))]">
-              <li>Invoices</li>
-              <li>Purchase Orders</li>
-              <li>ID Cards</li>
-              <li>Receipts</li>
-              <li>Bills of Lading</li>
-              <li>Passports</li>
-              <li>Bank Statements</li>
-              <li className="text-xs text-[hsl(var(--primary))]">And many more formats</li>
+              <li>Bank Statements (PDF)</li>
+              <li>Credit Card Statements</li>
+              <li className="text-xs text-[hsl(var(--primary))] pt-1">Detailed transaction extraction</li>
             </ul>
           </div>
 
           <div className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-5">
             <h3 className="text-xs font-semibold tracking-[0.2em] text-[hsl(var(--muted-foreground))] mb-3">
-              WORKFLOWS
+              EXPORT FORMATS
             </h3>
             <ul className="space-y-1 text-[hsl(var(--muted-foreground))]">
-              <li>Document uploads from your team or clients</li>
-              <li>Email attachments forwarded into a shared inbox</li>
-              <li>AP automation and reconciliation prep</li>
-              <li>Audit and review workflows</li>
+              <li>Excel (.xlsx)</li>
+              <li>CSV (.csv)</li>
+              <li>QuickBooks Online</li>
+              <li>Xero</li>
+              <li>Tally</li>
             </ul>
           </div>
 
           <div className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-5">
             <h3 className="text-xs font-semibold tracking-[0.2em] text-[hsl(var(--muted-foreground))] mb-3">
-              SOLUTIONS BY FUNCTION
+              PERFECT FOR
             </h3>
             <ul className="space-y-1 text-[hsl(var(--muted-foreground))]">
-              <li>Finance &amp; Accounting</li>
-              <li>Operations &amp; RevOps</li>
-              <li>Founders &amp; solo operators</li>
-              <li>Customer success &amp; onboarding teams</li>
-            </ul>
-          </div>
-
-          <div className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-5">
-            <h3 className="text-xs font-semibold tracking-[0.2em] text-[hsl(var(--muted-foreground))] mb-3">
-              SOLUTIONS BY INDUSTRY
-            </h3>
-            <ul className="space-y-1 text-[hsl(var(--muted-foreground))]">
-              <li>Banking &amp; Finance</li>
-              <li>Lending &amp; credit</li>
-              <li>Fintech products</li>
-              <li>Accounting &amp; bookkeeping firms</li>
-              <li>Real Estate &amp; property management</li>
-              <li>Logistics &amp; supply chain</li>
-            </ul>
-          </div>
-
-          <div className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-5">
-            <h3 className="text-xs font-semibold tracking-[0.2em] text-[hsl(var(--muted-foreground))] mb-3">
-              SOLUTIONS BY USE CASE
-            </h3>
-            <ul className="space-y-1 text-[hsl(var(--muted-foreground))]">
-              <li>Accounts payable and spend reviews</li>
-              <li>Account reconciliation and audits</li>
-              <li>Loan and credit application reviews</li>
-              <li>Investor reporting &amp; portfolio monitoring</li>
-              <li>Historical data clean-up</li>
+              <li>Monthly Bookkeeping</li>
+              <li>Catch-up Accounting</li>
+              <li>Reconciliation</li>
+              <li>Audit Trails</li>
             </ul>
           </div>
         </div>
@@ -296,100 +187,7 @@ export default function AboutPage() {
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="grid gap-4 md:grid-cols-2">
-          <div className="space-y-1">
-            <label className="text-xs font-medium text-[hsl(var(--muted-foreground))]" htmlFor="name">
-              Name
-            </label>
-            <Input
-              id="name"
-              placeholder="Alex from Example Co."
-              value={formData.name}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="space-y-1">
-            <label className="text-xs font-medium text-[hsl(var(--muted-foreground))]" htmlFor="email">
-              Work email
-            </label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="you@company.com"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="space-y-1">
-            <label className="text-xs font-medium text-[hsl(var(--muted-foreground))]" htmlFor="company">
-              Company (optional)
-            </label>
-            <Input
-              id="company"
-              placeholder="Company name"
-              value={formData.company}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="space-y-1">
-            <label className="text-xs font-medium text-[hsl(var(--muted-foreground))]" htmlFor="use-case">
-              What would you like help with?
-            </label>
-            <Input
-              id="use-case"
-              placeholder="e.g. Cleaning up 12 months of bank statements"
-              value={formData.help_needed}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="space-y-1 md:col-span-2">
-            <label className="text-xs font-medium text-[hsl(var(--muted-foreground))]" htmlFor="message">
-              Additional details or questions
-            </label>
-            <Textarea
-              id="details"
-              placeholder="Share links to example files, banks you use, or anything else that would help."
-              rows={4}
-              value={formData.details}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="md:col-span-2 flex flex-wrap items-center gap-3">
-            <Button type="submit" className="shadow-md" disabled={isSubmitting}>
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Sending...
-                </>
-              ) : (
-                "Send message"
-              )}
-            </Button>
-
-            {submitStatus === "success" && (
-              <div className="flex items-center gap-2 text-sm text-green-600 animate-in fade-in slide-in-from-left-2">
-                <CheckCircle2 className="h-4 w-4" />
-                <span>Message sent! We'll be in touch soon.</span>
-              </div>
-            )}
-
-            {submitStatus === "error" && (
-              <div className="flex items-center gap-2 text-sm text-red-600 animate-in fade-in slide-in-from-left-2">
-                <AlertCircle className="h-4 w-4" />
-                <span>Something went wrong. Please try again or email us directly.</span>
-              </div>
-            )}
-
-            {submitStatus === "idle" && !isSubmitting && (
-              <p className="text-[10px] text-[hsl(var(--muted-foreground))]">
-                This form is for discovery and product feedback. We'll get back to you with next steps
-                or a short demo if helpful.
-              </p>
-            )}
-          </div>
-        </form>
+        <ContactForm />
       </section>
     </div>
   );

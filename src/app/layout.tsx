@@ -10,6 +10,8 @@ import { Footer } from "@/components/Footer";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { ServerWarmup } from "@/components/ServerWarmup";
 import { TopLoader } from "@/components/TopLoader";
+import { CookieConsent } from "@/components/CookieConsent";
+import { Analytics } from "@/components/Analytics";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -136,28 +138,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="antialiased overflow-x-hidden">
         {isProduction && (
           <>
-            <Script
-              src="https://www.googletagmanager.com/gtag/js?id=G-KXNG847173"
-              strategy="afterInteractive"
-            />
-            <Script id="gtag-init" strategy="afterInteractive">
-              {`
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-
-                gtag('config', 'G-KXNG847173');
-              `}
-            </Script>
-            <Script id="microsoft-clarity" strategy="afterInteractive">
-              {`
-                (function(c,l,a,r,i,t,y){
-                    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-                    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-                    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-                })(window, document, "clarity", "script", "uhbfuj9d6q");
-              `}
-            </Script>
+            <Analytics />
           </>
         )}
         <ClerkProviderClient>
@@ -171,6 +152,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               </main>
               <Footer />
             </div>
+            {/* <CookieConsent /> */}
             <Toaster
               position="top-right"
               toastOptions={{

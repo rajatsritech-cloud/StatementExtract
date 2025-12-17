@@ -14,6 +14,7 @@ import {
   CreditCard,
   Zap,
   HelpCircle,
+  Mail,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
@@ -124,12 +125,12 @@ export const Header = () => {
                             </div>
                             <div
                               className="group flex flex-col items-center justify-center gap-2 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))] text-center transition-all duration-200 cursor-pointer hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40 hover:shadow-glow"
-                              onClick={() => handleSolutionsItemClick("/careers")}
+                              onClick={() => handleSolutionsItemClick("/contact")}
                             >
                               <div className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] group-hover:bg-[hsl(var(--primary))] group-hover:text-[hsl(var(--primary-foreground))] transition-colors">
-                                <FileText className="h-4 w-4" />
+                                <Mail className="h-4 w-4" />
                               </div>
-                              <span>Careers</span>
+                              <span>Contact Us</span>
                             </div>
                             <div
                               className="group flex flex-col items-center justify-center gap-2 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))] text-center transition-all duration-200 cursor-pointer hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40 hover:shadow-glow"
@@ -355,7 +356,7 @@ export const Header = () => {
                     <div className="mb-2">
                       <p className="text-[10px] font-semibold tracking-wider text-[hsl(var(--muted-foreground))] uppercase px-2 py-1">Company</p>
                       <button onClick={() => { setIsMobileMenuOpen(false); router.push('/about'); }} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">About Us</button>
-                      <button onClick={() => { setIsMobileMenuOpen(false); router.push('/careers'); }} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Careers</button>
+                      <button onClick={() => { setIsMobileMenuOpen(false); router.push('/contact'); }} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Contact Us</button>
                       <button onClick={() => { setIsMobileMenuOpen(false); router.push('/privacy-policy'); }} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Privacy Policy</button>
                       <button onClick={() => { setIsMobileMenuOpen(false); router.push('/terms'); }} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Terms</button>
                     </div>

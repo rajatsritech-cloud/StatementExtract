@@ -11,7 +11,7 @@ export default function PrivacyPolicyPage() {
         <h1 className="text-3xl md:text-4xl font-semibold tracking-tight text-[hsl(var(--foreground))]">
           Privacy Policy
         </h1>
-        <p className="text-xs text-[hsl(var(--muted-foreground))]">Last updated: November 17, 2025</p>
+        <p className="text-xs text-[hsl(var(--muted-foreground))]">Last updated: December 17, 2025</p>
       </section>
 
       <section className="space-y-3">
@@ -282,7 +282,7 @@ export default function PrivacyPolicyPage() {
           contact us at:
         </p>
         <p className="text-sm text-[hsl(var(--muted-foreground))]">
-          <span className="block">Email: privacy@statementextract.com</span>
+          <span className="block">Email: support@statementextract.com</span>
         </p>
       </section>
     </div>

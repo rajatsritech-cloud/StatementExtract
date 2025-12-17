@@ -477,21 +477,15 @@ export default async function BlogPostPage({ params }: PageParams) {
               <div className="flex flex-col items-start gap-4 mt-2">
                 {date && (
                   <div className="flex items-center gap-2 text-sm text-[hsl(var(--muted-foreground))]">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="h-4 w-4"
-                    >
-                      <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
-                      <line x1="16" x2="16" y1="2" y2="6" />
-                      <line x1="8" x2="8" y1="2" y2="6" />
-                      <line x1="3" x2="21" y1="10" y2="10" />
-                    </svg>
+                    <div className="flex items-center gap-2">
+                      <div className="flex h-5 w-5 items-center justify-center rounded-full bg-[hsl(var(--primary))]/10">
+                        <svg className="h-3 w-3 text-[hsl(var(--primary))]" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                        </svg>
+                      </div>
+                      <span className="font-medium text-[hsl(var(--foreground))]">Statement Team</span>
+                    </div>
+                    <span className="text-[hsl(var(--border))]">•</span>
                     <time dateTime={date}>
                       {new Date(date).toLocaleDateString("en-US", {
                         year: "numeric",
