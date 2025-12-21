@@ -17,10 +17,15 @@ export async function onRequest(context) {
   // Construct the new URL
   const targetUrl = `${OCI_API_URL}/${pathStr}${url.search}`;
 
+  // Clone headers to avoid immutable issues and remove Host header
+  const newHeaders = new Headers(request.headers);
+  newHeaders.delete("host");
+  newHeaders.delete("cf-connecting-ip"); // Optional: let the backend see the proxy IP or use standard forwarded headers
+
   // Clone the request to modify it
   const newRequest = new Request(targetUrl, {
     method: request.method,
-    headers: request.headers,
+    headers: newHeaders,
     body: request.body,
     redirect: "follow"
   });
