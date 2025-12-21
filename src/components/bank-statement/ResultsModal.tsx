@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, useMemo, useEffect, useCallback, useRef } from "react";
-import { X, Download, Copy, Eye, EyeOff, TrendingUp, TrendingDown, DollarSign, User, Mail, Building, CreditCard, Calendar, Wallet, ArrowUpCircle, ArrowDownCircle, FileText, Search, ArrowUpDown, Sparkles, CheckCircle2, Lock, Crown, ChevronDown, Trash2 } from "lucide-react";
+import { X, Download, Copy, Eye, EyeOff, TrendingUp, TrendingDown, DollarSign, User, Mail, Building, CreditCard, Calendar, Wallet, ArrowUpCircle, ArrowDownCircle, FileText, Search, ArrowUpDown, Sparkles, CheckCircle2, Lock, Crown, ChevronDown, Trash2, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 // Assuming ExportService and ExtractedData are correctly defined elsewhere
-import { ExportService } from "@/lib/exportService";
+import { ExportService, ExportSettings } from "@/lib/exportService";
 import { ExtractedData, PDFProcessor } from "@/lib/pdfProcessor";
 import { toast } from "react-hot-toast";
 import { useAuth, SignInButton } from "@clerk/clerk-react";
@@ -26,24 +26,17 @@ interface ResultsModalProps {
 }
 
 // --- Helper Functions for Formatting ---
-const formatCurrency = (amount: number, currency: string = 'USD') => {
-  // Map symbols to currency codes
-  let currencyCode = 'USD';
-  if (currency === '£' || currency === 'GBP') currencyCode = 'GBP';
-  else if (currency === '€' || currency === 'EUR') currencyCode = 'EUR';
-  else if (currency === '₹' || currency === 'INR' || currency === 'Rs') currencyCode = 'INR';
-  else if (currency === 'C$' || currency === 'CAD') currencyCode = 'CAD';
-  else if (currency === 'A$' || currency === 'AUD') currencyCode = 'AUD';
-  else if (currency && currency.length === 3) currencyCode = currency; // Assume valid 3-letter code
-
+// Modified to display PURE NUMBERS only (No currency symbols) as per user request
+const formatCurrency = (amount: number, _currency: string = 'USD') => {
+  if (amount === undefined || amount === null) return '-';
   try {
     return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: currencyCode,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+      useGrouping: true,
     }).format(amount);
   } catch (e) {
-    // Fallback if currency code is invalid
-    return `${currency}${amount.toFixed(2)}`;
+    return amount.toFixed(2);
   }
 };
 
@@ -121,6 +114,138 @@ const UserInfoAndSummary = ({ userInfo }: UserInfoAndSummaryProps) => {
             </div>
           </div>
         )}
+      </div>
+    </div>
+  );
+};
+
+interface ExportSettingsModalProps {
+  settings: ExportSettings;
+  format: 'qbo' | 'xero' | 'mt940' | 'tally' | null;
+  onSettingsChange: (settings: ExportSettings) => void;
+  onDownload: () => void;
+  onClose: () => void;
+}
+
+const ExportSettingsModal = ({ settings, format, onSettingsChange, onDownload, onClose }: ExportSettingsModalProps) => {
+  const isQBO = format === 'qbo';
+  const isMT940 = format === 'mt940';
+  const formatName = format?.toUpperCase() || 'Export';
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-300">
+      <div className="bg-[hsl(var(--card))] border border-[hsl(var(--border))] rounded-2xl shadow-2xl p-7 max-w-md w-full animate-in zoom-in-95 slide-in-from-bottom-4 duration-300 overflow-hidden relative">
+        {/* Progress bar hint */}
+        <div className="absolute top-0 left-0 right-0 h-1 bg-[hsl(var(--primary))]/20">
+          <div className="h-full bg-[hsl(var(--primary))] w-2/3 animate-pulse" />
+        </div>
+
+        <div className="flex items-center justify-between mb-5">
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-lg bg-[hsl(var(--primary))]/10">
+              <Settings className="h-5 w-5 text-[hsl(var(--primary))]" />
+            </div>
+            <div>
+              <h3 className="font-bold text-[hsl(var(--foreground))] text-lg">Finalize {formatName} Export</h3>
+              <p className="text-[10px] text-[hsl(var(--muted-foreground))] uppercase tracking-widest font-semibold">Accounting Configuration</p>
+            </div>
+          </div>
+          <button onClick={onClose} className="rounded-full p-1.5 hover:bg-[hsl(var(--muted))] transition-colors group">
+            <X className="h-5 w-5 text-[hsl(var(--muted-foreground))] group-hover:text-[hsl(var(--foreground))]" />
+          </button>
+        </div>
+
+        <p className="text-sm text-[hsl(var(--muted-foreground))] mb-6 leading-relaxed bg-[hsl(var(--muted))]/30 p-3 rounded-lg border border-[hsl(var(--border))]">
+          Configure metadata to ensure 100% compatibility with {formatName}. Fields marked <span className="text-[hsl(var(--primary))] font-bold">*</span> are highly recommended for seamless import.
+        </p>
+
+        <div className="space-y-4 max-h-[50vh] overflow-y-auto px-1 pr-2 [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[hsl(var(--border))] [&::-webkit-scrollbar-thumb]:rounded-full">
+          <div className="grid gap-1.5">
+            <label className="text-xs font-semibold text-[hsl(var(--foreground))] flex items-center gap-1">
+              Bank Name {(isQBO || isMT940 || format === 'tally') && <span className="text-[hsl(var(--primary))]" title="Required">*</span>}
+            </label>
+            <Input
+              value={settings.bankName || ''}
+              onChange={(e) => onSettingsChange({ ...settings, bankName: e.target.value })}
+              placeholder="e.g. Chase Bank"
+              className="h-10 bg-[hsl(var(--muted))]/20 border-[hsl(var(--border))] focus:ring-1 focus:ring-[hsl(var(--primary))]"
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="grid gap-1.5">
+              <label className="text-xs font-semibold text-[hsl(var(--foreground))] flex items-center gap-1">
+                Account No. {(isQBO || isMT940) && <span className="text-[hsl(var(--primary))]" title="Required">*</span>}
+              </label>
+              <Input
+                value={settings.accountNumber || ''}
+                onChange={(e) => onSettingsChange({ ...settings, accountNumber: e.target.value })}
+                placeholder="000000000"
+                className="h-10 bg-[hsl(var(--muted))]/20 border-[hsl(var(--border))]"
+              />
+            </div>
+            <div className="grid gap-1.5">
+              <label className="text-xs font-semibold text-[hsl(var(--foreground))] uppercase tracking-tight flex items-center gap-1">
+                Currency <span className="text-[hsl(var(--primary))]" title="Required for all formats">*</span>
+              </label>
+              <Input
+                value={settings.currency || ''}
+                onChange={(e) => onSettingsChange({ ...settings, currency: e.target.value.toUpperCase() })}
+                placeholder="USD"
+                maxLength={3}
+                className="h-10 font-mono bg-[hsl(var(--muted))]/20 border-[hsl(var(--border))]"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="grid gap-1.5">
+              <label className="text-xs font-semibold text-[hsl(var(--foreground))] flex items-center gap-1">
+                Routing / Sort {isQBO && <span className="text-[hsl(var(--primary))]" title="Required for QBO">*</span>}
+              </label>
+              <Input
+                value={settings.routingNumber || ''}
+                onChange={(e) => onSettingsChange({ ...settings, routingNumber: e.target.value })}
+                placeholder={isQBO ? "Required" : "Optional"}
+                className={`h-10 bg-[hsl(var(--muted))]/20 border-[hsl(var(--border))] ${isQBO && !settings.routingNumber ? 'border-[hsl(var(--primary))]/30' : ''}`}
+              />
+            </div>
+            <div className="grid gap-1.5">
+              <label className="text-xs font-semibold text-[hsl(var(--foreground))] flex items-center gap-1">
+                Statement Seq. {isMT940 && <span className="text-[hsl(var(--primary))]" title="Required for MT940">*</span>}
+              </label>
+              <Input
+                value={settings.statementNumber || ''}
+                onChange={(e) => onSettingsChange({ ...settings, statementNumber: e.target.value })}
+                placeholder="e.g. 1"
+                className="h-10 bg-[hsl(var(--muted))]/20 border-[hsl(var(--border))]"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-col sm:flex-row gap-3 mt-8">
+          <Button variant="outline" onClick={onClose} className="flex-1 h-11 border-[hsl(var(--border))] hover:bg-[hsl(var(--muted))]">
+            Cancel
+          </Button>
+          <Button
+            onClick={onDownload}
+            disabled={
+              !settings.currency ||
+              (isQBO && (!settings.bankName || !settings.accountNumber || !settings.routingNumber)) ||
+              (isMT940 && (!settings.bankName || !settings.accountNumber || !settings.statementNumber)) ||
+              (format === 'tally' && !settings.bankName)
+            }
+            className="flex-1 h-11 bg-[hsl(var(--primary))] text-white hover:bg-[hsl(var(--primary))]/90 shadow-lg shadow-[hsl(var(--primary))]/20 gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none"
+          >
+            <Download className="h-4 w-4" />
+            Download {formatName}
+          </Button>
+        </div>
+
+        <p className="text-[10px] text-center text-[hsl(var(--muted-foreground))] mt-4 italic">
+          Files are generated locally in your browser for maximum privacy.
+        </p>
       </div>
     </div>
   );
@@ -298,6 +423,19 @@ const DynamicTable = ({ transactions: initialTransactions, currency = '$', colum
     switch (field) {
       case 'Date':
         txn.date = editValue;
+        // Sync date_iso if possible to preserve export accuracy
+        if (/^\d{4}-\d{2}-\d{2}$/.test(editValue)) {
+          txn.date_iso = editValue;
+        } else {
+          // Attempt basic parsing for MM/DD/YYYY or DD/MM/YYYY
+          const match = editValue.match(/(\d{1,4})[-\/](\d{1,2})[-\/](\d{1,4})/);
+          if (match) {
+            let y: string, m: string, d: string;
+            if (match[1].length === 4) { y = match[1]; m = match[2]; d = match[3]; }
+            else { m = match[1]; d = match[2]; y = match[3]; }
+            txn.date_iso = `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;
+          }
+        }
         break;
       case 'Description':
         txn.description = editValue;
@@ -669,6 +807,27 @@ export const ResultsModal = ({ data, file, isProcessing = false, progress = 0, d
   const [showLoginPrompt, setShowLoginPrompt] = useState(false);
   const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
   const [editedTransactions, setEditedTransactions] = useState<ExtractedData['transactions'] | null>(null);
+  const [showExportSettings, setShowExportSettings] = useState(false);
+  const [pendingExportFormat, setPendingExportFormat] = useState<'qbo' | 'xero' | 'mt940' | 'tally' | null>(null);
+  const [exportSettings, setExportSettings] = useState<ExportSettings>({
+    routingNumber: '',
+    statementNumber: '1',
+    currency: data?.userInfo?.currency || 'USD',
+    accountNumber: data?.userInfo?.accountNumber || '',
+    bankName: data?.userInfo?.bankName || ''
+  });
+
+  // Sync settings when data changes
+  useEffect(() => {
+    if (data?.userInfo) {
+      setExportSettings(prev => ({
+        ...prev,
+        currency: data.userInfo.currency || prev.currency,
+        accountNumber: data.userInfo.accountNumber || prev.accountNumber,
+        bankName: data.userInfo.bankName || prev.bankName
+      }));
+    }
+  }, [data]);
   const { isSignedIn, isLoaded } = useAuth();
   const { usage } = useUsage();
 
@@ -746,8 +905,8 @@ export const ResultsModal = ({ data, file, isProcessing = false, progress = 0, d
       }
       setShowLoginPrompt(true);
     } else if (editedData) {
-      ExportService.exportToQBO(editedData);
-      toast.success("QuickBooks file (.qbo) downloaded!");
+      setPendingExportFormat('qbo');
+      setShowExportSettings(true);
     }
   };
 
@@ -762,8 +921,8 @@ export const ResultsModal = ({ data, file, isProcessing = false, progress = 0, d
       }
       setShowLoginPrompt(true);
     } else if (editedData) {
-      ExportService.exportToXero(editedData);
-      toast.success("Xero file (.csv) downloaded!");
+      setPendingExportFormat('xero');
+      setShowExportSettings(true);
     }
   };
 
@@ -778,8 +937,57 @@ export const ResultsModal = ({ data, file, isProcessing = false, progress = 0, d
       }
       setShowLoginPrompt(true);
     } else if (editedData) {
-      ExportService.exportToMT940(editedData);
-      toast.success("MT940 file downloaded!");
+      setPendingExportFormat('mt940');
+      setShowExportSettings(true);
+    }
+  };
+
+  const handleExportTally = () => {
+    if (isLoaded && !isSignedIn) {
+      if (editedData) {
+        localStorage.setItem("pending_extraction", JSON.stringify({
+          data: editedData,
+          fileName: file?.name || "Extracted Statement.pdf",
+          date: new Date().toLocaleDateString()
+        }));
+      }
+      setShowLoginPrompt(true);
+    } else if (editedData) {
+      setPendingExportFormat('tally');
+      setShowExportSettings(true);
+    }
+  };
+
+  const handleFinalDownload = () => {
+    if (!editedData || !pendingExportFormat) return;
+
+    try {
+      switch (pendingExportFormat) {
+        case 'qbo':
+          if (!exportSettings.routingNumber && isPro) {
+            toast.error("Routing Number is highly recommended for QBO import.");
+          }
+          ExportService.exportToQBO(editedData, exportSettings);
+          toast.success("QuickBooks file (.qbo) downloaded!");
+          break;
+        case 'xero':
+          ExportService.exportToXero(editedData, exportSettings);
+          toast.success("Xero file (.csv) downloaded!");
+          break;
+        case 'mt940':
+          ExportService.exportToMT940(editedData, exportSettings);
+          toast.success("MT940 file downloaded!");
+          break;
+        case 'tally':
+          ExportService.exportToTally(editedData, exportSettings);
+          toast.success("Tally file (.xml) downloaded!");
+          break;
+      }
+      setShowExportSettings(false);
+      setPendingExportFormat(null);
+    } catch (error) {
+      console.error('Export failed:', error);
+      toast.error("Failed to generate export file.");
     }
   };
 
@@ -975,6 +1183,23 @@ export const ResultsModal = ({ data, file, isProcessing = false, progress = 0, d
                   </div>
 
                   {/* Sectioned Transaction Display */}
+                  {/* Confidence/Inference Banner */}
+                  {(data.headers_inferred || data.ledger_confidence) && (
+                    <div className="flex items-center gap-2 mb-4 px-3 py-2 rounded-lg bg-blue-500/5 border border-blue-500/20">
+                      <svg className="w-4 h-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span className="text-xs text-blue-600">
+                        Column labels standardized for clarity
+                        {data.ledger_confidence && (
+                          <span className="ml-2 text-blue-500">
+                            • Ledger accuracy: {data.ledger_confidence}%
+                          </span>
+                        )}
+                      </span>
+                    </div>
+                  )}
+
                   {/* Single Unified Table (Smart Reconciled) */}
                   {data.transactions && data.transactions.length > 0 && (
                     <div className="mb-8">
@@ -1161,6 +1386,19 @@ export const ResultsModal = ({ data, file, isProcessing = false, progress = 0, d
                   </div>
                 </div>
               </div>
+            )}
+            {/* Export Settings Modal */}
+            {showExportSettings && (
+              <ExportSettingsModal
+                settings={exportSettings}
+                format={pendingExportFormat}
+                onSettingsChange={setExportSettings}
+                onDownload={handleFinalDownload}
+                onClose={() => {
+                  setShowExportSettings(false);
+                  setPendingExportFormat(null);
+                }}
+              />
             )}
           </div>
         </div >

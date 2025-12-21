@@ -2,6 +2,7 @@
 
 export interface TransactionData {
   date: string;
+  date_iso?: string; // Standardized ISO date (YYYY-MM-DD)
   description: string;
   amount: number;
   balance: number;
@@ -98,6 +99,8 @@ export interface ExtractedData {
   };
   num_pages?: number;
   llm_used?: boolean;
+  headers_inferred?: boolean;  // True if column headers were normalized/inferred
+  ledger_confidence?: number;  // Ledger solver confidence percentage (0-100)
 }
 
 export class PDFProcessor {
@@ -133,7 +136,7 @@ export class PDFProcessor {
         headers['Authorization'] = `Bearer ${token}`;
       }
 
-      const response = await fetch(`${apiUrl}/api/v1/pdf-extract/fast`, {
+      const response = await fetch(`${apiUrl}/api/v1/pdf-extract/extract`, {
         method: 'POST',
         headers: headers,
         body: formData,
@@ -149,7 +152,121 @@ export class PDFProcessor {
 
       const result = await response.json();
 
-      // Use structured data from backend if available (New "Hybrid AI" approach)
+      // Handle /extract endpoint response (PDFium accuracy endpoint)
+      // Response has: success, transactions, account_summary, columns, confidence_score
+      if (result.success && result.transactions) {
+        console.log("Using PDFium extract endpoint:", result);
+
+        // Get account summary from the response
+        const accountSummary = result.account_summary || {};
+
+        // Map transactions from /extract format
+        // Use *_parsed values when available (pre-parsed by backend), fallback to manual parsing
+        const mapTransaction = (t: any) => {
+          const debitVal = t.debit_parsed ?? (t.debit ? parseFloat(String(t.debit).replace(/[^0-9.-]/g, '')) : 0);
+          const creditVal = t.credit_parsed ?? (t.credit ? parseFloat(String(t.credit).replace(/[^0-9.-]/g, '')) : 0);
+          const balanceVal = t.balance_parsed ?? (t.balance ? parseFloat(String(t.balance).replace(/[^0-9.-]/g, '')) : 0);
+
+          return {
+            date: t.date,
+            date_iso: t.date_iso,
+            description: t.description,
+            amount: creditVal > 0 ? creditVal : debitVal,
+            balance: balanceVal,
+            type: creditVal > 0 ? 'credit' as const : 'debit' as const,
+            moneyIn: creditVal || 0,
+            moneyOut: debitVal || 0,
+            source_page: t.source_page || 1,
+            normalized_payee: t.normalized_payee
+          };
+        };
+
+        return {
+          userInfo: {
+            name: accountSummary.account_holder || '',
+            email: '',
+            accountNumber: accountSummary.account_number || '',
+            bankName: accountSummary.bank_name || 'Bank Statement',
+            statementPeriod: accountSummary.period_start && accountSummary.period_end
+              ? `${accountSummary.period_start} - ${accountSummary.period_end}`
+              : '',
+            currency: accountSummary.currency || '$',
+            accountSummary: {
+              beginningBalance: accountSummary.opening_balance || 0,
+              endingBalance: accountSummary.closing_balance || 0,
+              totalDeposits: accountSummary.total_credits || 0,
+              totalWithdrawals: accountSummary.total_debits || 0,
+            }
+          },
+          transactions: result.transactions.map(mapTransaction),
+          sections: undefined,
+          summary: {
+            totalCredits: accountSummary.total_credits || 0,
+            totalDebits: accountSummary.total_debits || 0,
+            netBalance: (accountSummary.total_credits || 0) - (accountSummary.total_debits || 0),
+            transactionCount: result.transaction_count || result.transactions?.length || 0
+          },
+          // Standardized financial headers - use clean UI labels instead of raw PDF headers
+          // This ensures trust and consistency regardless of PDF formatting issues
+          column_names: (() => {
+            const STANDARD_HEADERS: Record<string, string> = {
+              date: 'Date',
+              description: 'Description',
+              debit: 'Debit',
+              credit: 'Credit',
+              balance: 'Balance',
+              amount: 'Amount',
+              reference: 'Reference',
+              particulars: 'Particulars',
+            };
+
+            const columns: Record<string, string> = {};
+            let headersWereInferred = false;
+
+            if (result.columns) {
+              Object.entries(result.columns).forEach(([key, val]: [string, any]) => {
+                // Use standardized header if available
+                const standardLabel = STANDARD_HEADERS[key.toLowerCase()];
+                if (standardLabel) {
+                  columns[key] = standardLabel;
+                } else {
+                  // For unknown columns, check if it was normalized
+                  const rawLabel = val?.label || key;
+                  const normalizedFrom = val?.normalized_from;
+
+                  if (normalizedFrom) {
+                    headersWereInferred = true;
+                    columns[key] = STANDARD_HEADERS[key] || key;
+                  } else {
+                    columns[key] = rawLabel;
+                  }
+                }
+              });
+            }
+
+            return columns;
+          })(),
+          // Confidence indicator for UI
+          headers_inferred: result.ledger_stats?.fixed > 0 ||
+            Object.values(result.columns || {}).some((col: any) => col?.normalized_from),
+          ledger_confidence: result.ledger_stats?.confidence,
+          markdown: '',
+          fraud_analysis: undefined,
+          reconciliation: undefined,
+          human_review: undefined,
+          processing_steps: undefined,
+          processing_stats: {
+            extraction_method: result.metadata?.extraction_method || 'pdfium-production',
+            payees_normalized: 0,
+            total_steps: 10,
+            steps_passed: 10
+          },
+          num_pages: result.metadata?.page_count,
+          llm_used: false
+        };
+      }
+
+      // Fallback: Handle /fast endpoint response (legacy path)
       if (result.data) {
         console.log("Using structured data from backend:", result.data);
         const backendData = result.data;

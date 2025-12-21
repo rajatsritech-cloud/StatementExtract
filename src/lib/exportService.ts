@@ -1,6 +1,14 @@
 import { TransactionData, ExtractedData } from './pdfProcessor';
 import * as XLSX from 'xlsx';
 
+export interface ExportSettings {
+  routingNumber?: string;
+  statementNumber?: string;
+  currency?: string;
+  accountNumber?: string;
+  bankName?: string;
+}
+
 export class ExportService {
   static exportToCSV(data: ExtractedData, filename: string = 'bank-statement.csv'): void {
     let csvContent = "";
@@ -257,9 +265,14 @@ export class ExportService {
    * - FreshBooks
    * - Most other accounting software
    */
-  static exportToQBO(data: ExtractedData, filename: string = 'bank-statement.qbo'): void {
+  static exportToQBO(data: ExtractedData, settings: ExportSettings = {}, filename: string = 'bank-statement.qbo'): void {
     const now = new Date();
     const dtserver = this.formatOFXDate(now);
+
+    const accountNumber = settings.accountNumber || data.userInfo?.accountNumber || '000000000';
+    const bankName = settings.bankName || data.userInfo?.bankName || 'Bank';
+    const routingNumber = settings.routingNumber || '000000000';
+    const currency = settings.currency || data.userInfo?.currency || 'USD';
 
     // Generate a unique transaction ID based on date and amount
     const generateFitID = (tx: TransactionData, index: number): string => {
@@ -269,15 +282,33 @@ export class ExportService {
     };
 
     // Format date for OFX (YYYYMMDDHHMMSS)
-    const formatTxDate = (dateStr: string): string => {
+    const formatTxDate = (tx: TransactionData): string => {
+      // Priority 1: Use pre-normalized date_iso from backend (YYYY-MM-DD)
+      if (tx.date_iso && tx.date_iso.match(/^\d{4}-\d{2}-\d{2}$/)) {
+        return tx.date_iso.replace(/-/g, '') + "120000";
+      }
+
+      const dateStr = tx.date;
+      if (!dateStr) return this.formatOFXDate(new Date());
+
       // Try to parse the date
       const parts = dateStr.split(/[-/]/);
       if (parts.length >= 3) {
-        // Assume YYYY-MM-DD or similar
-        const year = parts[0].length === 4 ? parts[0] : `20${parts[2]}`;
-        const month = parts[0].length === 4 ? parts[1] : parts[0];
-        const day = parts[0].length === 4 ? parts[2] : parts[1];
-        return `${year}${month.padStart(2, '0')}${day.padStart(2, '0')}120000`;
+        // ISO: YYYY-MM-DD
+        if (parts[0].length === 4) {
+          return `${parts[0]}${parts[1].padStart(2, '0')}${parts[2].padStart(2, '0')}120000`;
+        }
+        // US: MM/DD/YYYY or MM/DD/YY
+        const year = parts[2].length === 2 ? `20${parts[2]}` : parts[2];
+        const month = parts[0].padStart(2, '0');
+        const day = parts[1].padStart(2, '0');
+        return `${year}${month}${day}120000`;
+      } else if (parts.length === 2) {
+        // MM/DD without year - use current year
+        const now = new Date();
+        const month = parts[0].padStart(2, '0');
+        const day = parts[1].padStart(2, '0');
+        return `${now.getFullYear()}${month}${day}120000`;
       }
       // Fallback to today
       return this.formatOFXDate(new Date());
@@ -309,6 +340,14 @@ export class ExportService {
       return true;
     });
 
+    // Filter out balance summary rows (not real transactions)
+    // Normalize: remove spaces for matching 'BeginningBalance' vs 'Beginning Balance'
+    const balanceKeywords = ['beginningbalance', 'endingbalance', 'openingbalance', 'closingbalance', 'ledgerbalance'];
+    allTransactions = allTransactions.filter(tx => {
+      const desc = (tx.description || '').toLowerCase().replace(/\s+/g, '');
+      return !balanceKeywords.some(kw => desc.includes(kw));
+    });
+
     const transactionXML = allTransactions.map((tx, index) => {
       const amount = tx.moneyIn && tx.moneyIn > 0
         ? tx.moneyIn
@@ -318,31 +357,27 @@ export class ExportService {
 
       const trnType = amount >= 0 ? 'CREDIT' : 'DEBIT';
       const name = tx.normalized_payee || tx.description;
-      // Truncate name to 32 chars (OFX limit)
+      // Truncate name to 32 chars (OFX limit) and memo to 255
       const truncatedName = name.substring(0, 32);
+      const truncatedMemo = tx.description.substring(0, 255);
 
       return `<STMTTRN>
 <TRNTYPE>${trnType}
-<DTPOSTED>${formatTxDate(tx.date)}
+<DTPOSTED>${formatTxDate(tx)}
 <TRNAMT>${amount.toFixed(2)}
 <FITID>${generateFitID(tx, index)}
 <NAME>${this.escapeXML(truncatedName)}
-<MEMO>${this.escapeXML(tx.description)}
+<MEMO>${this.escapeXML(truncatedMemo)}
 </STMTTRN>`;
     }).join('\n');
 
-    // Get account info
-    const accountNumber = data.userInfo?.accountNumber || '000000000';
-    const bankName = data.userInfo?.bankName || 'Bank';
-    const routingNumber = '000000000'; // Default routing number
-
-    // Get date range
-    const dates = allTransactions
-      .map(tx => tx.date)
-      .filter(d => d)
+    // Get date range - use formatTxDate for consistency
+    const formattedDates = allTransactions
+      .map(tx => formatTxDate(tx))
+      .filter(d => d && d !== this.formatOFXDate(new Date()))
       .sort();
-    const startDate = dates.length > 0 ? formatTxDate(dates[0]) : dtserver;
-    const endDate = dates.length > 0 ? formatTxDate(dates[dates.length - 1]) : dtserver;
+    const startDate = formattedDates.length > 0 ? formattedDates[0] : dtserver;
+    const endDate = formattedDates.length > 0 ? formattedDates[formattedDates.length - 1] : dtserver;
 
     // Build full QBO/OFX document
     const qboContent = `OFXHEADER:100
@@ -368,6 +403,7 @@ NEWFILEUID:NONE
 <ORG>${this.escapeXML(bankName)}
 <FID>10001
 </FI>
+<INTU.BID>10001
 </SONRS>
 </SIGNONMSGSRSV1>
 <BANKMSGSRSV1>
@@ -378,7 +414,7 @@ NEWFILEUID:NONE
 <SEVERITY>INFO
 </STATUS>
 <STMTRS>
-<CURDEF>USD
+<CURDEF>${currency}
 <BANKACCTFROM>
 <BANKID>${routingNumber}
 <ACCTID>${accountNumber}
@@ -441,12 +477,15 @@ ${transactionXML}
    * Creates vouchers that can be imported into Tally ERP 9 / TallyPrime
    * Import via: Gateway of Tally → Import of Data → Vouchers
    */
-  static exportToTally(data: ExtractedData, filename: string = 'bank-statement-tally.xml'): void {
-    const bankName = data.userInfo?.bankName || 'Bank Account';
+  static exportToTally(data: ExtractedData, settings: ExportSettings = {}, filename: string = 'bank-statement-tally.xml'): void {
+    const bankName = settings.bankName || data.userInfo?.bankName || 'Bank Account';
     const accountName = data.userInfo?.name || 'Bank Account';
 
     // Format date for Tally (YYYYMMDD)
-    const formatTallyDate = (dateStr: string): string => {
+    const formatTallyDate = (tx: TransactionData): string => {
+      if (tx.date_iso) return tx.date_iso.replace(/-/g, '');
+
+      const dateStr = tx.date;
       const parts = dateStr.split(/[-/]/);
       if (parts.length >= 3) {
         const year = parts[0].length === 4 ? parts[0] : `20${parts[2]}`;
@@ -491,10 +530,10 @@ ${transactionXML}
 
       const voucherType = isCredit ? 'Receipt' : 'Payment';
       const partyName = tx.normalized_payee || tx.description.substring(0, 50);
-      const voucherNumber = `BANK${formatTallyDate(tx.date)}${String(index + 1).padStart(4, '0')}`;
+      const voucherNumber = `BANK${formatTallyDate(tx)}${String(index + 1).padStart(4, '0')}`;
 
       return `    <VOUCHER VCHTYPE="${voucherType}" ACTION="Create">
-      <DATE>${formatTallyDate(tx.date)}</DATE>
+      <DATE>${formatTallyDate(tx)}</DATE>
       <VOUCHERTYPENAME>${voucherType}</VOUCHERTYPENAME>
       <VOUCHERNUMBER>${voucherNumber}</VOUCHERNUMBER>
       <NARRATION>${this.escapeXML(tx.description)}</NARRATION>
@@ -553,7 +592,7 @@ ${vouchers}
    * Creates a CSV file that can be imported directly into Xero via Banking > Bank Statements
    * Xero expects: Date, Amount, Payee, Description, Reference
    */
-  static exportToXero(data: ExtractedData, filename: string = 'bank-statement-xero.csv'): void {
+  static exportToXero(data: ExtractedData, _settings: ExportSettings = {}, filename: string = 'bank-statement-xero.csv'): void {
     // Collect ALL transactions
     let allTransactions: TransactionData[] = [];
 
@@ -579,7 +618,7 @@ ${vouchers}
     });
 
     // Xero CSV format headers
-    const headers = ['Date', 'Amount', 'Payee', 'Description', 'Reference'];
+    const headers = ['Date', 'Amount', 'Payee', 'Description', 'Reference', 'Check Number'];
 
     // Format transactions for Xero
     const rows = allTransactions.map((tx, index) => {
@@ -597,11 +636,12 @@ ${vouchers}
       const reference = `TXN${String(index + 1).padStart(5, '0')}`;
 
       return [
-        tx.date,
+        tx.date_iso || tx.date,
         amount.toFixed(2),
-        `"${payee.replace(/"/g, '""')}"`, // Escape quotes in payee
-        `"${tx.description.replace(/"/g, '""')}"`, // Escape quotes in description
-        reference
+        `"${payee.replace(/"/g, '""').substring(0, 255)}"`, // Escape quotes and truncate
+        `"${tx.description.replace(/"/g, '""').substring(0, 400)}"`, // Escape quotes and truncate
+        reference,
+        "" // Check Number
       ].join(',');
     });
 
@@ -622,13 +662,15 @@ ${vouchers}
    * Export to MT940 SWIFT format
    * Standard format for electronic bank statements used by many ERPs and accounting systems
    */
-  static exportToMT940(data: ExtractedData, filename: string = 'bank-statement-mt940.txt'): void {
-    const accountId = data.userInfo?.accountNumber || 'ACCOUNT123';
-    const statementId = '00001'; // Sequence number
-    const currency = data.userInfo?.currency && data.userInfo.currency.length === 3 ? data.userInfo.currency : 'USD';
+  static exportToMT940(data: ExtractedData, settings: ExportSettings = {}, filename: string = 'bank-statement-mt940.txt'): void {
+    const accountId = settings.accountNumber || data.userInfo?.accountNumber || 'ACCOUNT123';
+    const statementId = (settings.statementNumber || '00001').padStart(5, '0');
+    const currency = settings.currency || (data.userInfo?.currency && data.userInfo.currency.length === 3 ? data.userInfo.currency : 'USD');
 
     // Format date for MT940 (YYMMDD)
-    const formatMT940Date = (dateStr: string): string => {
+    const formatMT940Date = (dateStr: string, tx?: TransactionData): string => {
+      if (tx?.date_iso) return tx.date_iso.replace(/-/g, '').substring(2);
+
       const parts = dateStr.split(/[-/]/);
       if (parts.length >= 3) {
         const year = parts[0].length === 4 ? parts[0].substring(2) : parts[2].substring(2);
@@ -662,6 +704,13 @@ ${vouchers}
       if (seen.has(key)) return false;
       seen.add(key);
       return true;
+    });
+
+    // Filter out balance summary rows (not real transactions)
+    const balanceKeywords = ['beginningbalance', 'endingbalance', 'openingbalance', 'closingbalance', 'ledgerbalance'];
+    allTransactions = allTransactions.filter(tx => {
+      const desc = (tx.description || '').toLowerCase().replace(/\s+/g, '');
+      return !balanceKeywords.some(kw => desc.includes(kw));
     });
 
     // Determine Opening and Closing Balances
@@ -703,10 +752,24 @@ ${vouchers}
       // Format: YYMMDD (Date) + MMDD (Entry Date - optional, can be same) + D/C + Currency (First Letter optional? Usually just C/D then amount in SWIFT/MT940 standard usually doesn't strictly need currency code, but some variations do. Standard is D/C + Amount but often logic implies currency from header. Standard field 61 struc: 6!n[4!n]2a[1!a]15d1!a3!c16x//16x)
       // Simplified: Date(6) + D/C(1-2) + Amount(1-15) + N(1) + 3char code + Reference
       // Code 'TRF' = Transfer, 'MSC' = Misc
-      mt940 += `:61:${date}${sign}${absAmount}NMSCNONREF\r\n`;
+      mt940 += `:61:${formatMT940Date(tx.date, tx)}${sign}${absAmount}NMSCNONREF\r\n`;
 
       // :86: Information to Account Owner
-      mt940 += `:86:${tx.normalized_payee || tx.description}\r\n`;
+      // SWIFT MT940 standard requires lines of max 65 characters.
+      // Maximum 390 characters (6 lines).
+      const narrative = (tx.normalized_payee || tx.description).substring(0, 390);
+      const lines86 = [];
+      for (let i = 0; i < narrative.length; i += 65) {
+        lines86.push(narrative.substring(i, i + 65));
+      }
+
+      lines86.forEach((line, idx) => {
+        if (idx === 0) {
+          mt940 += `:86:${line}\r\n`;
+        } else {
+          mt940 += `${line}\r\n`;
+        }
+      });
     });
 
     // :62F: Closing Balance
