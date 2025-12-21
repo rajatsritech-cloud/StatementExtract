@@ -12,15 +12,18 @@ export async function onRequest(context) {
   // Or hardcode it if you prefer (but env var is better)
   // OCI API Gateway blocked by quota? Point directly to Container Instance
   // Container Instance IP: 132.145.134.130
-  const OCI_API_URL = env.OCI_API_URL || "http://132.145.134.130:8000/api";
+  const OCI_API_URL = env.OCI_API_URL || "https://api.statementextract.com/api";
 
   // Construct the new URL
   const targetUrl = `${OCI_API_URL}/${pathStr}${url.search}`;
 
-  // Clone headers to avoid immutable issues and remove Host header
+  // Clone headers to avoid immutable issues
   const newHeaders = new Headers(request.headers);
-  newHeaders.delete("host");
-  newHeaders.delete("cf-connecting-ip"); // Optional: let the backend see the proxy IP or use standard forwarded headers
+  // User Note: If connecting to a Cloudflare-protected IP, DO NOT delete 'host'.
+  // We keep 'host' so Cloudflare accepts the request (prevents Error 1003).
+  // newHeaders.delete("host"); 
+
+  newHeaders.delete("cf-connecting-ip"); // Recommended for CF-to-CF proxying
 
   // Clone the request to modify it
   const newRequest = new Request(targetUrl, {
