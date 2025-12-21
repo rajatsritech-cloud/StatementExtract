@@ -10,7 +10,9 @@ export async function onRequest(context) {
 
   // OCI API Gateway URL (Set this in Cloudflare Pages Environment Variables)
   // Or hardcode it if you prefer (but env var is better)
-  const OCI_API_URL = env.OCI_API_URL || "https://iuixl74zojqnoh45utpilyj53e.apigateway.us-ashburn-1.oci.customer-oci.com/api";
+  // OCI API Gateway blocked by quota? Point directly to Container Instance
+  // Container Instance IP: 132.145.134.130
+  const OCI_API_URL = env.OCI_API_URL || "http://132.145.134.130:8000/api";
 
   // Construct the new URL
   const targetUrl = `${OCI_API_URL}/${pathStr}${url.search}`;
