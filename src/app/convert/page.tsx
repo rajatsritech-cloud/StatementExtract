@@ -9,12 +9,12 @@ import {
 import { ConvertPageClient } from "@/components/tools/ConvertPageClient";
 
 export const metadata: Metadata = {
-    title: "Free Online Tools | Finance, Bookkeeping & Image Converters | Statement Extract",
-    description: "Free tools for accountants, CPAs, and bookkeepers. Bank statement to Excel/CSV converter, QuickBooks export, image converters, JSON tools. No signup required.",
-    keywords: "free bookkeeping tools, bank statement converter, pdf to excel, quickbooks export, xero import, image converter, AVIF converter, CPA tools",
+    title: "Free File Converters | Bank Statement, PDF & Image Tools | Statement Extract",
+    description: "Fast, private, and free online file converters. Convert bank statements to Excel, merge PDFs, compress images, and batch convert HEIC files. No signup required.",
+    keywords: "file converter, bank statement converter, pdf tools, image converter, batch heic converter, avif to png, pdf to excel free",
     openGraph: {
-        title: "Free Finance & Bookkeeping Tools",
-        description: "Convert bank statements, images, and data for free. No signup required.",
+        title: "Free File Converters & Statement Extractors",
+        description: "Convert bank statements, PDFs, and images for free. Fast, private, browser-based tools.",
         type: "website",
         url: "https://statementextract.com/convert",
     },
@@ -103,6 +103,13 @@ const toolSections = [
                 description: "Convert CSV bank exports to QuickBooks .qbo format. Map columns and import to QuickBooks.",
                 href: "/convert/csv-to-qbo",
                 icon: "FileSpreadsheet",
+                badge: "Popular",
+            },
+            {
+                title: "QIF to QBO Converter",
+                description: "Convert Quicken QIF files to QuickBooks QBO format. Migrate from Quicken to QuickBooks.",
+                href: "/convert/qif-to-qbo",
+                icon: "FileText",
                 badge: "New",
             },
             {
@@ -172,71 +179,7 @@ const toolSections = [
             },
         ],
     },
-    // 4. Finance Calculators - Good CPC, growing traffic
-    {
-        title: "Finance Calculators",
-        description: "Essential business calculators for pricing, margins, and financial analysis",
-        icon: "Calculator",
-        featured: false,
-        tools: [
-            {
-                title: "Profit Margin Calculator",
-                description: "Calculate gross margin, net margin, and markup percentage instantly.",
-                href: "/tools/profit-margin-calculator",
-                icon: "TrendingUp",
-                badge: "New",
-            },
-            {
-                title: "GST/VAT Calculator",
-                description: "Calculate GST, VAT, and sales tax for any country. Add or remove tax.",
-                href: "/tools/gst-vat-calculator",
-                icon: "Receipt",
-                badge: "New",
-            },
-            {
-                title: "Markup Calculator",
-                description: "Calculate markup percentage, selling price, and profit. Includes markup vs margin conversion.",
-                href: "/tools/markup-calculator",
-                icon: "Calculator",
-                badge: "New",
-            },
-            {
-                title: "Amortization Calculator",
-                description: "Loan payment schedule with extra payment analysis. Mortgage, auto, student loans.",
-                href: "/tools/amortization-calculator",
-                icon: "TrendingDown",
-                badge: "Hot",
-            },
-            {
-                title: "Debt Snowball Calculator",
-                description: "Visualize your debt-free date. Create a plan to pay off credit cards and loans faster.",
-                href: "/tools/debt-snowball-calculator",
-                icon: "TrendingDown",
-                badge: "Popular",
-            },
-            {
-                title: "FIRE Calculator",
-                description: "Financial Independence, Retire Early. See when you can retire based on savings rate.",
-                href: "/tools/fire-calculator",
-                icon: "Zap",
-                badge: "Hot",
-            },
-            {
-                title: "Rental Property ROI",
-                description: "Analyze cash flow, Cap Rate, and Cash-on-Cash return for real estate deals.",
-                href: "/tools/rental-roi-calculator",
-                icon: "Home",
-                badge: "Professional",
-            },
-            {
-                title: "Financial Ratio Calculator",
-                description: "Calculate 20+ key ratios: liquidity, profitability, leverage, efficiency. Industry benchmarks included.",
-                href: "/tools/financial-ratio-calculator",
-                icon: "PieChart",
-                badge: "New",
-            },
-        ],
-    },
+    // Moving Finance Calculators to /tools for cleaner SEO and site structure
     // 5. Developer Tools - Niche but engaged audience
     {
         title: "Developer Tools",
@@ -297,15 +240,20 @@ export default function ConvertHubPage() {
                         <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[hsl(var(--primary))]/30 bg-[hsl(var(--primary))]/10 px-4 py-1.5">
                             <Zap className="h-4 w-4 text-[hsl(var(--primary))]" />
                             <span className="text-sm font-medium text-[hsl(var(--primary))]">
-                                All Tools 100% Free and Private
+                                All Converters 100% Free and Private
                             </span>
                         </div>
                         <h1 className="text-4xl md:text-5xl font-bold text-[hsl(var(--foreground))] mb-4">
-                            Free Online Tools for <span className="bg-gradient-primary bg-clip-text text-transparent">Finance & Productivity</span>
+                            High-Performance <span className="bg-gradient-primary bg-clip-text text-transparent">File Converters</span>
                         </h1>
-                        <p className="text-lg text-[hsl(var(--muted-foreground))] max-w-3xl mx-auto">
-                            Convert bank statements, images, and data instantly. Trusted by accountants, CPAs, and bookkeepers worldwide. No signup, no watermarks.
+                        <p className="text-lg text-[hsl(var(--muted-foreground))] max-w-3xl mx-auto mb-8">
+                            Fast, browser-based conversion for bank statements, PDF documents, and images. Trusted by professionals worldwide. No signup, no watermarks.
                         </p>
+                        <div className="flex justify-center gap-4">
+                            <Link href="/tools" className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-[hsl(var(--muted))] border border-[hsl(var(--border))] text-sm font-medium text-[hsl(var(--foreground))] hover:border-[hsl(var(--primary))]/50 transition-all">
+                                <ArrowRight className="w-4 h-4" /> Looking for Financial Calculators? Visit the Tools Hub
+                            </Link>
+                        </div>
                     </div>
                 </section>
             } />

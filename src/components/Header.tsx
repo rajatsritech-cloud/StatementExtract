@@ -11,10 +11,11 @@ import {
   Truck,
   Heart,
   Settings,
-  CreditCard,
-  Zap,
   HelpCircle,
   Mail,
+  Zap,
+  CreditCard,
+  RotateCcw,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
@@ -71,7 +72,7 @@ export const Header = () => {
   }
 
   return (
-    <header className="sticky top-0 z-50">
+    <header className="sticky top-0 z-50 w-full border-b border-[hsl(var(--border))]/40 bg-[hsl(var(--background))]/80 backdrop-blur-md transition-all support-[backdrop-filter]:bg-[hsl(var(--background))]/60">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 pt-3 pb-0">
         <div className="flex h-[4.5rem] items-center justify-between rounded-2xl border border-[hsl(var(--primary))]/30 bg-[hsl(var(--background))]/95 px-3 sm:px-5">
           <Link
@@ -253,6 +254,9 @@ export const Header = () => {
             </Link>
 
             <Link href="/convert" className="text-sm font-medium text-[hsl(var(--foreground))] transition-colors hover:text-[hsl(var(--primary))]">
+              Converters
+            </Link>
+            <Link href="/tools" className="text-sm font-medium text-[hsl(var(--foreground))] transition-colors hover:text-[hsl(var(--primary))]">
               Tools
             </Link>
             <Link href="/#faq" className="text-sm font-medium text-[hsl(var(--foreground))] transition-colors hover:text-[hsl(var(--primary))]">
@@ -404,6 +408,17 @@ export const Header = () => {
 
               <Link
                 href="/convert"
+                className="flex w-full items-center justify-between px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))]"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                <span className="flex items-center gap-3">
+                  <RotateCcw className="h-4 w-4 text-[hsl(var(--primary))]" />
+                  <span>Converters</span>
+                </span>
+              </Link>
+
+              <Link
+                href="/tools"
                 className="flex w-full items-center justify-between px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))]"
                 onClick={() => setIsMobileMenuOpen(false)}
               >

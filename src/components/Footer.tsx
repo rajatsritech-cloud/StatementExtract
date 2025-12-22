@@ -1,6 +1,6 @@
 "use client";
 
-import { FileText, Linkedin, Twitter } from "lucide-react";
+import { FileText, Linkedin, Twitter, HelpCircle, Mail, RotateCcw } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -67,7 +67,31 @@ export const Footer = () => {
                   href="/convert"
                   className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors"
                 >
-                  Free Tools
+                  Converters
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/tools"
+                  className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors"
+                >
+                  Finance Tools
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/tools/invoice-generator"
+                  className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors font-medium text-[hsl(var(--primary))]"
+                >
+                  Free Invoice Generator
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/convert/qif-to-qbo"
+                  className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors"
+                >
+                  QIF to QBO Converter
                 </Link>
               </li>
               <li><Link href="/#use-cases" className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors">Use Cases</Link></li>

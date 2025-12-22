@@ -205,10 +205,12 @@ export const BankStatementSEOContent = () => {
                     Looking for more finance tools? Try our free calculators:
                 </p>
                 <ul className="list-disc pl-6 text-[hsl(var(--muted-foreground))] space-y-2">
+                    <li><a href="/tools/invoice-generator" className="text-[hsl(var(--primary))] hover:underline font-semibold">Free Invoice Generator</a> – Create professional PDF invoices instantly</li>
+                    <li><a href="/convert/qif-to-qbo" className="text-[hsl(var(--primary))] hover:underline">QIF to QBO Converter</a> – Quicken to QuickBooks migration tool</li>
                     <li><a href="/tools/financial-ratio-calculator" className="text-[hsl(var(--primary))] hover:underline">Financial Ratio Calculator</a> – Calculate 20+ key business ratios</li>
                     <li><a href="/tools/profit-margin-calculator" className="text-[hsl(var(--primary))] hover:underline">Profit Margin Calculator</a> – Calculate gross, operating, and net margins</li>
                     <li><a href="/tools/amortization-calculator" className="text-[hsl(var(--primary))] hover:underline">Amortization Calculator</a> – See loan payments and extra payment savings</li>
-                    <li><a href="/tools/fire-calculator" className="text-[hsl(var(--primary))] hover:underline">FIRE Calculator</a> – Plan your path to financial independence</li>
+                    <li><a href="/tools/fire-calculator" className="text-[hsl(var(--primary))] hover:underline font-bold">Explore All Financial Tools →</a></li>
                 </ul>
             </div>
         </section>

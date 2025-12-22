@@ -7,31 +7,31 @@ import { useEffect } from "react";
 const KEEP_ALIVE_INTERVAL_MS = 10 * 60 * 1000; // 10 minutes
 
 export function ServerWarmup() {
-    useEffect(() => {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+    // useEffect(() => {
+    //     const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
-        const pingServer = () => {
-            fetch(`${apiUrl}/api/v1/health/`)
-                .then(res => {
-                    if (res.ok) console.log("🔥 Backend warmed up!");
-                })
-                .catch(() => {
-                    // Silently fail - if backend is down, main requests will handle errors
-                });
-        };
+    //     const pingServer = () => {
+    //         fetch(`${apiUrl}/api/v1/health/`)
+    //             .then(res => {
+    //                 if (res.ok) console.log("🔥 Backend warmed up!");
+    //             })
+    //             .catch(() => {
+    //                 // Silently fail - if backend is down, main requests will handle errors
+    //             });
+    //     };
 
-        // Initial warmup on page load
-        pingServer();
+    //     // Initial warmup on page load
+    //     pingServer();
 
-        // Keep-alive: ping every 10 minutes to prevent cold starts
-        const intervalId = setInterval(() => {
-            console.log("🔄 Keep-alive ping...");
-            pingServer();
-        }, KEEP_ALIVE_INTERVAL_MS);
+    //     // Keep-alive: ping every 10 minutes to prevent cold starts
+    //     const intervalId = setInterval(() => {
+    //         console.log("🔄 Keep-alive ping...");
+    //         pingServer();
+    //     }, KEEP_ALIVE_INTERVAL_MS);
 
-        // Cleanup on unmount
-        return () => clearInterval(intervalId);
-    }, []);
+    //     // Cleanup on unmount
+    //     return () => clearInterval(intervalId);
+    // }, []);
 
-    return null; // Renders nothing
+    return ""; // Renders nothing
 }

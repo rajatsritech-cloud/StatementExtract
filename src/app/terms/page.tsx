@@ -132,7 +132,23 @@ export default function TermsPage() {
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-lg font-semibold text-[hsl(var(--foreground))]">10. Limitation of liability</h2>
+        <h2 className="text-lg font-semibold text-[hsl(var(--foreground))]">10. Financial Tools & Calculators</h2>
+        <p className="text-sm text-[hsl(var(--muted-foreground))]">
+          Our website includes financial calculators (such as the Self-Employed Tax Calculator) and
+          conversion tools. These tools are provided for educational and illustrative purposes only.
+          The results are estimates based on the data you input and publicly available tax rates.
+        </p>
+        <p className="text-sm text-[hsl(var(--muted-foreground))]">
+          These tools do not constitute professional tax, legal, or financial advice. Tax laws vary
+          by individual situation and location. We strongly recommend consulting with a qualified
+          CPA or tax professional before making any financial decisions or filing your taxes. We do
+          not guarantee the accuracy of any calculation and are not responsible for any errors or
+          omissions.
+        </p>
+      </section>
+
+      <section className="space-y-3">
+        <h2 className="text-lg font-semibold text-[hsl(var(--foreground))]">11. Limitation of liability</h2>
         <p className="text-sm text-[hsl(var(--muted-foreground))]">
           To the fullest extent permitted by law, in no event will we be liable for any indirect,
           incidental, special, consequential, or punitive damages, or for any loss of profits or
@@ -142,7 +158,7 @@ export default function TermsPage() {
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-lg font-semibold text-[hsl(var(--foreground))]">11. Governing law</h2>
+        <h2 className="text-lg font-semibold text-[hsl(var(--foreground))]">12. Governing law</h2>
         <p className="text-sm text-[hsl(var(--muted-foreground))]">
           These Terms are governed by and construed in accordance with the laws of India, without
           regard to its conflict of law principles. Any dispute arising out of or relating to these
@@ -152,7 +168,7 @@ export default function TermsPage() {
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-lg font-semibold text-[hsl(var(--foreground))]">12. Changes to these Terms</h2>
+        <h2 className="text-lg font-semibold text-[hsl(var(--foreground))]">13. Changes to these Terms</h2>
         <p className="text-sm text-[hsl(var(--muted-foreground))]">
           We may update these Terms from time to time. When we make material changes, we will revise
           the "Last updated" date at the top of this page and may provide additional notice (for
@@ -162,7 +178,7 @@ export default function TermsPage() {
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-lg font-semibold text-[hsl(var(--foreground))]">13. Contact us</h2>
+        <h2 className="text-lg font-semibold text-[hsl(var(--foreground))]">14. Contact us</h2>
         <p className="text-sm text-[hsl(var(--muted-foreground))]">
           If you have any questions about these Terms or the Service, you can contact us at:
         </p>

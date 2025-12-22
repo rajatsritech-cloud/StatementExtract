@@ -68,7 +68,14 @@ export function ToolPageFooter({ currentTool, relatedTools }: ToolPageFooterProp
                                 href="/convert"
                                 className="px-6 py-3 rounded-xl bg-[hsl(var(--card))] border border-[hsl(var(--border))] hover:border-[hsl(var(--primary))] transition-colors flex items-center gap-2"
                             >
-                                All Free Tools
+                                All Converters
+                                <ArrowRight className="w-4 h-4" />
+                            </Link>
+                            <Link
+                                href="/tools"
+                                className="px-6 py-3 rounded-xl bg-[hsl(var(--card))] border border-[hsl(var(--border))] hover:border-[hsl(var(--primary))] transition-colors flex items-center gap-2"
+                            >
+                                Business Tools
                                 <ArrowRight className="w-4 h-4" />
                             </Link>
                         </div>

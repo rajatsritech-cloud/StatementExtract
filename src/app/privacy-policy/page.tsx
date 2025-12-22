@@ -100,6 +100,14 @@ export default function PrivacyPolicyPage() {
           If you contact us by email or through in-app forms, we will collect the information you
           provide (such as your name, email address, and message) in order to respond.
         </p>
+
+        <h3 className="text-sm font-semibold text-[hsl(var(--foreground))]">5. Client-side tools & calculators</h3>
+        <p className="text-sm text-[hsl(var(--muted-foreground))]">
+          Our financial calculators (such as the tax and profit margin calculators) process data
+          entirely within your browser ("client-side"). The specific financial figures you enter into
+          these tools (like income, expenses, or profit numbers) are NOT sent to our servers and are
+          NOT stored by us.
+        </p>
       </section>
 
       <section className="space-y-3">

@@ -44,7 +44,7 @@ export const CTA = () => {
             </div>
 
             <p className="mt-6 text-sm text-[hsl(var(--muted-foreground))]">
-              Start with 10 free pages per day • No credit card required
+              Start with 10 free pages per day • No credit card required • <Link href="/tools" className="underline hover:text-[hsl(var(--primary))] transition-colors">Free Business Tools</Link>
             </p>
           </div>
         </div>
