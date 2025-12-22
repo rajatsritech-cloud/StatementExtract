@@ -41,7 +41,7 @@ const MONTH_NAMES: Record<string, string> = {
     'july': '07', 'august': '08', 'september': '09', 'october': '10', 'november': '11', 'december': '12',
     // German
     'januar': '01', 'februar': '02', 'märz': '03', 'marz': '03', 'mai': '05', 'juni': '06',
-    'juli': '07', 'august': '08', 'oktober': '10', 'dezember': '12',
+    'juli': '07', 'oktober': '10', 'dezember': '12',
     // Dutch
     'januari': '01', 'februari': '02', 'maart': '03', 'mei': '05',
     // French
@@ -50,7 +50,7 @@ const MONTH_NAMES: Record<string, string> = {
     'octobre': '10', 'novembre': '11', 'décembre': '12', 'decembre': '12',
     // Spanish
     'enero': '01', 'febrero': '02', 'marzo': '03', 'abril': '04', 'mayo': '05',
-    'junio': '06', 'julio': '07', 'agosto': '08', 'septiembre': '09',
+    'junio': '06', 'julio': '07', 'agosto': '08',
     'octubre': '10', 'noviembre': '11', 'diciembre': '12'
 };
 
