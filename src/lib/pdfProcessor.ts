@@ -11,6 +11,12 @@ export interface TransactionData {
   moneyOut?: number;
   source_page?: number;  // Page number in PDF for audit trail
   normalized_payee?: string;  // Cleaned up payee name (e.g., "Amazon Marketplace")
+
+  // Validation fields
+  balance_corrected?: string;
+  _ledger_fixed?: boolean;
+  _validation_message?: string;
+  [key: string]: any; // Allow dynamic fields like "Reference", "Particulars"
 }
 
 // NEW: Section for multi-table display
@@ -21,6 +27,10 @@ export interface TransactionSection {
     transaction_count: number;
     total_credits: number;
     total_debits: number;
+    totalDepositsComputed?: number;
+    totalDepositsDiscrepancy?: boolean;
+    totalWithdrawalsComputed?: number;
+    totalWithdrawalsDiscrepancy?: boolean;
   };
 }
 
@@ -37,6 +47,11 @@ export interface ExtractedData {
       endingBalance: number;
       totalDeposits: number;
       totalWithdrawals: number;
+      // Validation fields
+      totalDepositsComputed?: number;
+      totalDepositsDiscrepancy?: boolean;
+      totalWithdrawalsComputed?: number;
+      totalWithdrawalsDiscrepancy?: boolean;
     };
   };
   transactions: TransactionData[];
@@ -168,6 +183,7 @@ export class PDFProcessor {
           const balanceVal = t.balance_parsed ?? (t.balance ? parseFloat(String(t.balance).replace(/[^0-9.-]/g, '')) : 0);
 
           return {
+            ...t, // Included all other fields (e.g. Reference, Particulars)
             date: t.date,
             date_iso: t.date_iso,
             description: t.description,
@@ -177,7 +193,17 @@ export class PDFProcessor {
             moneyIn: creditVal || 0,
             moneyOut: debitVal || 0,
             source_page: t.source_page || 1,
-            normalized_payee: t.normalized_payee
+            normalized_payee: t.normalized_payee,
+
+            // Map validation fields
+            balance_corrected: t.balance_corrected,
+            debit_corrected: t.debit_corrected,
+            credit_corrected: t.credit_corrected,
+            _ledger_fixed: t._ledger_fixed,
+            _validation_message: t._validation_message,
+
+            // Preserve original balance string for UI display (since 'balance' is overwritten with number)
+            balance_display: t.balance
           };
         };
 
@@ -196,6 +222,12 @@ export class PDFProcessor {
               endingBalance: accountSummary.closing_balance || 0,
               totalDeposits: accountSummary.total_credits || 0,
               totalWithdrawals: accountSummary.total_debits || 0,
+
+              // Map validation fields
+              totalDepositsComputed: accountSummary.total_credits_computed,
+              totalDepositsDiscrepancy: accountSummary.total_credits_discrepancy,
+              totalWithdrawalsComputed: accountSummary.total_debits_computed,
+              totalWithdrawalsDiscrepancy: accountSummary.total_debits_discrepancy,
             }
           },
           transactions: result.transactions.map(mapTransaction),

@@ -101,11 +101,25 @@ const UserInfoAndSummary = ({ userInfo }: UserInfoAndSummaryProps) => {
               </div>
               <div className="flex justify-between">
                 <span className="text-[hsl(var(--muted-foreground))]">Total Credits</span>
-                <span className="font-medium text-green-600">+{formatCurrency(userInfo.accountSummary.totalDeposits, currency)}</span>
+                <div className="text-right">
+                  <span className="font-medium text-green-600 block">+{formatCurrency(userInfo.accountSummary.totalDeposits, currency)}</span>
+                  {userInfo.accountSummary.totalDepositsDiscrepancy && (
+                    <span className="text-[10px] text-amber-600 font-medium bg-amber-50 px-1 rounded" title="Calculated from rows">
+                      Cal: {formatCurrency(userInfo.accountSummary.totalDepositsComputed || 0, currency)}
+                    </span>
+                  )}
+                </div>
               </div>
               <div className="flex justify-between">
                 <span className="text-[hsl(var(--muted-foreground))]">Total Debits</span>
-                <span className="font-medium text-red-600">-{formatCurrency(userInfo.accountSummary.totalWithdrawals, currency)}</span>
+                <div className="text-right">
+                  <span className="font-medium text-red-600 block">-{formatCurrency(userInfo.accountSummary.totalWithdrawals, currency)}</span>
+                  {userInfo.accountSummary.totalWithdrawalsDiscrepancy && (
+                    <span className="text-[10px] text-amber-600 font-medium bg-amber-50 px-1 rounded" title="Calculated from rows">
+                      Cal: {formatCurrency(userInfo.accountSummary.totalWithdrawalsComputed || 0, currency)}
+                    </span>
+                  )}
+                </div>
               </div>
               <div className="flex justify-between pt-2 border-t border-[hsl(var(--border))]">
                 <span className="font-semibold text-[hsl(var(--foreground))]">Closing Balance</span>
@@ -271,14 +285,23 @@ const DynamicTable = ({ transactions: initialTransactions, currency = '$', colum
   const [editValue, setEditValue] = useState("");
   const [editedTransactionsSet] = useState(() => new WeakSet<object>());
   const [editedCount, setEditedCount] = useState(0); // Track count for UI display
-  const [visibleColumns, setVisibleColumns] = useState<Set<string>>(new Set(["Date", "Description", "Credit", "Debit", "Balance"]));
+  const [visibleColumns, setVisibleColumns] = useState<Set<string>>(new Set(["Date", "Description", "Reference", "Credit", "Debit", "Balance"]));
   const [showColumnMenu, setShowColumnMenu] = useState(false);
   const [dateFormat, setDateFormat] = useState("original");
   const [newRowIndex, setNewRowIndex] = useState<number | null>(null);
   const [pendingDeleteIndex, setPendingDeleteIndex] = useState<number | null>(null);
   const tableContainerRef = useRef<HTMLDivElement>(null);
 
-  const ALL_COLUMNS = ["Date", "Description", "Credit", "Debit", "Balance", "Type"];
+  // Dynamic columns based on provided columnNames or defaults
+  const ALL_COLUMNS = useMemo(() => {
+    const defaults = ["Date", "Description", "Reference", "Credit", "Debit", "Balance", "Type"];
+    if (!columnNames) return defaults;
+
+    // Add extra columns from columnNames that aren't in defaults
+    const extra = Object.values(columnNames).filter(name => !defaults.includes(name));
+    return [...defaults, ...extra];
+  }, [columnNames]);
+
   const DATE_FORMATS = [
     { value: "original", label: "Original" },
     { value: "YYYY-MM-DD", label: "YYYY-MM-DD" },
@@ -380,6 +403,7 @@ const DynamicTable = ({ transactions: initialTransactions, currency = '$', colum
           bValue = b.moneyOut || (b.type === 'debit' ? b.amount : 0);
           break;
         case 'Balance': aValue = a.balance; bValue = b.balance; break;
+        case 'Reference': aValue = a.reference || ''; bValue = b.reference || ''; break;
         default: return 0;
       }
 
@@ -440,6 +464,9 @@ const DynamicTable = ({ transactions: initialTransactions, currency = '$', colum
       case 'Description':
         txn.description = editValue;
         break;
+      case 'Reference':
+        txn.reference = editValue;
+        break;
       case 'Credit':
         const creditVal = parseFloat(editValue.replace(/[^-\d.]/g, '')) || 0;
         txn.moneyIn = creditVal;
@@ -458,6 +485,12 @@ const DynamicTable = ({ transactions: initialTransactions, currency = '$', colum
         break;
       case 'Balance':
         txn.balance = parseFloat(editValue.replace(/[^-\d.]/g, '')) || 0;
+        break;
+      default:
+        // Handle dynamic fields
+        const key = columnNames ? Object.keys(columnNames).find(k => columnNames[k] === field) : field.toLowerCase();
+        // Since TransactionData now supports dynamic keys, we can just assign
+        (txn as any)[key || field.toLowerCase()] = editValue;
         break;
     }
 
@@ -517,11 +550,20 @@ const DynamicTable = ({ transactions: initialTransactions, currency = '$', colum
     switch (header) {
       case 'Date': return formatDateValue(t.date);
       case 'Description': return t.description;
-      case 'Credit': return moneyIn > 0 ? formatCurrency(moneyIn, currency) : '-';
-      case 'Debit': return moneyOut > 0 ? formatCurrency(moneyOut, currency) : '-';
-      case 'Balance': return formatCurrency(t.balance, currency);
+      case 'Reference': return t.reference || '';
+      case 'Credit':
+        // Strict Non-Destructive: Show original string if available, else formatted number
+        return (t.credit && t.credit !== '-' && t.credit.trim() !== '') ? t.credit : (moneyIn > 0 ? formatCurrency(moneyIn, currency) : '-');
+      case 'Debit':
+        return (t.debit && t.debit !== '-' && t.debit.trim() !== '') ? t.debit : (moneyOut > 0 ? formatCurrency(moneyOut, currency) : '-');
+      case 'Balance':
+        // Use preserved string for display, fall back to formatted number
+        return (t.balance_display && t.balance_display !== '-') ? t.balance_display : formatCurrency(t.balance, currency);
       case 'Type': return t.type || 'debit';
-      default: return '';
+      default:
+        // Try to find the key from columnNames or use header as key
+        const key = columnNames ? Object.keys(columnNames).find(k => columnNames[k] === header) : header.toLowerCase();
+        return t[key || header] || t[header.toLowerCase()] || '';
     }
   };
 
@@ -533,11 +575,14 @@ const DynamicTable = ({ transactions: initialTransactions, currency = '$', colum
     switch (header) {
       case 'Date': return t.date || '';
       case 'Description': return t.description || '';
-      case 'Credit': return moneyIn > 0 ? String(moneyIn) : '';
-      case 'Debit': return moneyOut > 0 ? String(moneyOut) : '';
-      case 'Balance': return String(t.balance || 0);
+      case 'Reference': return t.reference || '';
+      case 'Credit': return (t.credit && t.credit !== '-' && t.credit.trim() !== '') ? t.credit : (moneyIn > 0 ? String(moneyIn) : '');
+      case 'Debit': return (t.debit && t.debit !== '-' && t.debit.trim() !== '') ? t.debit : (moneyOut > 0 ? String(moneyOut) : '');
+      case 'Balance': return (t.balance_display && t.balance_display !== '-') ? t.balance_display : String(t.balance || 0);
       case 'Type': return t.type || 'debit';
-      default: return '';
+      default:
+        const key = columnNames ? Object.keys(columnNames).find(k => columnNames[k] === header) : header.toLowerCase();
+        return String(t[key || header] || t[header.toLowerCase()] || '');
     }
   };
 
@@ -658,8 +703,25 @@ const DynamicTable = ({ transactions: initialTransactions, currency = '$', colum
                       const isEditing = editingCell?.rowIndex === originalIndex && editingCell?.field === header;
                       const cellValue = getCellValue(t, header);
 
+                      // Check for validation corrections
+                      let validationNote = null;
+                      let isCorrected = false;
+
+                      if (t._ledger_fixed) {
+                        if (header === 'Balance' && t.balance_corrected) {
+                          validationNote = `Suggested: ${t.balance_corrected}`;
+                          isCorrected = true;
+                        } else if (header === 'Credit' && t.credit_corrected) {
+                          validationNote = `Suggested: ${t.credit_corrected}`;
+                          isCorrected = true;
+                        } else if (header === 'Debit' && t.debit_corrected) {
+                          validationNote = `Suggested: ${t.debit_corrected}`;
+                          isCorrected = true;
+                        }
+                      }
+
                       return (
-                        <td key={cellIndex} className={`px-4 py-3 ${getCellStyle(header, cellValue, isEdited)}`}>
+                        <td key={cellIndex} className={`px-4 py-3 ${getCellStyle(header, cellValue, isEdited)} ${isCorrected ? "bg-amber-100/30 dark:bg-amber-900/20" : ""}`} title={validationNote || undefined}>
                           {isEditing ? (
                             <div className="flex items-center gap-1">
                               <input
@@ -680,12 +742,19 @@ const DynamicTable = ({ transactions: initialTransactions, currency = '$', colum
                               </button>
                             </div>
                           ) : (
-                            <span
-                              onClick={() => startEdit(originalIndex, header, getRawValue(t, header))}
-                              className="cursor-pointer hover:text-[hsl(var(--primary))] transition-colors"
-                            >
-                              {cellValue}
-                            </span>
+                            <div className="flex flex-col">
+                              <span
+                                onClick={() => startEdit(originalIndex, header, getRawValue(t, header))}
+                                className="cursor-pointer hover:text-[hsl(var(--primary))] transition-colors"
+                              >
+                                {cellValue}
+                              </span>
+                              {isCorrected && (
+                                <span className="text-[10px] text-amber-600 font-medium">
+                                  {validationNote}
+                                </span>
+                              )}
+                            </div>
                           )}
                         </td>
                       );
