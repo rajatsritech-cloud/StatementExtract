@@ -13,8 +13,13 @@ export interface TransactionData {
   normalized_payee?: string;  // Cleaned up payee name (e.g., "Amazon Marketplace")
 
   // Validation fields
-  balance_corrected?: string;
-  _ledger_fixed?: boolean;
+  suggested?: {
+    balance?: number | string;
+    credit?: number | string;
+    debit?: number | string;
+    message?: string;
+  };
+  _ledger_fixed?: boolean; // Keep for backward compatibility/styling
   _validation_message?: string;
   [key: string]: any; // Allow dynamic fields like "Reference", "Particulars"
 }
@@ -116,6 +121,40 @@ export interface ExtractedData {
   llm_used?: boolean;
   headers_inferred?: boolean;  // True if column headers were normalized/inferred
   ledger_confidence?: number;  // Ledger solver confidence percentage (0-100)
+
+  // Enterprise Validation Fields
+  validation_summary?: {
+    status: 'VERIFIED' | 'NEEDS_REVIEW' | 'LOW_BALANCE_COVERAGE' | string;
+    issues: string[];
+    chain_integrity: number;
+    confidence: number;
+  };
+  chain_validation?: {
+    status: string;
+    opening_balance: number;
+    computed_closing: number;
+    total_credits: number;
+    total_debits: number;
+    broken_links: Array<{
+      row_index: number;
+      expected: number;
+      actual: number;
+      discrepancy: number;
+    }>;
+    chain_integrity: number;
+  };
+  missing_transaction_warnings?: Array<{
+    type: string;
+    row_index: number;
+    delta: number;
+    message: string;
+  }>;
+  duplicate_warnings?: Array<{
+    type: string;
+    row_index: number;
+    duplicate_of: number;
+    message: string;
+  }>;
 }
 
 export class PDFProcessor {
@@ -175,8 +214,6 @@ export class PDFProcessor {
         // Get account summary from the response
         const accountSummary = result.account_summary || {};
 
-        // Map transactions from /extract format
-        // Use *_parsed values when available (pre-parsed by backend), fallback to manual parsing
         const mapTransaction = (t: any) => {
           const debitVal = t.debit_parsed ?? (t.debit ? parseFloat(String(t.debit).replace(/[^0-9.-]/g, '')) : 0);
           const creditVal = t.credit_parsed ?? (t.credit ? parseFloat(String(t.credit).replace(/[^0-9.-]/g, '')) : 0);
@@ -196,6 +233,7 @@ export class PDFProcessor {
             normalized_payee: t.normalized_payee,
 
             // Map validation fields
+            suggested: t.suggested,
             balance_corrected: t.balance_corrected,
             debit_corrected: t.debit_corrected,
             credit_corrected: t.credit_corrected,
@@ -206,6 +244,10 @@ export class PDFProcessor {
             balance_display: t.balance
           };
         };
+
+        console.log("PDFProcessor: Validation Summary present?", !!result.validation_summary, result.validation_summary);
+
+
 
         return {
           userInfo: {
@@ -294,7 +336,13 @@ export class PDFProcessor {
             steps_passed: 10
           },
           num_pages: result.metadata?.page_count,
-          llm_used: false
+          llm_used: false,
+
+          // Enterprise Validation Data
+          validation_summary: result.validation_summary,
+          chain_validation: result.chain_validation,
+          missing_transaction_warnings: result.missing_transaction_warnings,
+          duplicate_warnings: result.duplicate_warnings,
         };
       }
 

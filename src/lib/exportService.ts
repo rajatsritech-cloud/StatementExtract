@@ -21,13 +21,17 @@ export class ExportService {
 
 
 
+      const hasReference = transactions.some(t => t.reference && t.reference.toString().trim() !== '');
+
       const dateHeader = colNames.date || 'Date';
       const descHeader = colNames.desc || colNames.description || 'Description';
+      const refHeader = colNames.ref || colNames.reference || 'Reference';
       const creditHeader = colNames.credit || 'Money In';
       const debitHeader = colNames.debit || 'Money Out';
       const balanceHeader = colNames.balance || 'Balance';
 
       let headers = [dateHeader, descHeader];
+      if (hasReference) { headers.push(refHeader); }
 
       // Add Clean Payee column if available
       if (hasNormalizedPayee) {
@@ -45,6 +49,7 @@ export class ExportService {
 
       const rows = transactions.map(t => {
         const row = [t.date, t.description];
+        if (hasReference) { row.push(t.reference || ""); }
 
         // Add normalized payee
         if (hasNormalizedPayee) {
@@ -63,7 +68,13 @@ export class ExportService {
 
 
 
-        return row.map(cell => `"${cell || ""}"`).join(','); // Handle potential nulls
+        return row.map(cell => {
+          const val = cell || "";
+          if (val.includes('"') || val.includes(',') || val.includes('\n')) {
+            return `"${val.replace(/"/g, '""')}"`;
+          }
+          return val;
+        }).join(',');
       });
 
       return [headers.join(','), ...rows].join('\n');
@@ -101,16 +112,20 @@ export class ExportService {
 
 
 
+      const hasReference = transactions.some(t => t.reference && t.reference.toString().trim() !== '');
+
       const dateHeader = colNames.date || 'Date';
       const descHeader = colNames.desc || colNames.description || 'Description';
-      const creditHeader = colNames.credit || 'Deposits';
-      const debitHeader = colNames.debit || 'Withdrawals';
+      const refHeader = colNames.ref || colNames.reference || 'Reference';
+      const creditHeader = colNames.credit || 'Credit';
+      const debitHeader = colNames.debit || 'Debit';
       const balanceHeader = colNames.balance || 'Balance';
 
       return transactions.map(t => {
         const row: any = {};
         row[dateHeader] = t.date;
         row[descHeader] = t.description;
+        if (hasReference) { row[refHeader] = t.reference || ''; }
 
         // Add normalized payee (clean merchant name) if available
         if (hasNormalizedPayee) {
@@ -137,20 +152,8 @@ export class ExportService {
     };
 
     // Sheet 1: Summary (Account Information)
-    const summaryData = [
-      { Field: 'Account Name', Value: data.userInfo?.name || 'N/A' },
-      { Field: 'Account Number', Value: data.userInfo?.accountNumber || 'N/A' },
-      { Field: 'Bank Name', Value: data.userInfo?.bankName || 'N/A' },
-      { Field: 'Statement Period', Value: data.userInfo?.statementPeriod || 'N/A' },
-      { Field: '', Value: '' },
-      { Field: 'Opening Balance', Value: data.userInfo?.accountSummary?.beginningBalance ?? 'N/A' },
-      { Field: 'Total Credits', Value: data.summary?.totalCredits ?? 'N/A' },
-      { Field: 'Total Debits', Value: data.summary?.totalDebits ?? 'N/A' },
-      { Field: 'Closing Balance', Value: data.userInfo?.accountSummary?.endingBalance ?? 'N/A' },
-    ];
-    const summarySheet = XLSX.utils.json_to_sheet(summaryData);
-    summarySheet["!cols"] = [{ wch: 20 }, { wch: 40 }];
-    XLSX.utils.book_append_sheet(workbook, summarySheet, "Summary");
+    // Sheet 1: Transactions (Single sheet export)
+    // Summary sheet removed as per user request
 
     // Sheet 2: All Transactions (always use data.transactions as primary - contains edited data)
     if (data.transactions && data.transactions.length > 0) {
@@ -164,14 +167,14 @@ export class ExportService {
       }, 10);
       worksheet["!cols"] = [{ wch: 12 }, { wch: Math.min(maxDescLen, 50) }, { wch: 14 }, { wch: 14 }, { wch: 14 }];
 
-      XLSX.utils.book_append_sheet(workbook, worksheet, "All Transactions");
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Transactions");
     } else if (data.sections && data.sections.length > 0) {
       // Fallback: Combine all sections if no main transactions
       const allTransactions = data.sections.flatMap(s => s.transactions);
       const rows = processTransactionsToSheet(allTransactions);
       const worksheet = XLSX.utils.json_to_sheet(rows);
       worksheet["!cols"] = [{ wch: 12 }, { wch: 50 }, { wch: 14 }, { wch: 14 }, { wch: 14 }];
-      XLSX.utils.book_append_sheet(workbook, worksheet, "All Transactions");
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Transactions");
     }
 
     XLSX.writeFile(workbook, filename);
@@ -185,19 +188,26 @@ export class ExportService {
         const colNames = data.column_names || {};
         const hasMoneyInOut = transactions.some(t => t.moneyIn !== undefined || t.moneyOut !== undefined);
 
+        const hasReference = transactions.some(t => t.reference && t.reference.toString().trim() !== '');
+
         const dateHeader = colNames.date || 'Date';
         const descHeader = colNames.desc || colNames.description || 'Description';
-        const creditHeader = colNames.credit || 'Money In';
-        const debitHeader = colNames.debit || 'Money Out';
+        const refHeader = colNames.ref || colNames.reference || 'Reference';
+        const creditHeader = colNames.credit || 'Credit';
+        const debitHeader = colNames.debit || 'Debit';
         const balanceHeader = colNames.balance || 'Balance';
 
         let headers = [dateHeader, descHeader];
+        if (hasReference) { headers.push(refHeader); }
+
         if (hasMoneyInOut) { headers.push(creditHeader, debitHeader); }
         else { headers.push('Amount', 'Type'); }
         headers.push(balanceHeader);
 
         const rows = transactions.map(t => {
           const row = [t.date, t.description];
+          if (hasReference) { row.push(t.reference || ""); }
+
           if (hasMoneyInOut) {
             row.push(t.moneyIn ? t.moneyIn.toString() : "", t.moneyOut ? t.moneyOut.toString() : "");
           } else {
@@ -359,7 +369,8 @@ export class ExportService {
       const name = tx.normalized_payee || tx.description;
       // Truncate name to 32 chars (OFX limit) and memo to 255
       const truncatedName = name.substring(0, 32);
-      const truncatedMemo = tx.description.substring(0, 255);
+      const memoRef = tx.reference ? ` Ref: ${tx.reference}` : '';
+      const truncatedMemo = (tx.description + memoRef).substring(0, 255);
 
       return `<STMTTRN>
 <TRNTYPE>${trnType}
@@ -426,7 +437,7 @@ NEWFILEUID:NONE
 ${transactionXML}
 </BANKTRANLIST>
 <LEDGERBAL>
-<BALAMT>${(data.userInfo?.accountSummary?.endingBalance || 0).toFixed(2)}
+<BALAMT>0.00
 <DTASOF>${endDate}
 </LEDGERBAL>
 </STMTRS>
@@ -632,8 +643,8 @@ ${vouchers}
       // Payee (use normalized if available)
       const payee = tx.normalized_payee || tx.description.substring(0, 50);
 
-      // Reference (unique ID)
-      const reference = `TXN${String(index + 1).padStart(5, '0')}`;
+      // Reference (Use actual reference if available, else synthetic ID)
+      const reference = tx.reference || `TXN${String(index + 1).padStart(5, '0')}`;
 
       return [
         tx.date_iso || tx.date,
@@ -738,7 +749,8 @@ ${vouchers}
     mt940 += `:28C:${statementId}/1\r\n`;
 
     // :60F: Opening Balance
-    mt940 += `:60F:${formatBalance(openingBalance, startDate, currency)}\r\n`;
+    // Set to 0 as per user request to remove summary dependencies
+    mt940 += `:60F:${formatBalance(0, startDate, currency)}\r\n`;
 
     // Process Transactions
     allTransactions.forEach(tx => {
@@ -773,7 +785,8 @@ ${vouchers}
     });
 
     // :62F: Closing Balance
-    mt940 += `:62F:${formatBalance(closingBalance, endDate, currency)}\r\n`;
+    // Set to 0 as per user request
+    mt940 += `:62F:${formatBalance(0, endDate, currency)}\r\n`;
 
     // Footer Block
     mt940 += '-}';

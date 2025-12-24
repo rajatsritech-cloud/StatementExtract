@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect, useCallback, useRef } from "react";
-import { X, Download, Copy, Eye, EyeOff, TrendingUp, TrendingDown, DollarSign, User, Mail, Building, CreditCard, Calendar, Wallet, ArrowUpCircle, ArrowDownCircle, FileText, Search, ArrowUpDown, Sparkles, CheckCircle2, Lock, Crown, ChevronDown, Trash2, Settings } from "lucide-react";
+import { X, Download, Copy, Eye, EyeOff, TrendingUp, TrendingDown, DollarSign, User, Mail, Building, CreditCard, Calendar, Wallet, ArrowUpCircle, ArrowDownCircle, FileText, Search, ArrowUpDown, Sparkles, CheckCircle2, Lock, Crown, ChevronDown, Trash2, Settings, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 // Assuming ExportService and ExtractedData are correctly defined elsewhere
@@ -24,6 +24,182 @@ interface ResultsModalProps {
   onTryAnother: () => void;
   onExport: (format: 'csv' | 'excel') => void;
 }
+
+// --- Currency Select Component ---
+const CURRENCIES = [
+  // Tier 1 - Highest CPC Markets (US, UK, EU, AU, CA)
+  { code: 'USD', name: 'US Dollar', flag: '🇺🇸' },
+  { code: 'GBP', name: 'British Pound', flag: '🇬🇧' },
+  { code: 'EUR', name: 'Euro', flag: '🇪🇺' },
+  { code: 'AUD', name: 'Australian Dollar', flag: '🇦🇺' },
+  { code: 'CAD', name: 'Canadian Dollar', flag: '🇨🇦' },
+  // Tier 2 - Major Finance Markets
+  { code: 'CHF', name: 'Swiss Franc', flag: '🇨🇭' },
+  { code: 'JPY', name: 'Japanese Yen', flag: '🇯🇵' },
+  { code: 'NZD', name: 'New Zealand Dollar', flag: '🇳🇿' },
+  { code: 'SGD', name: 'Singapore Dollar', flag: '🇸🇬' },
+  { code: 'HKD', name: 'Hong Kong Dollar', flag: '🇭🇰' },
+  // Tier 3 - Emerging Markets & High Volume
+  { code: 'INR', name: 'Indian Rupee', flag: '🇮🇳' },
+  { code: 'AED', name: 'UAE Dirham', flag: '🇦🇪' },
+  { code: 'SAR', name: 'Saudi Riyal', flag: '🇸🇦' },
+  { code: 'ZAR', name: 'South African Rand', flag: '🇿🇦' },
+  { code: 'MXN', name: 'Mexican Peso', flag: '🇲🇽' },
+  { code: 'BRL', name: 'Brazilian Real', flag: '🇧🇷' },
+  { code: 'CNY', name: 'Chinese Yuan', flag: '🇨🇳' },
+  { code: 'KRW', name: 'South Korean Won', flag: '🇰🇷' },
+  // Tier 4 - European Markets
+  { code: 'SEK', name: 'Swedish Krona', flag: '🇸🇪' },
+  { code: 'NOK', name: 'Norwegian Krone', flag: '🇳🇴' },
+  { code: 'DKK', name: 'Danish Krone', flag: '🇩🇰' },
+  { code: 'PLN', name: 'Polish Zloty', flag: '🇵🇱' },
+  { code: 'CZK', name: 'Czech Koruna', flag: '🇨🇿' },
+  { code: 'HUF', name: 'Hungarian Forint', flag: '🇭🇺' },
+  { code: 'RON', name: 'Romanian Leu', flag: '🇷🇴' },
+  // Tier 5 - Asia Pacific
+  { code: 'THB', name: 'Thai Baht', flag: '🇹🇭' },
+  { code: 'MYR', name: 'Malaysian Ringgit', flag: '🇲🇾' },
+  { code: 'IDR', name: 'Indonesian Rupiah', flag: '🇮🇩' },
+  { code: 'PHP', name: 'Philippine Peso', flag: '🇵🇭' },
+  { code: 'VND', name: 'Vietnamese Dong', flag: '🇻🇳' },
+  { code: 'TWD', name: 'Taiwan Dollar', flag: '🇹🇼' },
+  // Tier 6 - Middle East & Africa
+  { code: 'ILS', name: 'Israeli Shekel', flag: '🇮🇱' },
+  { code: 'TRY', name: 'Turkish Lira', flag: '🇹🇷' },
+  { code: 'EGP', name: 'Egyptian Pound', flag: '🇪🇬' },
+  { code: 'NGN', name: 'Nigerian Naira', flag: '🇳🇬' },
+  { code: 'KES', name: 'Kenyan Shilling', flag: '🇰🇪' },
+  { code: 'QAR', name: 'Qatari Riyal', flag: '🇶🇦' },
+  { code: 'KWD', name: 'Kuwaiti Dinar', flag: '🇰🇼' },
+  { code: 'BHD', name: 'Bahraini Dinar', flag: '🇧🇭' },
+  { code: 'OMR', name: 'Omani Rial', flag: '🇴🇲' },
+  // Tier 7 - Americas
+  { code: 'ARS', name: 'Argentine Peso', flag: '🇦🇷' },
+  { code: 'CLP', name: 'Chilean Peso', flag: '🇨🇱' },
+  { code: 'COP', name: 'Colombian Peso', flag: '🇨🇴' },
+  { code: 'PEN', name: 'Peruvian Sol', flag: '🇵🇪' },
+  // Tier 8 - Other
+  { code: 'RUB', name: 'Russian Ruble', flag: '🇷🇺' },
+  { code: 'PKR', name: 'Pakistani Rupee', flag: '🇵🇰' },
+  { code: 'BDT', name: 'Bangladeshi Taka', flag: '🇧🇩' },
+  { code: 'LKR', name: 'Sri Lankan Rupee', flag: '🇱🇰' },
+];
+
+const CurrencySelect = ({ value, onChange }: { value: string; onChange: (val: string) => void }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [search, setSearch] = useState('');
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties>({});
+
+  // Calculate dropdown position when opened
+  useEffect(() => {
+    if (isOpen && buttonRef.current) {
+      const rect = buttonRef.current.getBoundingClientRect();
+      setDropdownStyle({
+        position: 'fixed',
+        top: rect.bottom + 4,
+        left: rect.left,
+        width: rect.width,
+        zIndex: 9999,
+      });
+    }
+  }, [isOpen]);
+
+  // Filter currencies based on search
+  const filtered = useMemo(() => {
+    if (!search) return CURRENCIES;
+    const q = search.toLowerCase();
+    return CURRENCIES.filter(c =>
+      c.code.toLowerCase().includes(q) || c.name.toLowerCase().includes(q)
+    );
+  }, [search]);
+
+  // Close on click outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as Node;
+      if (
+        buttonRef.current && !buttonRef.current.contains(target) &&
+        dropdownRef.current && !dropdownRef.current.contains(target)
+      ) {
+        setIsOpen(false);
+      }
+    };
+    if (isOpen) document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isOpen]);
+
+  const selected = CURRENCIES.find(c => c.code === value);
+
+  return (
+    <div className="relative">
+      <button
+        ref={buttonRef}
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full h-10 px-3 flex items-center justify-between rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--muted))]/20 text-sm hover:bg-[hsl(var(--muted))]/40 transition-colors"
+      >
+        <span className="flex items-center gap-2 font-mono">
+          {selected ? (
+            <>
+              <span>{selected.flag}</span>
+              <span className="font-semibold">{selected.code}</span>
+              <span className="text-[hsl(var(--muted-foreground))] text-xs hidden sm:inline">({selected.name})</span>
+            </>
+          ) : (
+            <span className="text-[hsl(var(--muted-foreground))]">Select currency...</span>
+          )}
+        </span>
+        <ChevronDown className={`h-4 w-4 text-[hsl(var(--muted-foreground))] transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+      </button>
+
+      {isOpen && (
+        <div
+          ref={dropdownRef}
+          style={dropdownStyle}
+          className="bg-[hsl(var(--popover))] border border-[hsl(var(--border))] rounded-lg shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-150"
+        >
+          <div className="p-2 border-b border-[hsl(var(--border))]">
+            <div className="relative">
+              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[hsl(var(--muted-foreground))]" />
+              <input
+                type="text"
+                placeholder="Search currencies..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full h-9 pl-8 pr-3 rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--background))] text-sm focus:outline-none focus:ring-1 focus:ring-[hsl(var(--primary))]"
+                autoFocus
+              />
+            </div>
+          </div>
+          <div className="max-h-[200px] overflow-y-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-[hsl(var(--border))] [&::-webkit-scrollbar-thumb]:rounded-full">
+            {filtered.length === 0 ? (
+              <div className="p-4 text-center text-sm text-[hsl(var(--muted-foreground))]">No currencies found</div>
+            ) : (
+              filtered.map((c) => (
+                <button
+                  key={c.code}
+                  type="button"
+                  onClick={() => {
+                    onChange(c.code);
+                    setIsOpen(false);
+                    setSearch('');
+                  }}
+                  className={`w-full px-3 py-2.5 flex items-center gap-3 text-sm hover:bg-[hsl(var(--muted))] transition-colors ${value === c.code ? 'bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))]' : ''}`}
+                >
+                  <span className="text-lg">{c.flag}</span>
+                  <span className="font-mono font-semibold">{c.code}</span>
+                  <span className="text-[hsl(var(--muted-foreground))] text-xs">{c.name}</span>
+                </button>
+              ))
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
 
 // --- Helper Functions for Formatting ---
 // Modified to display PURE NUMBERS only (No currency symbols) as per user request
@@ -133,6 +309,93 @@ const UserInfoAndSummary = ({ userInfo }: UserInfoAndSummaryProps) => {
   );
 };
 
+// --- Validation Status Banner ---
+interface ValidationStatusBannerProps {
+  data: ExtractedData;
+}
+
+const ValidationStatusBanner = ({ data }: ValidationStatusBannerProps) => {
+  const validation = data.validation_summary;
+  const chainValidation = data.chain_validation;
+  const missingWarnings = data.missing_transaction_warnings || [];
+  const duplicateWarnings = data.duplicate_warnings || [];
+
+  if (!validation) return null;
+
+  const isVerified = validation.status === 'VERIFIED';
+  const hasWarnings = missingWarnings.length > 0 || duplicateWarnings.length > 0;
+
+  return (
+    <div className={`mb-4 rounded-lg border overflow-hidden ${isVerified
+      ? 'border-green-500/30 bg-green-500/5'
+      : 'border-amber-500/30 bg-amber-500/5'
+      }`}>
+      {/* Header */}
+      <div className={`flex items-center justify-between px-4 py-2.5 ${isVerified ? 'bg-green-500/10' : 'bg-amber-500/10'
+        }`}>
+        <div className="flex items-center gap-2">
+          {isVerified ? (
+            <CheckCircle2 className="h-4 w-4 text-green-600" />
+          ) : (
+            <Sparkles className="h-4 w-4 text-amber-600" />
+          )}
+          <h4 className={`text-sm font-semibold ${isVerified ? 'text-green-700' : 'text-amber-700'}`}>
+            {isVerified ? 'Extraction Verified' : 'Review Recommended'}
+          </h4>
+        </div>
+        <div className="flex items-center gap-4 text-xs">
+          <div className="flex items-center gap-1">
+            <span className="text-[hsl(var(--muted-foreground))]">Chain Integrity:</span>
+            <span className={`font-bold ${validation.chain_integrity >= 95 ? 'text-green-600' : 'text-amber-600'}`}>
+              {validation.chain_integrity}%
+            </span>
+          </div>
+          <div className="flex items-center gap-1">
+            <span className="text-[hsl(var(--muted-foreground))]">Confidence:</span>
+            <span className={`font-bold ${validation.confidence >= 80 ? 'text-green-600' : 'text-amber-600'}`}>
+              {validation.confidence}%
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Issues/Warnings */}
+      {(validation.issues.length > 0 || hasWarnings) && (
+        <div className="px-4 py-3 space-y-2">
+          {validation.issues.map((issue, i) => (
+            <div key={i} className="flex items-center gap-2 text-xs text-amber-700">
+              <span className="text-amber-500">⚠️</span>
+              <span>{issue}</span>
+            </div>
+          ))}
+          {missingWarnings.length > 0 && (
+            <div className="flex items-center gap-2 text-xs text-amber-700">
+              <span className="text-amber-500">⚠️</span>
+              <span>{missingWarnings.length} potential missing transaction(s) detected</span>
+            </div>
+          )}
+          {duplicateWarnings.length > 0 && (
+            <div className="flex items-center gap-2 text-xs text-amber-700">
+              <span className="text-amber-500">⚠️</span>
+              <span>{duplicateWarnings.length} potential duplicate(s) detected</span>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Chain Validation Summary */}
+      {chainValidation && isVerified && (
+        <div className="px-4 py-2 border-t border-green-500/20 flex items-center gap-4 text-xs text-[hsl(var(--muted-foreground))]">
+          <span>✓ Opening: ${chainValidation.opening_balance?.toFixed(2)}</span>
+          <span>✓ Credits: ${chainValidation.total_credits?.toFixed(2)}</span>
+          <span>✓ Debits: ${chainValidation.total_debits?.toFixed(2)}</span>
+          <span>✓ Closing: ${chainValidation.computed_closing?.toFixed(2)}</span>
+        </div>
+      )}
+    </div>
+  );
+};
+
 interface ExportSettingsModalProps {
   settings: ExportSettings;
   format: 'qbo' | 'xero' | 'mt940' | 'tally' | null;
@@ -202,12 +465,9 @@ const ExportSettingsModal = ({ settings, format, onSettingsChange, onDownload, o
               <label className="text-xs font-semibold text-[hsl(var(--foreground))] uppercase tracking-tight flex items-center gap-1">
                 Currency <span className="text-[hsl(var(--primary))]" title="Required for all formats">*</span>
               </label>
-              <Input
+              <CurrencySelect
                 value={settings.currency || ''}
-                onChange={(e) => onSettingsChange({ ...settings, currency: e.target.value.toUpperCase() })}
-                placeholder="USD"
-                maxLength={3}
-                className="h-10 font-mono bg-[hsl(var(--muted))]/20 border-[hsl(var(--border))]"
+                onChange={(val) => onSettingsChange({ ...settings, currency: val })}
               />
             </div>
           </div>
@@ -267,15 +527,127 @@ const ExportSettingsModal = ({ settings, format, onSettingsChange, onDownload, o
 
 
 // --- Dynamic Table Component (Editable) ---
+const ExportMenu = ({ onExport, onExportMT940, onExportQBO, onExportXero, isPro, onUpgrade, disabled }: {
+  onExport: (format: 'csv' | 'excel') => void;
+  onExportMT940: () => void;
+  onExportQBO: () => void;
+  onExportXero: () => void;
+  isPro: boolean;
+  onUpgrade: () => void;
+  disabled: boolean;
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    if (isOpen) document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isOpen]);
+
+  const handleAction = (action: () => void) => {
+    action();
+    setIsOpen(false);
+  };
+
+  return (
+    <div className="relative" ref={menuRef}>
+      <Button
+        variant="default"
+        size="sm"
+        disabled={disabled}
+        onClick={() => setIsOpen(!isOpen)}
+        className="gap-2 px-3 shadow-sm h-8 text-xs bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))] hover:bg-[hsl(var(--primary))]/90"
+      >
+        <Download className="h-3.5 w-3.5" />
+        Export
+        <ChevronDown className={`h-3 w-3 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+      </Button>
+
+      {isOpen && (
+        <div className="absolute right-0 mt-2 w-56 rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--popover))] p-1 text-[hsl(var(--popover-foreground))] shadow-md outline-none z-[100] animate-in fade-in zoom-in-95 data-[side=bottom]:slide-in-from-top-2">
+          <div className="px-2 py-1.5 text-xs font-semibold text-[hsl(var(--muted-foreground))]">
+            Standard Formats
+          </div>
+          <button
+            onClick={() => handleAction(() => onExport('csv'))}
+            className="w-full flex items-center rounded-sm px-2 py-1.5 text-xs hover:bg-[hsl(var(--accent))] hover:text-[hsl(var(--accent-foreground))] outline-none cursor-pointer"
+          >
+            <FileText className="mr-2 h-3.5 w-3.5" />
+            CSV
+          </button>
+          <button
+            onClick={() => handleAction(() => onExport('excel'))}
+            className="w-full flex items-center rounded-sm px-2 py-1.5 text-xs hover:bg-[hsl(var(--accent))] hover:text-[hsl(var(--accent-foreground))] outline-none cursor-pointer"
+          >
+            <FileText className="mr-2 h-3.5 w-3.5" />
+            Excel
+          </button>
+
+          <div className="h-px bg-[hsl(var(--border))] my-1" />
+
+          <div className="px-2 py-1.5 text-xs font-semibold text-[hsl(var(--muted-foreground))] flex items-center justify-between">
+            <span>Accounting Software</span>
+            {!isPro && <Lock className="h-3 w-3" />}
+          </div>
+
+          {/* MT940 */}
+          <button
+            onClick={() => isPro ? handleAction(onExportMT940) : onUpgrade()}
+            className={`w-full flex items-center justify-between rounded-sm px-2 py-1.5 text-xs outline-none cursor-pointer ${isPro ? 'hover:bg-[hsl(var(--accent))] hover:text-[hsl(var(--accent-foreground))]' : 'opacity-75 hover:bg-amber-500/10 text-amber-600'}`}
+          >
+            <span className="flex items-center">
+              <Download className="mr-2 h-3.5 w-3.5" />
+              MT940
+            </span>
+            {!isPro && <Crown className="h-3 w-3 text-amber-500" />}
+          </button>
+
+          {/* QBO */}
+          <button
+            onClick={() => isPro ? handleAction(onExportQBO) : onUpgrade()}
+            className={`w-full flex items-center justify-between rounded-sm px-2 py-1.5 text-xs outline-none cursor-pointer ${isPro ? 'hover:bg-[hsl(var(--accent))] hover:text-[hsl(var(--accent-foreground))]' : 'opacity-75 hover:bg-amber-500/10 text-amber-600'}`}
+          >
+            <span className="flex items-center">
+              <Download className="mr-2 h-3.5 w-3.5" />
+              QuickBooks (QBO)
+            </span>
+            {!isPro && <Crown className="h-3 w-3 text-amber-500" />}
+          </button>
+
+          {/* Xero */}
+          <button
+            onClick={() => isPro ? handleAction(onExportXero) : onUpgrade()}
+            className={`w-full flex items-center justify-between rounded-sm px-2 py-1.5 text-xs outline-none cursor-pointer ${isPro ? 'hover:bg-[hsl(var(--accent))] hover:text-[hsl(var(--accent-foreground))]' : 'opacity-75 hover:bg-amber-500/10 text-amber-600'}`}
+          >
+            <span className="flex items-center">
+              <Download className="mr-2 h-3.5 w-3.5" />
+              Xero
+            </span>
+            {!isPro && <Crown className="h-3 w-3 text-amber-500" />}
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
+
 interface DynamicTableProps {
   transactions: ExtractedData['transactions'];
   currency?: string;
   columnNames?: { [key: string]: string };
   title?: string;
+  subtitle?: string;
+  headerActions?: React.ReactNode;
   onDataChange?: (transactions: ExtractedData['transactions']) => void;
+  fullHeight?: boolean;
 }
 
-const DynamicTable = ({ transactions: initialTransactions, currency = '$', columnNames, title = "Transactions", onDataChange }: DynamicTableProps) => {
+const DynamicTable = ({ transactions: initialTransactions, currency = '$', columnNames, title = "", subtitle, headerActions, onDataChange, fullHeight = false }: DynamicTableProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMS_PER_PAGE = 10;
   const [searchTerm, setSearchTerm] = useState("");
@@ -283,14 +655,34 @@ const DynamicTable = ({ transactions: initialTransactions, currency = '$', colum
   const [transactions, setTransactions] = useState(initialTransactions);
   const [editingCell, setEditingCell] = useState<{ rowIndex: number; field: string } | null>(null);
   const [editValue, setEditValue] = useState("");
-  const [editedTransactionsSet] = useState(() => new WeakSet<object>());
-  const [editedCount, setEditedCount] = useState(0); // Track count for UI display
-  const [visibleColumns, setVisibleColumns] = useState<Set<string>>(new Set(["Date", "Description", "Reference", "Credit", "Debit", "Balance"]));
+  // Calculate edited count dynamically
+  const editedCount = transactions.filter(t => (t as any)._isEdited).length;
+  const [visibleColumns, setVisibleColumns] = useState<Set<string>>(() => {
+    const cols = new Set(["Date", "Description", "Credit", "Debit", "Balance"]);
+    const hasRef = initialTransactions.some(t => t.reference && t.reference.toString().trim() !== '');
+    if (hasRef) cols.add("Reference");
+    return cols;
+  });
   const [showColumnMenu, setShowColumnMenu] = useState(false);
   const [dateFormat, setDateFormat] = useState("original");
+  const [showDateMenu, setShowDateMenu] = useState(false);
   const [newRowIndex, setNewRowIndex] = useState<number | null>(null);
   const [pendingDeleteIndex, setPendingDeleteIndex] = useState<number | null>(null);
   const tableContainerRef = useRef<HTMLDivElement>(null);
+
+  // Close menus on click outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (showColumnMenu && !(event.target as Element).closest('[data-column-menu]')) {
+        setShowColumnMenu(false);
+      }
+      if (showDateMenu && !(event.target as Element).closest('[data-date-menu]')) {
+        setShowDateMenu(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showColumnMenu, showDateMenu]);
 
   // Dynamic columns based on provided columnNames or defaults
   const ALL_COLUMNS = useMemo(() => {
@@ -444,6 +836,11 @@ const DynamicTable = ({ transactions: initialTransactions, currency = '$', colum
     const txn = { ...newTransactions[originalIndex] };
 
     // Update the appropriate field
+    // Backup original state if first edit
+    if (!(txn as any)._isEdited) {
+      (txn as any)._original = { ...txn };
+    }
+
     switch (field) {
       case 'Date':
         txn.date = editValue;
@@ -470,14 +867,23 @@ const DynamicTable = ({ transactions: initialTransactions, currency = '$', colum
       case 'Credit':
         const creditVal = parseFloat(editValue.replace(/[^-\d.]/g, '')) || 0;
         txn.moneyIn = creditVal;
+        txn.moneyOut = 0;
+        (txn as any).credit = undefined; // Clear string display
+        (txn as any).debit = undefined;
         if (creditVal > 0) {
           txn.type = 'credit';
           txn.amount = creditVal;
+        } else if (creditVal === 0) {
+          // Handle 0
+          txn.amount = 0;
         }
         break;
       case 'Debit':
         const debitVal = parseFloat(editValue.replace(/[^-\d.]/g, '')) || 0;
         txn.moneyOut = debitVal;
+        txn.moneyIn = 0;
+        (txn as any).debit = undefined; // Clear string display
+        (txn as any).credit = undefined;
         if (debitVal > 0) {
           txn.type = 'debit';
           txn.amount = debitVal;
@@ -485,22 +891,19 @@ const DynamicTable = ({ transactions: initialTransactions, currency = '$', colum
         break;
       case 'Balance':
         txn.balance = parseFloat(editValue.replace(/[^-\d.]/g, '')) || 0;
+        (txn as any).balance_display = undefined; // Clear string display
         break;
       default:
         // Handle dynamic fields
         const key = columnNames ? Object.keys(columnNames).find(k => columnNames[k] === field) : field.toLowerCase();
-        // Since TransactionData now supports dynamic keys, we can just assign
         (txn as any)[key || field.toLowerCase()] = editValue;
         break;
     }
 
+    (txn as any)._isEdited = true;
     newTransactions[originalIndex] = txn;
     setTransactions(newTransactions);
-    // Mark transaction as edited using WeakSet
-    if (!editedTransactionsSet.has(txn)) {
-      editedTransactionsSet.add(txn);
-      setEditedCount(c => c + 1);
-    }
+
     setEditingCell(null);
     setEditValue("");
 
@@ -528,9 +931,8 @@ const DynamicTable = ({ transactions: initialTransactions, currency = '$', colum
     setTransactions(newTransactions);
 
     // Update edited count if deleted transaction was edited
-    if (editedTransactionsSet.has(deletedTxn)) {
-      setEditedCount(c => Math.max(0, c - 1));
-    }
+    // No explicit update needed as editedCount is derived
+
 
     if (onDataChange) {
       onDataChange(newTransactions);
@@ -540,6 +942,21 @@ const DynamicTable = ({ transactions: initialTransactions, currency = '$', colum
 
   const cancelDelete = () => {
     setPendingDeleteIndex(null);
+  };
+
+  // Undo edit
+  const undoEdit = (originalIndex: number) => {
+    const newTransactions = [...transactions];
+    const txn = newTransactions[originalIndex];
+
+    if ((txn as any)._isEdited && (txn as any)._original) {
+      newTransactions[originalIndex] = { ...(txn as any)._original };
+      setTransactions(newTransactions);
+
+      if (onDataChange) {
+        onDataChange(newTransactions);
+      }
+    }
   };
 
   // Get cell value for display
@@ -598,78 +1015,103 @@ const DynamicTable = ({ transactions: initialTransactions, currency = '$', colum
   if (transactions.length === 0) return <div className="text-center py-8 text-[hsl(var(--muted-foreground))]">No transaction data found.</div>;
 
   return (
-    <div className="space-y-3">
+    <div className={fullHeight ? "flex flex-col h-full gap-3" : "space-y-3"}>
       {/* Header with title and controls */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <h4 className="font-semibold text-[hsl(var(--foreground))]">{title}</h4>
-          {editedCount > 0 && (
-            <span className="text-xs px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-600 font-medium">
-              {editedCount} edited
-            </span>
-          )}
-        </div>
-        <div className="flex items-center gap-2">
-          {/* Date Format */}
-          <select
-            value={dateFormat}
-            onChange={(e) => setDateFormat(e.target.value)}
-            className="text-xs px-2 py-1.5 rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--background))] text-[hsl(var(--foreground))] focus:ring-1 focus:ring-[hsl(var(--primary))] outline-none"
-          >
-            {DATE_FORMATS.map(f => (
-              <option key={f.value} value={f.value}>{f.label}</option>
-            ))}
-          </select>
+      <div className="space-y-2 pb-1">
+        {/* Controls Row - Split */}
+        <div className="flex items-center justify-between gap-2 flex-wrap w-full">
+          <div className="flex items-center gap-2">
+            {/* Date Format */}
+            <div className="relative" data-date-menu>
+              <button
+                onClick={(e) => { e.stopPropagation(); setShowDateMenu(!showDateMenu); }}
+                className="flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-md border border-[hsl(var(--border))] hover:bg-[hsl(var(--muted))] transition-colors bg-[hsl(var(--background))] text-[hsl(var(--foreground))]"
+              >
+                <FileText className="w-3.5 h-3.5 text-[hsl(var(--muted-foreground))]" />
+                <span className="hidden sm:inline">{DATE_FORMATS.find(f => f.value === dateFormat)?.label}</span>
+                <ChevronDown className="w-3 h-3 text-[hsl(var(--muted-foreground))]" />
+              </button>
+              {showDateMenu && (
+                <div className="absolute left-0 top-full mt-1 z-50 w-48 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--card))] shadow-xl py-1.5">
+                  {DATE_FORMATS.map(f => (
+                    <button
+                      key={f.value}
+                      onClick={() => { setDateFormat(f.value); setShowDateMenu(false); }}
+                      className={`flex items-center w-full px-3 py-1.5 hover:bg-[hsl(var(--muted))] text-xs text-left gap-2 ${dateFormat === f.value ? 'bg-[hsl(var(--muted))] font-medium' : ''}`}
+                    >
+                      {dateFormat === f.value && <CheckCircle2 className="h-3 w-3 text-[hsl(var(--primary))]" />}
+                      <span className={dateFormat === f.value ? "" : "pl-5"}>{f.label}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
 
-          {/* Column Toggle */}
-          <div className="relative" data-column-menu>
-            <button
-              onClick={(e) => { e.stopPropagation(); setShowColumnMenu(!showColumnMenu); }}
-              className="flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-md border border-[hsl(var(--border))] hover:bg-[hsl(var(--muted))] transition-colors"
-            >
-              <Eye className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Columns</span>
-              <ChevronDown className="w-3 h-3" />
-            </button>
-            {showColumnMenu && (
-              <div className="absolute right-0 top-full mt-1 z-50 w-40 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--card))] shadow-xl py-1.5">
-                {ALL_COLUMNS.map(col => (
-                  <label key={col} className="flex items-center gap-2 px-3 py-1.5 hover:bg-[hsl(var(--muted))] cursor-pointer text-xs">
-                    <input type="checkbox" checked={visibleColumns.has(col)} onChange={() => toggleColumn(col)} className="rounded border-[hsl(var(--border))] text-[hsl(var(--primary))] focus:ring-[hsl(var(--primary))]" />
-                    {col}
-                  </label>
-                ))}
-              </div>
+            {/* Column Toggle */}
+            <div className="relative" data-column-menu>
+              <button
+                onClick={(e) => { e.stopPropagation(); setShowColumnMenu(!showColumnMenu); }}
+                className="flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-md border border-[hsl(var(--border))] hover:bg-[hsl(var(--muted))] transition-colors"
+              >
+                <Eye className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Columns</span>
+                <ChevronDown className="w-3 h-3" />
+              </button>
+              {showColumnMenu && (
+                <div className="absolute right-0 top-full mt-1 z-50 w-40 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--card))] shadow-xl py-1.5">
+                  {ALL_COLUMNS.map(col => (
+                    <label key={col} className="flex items-center gap-2 px-3 py-1.5 hover:bg-[hsl(var(--muted))] cursor-pointer text-xs">
+                      <input type="checkbox" checked={visibleColumns.has(col)} onChange={() => toggleColumn(col)} className="rounded border-[hsl(var(--border))] text-[hsl(var(--primary))] focus:ring-[hsl(var(--primary))]" />
+                      {col}
+                    </label>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Search */}
+            <div className="relative">
+              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[hsl(var(--muted-foreground))]" />
+              <Input
+                placeholder="Search transactions..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-8 h-8 w-64 text-xs"
+              />
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            {editedCount > 0 && (
+              <span className="text-xs px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-600 font-medium border border-amber-500/20 animate-in fade-in zoom-in-50">
+                {editedCount} edited
+              </span>
             )}
-          </div>
-
-          {/* Search */}
-          <div className="relative">
-            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[hsl(var(--muted-foreground))]" />
-            <Input
-              placeholder="Search..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-8 h-8 w-36 text-xs"
-            />
+            {headerActions}
           </div>
         </div>
+
+        {/* Title Row - Left Aligned */}
+        {title && (
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div>
+                <h4 className="text-lg font-semibold tracking-tight text-[hsl(var(--foreground))]">{title}</h4>
+                {subtitle && <p className="text-xs text-[hsl(var(--muted-foreground))] font-normal mt-0.5">{subtitle}</p>}
+              </div>
+              {editedCount > 0 && (
+                <span className="text-xs px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-600 font-medium self-start mt-0.5">
+                  {editedCount} edited
+                </span>
+              )}
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* Edit hint banner */}
-      <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[hsl(var(--primary))]/5 border border-[hsl(var(--primary))]/20">
-        <div className="flex items-center gap-1.5 text-xs text-[hsl(var(--primary))]">
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-          </svg>
-          <span className="font-medium">Click any cell to edit</span>
-        </div>
-        <span className="text-xs text-[hsl(var(--muted-foreground))]">•</span>
-        <span className="text-xs text-[hsl(var(--muted-foreground))]">Changes will be included in export</span>
-      </div>
 
-      <div className="rounded-lg border border-[hsl(var(--border))] overflow-hidden">
-        <div ref={tableContainerRef} className="overflow-auto max-h-[400px] [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[hsl(var(--border))] [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-[hsl(var(--muted-foreground))]" style={{ scrollbarWidth: 'thin', scrollbarColor: 'hsl(var(--border)) transparent' }}>
+
+      <div className={`rounded-lg border border-[hsl(var(--border))] overflow-hidden ${fullHeight ? 'flex-1 min-h-0 flex flex-col' : ''}`}>
+        <div ref={tableContainerRef} className={`overflow-auto [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[hsl(var(--border))] [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-[hsl(var(--muted-foreground))] ${fullHeight ? 'flex-1' : 'max-h-[400px]'}`} style={{ scrollbarWidth: 'thin', scrollbarColor: 'hsl(var(--border)) transparent' }}>
           <table className="w-full text-sm text-left">
             <thead className="bg-[hsl(var(--muted))]/50 text-[hsl(var(--foreground))]">
               <tr>
@@ -691,13 +1133,13 @@ const DynamicTable = ({ transactions: initialTransactions, currency = '$', colum
             <tbody data-clarity-mask="true">
               {filteredData.map((t, rowIndex) => {
                 const originalIndex = transactions.findIndex(orig => orig === t);
-                const isEdited = editedTransactionsSet.has(t);
+                const isEdited = (t as any)._isEdited;
                 const isNewRow = newRowIndex === originalIndex;
 
                 return (
                   <tr
                     key={rowIndex}
-                    className={`hover:bg-[hsl(var(--muted))]/30 transition-colors border-b border-[hsl(var(--border))] last:border-0 ${isEdited ? "bg-amber-500/5" : ""} ${isNewRow ? "bg-green-500/20 animate-pulse" : ""}`}
+                    className={`hover:bg-[hsl(var(--muted))]/30 transition-colors ${isEdited ? "bg-amber-500/5" : ""} ${isNewRow ? "bg-green-500/20 animate-pulse" : ""}`}
                   >
                     {headers.map((header, cellIndex) => {
                       const isEditing = editingCell?.rowIndex === originalIndex && editingCell?.field === header;
@@ -707,7 +1149,18 @@ const DynamicTable = ({ transactions: initialTransactions, currency = '$', colum
                       let validationNote = null;
                       let isCorrected = false;
 
-                      if (t._ledger_fixed) {
+                      if (t.suggested) {
+                        if (header === 'Balance' && t.suggested.balance !== undefined) {
+                          validationNote = `Suggested: ${t.suggested.balance}`;
+                          isCorrected = true;
+                        } else if (header === 'Credit' && t.suggested.credit !== undefined) {
+                          validationNote = `Suggested: ${t.suggested.credit}`;
+                          isCorrected = true;
+                        } else if (header === 'Debit' && t.suggested.debit !== undefined) {
+                          validationNote = `Suggested: ${t.suggested.debit}`;
+                          isCorrected = true;
+                        }
+                      } else if (t._ledger_fixed) {
                         if (header === 'Balance' && t.balance_corrected) {
                           validationNote = `Suggested: ${t.balance_corrected}`;
                           isCorrected = true;
@@ -721,7 +1174,7 @@ const DynamicTable = ({ transactions: initialTransactions, currency = '$', colum
                       }
 
                       return (
-                        <td key={cellIndex} className={`px-4 py-3 ${getCellStyle(header, cellValue, isEdited)} ${isCorrected ? "bg-amber-100/30 dark:bg-amber-900/20" : ""}`} title={validationNote || undefined}>
+                        <td key={cellIndex} className={`px-4 py-3 border border-[hsl(var(--border))]/30 hover:border-[hsl(var(--primary))]/50 hover:bg-[hsl(var(--primary))]/5 cursor-text transition-colors ${getCellStyle(header, cellValue, isEdited)} ${isCorrected ? "bg-amber-100/30 dark:bg-amber-900/20" : ""}`} title={validationNote || undefined}>
                           {isEditing ? (
                             <div className="flex items-center gap-1">
                               <input
@@ -760,13 +1213,24 @@ const DynamicTable = ({ transactions: initialTransactions, currency = '$', colum
                       );
                     })}
                     <td className="px-2 py-2">
-                      <button
-                        onClick={() => requestDelete(originalIndex)}
-                        className="p-1 rounded hover:bg-red-500/10 text-[hsl(var(--muted-foreground))] hover:text-red-500 transition-colors"
-                        title="Delete row"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
+                      <div className="flex items-center gap-1">
+                        {isEdited && (
+                          <button
+                            onClick={() => undoEdit(originalIndex)}
+                            className="p-1 rounded hover:bg-amber-500/10 text-[hsl(var(--muted-foreground))] hover:text-amber-600 transition-colors"
+                            title="Undo changes"
+                          >
+                            <RotateCcw className="w-4 h-4" />
+                          </button>
+                        )}
+                        <button
+                          onClick={() => requestDelete(originalIndex)}
+                          className="p-1 rounded hover:bg-red-500/10 text-[hsl(var(--muted-foreground))] hover:text-red-500 transition-colors"
+                          title="Delete row"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 );
@@ -881,22 +1345,24 @@ export const ResultsModal = ({ data, file, isProcessing = false, progress = 0, d
   const [exportSettings, setExportSettings] = useState<ExportSettings>({
     routingNumber: '',
     statementNumber: '1',
-    currency: data?.userInfo?.currency || 'USD',
-    accountNumber: data?.userInfo?.accountNumber || '',
-    bankName: data?.userInfo?.bankName || ''
+    currency: 'USD',
+    accountNumber: '',
+    bankName: ''
   });
 
   // Sync settings when data changes
-  useEffect(() => {
-    if (data?.userInfo) {
-      setExportSettings(prev => ({
-        ...prev,
-        currency: data.userInfo.currency || prev.currency,
-        accountNumber: data.userInfo.accountNumber || prev.accountNumber,
-        bankName: data.userInfo.bankName || prev.bankName
-      }));
-    }
-  }, [data]);
+  // Sync settings when data changes
+  // Auto-population removed as per user request to avoid confusion with summary removal
+  // useEffect(() => {
+  //   if (data?.userInfo) {
+  //     setExportSettings(prev => ({
+  //       ...prev,
+  //       currency: data.userInfo.currency || prev.currency,
+  //       accountNumber: data.userInfo.accountNumber || prev.accountNumber,
+  //       bankName: data.userInfo.bankName || prev.bankName
+  //     }));
+  //   }
+  // }, [data]);
   const { isSignedIn, isLoaded } = useAuth();
   const { usage } = useUsage();
 
@@ -1093,8 +1559,8 @@ export const ResultsModal = ({ data, file, isProcessing = false, progress = 0, d
         {/* Compact Header */}
         <div className="flex items-center justify-between px-4 py-2 border-b border-[hsl(var(--border))] bg-[hsl(var(--muted))]/20">
           <div className="flex items-center gap-2">
-            <div className="flex h-6 w-6 items-center justify-center rounded bg-[hsl(var(--primary))]/10">
-              <DollarSign className="h-3.5 w-3.5 text-[hsl(var(--primary))]" />
+            <div className="flex h-6 w-6 items-center justify-center rounded bg-emerald-500/10">
+              <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
             </div>
             <div>
               <h3 className="text-sm font-semibold text-[hsl(var(--foreground))]">
@@ -1104,12 +1570,17 @@ export const ResultsModal = ({ data, file, isProcessing = false, progress = 0, d
                 {isProcessing
                   ? 'Analyzing document'
                   : data?.summary?.transactionCount && data.summary.transactionCount > 0
-                    ? `${data.summary.transactionCount} transactions`
+                    ? `${data.summary.transactionCount} transactions detected`
                     : 'Ready to export'}
               </p>
             </div>
           </div>
           <div className="flex items-center gap-1.5">
+            {!showPdf && fileUrl && (
+              <Button variant="outline" size="sm" onClick={() => setShowPdf(true)} className="h-7 text-xs px-2">
+                Show PDF
+              </Button>
+            )}
             {!isProcessing && (
               <Button variant="outline" size="sm" onClick={onTryAnother} className="h-7 text-xs px-2">
                 Try Another
@@ -1154,30 +1625,69 @@ export const ResultsModal = ({ data, file, isProcessing = false, progress = 0, d
           {/* Right Side - Transaction Data */}
           <div className={`${showPdf ? 'w-1/2' : 'w-full'} flex flex-col relative`}>
 
-            {/* Show PDF Toggle (subtle) */}
-            {!showPdf && (
-              <div className="flex items-center justify-center py-1.5 border-b border-[hsl(var(--border))] bg-[hsl(var(--muted))]/20">
-                <button
-                  onClick={() => setShowPdf(true)}
-                  className="flex items-center gap-1.5 text-xs text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors"
-                >
-                  <Eye className="h-3 w-3" />
-                  Show PDF
-                </button>
-              </div>
-            )}
 
-            <div className="flex-1 overflow-auto p-4">
+            <div className="flex-1 flex flex-col overflow-hidden p-4">
               {isProcessing ? (
-                // ===== PROCESSING UI with Pipeline =====
-                <div className="max-w-2xl mx-auto">
-                  <ProcessingPipeline
-                    steps={getSimulatedProcessingSteps(progress)}
-                    isProcessing={true}
-                    fileName={file?.name}
-                    pageCount={undefined}
-                    transactionCount={undefined}
-                  />
+                // ===== SIMPLE PROCESSING LOADER =====
+                <div className="flex-1 flex flex-col items-center justify-center gap-6">
+                  {/* Circular Progress */}
+                  <div className="relative w-32 h-32">
+                    {/* Background circle */}
+                    <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                      <circle
+                        cx="50"
+                        cy="50"
+                        r="45"
+                        fill="none"
+                        stroke="hsl(var(--muted))"
+                        strokeWidth="8"
+                      />
+                      {/* Progress circle */}
+                      <circle
+                        cx="50"
+                        cy="50"
+                        r="45"
+                        fill="none"
+                        stroke="hsl(var(--primary))"
+                        strokeWidth="8"
+                        strokeLinecap="round"
+                        strokeDasharray={`${progress * 2.83} 283`}
+                        className="transition-all duration-500 ease-out"
+                      />
+                    </svg>
+                    {/* Percentage text */}
+                    <div className="absolute inset-0 flex flex-col items-center justify-center">
+                      <span className="text-3xl font-bold text-[hsl(var(--foreground))]">{Math.round(progress)}%</span>
+                    </div>
+                  </div>
+
+                  {/* Status text */}
+                  <div className="text-center space-y-2">
+                    <p className="text-lg font-medium text-[hsl(var(--foreground))]">
+                      Processing your statement...
+                    </p>
+                    <p className="text-sm text-[hsl(var(--muted-foreground))]">
+                      {progress < 30 && "Extracting text from PDF..."}
+                      {progress >= 30 && progress < 60 && "Detecting transactions..."}
+                      {progress >= 60 && progress < 85 && "Verifying data..."}
+                      {progress >= 85 && "Almost done..."}
+                    </p>
+                    {/* Estimated time */}
+                    <p className="text-xs text-[hsl(var(--muted-foreground))] mt-4">
+                      {progress < 100 && (
+                        <>
+                          Estimated time: ~{Math.max(1, Math.ceil((100 - progress) / 10))} sec
+                        </>
+                      )}
+                    </p>
+                  </div>
+
+                  {/* File name */}
+                  {file?.name && (
+                    <p className="text-xs text-[hsl(var(--muted-foreground))] bg-[hsl(var(--muted))]/50 px-3 py-1.5 rounded-full">
+                      📄 {file.name}
+                    </p>
+                  )}
                 </div>
               ) : data ? (
                 // ===== RESULTS UI =====
@@ -1196,91 +1706,37 @@ export const ResultsModal = ({ data, file, isProcessing = false, progress = 0, d
                     />
                   )}
 
-                  {/* Consolidated Account Info & Summary */}
-                  <UserInfoAndSummary userInfo={data.userInfo} />
 
-                  {/* Export Buttons */}
-                  <div className="flex items-center justify-end mb-4 gap-2 flex-wrap">
-                    <Button variant="outline" size="sm" onClick={handleCopyToClipboard} disabled={!isApproved} className="h-8 text-xs px-3">
-                      <Copy className="h-3.5 w-3.5 mr-1.5" />Copy
-                    </Button>
-                    <Button variant="outline" size="sm" onClick={() => handleExport('csv')} disabled={!isApproved} className="h-8 text-xs px-3">
-                      <Download className="h-3.5 w-3.5 mr-1.5" />CSV
-                    </Button>
-                    <Button variant="outline" size="sm" onClick={() => handleExport('excel')} disabled={!isApproved} className="h-8 text-xs px-3">
-                      <Download className="h-3.5 w-3.5 mr-1.5" />Excel
-                    </Button>
-                    {/* MT940 - Pro Feature */}
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={isPro ? handleExportMT940 : () => setShowUpgradePrompt(true)}
-                      disabled={!isApproved}
-                      className={`h-8 text-xs px-3 ${isPro ? 'border-purple-500/50 text-purple-600 hover:bg-purple-500/10' : 'border-amber-500/50 text-amber-600 hover:bg-amber-500/10'}`}
-                      title={isPro ? "Export to MT940" : "Pro feature - Upgrade to unlock"}
-                    >
-                      {isPro ? <Download className="h-3.5 w-3.5 mr-1.5" /> : <Lock className="h-3.5 w-3.5 mr-1.5" />}
-                      MT940
-                      {!isPro && <Crown className="h-3 w-3 ml-1 text-amber-500" />}
-                    </Button>
-                    {/* QBO - Pro Feature */}
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={isPro ? handleExportQBO : () => setShowUpgradePrompt(true)}
-                      disabled={!isApproved}
-                      className={`h-8 text-xs px-3 ${isPro ? 'border-green-500/50 text-green-600 hover:bg-green-500/10' : 'border-amber-500/50 text-amber-600 hover:bg-amber-500/10'}`}
-                      title={isPro ? "Export to QuickBooks" : "Pro feature - Upgrade to unlock"}
-                    >
-                      {isPro ? <Download className="h-3.5 w-3.5 mr-1.5" /> : <Lock className="h-3.5 w-3.5 mr-1.5" />}
-                      QBO
-                      {!isPro && <Crown className="h-3 w-3 ml-1 text-amber-500" />}
-                    </Button>
-                    {/* Xero - Pro Feature */}
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={isPro ? handleExportXero : () => setShowUpgradePrompt(true)}
-                      disabled={!isApproved}
-                      className={`h-8 text-xs px-3 ${isPro ? 'border-blue-500/50 text-blue-600 hover:bg-blue-500/10' : 'border-amber-500/50 text-amber-600 hover:bg-amber-500/10'}`}
-                      title={isPro ? "Export to Xero" : "Pro feature - Upgrade to unlock"}
-                    >
-                      {isPro ? <Download className="h-3.5 w-3.5 mr-1.5" /> : <Lock className="h-3.5 w-3.5 mr-1.5" />}
-                      Xero
-                      {!isPro && <Crown className="h-3 w-3 ml-1 text-amber-500" />}
-                    </Button>
-                  </div>
-
-                  {/* Sectioned Transaction Display */}
-                  {/* Confidence/Inference Banner */}
-                  {(data.headers_inferred || data.ledger_confidence) && (
-                    <div className="flex items-center gap-2 mb-4 px-3 py-2 rounded-lg bg-blue-500/5 border border-blue-500/20">
-                      <svg className="w-4 h-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                      <span className="text-xs text-blue-600">
-                        Column labels standardized for clarity
-                        {data.ledger_confidence && (
-                          <span className="ml-2 text-blue-500">
-                            • Ledger accuracy: {data.ledger_confidence}%
-                          </span>
-                        )}
-                      </span>
-                    </div>
-                  )}
 
                   {/* Single Unified Table (Smart Reconciled) */}
                   {data.transactions && data.transactions.length > 0 && (
-                    <div className="mb-8">
+                    <div className="flex-1 min-h-0 flex flex-col mb-8">
                       <DynamicTable
+                        fullHeight={true}
                         transactions={currentTransactions}
                         currency={data.userInfo.currency}
                         columnNames={data.column_names}
-                        title="Statement Activity (Reconciled)"
+                        headerActions={(
+                          <div className="flex items-center gap-2">
+                            <Button variant="outline" size="sm" onClick={handleCopyToClipboard} disabled={!isApproved} className="h-8 text-xs px-3">
+                              <Copy className="h-3.5 w-3.5 mr-1.5" />Copy
+                            </Button>
+                            <ExportMenu
+                              onExport={handleExport}
+                              onExportMT940={handleExportMT940}
+                              onExportQBO={handleExportQBO}
+                              onExportXero={handleExportXero}
+                              isPro={isPro}
+                              onUpgrade={() => setShowUpgradePrompt(true)}
+                              disabled={!isApproved}
+                            />
+                          </div>
+                        )}
                         onDataChange={handleTransactionsChange}
                       />
                     </div>
                   )}
+
 
                   {/* detailed Sections (Collapsible) */}
                   {data.sections && data.sections.length > 0 && (
@@ -1314,7 +1770,7 @@ export const ResultsModal = ({ data, file, isProcessing = false, progress = 0, d
                   )}
 
                   {/* Privacy Notice */}
-                  <PrivacyNotice className="mt-8" />
+
                 </>
               ) : null}
             </div>
