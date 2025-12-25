@@ -46,6 +46,20 @@ export const UploadArea = ({ onFileUpload, isProcessing, hideFeatures = false, m
   };
 
   const checkLimits = async (file: File): Promise<boolean> => {
+    // 0. Check File Size (Global Limit matching Cloudflare Worker)
+    const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20MB
+    if (file.size > MAX_FILE_SIZE) {
+      toast.error(
+        <div className="flex flex-col gap-1">
+          <span className="font-semibold text-red-600">File Too Large</span>
+          <span>Maximum upload size is 20MB.</span>
+          <span className="text-xs text-gray-500">Your file: {formatFileSize(file.size)}</span>
+        </div>,
+        { duration: 6000 }
+      );
+      return false;
+    }
+
     if (isSignedIn) return true; // Logged-in users have different limits (enforced by backend)
 
     // 1. Check Page Count of Current File
@@ -54,7 +68,7 @@ export const UploadArea = ({ onFileUpload, isProcessing, hideFeatures = false, m
       if (pageCount > 5) {
         toast.error(
           <div className="flex flex-col gap-1">
-            <span className="font-semibold">Limit Exceeded</span>
+            <span className="font-semibold">Page Limit Exceeded</span>
             <span>Free uploads are limited to 5 pages per document.</span>
           </div>,
           { duration: 5000 }
@@ -413,8 +427,8 @@ export const UploadArea = ({ onFileUpload, isProcessing, hideFeatures = false, m
         {!isProcessing && (
           <p className="mt-4 text-xs text-[hsl(var(--muted-foreground))]">
             {isSignedIn
-              ? (usage?.tier === 'admin' ? 'Unlimited pages' : `Daily limit: ${usage?.limit || 10} pages`)
-              : 'Free tier daily limit: 1 PDF (max 5 pages)'
+              ? (usage?.tier === 'admin' ? 'Unlimited pages • Max 20MB' : `Daily limit: ${usage?.limit || 10} pages • Max size: 20MB`)
+              : 'Free tier daily limit: 1 PDF (max 5 pages) • Max size: 20MB'
             }
           </p>
         )}

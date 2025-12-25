@@ -2,11 +2,23 @@ export async function onRequest(context) {
   const { request, env, params } = context;
   const url = new URL(request.url);
 
-  const pathStr = Array.isArray(params.path)
-    ? params.path.join("/")
-    : params.path;
+  // 1. Safe Path Handling
+  const pathStr = params?.path
+    ? Array.isArray(params.path)
+      ? params.path.join("/")
+      : params.path
+    : "";
 
-  // Use the domain name to satisfy Cloudflare's Host requirement
+  // 2. Request Size Guard (20MB Limit)
+  // Protects Micro Instance from OOM during upload
+  const contentLength = request.headers.get("content-length");
+  if (contentLength && Number(contentLength) > 20_000_000) {
+    return new Response(JSON.stringify({ error: "Payload too large (Max 20MB)" }), {
+      status: 413,
+      headers: { "Content-Type": "application/json" }
+    });
+  }
+
   // Enterprise Load Balancing: Failover Logic
   const backends = [
     "150.136.48.30:8000",
@@ -34,7 +46,10 @@ export async function onRequest(context) {
     // Failover Loop
     for (const backend of attemptOrder) {
       try {
+        // Note: Using HTTP as backend is internal/firewalled.
+        // HTTPS would require self-signed certs setup on VMs.
         const targetUrl = `http://${backend}/api/${pathStr}${url.search}`;
+
         const response = await fetch(targetUrl, {
           method: request.method,
           headers,
@@ -44,7 +59,12 @@ export async function onRequest(context) {
 
         if (response.ok || response.status < 500) {
           clearTimeout(timeout);
-          return new Response(response.body, response);
+
+          // 3. Fix Response Cloning (Stream Safety)
+          return new Response(response.body, {
+            status: response.status,
+            headers: response.headers
+          });
         }
         // If 5xx error, throw to trigger failover to next backend
         throw new Error(`Backend ${backend} returned ${response.status}`);
