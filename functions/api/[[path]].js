@@ -16,7 +16,7 @@ export async function onRequest(context) {
   headers.delete("cf-connecting-ip");
 
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 10_000); // 10s
+  const timeout = setTimeout(() => controller.abort(), 120_000); // 120s for queued requests
 
   try {
     const response = await fetch(targetUrl, {
