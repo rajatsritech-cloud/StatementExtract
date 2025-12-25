@@ -34,7 +34,8 @@ export async function onRequest(context) {
   ];
 
   const headers = new Headers(request.headers);
-  headers.set("host", "api.statementextract.com");
+  // Do NOT force Host header for direct IP access
+  // headers.set("host", "api.statementextract.com");
   headers.delete("cf-connecting-ip");
 
   const controller = new AbortController();
