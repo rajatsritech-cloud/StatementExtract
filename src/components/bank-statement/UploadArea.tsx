@@ -15,7 +15,7 @@ import { StorageService } from "@/lib/storageService";
 import { PDFDocument } from 'pdf-lib';
 
 interface UploadAreaProps {
-  onFileUpload: (file: File) => void;
+  onFileUpload: (files: File[]) => void;
   isProcessing: boolean;
   hideFeatures?: boolean;
   manualTrigger?: boolean;
@@ -34,6 +34,9 @@ export const UploadArea = ({ onFileUpload, isProcessing, hideFeatures = false, m
   const [documentCount, setDocumentCount] = useState(0);
   const { isSignedIn, isLoaded, getToken } = useAuth();
   const { usage, refreshUsage } = useUsage();
+
+  // State for Review Mode (Batch Uploads)
+  const [reviewFiles, setReviewFiles] = useState<File[]>([]);
 
   // Check storage status on mount and when storage updates
   useEffect(() => {
@@ -165,84 +168,77 @@ export const UploadArea = ({ onFileUpload, isProcessing, hideFeatures = false, m
     const files = Array.from(e.dataTransfer.files);
     console.log('📁 Dropped files:', files.length);
 
+    if (files.some(f => f.type !== 'application/pdf')) {
+      toast.error("Only PDF files are supported.");
+      return;
+    }
+
     if (files.length > 1 && !isSignedIn) {
       toast.error("Free users can only upload 1 file at a time. Login for batch uploads!");
       return;
     }
 
-    // Process all files for signed-in users, or just first file for guests
-    const filesToProcess = isSignedIn ? files : files.slice(0, 1);
-
-    for (const file of filesToProcess) {
-      console.log('📄 Processing file:', file.name);
-
-      // Check limits first
-      if (!(await checkLimits(file))) {
-        continue; // Skip this file
+    // Signed IN Logic for Batch Handling
+    if (isSignedIn) {
+      if (files.length > 5) {
+        // ENFORCE REVIEW MODE
+        setReviewFiles(files);
+        // Toast triggered in render or just show UI
+        toast.error("Limit is 5 per batch. Please remove excess files.", { duration: 4000 });
+        return;
       }
 
-      // Check authentication for OCR before setting file or calling onFileUpload
-      const canProceed = await checkAuthenticationForOCR(file);
-      if (!canProceed) {
-        console.log('🔐 Authentication required, showing modal');
-        continue;
-      }
-
-      setSelectedFile(file);
-
-      if (manualTrigger) {
-        setUploadStatus('uploading');
-        setTimeout(() => {
-          setUploadStatus('ready');
-        }, 1500);
-      } else {
-        console.log('✅ File selected, calling onFileUpload');
-        onFileUpload(file);
-      }
+      // Auto-process if <= 5
+      onFileUpload(files);
+      return;
     }
+
+    // Guest Logic (Single File)
+    const file = files[0];
+    if (!(await checkLimits(file))) return;
+    if (!(await checkAuthenticationForOCR(file))) return;
+
+    // Standard Single File Processing
+    setSelectedFile(file);
+    if (!manualTrigger) onFileUpload([file]);
+
   }, [onFileUpload, isSignedIn]);
 
+
   const handleFileSelect = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log('📁 File select triggered');
+    // ...
     const files = e.target.files;
     if (files && files.length > 0) {
-      // Process all selected files
       const fileArray = Array.from(files);
-      console.log('📄 Files selected:', fileArray.length);
 
-      for (const file of fileArray) {
-        console.log('📄 Processing file:', file.name);
-        console.log('📏 File size:', file.size);
-        console.log('📋 File type:', file.type);
-
-        // Check limits first
-        if (!(await checkLimits(file))) {
-          continue; // Skip this file and try next
-        }
-
-        // Check authentication for OCR before setting file or calling onFileUpload
-        const canProceed = await checkAuthenticationForOCR(file);
-        if (!canProceed) {
-          continue; // Skip this file
-        }
-
-        setSelectedFile(file);
-
-        if (manualTrigger) {
-          setUploadStatus('uploading');
-          setTimeout(() => {
-            setUploadStatus('ready');
-          }, 1500);
-        } else {
-          console.log('🔄 Calling onFileUpload...');
-          onFileUpload(file);
-        }
+      if (fileArray.some(f => f.type !== 'application/pdf')) {
+        toast.error("Only PDF files are supported.");
+        e.target.value = '';
+        return;
       }
 
-      // Clear input to allow re-selecting same files
+      // Signed IN Logic
+      if (isSignedIn) {
+        if (fileArray.length > 5) {
+          setReviewFiles(fileArray);
+          toast.error("Limit is 5 per batch. Please remove excess files.", { duration: 4000 });
+        } else {
+          onFileUpload(fileArray);
+        }
+        e.target.value = ''; // Reset
+        return;
+      }
+
+
+      // Guest (Single)
+      const file = fileArray[0];
+      if (!(await checkLimits(file))) return;
+      if (!(await checkAuthenticationForOCR(file))) return;
+
+      setSelectedFile(file);
+      if (!manualTrigger) onFileUpload([file]);
       e.target.value = '';
-    } else {
-      console.log('❌ No files selected');
+
     }
   }, [onFileUpload, isSignedIn]);
 
@@ -265,6 +261,77 @@ export const UploadArea = ({ onFileUpload, isProcessing, hideFeatures = false, m
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
 
+  const handleRemoveReviewFile = (index: number) => {
+    setReviewFiles(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const handleProcessReview = () => {
+    if (reviewFiles.length === 0) return;
+    if (reviewFiles.length > 5) {
+      toast.error("Limit is 5 files. Please remove some.", { duration: 3000 });
+      return;
+    }
+    onFileUpload(reviewFiles);
+    setReviewFiles([]); // Reset
+  };
+
+  // REVIEW MODE UI
+  if (reviewFiles.length > 0) {
+    return (
+      <div className="w-full max-w-4xl mx-auto">
+        <div className="bg-[hsl(var(--card))] rounded-2xl border border-[hsl(var(--border))] p-6 shadow-sm">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h3 className="text-xl font-semibold text-[hsl(var(--foreground))]">Review Uploads</h3>
+              <p className="text-sm text-[hsl(var(--muted-foreground))]">You can verify 5 multiple uploads at a time.</p>
+            </div>
+            <span className={`text-sm font-medium px-3 py-1 rounded-full ${reviewFiles.length > 5 ? 'bg-red-100 text-red-600 dark:bg-red-900/30' : 'bg-green-100 text-green-600 dark:bg-green-900/30'}`}>
+              {reviewFiles.length} / 5 files selected
+            </span>
+          </div>
+
+          <div className="space-y-3 mb-8 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+            {reviewFiles.map((file, index) => (
+              <div key={index} className="flex items-center justify-between p-3 bg-[hsl(var(--muted))]/30 rounded-lg border border-[hsl(var(--border))] group hover:border-[hsl(var(--primary))]/30 transition-colors">
+                <div className="flex items-center gap-3 overflow-hidden">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[hsl(var(--primary))]/10 flex-shrink-0">
+                    <FileText className="h-5 w-5 text-[hsl(var(--primary))]" />
+                  </div>
+                  <div className="truncate">
+                    <p className="font-medium text-sm text-[hsl(var(--foreground))] truncate">{file.name}</p>
+                    <p className="text-xs text-[hsl(var(--muted-foreground))]">{formatFileSize(file.size)}</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => handleRemoveReviewFile(index)}
+                  className="p-2 text-[hsl(var(--muted-foreground))] hover:text-red-500 hover:bg-red-500/10 rounded-md transition-colors"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex justify-end gap-3 pt-4 border-t border-[hsl(var(--border))]">
+            <button
+              onClick={() => setReviewFiles([])}
+              className="px-4 py-2 text-sm font-medium text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleProcessReview}
+              disabled={reviewFiles.length > 5}
+              className="px-6 py-2 text-sm font-medium text-white bg-[hsl(var(--primary))] rounded-lg hover:bg-[hsl(var(--primary))]/90 transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {reviewFiles.length > 5 ? `Remove ${reviewFiles.length - 5} files` : `Process ${reviewFiles.length} files`}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (minimal) {
     return (
       <div className="w-full">
@@ -272,7 +339,8 @@ export const UploadArea = ({ onFileUpload, isProcessing, hideFeatures = false, m
           id="file-input-minimal"
           type="file"
           className="hidden"
-          accept=".pdf,.jpg,.jpeg,.png"
+          accept=".pdf"
+          onChange={handleFileSelect}
           onChange={handleFileSelect}
           disabled={isProcessing || isStorageFull}
         />
@@ -363,7 +431,8 @@ export const UploadArea = ({ onFileUpload, isProcessing, hideFeatures = false, m
           id="file-input"
           type="file"
           className="hidden"
-          accept=".pdf,.jpg,.jpeg,.png"
+          accept=".pdf"
+          onChange={handleFileSelect}
           onChange={handleFileSelect}
           disabled={isProcessing || isStorageFull}
           multiple={isSignedIn}
@@ -389,12 +458,17 @@ export const UploadArea = ({ onFileUpload, isProcessing, hideFeatures = false, m
           <h3 className={`${hideFeatures ? 'text-base' : 'text-xl'} font-semibold text-[hsl(var(--foreground))] mb-1`}>
             {isProcessing ? 'Processing...' : 'Drop your bank statement here'}
           </h3>
-          <p className="text-[hsl(var(--muted-foreground))]">
+          <p className="text-[hsl(var(--muted-foreground))] mb-1">
             {isProcessing
               ? 'Please wait while we extract your data'
               : 'or click to browse from your computer'
             }
           </p>
+          {!isProcessing && isSignedIn && (
+            <p className="mt-2 inline-block rounded-full bg-[hsl(var(--primary))]/10 px-3 py-1 text-sm font-medium text-[hsl(var(--primary))]">
+              Up to 5 files at a time
+            </p>
+          )}
         </div>
 
         {/* File Types */}
@@ -402,15 +476,7 @@ export const UploadArea = ({ onFileUpload, isProcessing, hideFeatures = false, m
           <div className="flex justify-center gap-4 text-sm text-[hsl(var(--muted-foreground))]">
             <div className="flex items-center gap-2">
               <FileText className="h-4 w-4" />
-              <span>PDF</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Image className="h-4 w-4" />
-              <span>JPG</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Image className="h-4 w-4" />
-              <span>PNG</span>
+              <span>PDF Only</span>
             </div>
           </div>
         )}
@@ -441,7 +507,7 @@ export const UploadArea = ({ onFileUpload, isProcessing, hideFeatures = false, m
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    onFileUpload(selectedFile);
+                    onFileUpload([selectedFile]);
                   }}
                   className="px-4 py-2 text-sm font-medium text-white bg-[hsl(var(--primary))] rounded-lg hover:bg-[hsl(var(--primary))]/90 transition-colors shadow-sm"
                 >

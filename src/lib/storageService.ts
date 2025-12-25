@@ -75,11 +75,14 @@ export class StorageService {
             };
 
             const addRequest = store.put(docToSave);
-            addRequest.onsuccess = () => {
+
+            transaction.oncomplete = () => {
                 // Dispatch event for UI components to update
                 window.dispatchEvent(new CustomEvent('storage-updated'));
                 resolve();
             };
+
+            transaction.onerror = () => reject(transaction.error);
             addRequest.onerror = () => reject(addRequest.error);
         });
     }
@@ -123,10 +126,13 @@ export class StorageService {
             const transaction = db.transaction([STORE_NAME], 'readwrite');
             const store = transaction.objectStore(STORE_NAME);
             const request = store.delete(id);
-            request.onsuccess = () => {
+
+            transaction.oncomplete = () => {
                 window.dispatchEvent(new CustomEvent('storage-updated'));
                 resolve();
             };
+
+            transaction.onerror = () => reject(transaction.error);
             request.onerror = () => reject(request.error);
         });
     }
@@ -139,10 +145,13 @@ export class StorageService {
             const transaction = db.transaction([STORE_NAME], 'readwrite');
             const store = transaction.objectStore(STORE_NAME);
             const request = store.clear();
-            request.onsuccess = () => {
+
+            transaction.oncomplete = () => {
                 window.dispatchEvent(new CustomEvent('storage-updated'));
                 resolve(count);
             };
+
+            transaction.onerror = () => reject(transaction.error);
             request.onerror = () => reject(request.error);
         });
     }

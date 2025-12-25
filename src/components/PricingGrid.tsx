@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Check, X, Zap, Crown, ArrowRight } from "lucide-react";
-import { SignUpButton, SignedOut } from "@clerk/clerk-react";
+import { SignUpButton, SignedOut, SignedIn } from "@clerk/clerk-react";
 
 export const tiers = [
     {
@@ -12,7 +12,7 @@ export const tiers = [
         period: "/month",
         description: "Instant access. No login required.",
         features: [
-            { name: "5 pages/document", included: true },
+            { name: "5 pages daily", included: true },
             { name: "Bank statement formats", included: true },
             { name: "CSV & Excel export", included: true },
             { name: "QuickBooks/Xero formats", included: false },
@@ -104,18 +104,36 @@ export const PricingGrid = () => {
 
                         {/* CTA Button */}
                         {isFreePlus ? (
-                            <SignUpButton mode="modal">
-                                <Button
-                                    size="lg"
-                                    className={`w-full group gap-2 ${tier.popular
-                                        ? "bg-gradient-primary hover:opacity-90 shadow-glow"
-                                        : "bg-[hsl(var(--secondary))] hover:bg-[hsl(var(--secondary))]/80"
-                                        }`}
-                                >
-                                    {tier.cta}
-                                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                                </Button>
-                            </SignUpButton>
+                            <>
+                                <SignedOut>
+                                    <SignUpButton mode="modal">
+                                        <Button
+                                            size="lg"
+                                            className={`w-full group gap-2 ${tier.popular
+                                                ? "bg-gradient-primary hover:opacity-90 shadow-glow"
+                                                : "bg-[hsl(var(--secondary))] hover:bg-[hsl(var(--secondary))]/80"
+                                                }`}
+                                        >
+                                            {tier.cta}
+                                            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                                        </Button>
+                                    </SignUpButton>
+                                </SignedOut>
+                                <SignedIn>
+                                    <Link href="/dashboard" className="block">
+                                        <Button
+                                            size="lg"
+                                            className={`w-full group gap-2 ${tier.popular
+                                                ? "bg-gradient-primary hover:opacity-90 shadow-glow"
+                                                : "bg-[hsl(var(--secondary))] hover:bg-[hsl(var(--secondary))]/80"
+                                                }`}
+                                        >
+                                            Go to Dashboard
+                                            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                                        </Button>
+                                    </Link>
+                                </SignedIn>
+                            </>
                         ) : (
                             <Link href={tier.href} className="block">
                                 <Button

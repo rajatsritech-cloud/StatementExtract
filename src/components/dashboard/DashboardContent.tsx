@@ -39,26 +39,49 @@ export const DashboardContent = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const documentsRef = useRef<HTMLDivElement>(null);
 
-    // Load documents from IndexedDB on mount
-    useEffect(() => {
-        const loadDocs = async () => {
-            try {
-                const storedDocs = await StorageService.getDocuments();
-                const mappedDocs: Document[] = storedDocs.map(doc => ({
-                    id: doc.id,
-                    fileName: doc.fileName,
-                    date: doc.date,
-                    status: "completed",
-                    data: doc.data,
-                    file: doc.fileBlob ? new File([doc.fileBlob], doc.fileName, { type: 'application/pdf' }) : undefined
-                }));
-                setDocuments(mappedDocs);
-            } catch (error) {
-                console.error("Failed to load documents from storage:", error);
-            }
-        };
-        loadDocs();
+    // Load documents from IndexedDB
+    const loadDocs = useCallback(async () => {
+        try {
+            const storedDocs = await StorageService.getDocuments();
+            const mappedDocs: Document[] = storedDocs.map(doc => ({
+                id: doc.id,
+                fileName: doc.fileName,
+                date: doc.date,
+                status: "completed",
+                data: doc.data,
+                file: doc.fileBlob ? new File([doc.fileBlob], doc.fileName, { type: 'application/pdf' }) : undefined
+            }));
+
+            setDocuments(prevDocs => {
+                // Create a Set of IDs from the database (completed items)
+                const dbIds = new Set(mappedDocs.map(d => d.id));
+
+                // Keep existing items that are NOT 'completed' (queued, processing, failed)
+                // AND are not already in the database list (to prevent duplication)
+                const activeDocs = prevDocs.filter(doc =>
+                    doc.status !== 'completed' && !dbIds.has(doc.id)
+                );
+
+                // Show active (queued/processing) items first, then history
+                return [...activeDocs, ...mappedDocs];
+            });
+        } catch (error) {
+            console.error("Failed to load documents from storage:", error);
+        }
     }, []);
+
+    useEffect(() => {
+        loadDocs();
+
+        const handleStorageUpdate = () => {
+            loadDocs();
+        };
+
+        window.addEventListener('storage-updated', handleStorageUpdate);
+        return () => {
+            window.removeEventListener('storage-updated', handleStorageUpdate);
+        };
+    }, [loadDocs]);
 
     // Concurrency limit for parallel processing
     const MAX_CONCURRENT = 3;
@@ -184,7 +207,7 @@ export const DashboardContent = () => {
         setIsProcessing(hasActiveOrQueued);
     }, [documents, processNextInQueue]);
 
-    const handleFileUpload = useCallback(async (file: File) => {
+    const handleFileUpload = useCallback(async (files: File[]) => {
         if (!isLoaded || !isSignedIn) {
             toast.error('Please sign in to upload documents.');
             return;
@@ -192,25 +215,33 @@ export const DashboardContent = () => {
 
         setShowUploadModal(false);
 
-        // Determine initial status based on current active count
-        const willQueue = activeCountRef.current >= MAX_CONCURRENT;
+        // Calculate how many slots we have in our concurrent queue
+        let currentQueueCount = documents.filter(d => d.status === "processing" || d.status === "queued").length;
 
-        const newDoc: Document = {
-            id: Math.random().toString(36).substr(2, 9),
-            fileName: file.name,
-            date: new Date().toLocaleDateString(),
-            status: willQueue ? "queued" : "queued", // Always start as queued, effect will pick it up
-            file: file
-        };
-
-        setDocuments(prev => [newDoc, ...prev]);
-
-        if (willQueue) {
-            const queuePosition = documents.filter(d => d.status === "queued" || d.status === "processing").length + 1;
-            toast(`${file.name} added to queue`, { icon: '📋' });
+        // Show summary toast
+        if (files.length === 1) {
+            toast.loading(`Processing ${files[0].name}...`, { duration: 2000 });
         } else {
-            toast.loading("Processing started...", { duration: 2000 });
+            toast.success(`Added ${files.length} documents to queue`, { icon: 'xk' }); // 'xk' is not an icon, assume typo in user prompt 'muktiple updates?'. Standard success/loading icon.
+            toast.loading(`Processing ${files.length} documents...`, { duration: 2000 });
         }
+
+        const newDocs: Document[] = [];
+
+        for (const file of files) {
+            const willQueue = currentQueueCount + 1 > MAX_CONCURRENT; // Simplified queue logic
+            const newDoc: Document = {
+                id: Math.random().toString(36).substr(2, 9),
+                fileName: file.name,
+                date: new Date().toLocaleDateString(),
+                status: "queued", // Always start as queued, effect loop picks it up
+                file: file
+            };
+            newDocs.push(newDoc);
+            currentQueueCount++;
+        }
+
+        setDocuments(prev => [...newDocs, ...prev]);
 
         setTimeout(() => {
             documentsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });

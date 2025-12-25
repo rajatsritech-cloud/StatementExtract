@@ -6,7 +6,7 @@ import { UploadArea } from "@/components/bank-statement/UploadArea";
 interface UploadModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onFileUpload: (file: File) => void;
+    onFileUpload: (files: File[]) => void;
     isProcessing: boolean;
 }
 
