@@ -20,7 +20,7 @@ export const InteractiveDemo = () => {
     };
 
     // Handle file upload simulation
-    const handleUpload = (files: File[]) => {
+    const handleUpload = () => {
         setStep("processing");
         // Simulate processing progress
         let currentProgress = 0;

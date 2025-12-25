@@ -27,6 +27,7 @@ import {
   FileSpreadsheet,
   TrendingUp,
   Flame,
+  LayoutDashboard,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
@@ -502,7 +503,7 @@ export const Header = () => {
                           </div>
                           <Link
                             href="/convert"
-                            className="mt-6 flex items-center justify-end gap-2 text-sm font-bold text-[hsl(var(--primary))] hover:text-purple-500 hover:underline transition-colors"
+                            className="mt-6 flex items-center justify-end gap-2 text-sm font-bold hover:text-purple-500 hover:underline transition-colors"
                             onClick={closeConvertersDropdown}
                           >
                             View All Converters →
@@ -671,7 +672,7 @@ export const Header = () => {
                           </div>
                           <Link
                             href="/tools"
-                            className="mt-6 flex items-center justify-end gap-2 text-sm font-bold text-[hsl(var(--primary))] hover:text-purple-500 hover:underline transition-colors"
+                            className="mt-6 flex items-center justify-end gap-2 text-sm font-bold hover:text-purple-500 hover:underline transition-colors"
                             onClick={closeToolsDropdown}
                           >
                             View All Tools →
