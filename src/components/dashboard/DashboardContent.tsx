@@ -126,13 +126,6 @@ export const DashboardContent = () => {
             if (error.message?.includes("503") || error.message?.includes("capacity") || error.message?.includes("overload") || error.message?.includes("high traffic")) {
                 errorMessage = "We're experiencing high traffic on our free tier model. Please try again in a few minutes.";
                 userFriendlyMessage = "We're experiencing high traffic on our free tier model. Please try again in a few minutes.";
-
-                // Auto-retry after 10 seconds
-                setTimeout(() => {
-                    setDocuments(prev => prev.map(doc =>
-                        doc.id === docId && doc.status === "failed" ? { ...doc, status: "queued" as const, errorMessage: undefined } : doc
-                    ));
-                }, 10000);
             }
             // Check for rate limit exceeded (402)
             else if (error.message?.includes("limit exceeded") || error.message?.includes("402") || error.message?.includes("Upgrade")) {
