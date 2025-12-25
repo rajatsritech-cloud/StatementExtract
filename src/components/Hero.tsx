@@ -39,7 +39,7 @@ export const Hero = () => {
               <span className="relative inline-flex rounded-full h-2 w-2 bg-[hsl(var(--primary))]"></span>
             </span>
             <span className="text-sm font-medium text-[hsl(var(--primary))]">
-              AI-Powered Document Processing
+              Next-Generation Financial Data Extraction
             </span>
           </div>
 
@@ -51,7 +51,7 @@ export const Hero = () => {
 
           {/* Subheadline */}
           <p className="mx-auto mb-10 max-w-2xl text-lg text-[hsl(var(--muted-foreground))] md:text-xl animate-fade-in delay-100">
-            Stop building fragile templates. Our AI extracts verified data from bank statements, invoices, and tax forms with industry-leading accuracy.
+            Automate your bookkeeping. Convert PDF Bank Statements to Excel, CSV, QuickBooks, and Xero with industry-leading accuracy. Stop juggling tools—get everything in one place.
           </p>
 
           {/* Buttons */}

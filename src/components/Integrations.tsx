@@ -4,34 +4,34 @@ import { Code2, Database, Webhook, Cloud, Shield, Zap } from "lucide-react";
 export const Integrations = () => {
   const integrations = [
     {
-      icon: Code2,
-      name: "REST API",
-      description: "Simple HTTP endpoints for any language or platform"
-    },
-    {
       icon: Database,
-      name: "Direct DB",
-      description: "Write extracted data directly to your database"
-    },
-    {
-      icon: Webhook,
-      name: "Webhooks",
-      description: "Real-time notifications when processing completes"
+      name: "QuickBooks Online",
+      description: "Direct one-click export for invoices and bank transactions."
     },
     {
       icon: Cloud,
-      name: "Cloud Storage",
-      description: "S3, GCS, Azure Blob, and more integrations"
+      name: "Xero",
+      description: "Seamlessly push reconciled statements to Xero."
+    },
+    {
+      icon: Code2,
+      name: "Excel & CSV",
+      description: "Universal formats compatible with any accounting software."
+    },
+    {
+      icon: Webhook,
+      name: "API & Webhooks",
+      description: "Automate your pipeline with our robust developer API."
     },
     {
       icon: Shield,
-      name: "Enterprise SSO",
-      description: "SAML, OAuth, and custom auth integrations"
+      name: "Zero Data Retention",
+      description: "We process your files in memory and do not store them. Your data stays yours."
     },
     {
       icon: Zap,
-      name: "Zapier",
-      description: "Connect with 5000+ apps without code"
+      name: "Auto-Categorization",
+      description: "Smart rules to auto-assign categories before export."
     }
   ];
 
@@ -43,10 +43,10 @@ export const Integrations = () => {
       <div className="relative mx-auto max-w-7xl z-10">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-[hsl(var(--foreground))] md:text-5xl mb-4">
-            Integrations that fit your workflow
+            Connects with your accounting stack
           </h2>
           <p className="text-lg text-[hsl(var(--muted-foreground))] max-w-2xl mx-auto">
-            Connect seamlessly with your existing tools and infrastructure
+            Compatible with all major accounting platforms and custom financial workflows.
           </p>
         </div>
 

@@ -5,124 +5,103 @@ import { Mail, MessageCircle, BookOpen, Calendar, HelpCircle } from "lucide-reac
 
 const faqs = [
   {
-    question: "What is StatementExtract and what problem does it solve?",
+    question: "What is the best way to convert PDF bank statements to Excel?",
     intro:
-      "StatementExtract focuses on turning complex business documents—like invoices, contracts, healthcare records, and bank statements—into clean, structured data you can actually use.",
+      "StatementExtract provides the most accurate way to convert PDF bank statements to Excel, CSV, and accounting formats. Unlike generic OCR tools, we specialize in financial documents.",
     points: [
-      "Upload PDFs or images and get ready-to-use CSV or Excel instead of manual copy-paste.",
-      "Designed for workflows like invoice processing, contract review, healthcare reporting, and financial analysis.",
-      "Eliminates human error and frees your team from repetitive data entry tasks.",
+      "Automatically extracts transactions, dates, descriptions, and balances.",
+      "Converts PDF to Excel (.xlsx) and CSV with proper column formatting.",
+      "Eliminates manual data entry for accountants and bookkeepers.",
     ],
   },
   {
-    question: "How is StatementExtract different from standard OCR tools?",
+    question: "Do you support converting scanned PDF statements and images?",
     intro:
-      "Standard OCR only gives you plain text; StatementExtract understands the structure and meaning of financial data.",
+      "Yes, our advanced Financial OCR technology handles scanned PDFs and image-based statements (JPG, PNG) with high precision.",
     points: [
-      "Built specifically for high-value documents like invoices, contracts, healthcare records, and bank statements, not generic images.",
-      "Identifies the right fields for each document type—line items, key terms, patient details, or transactions—automatically.",
-      "Delivers structured outputs you can filter and analyze immediately, greatly reducing the amount of custom parsing you need to build.",
+      "Digitize paper statements and low-quality scans instantly.",
+      "Corrects common OCR errors using context-aware financial logic.",
+      "Perfect for converting older historical bank records to digital formats.",
     ],
   },
   {
-    question: "Which documents and formats do you support?",
+    question: "How do I import bank statements into QuickBooks Online and Xero?",
     intro:
-      "StatementExtract is designed to work across many document types and layouts without manual template setup.",
+      "We generate files specifically formatted for direct import into QuickBooks Online, Xero, Sage, and FreshBooks.",
     points: [
-      "Supports digital PDFs, scanned PDFs, and images (JPG, PNG).",
-      "Handles invoices, contracts, healthcare records, bank statements, and other financial documents.",
-      "Intelligent Document Processing adapts to new layouts so you don't have to maintain rigid templates for every format.",
+      "Download .qbo files for one-click QuickBooks Web Connect import.",
+      "Export Xero-compatible CSVs or OFX files for easy bank feed reconciliation.",
+      "Assign categories automatically before exporting to save time on coding.",
     ],
   },
   {
-    question: "What data can you extract from invoices, contracts, healthcare records, and bank statements?",
+    question: "Can I process bulk bank statements or use an API?",
     intro:
-      "We focus on extracting the fields that actually power automation and decision making across your documents.",
+      "Yes, our platform is built for high-volume batch processing for firms and developers.",
     points: [
-      "Invoice processing: line items, totals, taxes, dates, and vendor information across many formats.",
-      "Contract analysis: key terms, parties, dates, renewal details, and important clauses from legal documents.",
-      "Healthcare records: patient details, diagnoses, and treatment information while supporting strict privacy requirements.",
-      "Bank statements: account details, period, balances, and every transaction line with date, description, and amount.",
+      "Upload hundreds of PDFs at once via our dashboard for bulk conversion.",
+      "Use our Developer API to integrate bank statement extraction into your own app.",
+      "Ideal for lenders, underwriting automation, and tax preparation firms.",
     ],
   },
   {
-    question: "How accurate is the Intelligent Document Processing engine?",
+    question: "Which bank formats do you support?",
     intro:
-      "The extraction pipeline is tuned for financial data and built to minimize silent errors.",
+      "We support thousands of global bank formats, including major institutions like Chase, Bank of America, Wells Fargo, and international banks.",
     points: [
-      "Targets industry-leading accuracy on well-structured statements.",
-      "Applies validation checks across balances and transaction totals to catch anomalies.",
-      "Flags suspicious or low-confidence areas instead of guessing and polluting your data.",
+      "Works with checking, savings, credit card, and load account statements.",
+      "Handles multi-column layouts, widely varying tables, and multi-page documents.",
+      "Support for multi-currency statements and complex date formats (DD/MM vs MM/DD).",
     ],
   },
   {
-    question: "Do I need templates or training data to get started?",
+    question: "Is my financial data secure and private?",
     intro:
-      "You can start using StatementExtract without upfront configuration or labeled datasets.",
+      "Security is our top priority. We operate with a strict Zero Data Retention policy.",
     points: [
-      "No need to build or maintain per-bank templates.",
-      "Upload a statement or call the API and receive structured results immediately.",
-      "Intelligent Document Processing models generalize across many formats for you.",
+      "We process files in memory and do not store your financial data after conversion.",
+      "Zero database storage ensures your client's sensitive PII remains content.",
+      "All data transfer is protected by bank-level AES-256 encryption and TLS 1.3.",
     ],
   },
   {
-    question: "How does StatementExtract keep my financial data secure?",
+    question: "How accurate is the reconciliation and data validation?",
     intro:
-      "Bank statements are sensitive, so the platform is designed with security as a core requirement, not an afterthought.",
+      "We deliver industry-leading accuracy by mathematically validating every transaction against the statement period balances.",
     points: [
-      "Data is encrypted in transit and at rest throughout processing.",
-      "Access is restricted to only the services that need it, with strong logging and monitoring.",
-      "Your private documents are not used to train generic public models.",
+      "Automatic reconciliation checks opening balance + transactions = closing balance.",
+      "Flags potential errors or missing pages for review.",
+      "Provides a confidence score so you know exactly which data is verified.",
     ],
   },
   {
-    question: "How can I integrate StatementExtract into my existing systems?",
+    question: "Is this tool suitable for lenders and credit underwriting?",
     intro:
-      "You can start simple and grow into deeper automation as your volumes increase.",
+      "Absolutely. Lenders and mortgage brokers use StatementExtract to speed up credit analysis and income verification.",
     points: [
-      "Use the web interface to upload statements and export CSV, Excel, or JSON.",
-      "Integrate via REST API and webhooks to automate uploads and retrieval of results.",
-      "Feed outputs directly into accounting tools, BI dashboards, or internal databases.",
+      "Extract cash flow data, recurring deposits, and average daily balances.",
+      "Detect non-sufficient funds (NSF) fees and other risk indicators.",
+      "Turn months of applicant bank statements into a clean credit analysis spreadsheet.",
     ],
   },
   {
-    question: "Can StatementExtract handle invoices, contracts, healthcare records, and bank statements?",
+    question: "Can I convert checking, savings, and credit card statements?",
     intro:
-      "Yes—StatementExtract is built to support multiple high-value use cases, not just one document type.",
+      "Yes, our AI understands the unique layouts of checking accounts, savings summaries, and detailed credit card activity logs.",
     points: [
-      "Process invoices, contracts, healthcare records, bank statements, and related financial paperwork with the same pipeline.",
-      "Configure extraction to focus on fields that matter in each use case—line items, clauses, patient info, or transactions.",
-      "Keep all of this data flowing into a single, consistent structure for downstream tools.",
+      "Separates deposits, withdrawals, and fees into distinct columns.",
+      "Standardizes merchant names and clean transaction descriptions.",
+      "Handles combined statements with multiple accounts in a single PDF.",
     ],
   },
   {
-    question: "What does the pricing and free usage look like?",
+    question: "Is there a free trial or free PDF to Excel converter?",
     intro:
-      "StatementExtract is designed to be easy to try and scale without upfront commitment.",
+      "Yes, we offer a generous free tier that allows you to convert PDF bank statements to Excel and CSV for free.",
     points: [
-      "Start with a generous free tier so you can test on real statements without a credit card.",
-      "Move to a paid plan as your page volumes and integration needs grow.",
-      "Work with our team to pick a usage-based model that fits your business.",
-    ],
-  },
-  {
-    question: "How fast is processing and will it scale with my volume?",
-    intro:
-      "The platform is built so that individual users get fast responses even when volumes are high.",
-    points: [
-      "Most statements are processed in a few seconds from upload to structured data.",
-      "The backend pipeline scales to handle spikes and large batches without blocking others.",
-      "Whether you upload one PDF or thousands via API, the experience stays responsive.",
-    ],
-  },
-  {
-    question: "What happens if the engine is unsure or something looks wrong?",
-    intro:
-      "We prefer explicit handling of edge cases rather than letting bad data slip into your systems.",
-    points: [
-      "Low-confidence text or confusing layouts can be flagged for review.",
-      "Balance and total checks help surface mismatches before they impact reporting.",
-      "You can combine our confidence signals with your own business rules to decide when to trust or escalate a document.",
+      "No credit card required to start converting.",
+      "Get full access to all export formats (QBO, Xero, Excel) during the trial.",
+      "Simple, transparent pricing for growing accounting firms.",
     ],
   },
 ];

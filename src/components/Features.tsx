@@ -4,13 +4,13 @@ import { Card } from "@/components/ui/card";
 const features = [
   {
     icon: Brain,
-    title: "AI-Powered Document Processing",
-    description: "Intelligent Document Processing models understand document context and extract data with human-level accuracy.",
+    title: "Industry-Leading Accuracy",
+    description: "Our AI is trained on millions of bank statements and invoices to deliver accountant-verified accuracy without templates.",
   },
   {
     icon: Gauge,
-    title: "Lightning Fast",
-    description: "Process thousands of documents per minute with our optimized extraction pipeline.",
+    title: "Lightning Fast Processing",
+    description: "Convert 100+ page statements in seconds. Automated reconciliation and fraud detection included.",
   },
   {
     icon: Shield,
@@ -19,8 +19,8 @@ const features = [
   },
   {
     icon: Workflow,
-    title: "Seamless Integration",
-    description: "Connect with your existing tools via REST API, webhooks, or pre-built integrations.",
+    title: "Accounting Integrations",
+    description: "Export directly to QuickBooks Online, Xero, Excel, or consume via API for your custom workflows.",
   },
 ];
 
@@ -32,10 +32,10 @@ export const Features = () => {
       <div className="relative mx-auto max-w-7xl z-10">
         <div className="mb-16 text-center">
           <h2 className="mb-4 text-4xl font-bold tracking-tight text-[hsl(var(--foreground))] md:text-5xl">
-            Built for scale, designed for simplicity
+            Built for modern finance teams
           </h2>
           <p className="mx-auto max-w-2xl text-lg text-[hsl(var(--muted-foreground))]">
-            Extract data from any document type with industry-leading accuracy and speed.
+            The only platform that combines high-accuracy extraction with built-in financial intelligence.
           </p>
         </div>
 

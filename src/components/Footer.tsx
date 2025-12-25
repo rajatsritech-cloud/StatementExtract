@@ -94,8 +94,6 @@ export const Footer = () => {
                   QIF to QBO Converter
                 </Link>
               </li>
-              <li><Link href="/#use-cases" className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors">Use Cases</Link></li>
-              <li><Link href="/#pricing" className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors">Pricing</Link></li>
             </ul>
           </div>
 

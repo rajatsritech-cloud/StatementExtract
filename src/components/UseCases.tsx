@@ -1,30 +1,30 @@
-import { Building2, FileCheck, Receipt, Stethoscope } from "lucide-react";
+import { Building2, FileCheck, Receipt, Shield } from "lucide-react";
 import { Card } from "@/components/ui/card";
 
 const useCases = [
   {
+    icon: Building2,
+    title: "Bank Statement Processing",
+    description: "Convert PDF bank statements to Excel, CSV, QuickBooks, and Xero for accountants and bookkeepers.",
+    metrics: "Industry Leading",
+  },
+  {
     icon: Receipt,
-    title: "Invoice Processing",
-    description: "Automatically extract line items, totals, dates, and vendor information from invoices in any format.",
-    metrics: "98% accuracy",
+    title: "QuickBooks & Xero Import",
+    description: "Ready-to-import formats for accounting. Seamlessly push data to your preferred software.",
+    metrics: "Instant Export",
   },
   {
     icon: FileCheck,
-    title: "Contract Analysis",
-    description: "Pull key terms, dates, parties, and clauses from legal documents and contracts.",
-    metrics: "10x faster",
+    title: "Small Business Accounting",
+    description: "For CPAs, CAs, and bookkeepers. Automate data entry and focus on advisory.",
+    metrics: "Save 20+ Hrs/Wk",
   },
   {
-    icon: Stethoscope,
-    title: "Healthcare Records",
-    description: "Extract patient data, diagnoses, and treatment information while maintaining HIPAA compliance.",
-    metrics: "100% secure",
-  },
-  {
-    icon: Building2,
-    title: "Bank Statements",
-    description: "Use Intelligent Document Processing to extract transactions, balances, IBANs, and account details from bank statements in any format.",
-    metrics: "Industry-leading accuracy",
+    icon: Shield,
+    title: "Financial Auditing",
+    description: "Transaction verification & reconciliation with audit trails and confidence scores.",
+    metrics: "Audit Ready",
   },
 ];
 
@@ -36,10 +36,10 @@ export const UseCases = () => {
       <div className="relative mx-auto max-w-7xl z-10">
         <div className="mb-16 text-center">
           <h2 className="mb-4 text-4xl font-bold tracking-tight text-[hsl(var(--foreground))] md:text-5xl">
-            Trusted across industries
+            Complete Financial Suite
           </h2>
           <p className="mx-auto max-w-2xl text-lg text-[hsl(var(--muted-foreground))]">
-            From startups to Fortune 500 companies, teams rely on our platform for critical document processing.
+            Everything accountants, bookkeepers, and businesses need in one platform.
           </p>
         </div>
 

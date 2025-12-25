@@ -7,20 +7,20 @@ export const HowItWorks = () => {
   const steps = [
     {
       icon: Upload,
-      title: "Upload Documents",
-      description: "Simply upload your PDFs, images, or documents through our API or dashboard. Support for any format.",
+      title: "Upload Bank Statements",
+      description: "Securely upload your PDF bank statements or scanned images. We support thousands of global bank formats.",
       step: "01"
     },
     {
       icon: Cpu,
-      title: "AI-Powered Document Processing",
-      description: "Our Intelligent Document Processing engine automatically identifies fields, extracts data, and validates information with high accuracy.",
+      title: "AI Analysis & Validation",
+      description: "Our Financial AI engine identifies transactions, verifies balances, and standardizes descriptions automatically.",
       step: "02"
     },
     {
       icon: Download,
-      title: "Get Structured Data",
-      description: "Receive clean JSON, CSV, or direct database integration. Ready to use in your systems immediately.",
+      title: "Export to Accounting Software",
+      description: "Download verified Excel/CSV files or sync directly to QuickBooks Online and Xero with one click.",
       step: "03"
     }
   ];
@@ -33,10 +33,10 @@ export const HowItWorks = () => {
       <div className="relative mx-auto max-w-7xl z-10">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-[hsl(var(--foreground))] md:text-5xl mb-4">
-            How it works
+            Automated Bookkeeping in 3 Steps
           </h2>
           <p className="text-lg text-[hsl(var(--muted-foreground))] max-w-2xl mx-auto">
-            Three simple steps to automate your document processing
+            From PDF to Excel, QuickBooks & Xero in seconds. Stop manual data entry forever.
           </p>
         </div>
 
