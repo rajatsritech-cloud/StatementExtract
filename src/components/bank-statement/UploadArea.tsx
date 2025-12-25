@@ -341,7 +341,6 @@ export const UploadArea = ({ onFileUpload, isProcessing, hideFeatures = false, m
           className="hidden"
           accept=".pdf"
           onChange={handleFileSelect}
-          onChange={handleFileSelect}
           disabled={isProcessing || isStorageFull}
         />
 
@@ -432,7 +431,6 @@ export const UploadArea = ({ onFileUpload, isProcessing, hideFeatures = false, m
           type="file"
           className="hidden"
           accept=".pdf"
-          onChange={handleFileSelect}
           onChange={handleFileSelect}
           disabled={isProcessing || isStorageFull}
           multiple={isSignedIn}
