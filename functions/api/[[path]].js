@@ -21,8 +21,8 @@ export async function onRequest(context) {
 
   // Enterprise Load Balancing: Failover Logic
   const backends = [
-    "150.136.48.30:8000",
-    "129.80.181.100:8000"
+    "backend1.statementextract.com:8000",
+    "backend2.statementextract.com:8000"
   ];
 
   // Try random backend first (Load Distribution)
