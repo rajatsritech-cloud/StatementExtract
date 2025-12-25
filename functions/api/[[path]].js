@@ -34,8 +34,9 @@ export async function onRequest(context) {
   ];
 
   const headers = new Headers(request.headers);
-  // Do NOT force Host header for direct IP access
-  // headers.set("host", "api.statementextract.com");
+  // Ensure we do NOT invoke the original Host header on the backend request
+  // This forces fetch() to generate the correct Host: <IP> header
+  headers.delete("host");
   headers.delete("cf-connecting-ip");
 
   const controller = new AbortController();
