@@ -29,7 +29,10 @@ export const BankStatementConverter = ({
   const { isSignedIn, isLoaded, getToken } = useAuth();
   const processingRef = useRef(false);
 
-  const handleFileUpload = useCallback(async (file: File) => {
+  const handleFileUpload = useCallback(async (files: File[]) => {
+    const file = files[0];
+    if (!file) return;
+
     console.log('🚀 Starting file upload...');
     console.log(`📁 File: ${file.name}`);
     console.log(`📏 Size: ${(file.size / 1024 / 1024).toFixed(2)} MB`);
