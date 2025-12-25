@@ -11,6 +11,7 @@ import LazyTweet from "@/components/LazyTweet";
 import { BlogNewsletterSignup } from "@/components/BlogNewsletterSignup";
 import { BlogInlineCTA } from "@/components/BlogInlineCTA";
 import { TableOfContents } from "@/components/blogs/TableOfContents";
+import { PageMeta } from "@/components/PageMeta";
 import styles from "./page.module.css";
 
 // Disable ISR (Incremental Static Regeneration)
@@ -678,6 +679,10 @@ export default async function BlogPostPage({ params }: PageParams) {
                   </div>
                 </Link>
               ))}
+          </div>
+
+          <div className="mt-10 max-w-2xl mx-auto">
+            <PageMeta />
           </div>
 
           <div className="mt-16 md:mt-24">

@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { QboToCsvTool } from "@/components/qbo-tools/QboToCsvTool";
 import { ToolPageFooter } from "@/components/tools/ToolPageFooter";
+import { PageMeta } from "@/components/PageMeta";
 import {
     Zap,
     Shield,
@@ -43,6 +44,16 @@ const schemaData = {
         "ratingValue": "4.8",
         "ratingCount": "1250"
     }
+};
+
+const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://statementextract.com" },
+        { "@type": "ListItem", "position": 2, "name": "Converters", "item": "https://statementextract.com/convert" },
+        { "@type": "ListItem", "position": 3, "name": "QBO to CSV" }
+    ]
 };
 
 const faqSchema = {
@@ -109,6 +120,10 @@ export default function QboToCsvPage() {
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
             />
 
             {/* Tool Section - Visible Above the Fold */}
@@ -231,6 +246,13 @@ export default function QboToCsvPage() {
                             </div>
                         ))}
                     </div>
+                </div>
+            </section>
+
+            {/* Author Attribution for E-E-A-T */}
+            <section className="py-8 px-6">
+                <div className="max-w-4xl mx-auto">
+                    <PageMeta lastUpdated="December 2024" />
                 </div>
             </section>
 

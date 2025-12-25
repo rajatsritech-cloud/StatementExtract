@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { ProfitMarginCalculator } from "@/components/calculators/ProfitMarginCalculator";
 import { ToolPageFooter } from "@/components/tools/ToolPageFooter";
+import { PageMeta } from "@/components/PageMeta";
 import { Calculator, TrendingUp, DollarSign, Percent, BarChart3, Building2, ShoppingCart, Briefcase, CheckCircle } from "lucide-react";
 
 // Maximum SEO metadata targeting high CPC countries (US, UK, CA, AU, DE, SG)
@@ -137,6 +138,16 @@ const howToSchema = {
     ]
 };
 
+const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://statementextract.com" },
+        { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://statementextract.com/tools" },
+        { "@type": "ListItem", "position": 3, "name": "Profit Margin Calculator" }
+    ]
+};
+
 // Industry margin benchmarks for SEO content
 const industryMargins = [
     { industry: "Software & SaaS", grossMargin: "70-85%", netMargin: "15-25%" },
@@ -185,6 +196,10 @@ export default function ProfitMarginCalculatorPage() {
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
             />
 
             {/* Calculator Tool Section - Visible Above the Fold */}
@@ -423,6 +438,13 @@ export default function ProfitMarginCalculatorPage() {
                             </div>
                         ))}
                     </div>
+                </div>
+            </section>
+
+            {/* Author Attribution for E-E-A-T */}
+            <section className="py-8 px-6">
+                <div className="max-w-4xl mx-auto">
+                    <PageMeta lastUpdated="December 2024" />
                 </div>
             </section>
 

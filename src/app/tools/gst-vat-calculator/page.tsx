@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { GSTVATCalculator } from "@/components/calculators/GSTVATCalculator";
 import { ToolPageFooter } from "@/components/tools/ToolPageFooter";
+import { PageMeta } from "@/components/PageMeta";
 import { Calculator, Globe, DollarSign, Percent, Building2, ShoppingCart, Briefcase, CheckCircle, Plane } from "lucide-react";
 
 // Maximum SEO metadata targeting high CPC countries
@@ -137,6 +138,16 @@ const howToSchema = {
     ]
 };
 
+const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://statementextract.com" },
+        { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://statementextract.com/tools" },
+        { "@type": "ListItem", "position": 3, "name": "GST/VAT Calculator" }
+    ]
+};
+
 // Tax rates by country for SEO content
 const countryTaxRates = [
     { country: "Australia", type: "GST", rate: "10%", currency: "AUD" },
@@ -175,6 +186,10 @@ export default function GSTVATCalculatorPage() {
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
             />
 
             {/* Calculator Tool Section - Visible Above the Fold */}
@@ -364,6 +379,13 @@ export default function GSTVATCalculatorPage() {
                             </div>
                         ))}
                     </div>
+                </div>
+            </section>
+
+            {/* Author Attribution for E-E-A-T */}
+            <section className="py-8 px-6">
+                <div className="max-w-4xl mx-auto">
+                    <PageMeta lastUpdated="December 2024" />
                 </div>
             </section>
 

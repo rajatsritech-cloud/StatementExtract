@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { InvoiceGenerator } from "@/components/tools/InvoiceGenerator";
 import { ToolPageFooter } from "@/components/tools/ToolPageFooter";
+import { PageMeta } from "@/components/PageMeta";
 import {
     FileText,
     Download,
@@ -11,13 +12,14 @@ import {
     Printer
 } from "lucide-react";
 
+// Updated metadata - US priority, then UK/AU
 export const metadata: Metadata = {
-    title: "Free Invoice Generator | Professional Online Invoice Maker (VAT & GST)",
-    description: "Create professional invoices instantly with our free online invoice generator. Supports global tax systems (VAT, GST, Tax ID), multiple currencies, and digital signatures. No sign-up required. Download high-resolution PDFs.",
-    keywords: "free invoice generator, online invoice maker, professional invoice template, VAT invoice generator, GST invoice maker, freelancer billing tool, small business invoicing, international invoice creator, pdf invoice maker, free billing software",
+    title: "Free Invoice Generator for Freelancers & Contractors | 1099 Invoice Maker | Statement Extract",
+    description: "Free invoice generator for freelancers, 1099 contractors, and small businesses. Create professional invoices with payment terms, tax ID, and digital signature. Works for US, UK (VAT), Australia (GST). No signup required.",
+    keywords: "free invoice generator for freelancers, 1099 invoice template, contractor invoice generator, small business invoice maker, freelancer invoice template free, self employed invoice generator, invoice generator no sign up, professional invoice PDF free, invoice maker with signature, VAT invoice generator UK, GST invoice Australia, invoice template with tax",
     openGraph: {
-        title: "Free Professional Invoice Generator | Global Invoicing Tool",
-        description: "The professional standard for freelancers and small businesses worldwide. Create, sign, and download professional invoices in seconds. Supports VAT, GST, and international currencies.",
+        title: "Free Invoice Generator | Freelancer & 1099 Contractor Invoice Maker",
+        description: "Create professional invoices for your freelance or contracting business. Free, no signup. Supports US, UK VAT, Australian GST.",
         type: "website",
         url: "https://statementextract.com/tools/invoice-generator",
     },
@@ -29,7 +31,7 @@ export const metadata: Metadata = {
 const schemaData = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    "name": "Global Professional Invoice Generator",
+    "name": "VAT & GST Invoice Generator",
     "applicationCategory": "BusinessApplication",
     "operatingSystem": "Web",
     "offers": {
@@ -37,8 +39,18 @@ const schemaData = {
         "price": "0",
         "priceCurrency": "USD"
     },
-    "featureList": "Global Tax Support (VAT/GST), Multi-Currency, Digital Signature, PDF Export, Professional Templates",
+    "featureList": "VAT Invoice UK, GST Invoice Australia, Freelancer Templates, Digital Signature, Multi-Currency, PDF Export",
     "screenshot": "https://statementextract.com/images/invoice-generator-screenshot.png"
+};
+
+const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://statementextract.com" },
+        { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://statementextract.com/tools" },
+        { "@type": "ListItem", "position": 3, "name": "Invoice Generator" }
+    ]
 };
 
 const faqSchema = {
@@ -89,6 +101,10 @@ export default function InvoiceGeneratorPage() {
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
             />
 
             {/* Hero Section */}
@@ -312,6 +328,13 @@ export default function InvoiceGeneratorPage() {
                             </p>
                         </div>
                     </div>
+                </div>
+            </section>
+
+            {/* Author Attribution for E-E-A-T */}
+            <section className="py-8 px-6">
+                <div className="max-w-4xl mx-auto">
+                    <PageMeta lastUpdated="December 2024" />
                 </div>
             </section>
 

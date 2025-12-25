@@ -136,7 +136,29 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-
+        {/* Organization Schema for E-E-A-T */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "Statement Extract",
+              "url": "https://statementextract.com",
+              "logo": "https://statementextract.com/favicon-512x512.png",
+              "description": "AI-powered document processing platform for extracting structured data from bank statements, invoices, and financial documents.",
+              "foundingDate": "2024",
+              "sameAs": [
+                "https://www.linkedin.com/company/statementextract"
+              ],
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "contactType": "customer support",
+                "url": "https://statementextract.com/contact"
+              }
+            })
+          }}
+        />
       </head>
       <body className="antialiased overflow-x-hidden">
         {isProduction && (

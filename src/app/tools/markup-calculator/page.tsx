@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { MarkupCalculator } from "@/components/calculators/MarkupCalculator";
 import { ToolPageFooter } from "@/components/tools/ToolPageFooter";
+import { PageMeta } from "@/components/PageMeta";
 import { Calculator, Zap, ArrowLeftRight, TrendingUp, DollarSign, Percent, CheckCircle, BookOpen } from "lucide-react";
 
 // Maximum SEO metadata targeting high-volume keywords
@@ -137,6 +138,16 @@ const howToSchema = {
     ]
 };
 
+const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://statementextract.com" },
+        { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://statementextract.com/tools" },
+        { "@type": "ListItem", "position": 3, "name": "Markup Calculator" }
+    ]
+};
+
 const relatedTools = [
     { href: "/tools/profit-margin-calculator", title: "Profit Margin Calculator" },
     { href: "/tools/gst-vat-calculator", title: "GST/VAT Calculator" },
@@ -189,6 +200,10 @@ export default function MarkupCalculatorPage() {
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
             />
 
             {/* Calculator Section - Above the Fold */}
@@ -409,6 +424,13 @@ export default function MarkupCalculatorPage() {
                             </div>
                         ))}
                     </div>
+                </div>
+            </section>
+
+            {/* Author Attribution for E-E-A-T */}
+            <section className="py-8 px-6">
+                <div className="max-w-4xl mx-auto">
+                    <PageMeta lastUpdated="December 2024" />
                 </div>
             </section>
 
