@@ -16,6 +16,16 @@ import {
   Zap,
   CreditCard,
   RotateCcw,
+  Layers,
+  Minimize2,
+  FileImage,
+  Images,
+  Calculator,
+  Receipt,
+  TrendingDown,
+  Database,
+  FileSpreadsheet,
+  TrendingUp,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
@@ -34,9 +44,15 @@ import { useTheme } from "@/components/ThemeProvider";
 export const Header = () => {
   const router = useRouter();
   const [isSolutionsHovered, setIsSolutionsHovered] = useState(false);
+  const [isConvertersHovered, setIsConvertersHovered] = useState(false);
+  const [isToolsHovered, setIsToolsHovered] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobileSolutionsOpen, setIsMobileSolutionsOpen] = useState(false);
+  const [isMobileConvertersOpen, setIsMobileConvertersOpen] = useState(false);
+  const [isMobileToolsOpen, setIsMobileToolsOpen] = useState(false);
   const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const convertersTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const toolsTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const { user } = useUser();
   const { theme, setTheme } = useTheme();
   const isAdmin = isAdminEmail(
@@ -63,6 +79,52 @@ export const Header = () => {
       hoverTimeoutRef.current = null;
     }
     setIsSolutionsHovered(false);
+  };
+
+  // Converters hover handlers
+  const handleConvertersMouseEnter = () => {
+    if (convertersTimeoutRef.current) {
+      clearTimeout(convertersTimeoutRef.current);
+      convertersTimeoutRef.current = null;
+    }
+    setIsConvertersHovered(true);
+  };
+
+  const handleConvertersMouseLeave = () => {
+    convertersTimeoutRef.current = setTimeout(() => {
+      setIsConvertersHovered(false);
+    }, 250);
+  };
+
+  const closeConvertersDropdown = () => {
+    if (convertersTimeoutRef.current) {
+      clearTimeout(convertersTimeoutRef.current);
+      convertersTimeoutRef.current = null;
+    }
+    setIsConvertersHovered(false);
+  };
+
+  // Tools hover handlers
+  const handleToolsMouseEnter = () => {
+    if (toolsTimeoutRef.current) {
+      clearTimeout(toolsTimeoutRef.current);
+      toolsTimeoutRef.current = null;
+    }
+    setIsToolsHovered(true);
+  };
+
+  const handleToolsMouseLeave = () => {
+    toolsTimeoutRef.current = setTimeout(() => {
+      setIsToolsHovered(false);
+    }, 250);
+  };
+
+  const closeToolsDropdown = () => {
+    if (toolsTimeoutRef.current) {
+      clearTimeout(toolsTimeoutRef.current);
+      toolsTimeoutRef.current = null;
+    }
+    setIsToolsHovered(false);
   };
 
   const pathname = usePathname();
@@ -253,12 +315,369 @@ export const Header = () => {
               Blogs
             </Link>
 
-            <Link href="/convert" className="text-sm font-medium text-[hsl(var(--foreground))] transition-colors hover:text-[hsl(var(--primary))]">
-              Converters
-            </Link>
-            <Link href="/tools" className="text-sm font-medium text-[hsl(var(--foreground))] transition-colors hover:text-[hsl(var(--primary))]">
-              Tools
-            </Link>
+            {/* Converters Dropdown */}
+            <div
+              className="relative"
+              onMouseEnter={handleConvertersMouseEnter}
+              onMouseLeave={handleConvertersMouseLeave}
+            >
+              <button className="flex items-center gap-1 text-sm font-medium text-[hsl(var(--foreground))] hover:text-[hsl(var(--primary))] transition-colors">
+                Converters
+                <ChevronDown className="h-4 w-4" />
+              </button>
+
+              {isConvertersHovered && (
+                <div
+                  className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 z-50"
+                  onMouseEnter={handleConvertersMouseEnter}
+                  onMouseLeave={handleConvertersMouseLeave}
+                >
+                  <div className="relative w-[880px] rounded-2xl bg-[hsl(var(--card))] shadow-2xl border border-[hsl(var(--border))] overflow-hidden animate-dropdown-enter">
+                    <div className="grid grid-cols-3 divide-x divide-[hsl(var(--border))]/70">
+                      {/* PDF Tools column */}
+                      <div className="col-span-1 p-6 bg-[hsl(var(--background))]/40">
+                        <p className="text-xs font-semibold tracking-[0.2em] text-[hsl(var(--muted-foreground))] mb-4">PDF TOOLS</p>
+                        <div className="space-y-2">
+                          <Link
+                            href="/convert/merge-pdf"
+                            className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--primary))]/30 bg-[hsl(var(--card))] px-3 py-2.5 cursor-pointer transition-all duration-200 hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40 hover:shadow-glow"
+                            onClick={closeConvertersDropdown}
+                          >
+                            <div className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] group-hover:bg-[hsl(var(--primary))] group-hover:text-[hsl(var(--primary-foreground))] transition-colors">
+                              <Layers className="h-3.5 w-3.5" />
+                            </div>
+                            <div>
+                              <p className="text-sm font-semibold text-[hsl(var(--foreground))]">Merge PDF</p>
+                              <p className="text-[11px] text-[hsl(var(--muted-foreground))]">Combine multiple PDFs</p>
+                            </div>
+                          </Link>
+                          <Link
+                            href="/convert/compress-pdf"
+                            className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--primary))]/30 bg-[hsl(var(--card))] px-3 py-2.5 cursor-pointer transition-all duration-200 hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40 hover:shadow-glow"
+                            onClick={closeConvertersDropdown}
+                          >
+                            <div className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] group-hover:bg-[hsl(var(--primary))] group-hover:text-[hsl(var(--primary-foreground))] transition-colors">
+                              <Minimize2 className="h-3.5 w-3.5" />
+                            </div>
+                            <div>
+                              <p className="text-sm font-semibold text-[hsl(var(--foreground))]">Compress PDF</p>
+                              <p className="text-[11px] text-[hsl(var(--muted-foreground))]">Reduce file size</p>
+                            </div>
+                          </Link>
+                          <Link
+                            href="/convert/split-pdf"
+                            className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--primary))]/30 bg-[hsl(var(--card))] px-3 py-2.5 cursor-pointer transition-all duration-200 hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40 hover:shadow-glow"
+                            onClick={closeConvertersDropdown}
+                          >
+                            <div className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] group-hover:bg-[hsl(var(--primary))] group-hover:text-[hsl(var(--primary-foreground))] transition-colors">
+                              <FileIcon className="h-3.5 w-3.5" />
+                            </div>
+                            <div>
+                              <p className="text-sm font-semibold text-[hsl(var(--foreground))]">Split PDF</p>
+                              <p className="text-[11px] text-[hsl(var(--muted-foreground))]">Extract pages</p>
+                            </div>
+                          </Link>
+                          <Link
+                            href="/convert/jpg-to-pdf"
+                            className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--primary))]/30 bg-[hsl(var(--card))] px-3 py-2.5 cursor-pointer transition-all duration-200 hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40 hover:shadow-glow"
+                            onClick={closeConvertersDropdown}
+                          >
+                            <div className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] group-hover:bg-[hsl(var(--primary))] group-hover:text-[hsl(var(--primary-foreground))] transition-colors">
+                              <FileImage className="h-3.5 w-3.5" />
+                            </div>
+                            <div>
+                              <p className="text-sm font-semibold text-[hsl(var(--foreground))]">JPG to PDF</p>
+                              <p className="text-[11px] text-[hsl(var(--muted-foreground))]">Images to PDF</p>
+                            </div>
+                          </Link>
+                        </div>
+                      </div>
+
+                      {/* Finance Converters column */}
+                      <div className="col-span-1 p-6">
+                        <p className="text-xs font-semibold tracking-[0.2em] text-[hsl(var(--muted-foreground))] mb-4">FINANCE</p>
+                        <div className="space-y-2">
+                          <Link
+                            href="/convert-bank-statement-to-csv-excel"
+                            className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--primary))]/30 bg-[hsl(var(--primary))]/[0.06] px-3 py-2.5 cursor-pointer transition-all duration-200 hover:border-[hsl(var(--primary))]/50 hover:bg-[hsl(var(--primary))]/[0.12] hover:shadow-md"
+                            onClick={closeConvertersDropdown}
+                          >
+                            <div className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] group-hover:bg-[hsl(var(--primary))] group-hover:text-[hsl(var(--primary-foreground))] transition-colors">
+                              <FileSpreadsheet className="h-3.5 w-3.5" />
+                            </div>
+                            <div>
+                              <p className="text-sm font-semibold text-[hsl(var(--foreground))]">Bank to Excel/CSV</p>
+                              <p className="text-[11px] text-[hsl(var(--muted-foreground))]">AI-powered extraction</p>
+                            </div>
+                          </Link>
+                          <Link
+                            href="/convert/csv-to-qbo"
+                            className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--primary))]/30 bg-[hsl(var(--card))] px-3 py-2.5 cursor-pointer transition-all duration-200 hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40 hover:shadow-glow"
+                            onClick={closeConvertersDropdown}
+                          >
+                            <div className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] group-hover:bg-[hsl(var(--primary))] group-hover:text-[hsl(var(--primary-foreground))] transition-colors">
+                              <FileSpreadsheet className="h-3.5 w-3.5" />
+                            </div>
+                            <div>
+                              <p className="text-sm font-semibold text-[hsl(var(--foreground))]">CSV to QBO</p>
+                              <p className="text-[11px] text-[hsl(var(--muted-foreground))]">QuickBooks format</p>
+                            </div>
+                          </Link>
+                          <Link
+                            href="/convert/csv-to-ofx"
+                            className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--primary))]/30 bg-[hsl(var(--card))] px-3 py-2.5 cursor-pointer transition-all duration-200 hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40 hover:shadow-glow"
+                            onClick={closeConvertersDropdown}
+                          >
+                            <div className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] group-hover:bg-[hsl(var(--primary))] group-hover:text-[hsl(var(--primary-foreground))] transition-colors">
+                              <FileSpreadsheet className="h-3.5 w-3.5" />
+                            </div>
+                            <div>
+                              <p className="text-sm font-semibold text-[hsl(var(--foreground))]">CSV to OFX</p>
+                              <p className="text-[11px] text-[hsl(var(--muted-foreground))]">Universal banking</p>
+                            </div>
+                          </Link>
+                          <Link
+                            href="/convert/csv-to-mt940"
+                            className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--primary))]/30 bg-[hsl(var(--card))] px-3 py-2.5 cursor-pointer transition-all duration-200 hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40 hover:shadow-glow"
+                            onClick={closeConvertersDropdown}
+                          >
+                            <div className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] group-hover:bg-[hsl(var(--primary))] group-hover:text-[hsl(var(--primary-foreground))] transition-colors">
+                              <FileSpreadsheet className="h-3.5 w-3.5" />
+                            </div>
+                            <div>
+                              <p className="text-sm font-semibold text-[hsl(var(--foreground))]">CSV to MT940</p>
+                              <p className="text-[11px] text-[hsl(var(--muted-foreground))]">SWIFT format</p>
+                            </div>
+                          </Link>
+                        </div>
+                      </div>
+
+                      {/* Image & Dev Tools column */}
+                      <div className="col-span-1 p-6">
+                        <p className="text-xs font-semibold tracking-[0.2em] text-[hsl(var(--muted-foreground))] mb-4">IMAGE & DEV</p>
+                        <div className="space-y-2">
+                          <Link
+                            href="/convert/batch-converter"
+                            className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--primary))]/30 bg-[hsl(var(--card))] px-3 py-2.5 cursor-pointer transition-all duration-200 hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40 hover:shadow-glow"
+                            onClick={closeConvertersDropdown}
+                          >
+                            <div className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] group-hover:bg-[hsl(var(--primary))] group-hover:text-[hsl(var(--primary-foreground))] transition-colors">
+                              <Images className="h-3.5 w-3.5" />
+                            </div>
+                            <div>
+                              <p className="text-sm font-semibold text-[hsl(var(--foreground))]">HEIC/AVIF Batch</p>
+                              <p className="text-[11px] text-[hsl(var(--muted-foreground))]">Bulk image convert</p>
+                            </div>
+                          </Link>
+                          <Link
+                            href="/convert/image-compressor"
+                            className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--primary))]/30 bg-[hsl(var(--card))] px-3 py-2.5 cursor-pointer transition-all duration-200 hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40 hover:shadow-glow"
+                            onClick={closeConvertersDropdown}
+                          >
+                            <div className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] group-hover:bg-[hsl(var(--primary))] group-hover:text-[hsl(var(--primary-foreground))] transition-colors">
+                              <Minimize2 className="h-3.5 w-3.5" />
+                            </div>
+                            <div>
+                              <p className="text-sm font-semibold text-[hsl(var(--foreground))]">Image Compressor</p>
+                              <p className="text-[11px] text-[hsl(var(--muted-foreground))]">Reduce image size</p>
+                            </div>
+                          </Link>
+                          <Link
+                            href="/convert/json-to-sql"
+                            className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--primary))]/30 bg-[hsl(var(--card))] px-3 py-2.5 cursor-pointer transition-all duration-200 hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40 hover:shadow-glow"
+                            onClick={closeConvertersDropdown}
+                          >
+                            <div className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] group-hover:bg-[hsl(var(--primary))] group-hover:text-[hsl(var(--primary-foreground))] transition-colors">
+                              <Database className="h-3.5 w-3.5" />
+                            </div>
+                            <div>
+                              <p className="text-sm font-semibold text-[hsl(var(--foreground))]">JSON to SQL</p>
+                              <p className="text-[11px] text-[hsl(var(--muted-foreground))]">Database import</p>
+                            </div>
+                          </Link>
+                        </div>
+                        <Link
+                          href="/convert"
+                          className="mt-4 flex items-center justify-center gap-2 rounded-lg bg-[hsl(var(--primary))]/[0.08] border border-[hsl(var(--primary))]/20 px-4 py-2 text-sm font-medium text-[hsl(var(--primary))] hover:bg-[hsl(var(--primary))]/[0.12] hover:border-[hsl(var(--primary))]/30 transition-all"
+                          onClick={closeConvertersDropdown}
+                        >
+                          View All Converters →
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Tools Dropdown */}
+            <div
+              className="relative"
+              onMouseEnter={handleToolsMouseEnter}
+              onMouseLeave={handleToolsMouseLeave}
+            >
+              <button className="flex items-center gap-1 text-sm font-medium text-[hsl(var(--foreground))] hover:text-[hsl(var(--primary))] transition-colors">
+                Tools
+                <ChevronDown className="h-4 w-4" />
+              </button>
+
+              {isToolsHovered && (
+                <div
+                  className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 z-50"
+                  onMouseEnter={handleToolsMouseEnter}
+                  onMouseLeave={handleToolsMouseLeave}
+                >
+                  <div className="relative w-[880px] rounded-2xl bg-[hsl(var(--card))] shadow-2xl border border-[hsl(var(--border))] overflow-hidden animate-dropdown-enter">
+                    <div className="grid grid-cols-3 divide-x divide-[hsl(var(--border))]/70">
+                      {/* Finance & Invoicing column */}
+                      <div className="col-span-1 p-6 bg-[hsl(var(--background))]/40">
+                        <p className="text-xs font-semibold tracking-[0.2em] text-[hsl(var(--muted-foreground))] mb-4">INVOICING</p>
+                        <div className="space-y-2">
+                          <Link
+                            href="/tools/invoice-generator"
+                            className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--primary))]/30 bg-[hsl(var(--primary))]/[0.06] px-3 py-2.5 cursor-pointer transition-all duration-200 hover:border-[hsl(var(--primary))]/50 hover:bg-[hsl(var(--primary))]/[0.12] hover:shadow-md"
+                            onClick={closeToolsDropdown}
+                          >
+                            <div className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] group-hover:bg-[hsl(var(--primary))] group-hover:text-[hsl(var(--primary-foreground))] transition-colors">
+                              <FileText className="h-3.5 w-3.5" />
+                            </div>
+                            <div>
+                              <p className="text-sm font-semibold text-[hsl(var(--foreground))]">Invoice Generator</p>
+                              <p className="text-[11px] text-[hsl(var(--muted-foreground))]">Professional PDF invoices</p>
+                            </div>
+                          </Link>
+                          <Link
+                            href="/tools/profit-margin-calculator"
+                            className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--primary))]/30 bg-[hsl(var(--card))] px-3 py-2.5 cursor-pointer transition-all duration-200 hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40 hover:shadow-glow"
+                            onClick={closeToolsDropdown}
+                          >
+                            <div className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] group-hover:bg-[hsl(var(--primary))] group-hover:text-[hsl(var(--primary-foreground))] transition-colors">
+                              <TrendingUp className="h-3.5 w-3.5" />
+                            </div>
+                            <div>
+                              <p className="text-sm font-semibold text-[hsl(var(--foreground))]">Profit Margin</p>
+                              <p className="text-[11px] text-[hsl(var(--muted-foreground))]">Calculate margins</p>
+                            </div>
+                          </Link>
+                          <Link
+                            href="/tools/markup-calculator"
+                            className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--primary))]/30 bg-[hsl(var(--card))] px-3 py-2.5 cursor-pointer transition-all duration-200 hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40 hover:shadow-glow"
+                            onClick={closeToolsDropdown}
+                          >
+                            <div className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] group-hover:bg-[hsl(var(--primary))] group-hover:text-[hsl(var(--primary-foreground))] transition-colors">
+                              <Calculator className="h-3.5 w-3.5" />
+                            </div>
+                            <div>
+                              <p className="text-sm font-semibold text-[hsl(var(--foreground))]">Markup Calculator</p>
+                              <p className="text-[11px] text-[hsl(var(--muted-foreground))]">Price markup tool</p>
+                            </div>
+                          </Link>
+                        </div>
+                      </div>
+
+                      {/* Tax Calculators column */}
+                      <div className="col-span-1 p-6">
+                        <p className="text-xs font-semibold tracking-[0.2em] text-[hsl(var(--muted-foreground))] mb-4">TAX TOOLS</p>
+                        <div className="space-y-2">
+                          <Link
+                            href="/tools/gst-vat-calculator"
+                            className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--primary))]/30 bg-[hsl(var(--card))] px-3 py-2.5 cursor-pointer transition-all duration-200 hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40 hover:shadow-glow"
+                            onClick={closeToolsDropdown}
+                          >
+                            <div className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] group-hover:bg-[hsl(var(--primary))] group-hover:text-[hsl(var(--primary-foreground))] transition-colors">
+                              <Receipt className="h-3.5 w-3.5" />
+                            </div>
+                            <div>
+                              <p className="text-sm font-semibold text-[hsl(var(--foreground))]">GST/VAT Calculator</p>
+                              <p className="text-[11px] text-[hsl(var(--muted-foreground))]">Global tax rates</p>
+                            </div>
+                          </Link>
+                          <Link
+                            href="/tools/self-employed-tax-calculator"
+                            className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--primary))]/30 bg-[hsl(var(--card))] px-3 py-2.5 cursor-pointer transition-all duration-200 hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40 hover:shadow-glow"
+                            onClick={closeToolsDropdown}
+                          >
+                            <div className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] group-hover:bg-[hsl(var(--primary))] group-hover:text-[hsl(var(--primary-foreground))] transition-colors">
+                              <Calculator className="h-3.5 w-3.5" />
+                            </div>
+                            <div>
+                              <p className="text-sm font-semibold text-[hsl(var(--foreground))]">Self-Employed Tax</p>
+                              <p className="text-[11px] text-[hsl(var(--muted-foreground))]">1099 tax calculator</p>
+                            </div>
+                          </Link>
+                          <Link
+                            href="/tools/financial-ratio-calculator"
+                            className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--primary))]/30 bg-[hsl(var(--card))] px-3 py-2.5 cursor-pointer transition-all duration-200 hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40 hover:shadow-glow"
+                            onClick={closeToolsDropdown}
+                          >
+                            <div className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] group-hover:bg-[hsl(var(--primary))] group-hover:text-[hsl(var(--primary-foreground))] transition-colors">
+                              <TrendingUp className="h-3.5 w-3.5" />
+                            </div>
+                            <div>
+                              <p className="text-sm font-semibold text-[hsl(var(--foreground))]">Financial Ratios</p>
+                              <p className="text-[11px] text-[hsl(var(--muted-foreground))]">Key business metrics</p>
+                            </div>
+                          </Link>
+                        </div>
+                      </div>
+
+                      {/* Investment & Loans column */}
+                      <div className="col-span-1 p-6">
+                        <p className="text-xs font-semibold tracking-[0.2em] text-[hsl(var(--muted-foreground))] mb-4">INVESTMENTS</p>
+                        <div className="space-y-2">
+                          <Link
+                            href="/tools/amortization-calculator"
+                            className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--primary))]/30 bg-[hsl(var(--card))] px-3 py-2.5 cursor-pointer transition-all duration-200 hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40 hover:shadow-glow"
+                            onClick={closeToolsDropdown}
+                          >
+                            <div className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] group-hover:bg-[hsl(var(--primary))] group-hover:text-[hsl(var(--primary-foreground))] transition-colors">
+                              <TrendingDown className="h-3.5 w-3.5" />
+                            </div>
+                            <div>
+                              <p className="text-sm font-semibold text-[hsl(var(--foreground))]">Amortization</p>
+                              <p className="text-[11px] text-[hsl(var(--muted-foreground))]">Loan schedules</p>
+                            </div>
+                          </Link>
+                          <Link
+                            href="/tools/rental-roi-calculator"
+                            className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--primary))]/30 bg-[hsl(var(--card))] px-3 py-2.5 cursor-pointer transition-all duration-200 hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40 hover:shadow-glow"
+                            onClick={closeToolsDropdown}
+                          >
+                            <div className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] group-hover:bg-[hsl(var(--primary))] group-hover:text-[hsl(var(--primary-foreground))] transition-colors">
+                              <Layers className="h-3.5 w-3.5" />
+                            </div>
+                            <div>
+                              <p className="text-sm font-semibold text-[hsl(var(--foreground))]">Rental ROI</p>
+                              <p className="text-[11px] text-[hsl(var(--muted-foreground))]">Property analysis</p>
+                            </div>
+                          </Link>
+                          <Link
+                            href="/tools/fire-calculator"
+                            className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--primary))]/30 bg-[hsl(var(--card))] px-3 py-2.5 cursor-pointer transition-all duration-200 hover:border-primary/60 hover:bg-[hsl(var(--muted))]/40 hover:shadow-glow"
+                            onClick={closeToolsDropdown}
+                          >
+                            <div className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))] group-hover:bg-[hsl(var(--primary))] group-hover:text-[hsl(var(--primary-foreground))] transition-colors">
+                              <Zap className="h-3.5 w-3.5" />
+                            </div>
+                            <div>
+                              <p className="text-sm font-semibold text-[hsl(var(--foreground))]">FIRE Calculator</p>
+                              <p className="text-[11px] text-[hsl(var(--muted-foreground))]">Retire early plan</p>
+                            </div>
+                          </Link>
+                        </div>
+                        <Link
+                          href="/tools"
+                          className="mt-4 flex items-center justify-center gap-2 rounded-lg bg-[hsl(var(--primary))]/[0.08] border border-[hsl(var(--primary))]/20 px-4 py-2 text-sm font-medium text-[hsl(var(--primary))] hover:bg-[hsl(var(--primary))]/[0.12] hover:border-[hsl(var(--primary))]/30 transition-all"
+                          onClick={closeToolsDropdown}
+                        >
+                          View All Tools →
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
             <Link href="/#faq" className="text-sm font-medium text-[hsl(var(--foreground))] transition-colors hover:text-[hsl(var(--primary))]">
               FAQ
             </Link>
@@ -406,27 +825,81 @@ export const Header = () => {
                 </span>
               </Link>
 
-              <Link
-                href="/convert"
-                className="flex w-full items-center justify-between px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))]"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                <span className="flex items-center gap-3">
-                  <RotateCcw className="h-4 w-4 text-[hsl(var(--primary))]" />
-                  <span>Converters</span>
-                </span>
-              </Link>
+              {/* Mobile Converters Accordion */}
+              <div>
+                <button
+                  className="flex w-full items-center justify-between px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))]"
+                  onClick={() => setIsMobileConvertersOpen(!isMobileConvertersOpen)}
+                >
+                  <span className="flex items-center gap-3">
+                    <RotateCcw className="h-4 w-4 text-[hsl(var(--primary))]" />
+                    <span>Converters</span>
+                  </span>
+                  <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isMobileConvertersOpen ? 'rotate-180' : ''}`} />
+                </button>
 
-              <Link
-                href="/tools"
-                className="flex w-full items-center justify-between px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))]"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                <span className="flex items-center gap-3">
-                  <Zap className="h-4 w-4 text-[hsl(var(--primary))]" />
-                  <span>Tools</span>
-                </span>
-              </Link>
+                {isMobileConvertersOpen && (
+                  <div className="bg-[hsl(var(--muted))]/30 px-4 py-2 space-y-1">
+                    <div className="mb-2">
+                      <p className="text-[10px] font-semibold tracking-wider text-[hsl(var(--muted-foreground))] uppercase px-2 py-1">PDF Tools</p>
+                      <Link href="/convert/merge-pdf" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Merge PDF</Link>
+                      <Link href="/convert/compress-pdf" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Compress PDF</Link>
+                      <Link href="/convert/split-pdf" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Split PDF</Link>
+                      <Link href="/convert/jpg-to-pdf" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">JPG to PDF</Link>
+                    </div>
+                    <div className="mb-2">
+                      <p className="text-[10px] font-semibold tracking-wider text-[hsl(var(--muted-foreground))] uppercase px-2 py-1">Finance</p>
+                      <Link href="/convert-bank-statement-to-csv-excel" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Bank to Excel/CSV</Link>
+                      <Link href="/convert/csv-to-qbo" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">CSV to QBO</Link>
+                      <Link href="/convert/csv-to-ofx" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">CSV to OFX</Link>
+                    </div>
+                    <div>
+                      <p className="text-[10px] font-semibold tracking-wider text-[hsl(var(--muted-foreground))] uppercase px-2 py-1">Image & Dev</p>
+                      <Link href="/convert/batch-converter" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">HEIC/AVIF Batch</Link>
+                      <Link href="/convert/image-compressor" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Image Compressor</Link>
+                      <Link href="/convert/json-to-sql" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">JSON to SQL</Link>
+                    </div>
+                    <Link href="/convert" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-center rounded-lg px-2 py-2 mt-2 text-sm font-medium text-[hsl(var(--primary))] bg-[hsl(var(--primary))]/10">View All Converters</Link>
+                  </div>
+                )}
+              </div>
+
+              {/* Mobile Tools Accordion */}
+              <div>
+                <button
+                  className="flex w-full items-center justify-between px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))]"
+                  onClick={() => setIsMobileToolsOpen(!isMobileToolsOpen)}
+                >
+                  <span className="flex items-center gap-3">
+                    <Zap className="h-4 w-4 text-[hsl(var(--primary))]" />
+                    <span>Tools</span>
+                  </span>
+                  <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isMobileToolsOpen ? 'rotate-180' : ''}`} />
+                </button>
+
+                {isMobileToolsOpen && (
+                  <div className="bg-[hsl(var(--muted))]/30 px-4 py-2 space-y-1">
+                    <div className="mb-2">
+                      <p className="text-[10px] font-semibold tracking-wider text-[hsl(var(--muted-foreground))] uppercase px-2 py-1">Invoicing</p>
+                      <Link href="/tools/invoice-generator" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Invoice Generator</Link>
+                      <Link href="/tools/profit-margin-calculator" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Profit Margin</Link>
+                      <Link href="/tools/markup-calculator" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Markup Calculator</Link>
+                    </div>
+                    <div className="mb-2">
+                      <p className="text-[10px] font-semibold tracking-wider text-[hsl(var(--muted-foreground))] uppercase px-2 py-1">Tax Tools</p>
+                      <Link href="/tools/gst-vat-calculator" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">GST/VAT Calculator</Link>
+                      <Link href="/tools/self-employed-tax-calculator" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Self-Employed Tax</Link>
+                    </div>
+                    <div>
+                      <p className="text-[10px] font-semibold tracking-wider text-[hsl(var(--muted-foreground))] uppercase px-2 py-1">Investments</p>
+                      <Link href="/tools/amortization-calculator" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Amortization</Link>
+                      <Link href="/tools/rental-roi-calculator" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Rental ROI</Link>
+                      <Link href="/tools/fire-calculator" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">FIRE Calculator</Link>
+                    </div>
+                    <Link href="/tools" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-center rounded-lg px-2 py-2 mt-2 text-sm font-medium text-[hsl(var(--primary))] bg-[hsl(var(--primary))]/10">View All Tools</Link>
+                  </div>
+                )}
+              </div>
 
               {/* Mobile Theme Toggle */}
               <div className="flex items-center justify-between px-4 py-3">
