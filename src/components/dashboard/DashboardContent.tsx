@@ -66,12 +66,17 @@ export const DashboardContent = () => {
     const processingIdsRef = useRef<Set<string>>(new Set());
 
     // Process a single document
-    const processDocument = useCallback(async (docId: string, file: File) => {
+    const processDocument = useCallback(async (docId: string, file: File, delayMs: number = 0) => {
         if (processingIdsRef.current.has(docId)) return;
         processingIdsRef.current.add(docId);
         activeCountRef.current++;
 
         try {
+            // Apply stagger delay if requested
+            if (delayMs > 0) {
+                await new Promise(resolve => setTimeout(resolve, delayMs));
+            }
+
             // Update status to processing
             setDocuments(prev => prev.map(doc =>
                 doc.id === docId ? { ...doc, status: "processing" as const } : doc
@@ -152,12 +157,21 @@ export const DashboardContent = () => {
         setDocuments(prev => {
             const queuedDocs = prev.filter(d => d.status === "queued" && d.file);
 
+            let scheduledCount = 0;
             // Start processing for each available slot
             for (const queuedDoc of queuedDocs) {
                 if (activeCountRef.current >= MAX_CONCURRENT) break;
+
+                // Double check to avoid reprocessing items that are waiting for their delay
+                if (processingIdsRef.current.has(queuedDoc.id)) continue;
+
                 if (queuedDoc.file) {
+                    // Stagger start times: 0s, 2s, 4s...
+                    const delay = scheduledCount * 2000;
+
                     // Start processing this document (async, don't await)
-                    processDocument(queuedDoc.id, queuedDoc.file);
+                    processDocument(queuedDoc.id, queuedDoc.file, delay);
+                    scheduledCount++;
                 }
             }
 
