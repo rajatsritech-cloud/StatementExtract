@@ -75,10 +75,12 @@ export class StorageService {
             };
 
             const addRequest = store.put(docToSave);
-            addRequest.onsuccess = () => resolve();
+            addRequest.onsuccess = () => {
+                // Dispatch event for UI components to update
+                window.dispatchEvent(new CustomEvent('storage-updated'));
+                resolve();
+            };
             addRequest.onerror = () => reject(addRequest.error);
-
-            transaction.onerror = () => reject(transaction.error);
         });
     }
 
@@ -121,7 +123,26 @@ export class StorageService {
             const transaction = db.transaction([STORE_NAME], 'readwrite');
             const store = transaction.objectStore(STORE_NAME);
             const request = store.delete(id);
-            request.onsuccess = () => resolve();
+            request.onsuccess = () => {
+                window.dispatchEvent(new CustomEvent('storage-updated'));
+                resolve();
+            };
+            request.onerror = () => reject(request.error);
+        });
+    }
+
+    static async deleteAllDocuments(): Promise<number> {
+        const db = await this.openDB();
+        const count = await this.getDocumentCount();
+
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction([STORE_NAME], 'readwrite');
+            const store = transaction.objectStore(STORE_NAME);
+            const request = store.clear();
+            request.onsuccess = () => {
+                window.dispatchEvent(new CustomEvent('storage-updated'));
+                resolve(count);
+            };
             request.onerror = () => reject(request.error);
         });
     }
@@ -180,24 +201,29 @@ export class StorageService {
     static async getStorageStatus(): Promise<{
         documentCount: number;
         maxDocuments: number;
-        availableSpaceMB: number | null;
+        usedSpaceKB: number | null;
         isNearLimit: boolean;
     }> {
-        const documentCount = await this.getDocumentCount();
-        let availableSpaceMB: number | null = null;
+        const documents = await this.getDocuments();
+        const documentCount = documents.length;
 
-        if (navigator.storage && navigator.storage.estimate) {
-            const { quota, usage } = await navigator.storage.estimate();
-            if (quota && usage) {
-                availableSpaceMB = Math.round((quota - usage) / (1024 * 1024));
-            }
+        // Calculate actual size of documents by serializing to JSON
+        let usedSpaceKB: number | null = null;
+        try {
+            const totalBytes = documents.reduce((sum, doc) => {
+                const docString = JSON.stringify(doc);
+                return sum + new Blob([docString]).size;
+            }, 0);
+            usedSpaceKB = Math.round(totalBytes / 1024);
+        } catch (e) {
+            console.error("Failed to calculate document size:", e);
         }
 
         return {
             documentCount,
             maxDocuments: MAX_DOCS,
-            availableSpaceMB,
-            isNearLimit: documentCount >= MAX_DOCS - 5 || (availableSpaceMB !== null && availableSpaceMB < 10)
+            usedSpaceKB,
+            isNearLimit: documentCount >= MAX_DOCS - 5
         };
     }
 }

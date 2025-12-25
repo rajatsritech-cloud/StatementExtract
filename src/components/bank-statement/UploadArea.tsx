@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useState, useEffect } from "react";
-import { Upload, FileText, Image, X, Sparkles } from "lucide-react";
+import { Upload, FileText, Image, X, Sparkles, AlertTriangle } from "lucide-react";
 import { useAuth, SignInButton } from "@clerk/clerk-react";
 import Link from "next/link";
 import { OCRAuthModal } from "./OCRAuthModal";
@@ -9,6 +9,7 @@ import { PrivacyNotice } from "@/components/PrivacyNotice";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { toast } from "react-hot-toast";
 import { useUsage } from "@/hooks/useUsage";
+import { StorageService } from "@/lib/storageService";
 
 // Import pdf-lib
 import { PDFDocument } from 'pdf-lib';
@@ -29,8 +30,29 @@ export const UploadArea = ({ onFileUpload, isProcessing, hideFeatures = false, m
   const [uploadStatus, setUploadStatus] = useState<'idle' | 'uploading' | 'ready'>('idle');
   const [showOCRAuthModal, setShowOCRAuthModal] = useState(false);
   const [pendingFile, setPendingFile] = useState<File | null>(null);
+  const [isStorageFull, setIsStorageFull] = useState(false);
+  const [documentCount, setDocumentCount] = useState(0);
   const { isSignedIn, isLoaded, getToken } = useAuth();
   const { usage, refreshUsage } = useUsage();
+
+  // Check storage status on mount and when storage updates
+  useEffect(() => {
+    const checkStorageLimit = async () => {
+      try {
+        const status = await StorageService.getStorageStatus();
+        setDocumentCount(status.documentCount);
+        setIsStorageFull(status.documentCount >= status.maxDocuments);
+      } catch (error) {
+        console.error("Failed to check storage limit:", error);
+      }
+    };
+
+    checkStorageLimit();
+
+    // Listen for storage updates
+    window.addEventListener('storage-updated', checkStorageLimit);
+    return () => window.removeEventListener('storage-updated', checkStorageLimit);
+  }, []);
 
   const countPdfPages = async (file: File): Promise<number> => {
     try {
@@ -46,7 +68,20 @@ export const UploadArea = ({ onFileUpload, isProcessing, hideFeatures = false, m
   };
 
   const checkLimits = async (file: File): Promise<boolean> => {
-    // 0. Check File Size (Global Limit matching Cloudflare Worker)
+    // 0. Check Storage Limit (100 documents max)
+    if (isStorageFull) {
+      toast.error(
+        <div className="flex flex-col gap-1">
+          <span className="font-semibold text-red-600">Storage Full</span>
+          <span>You have reached the maximum of 100 documents.</span>
+          <span className="text-xs text-gray-500">Delete some documents from your dashboard to continue.</span>
+        </div>,
+        { duration: 6000 }
+      );
+      return false;
+    }
+
+    // 1. Check File Size (Global Limit matching Cloudflare Worker)
     const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20MB
     if (file.size > MAX_FILE_SIZE) {
       toast.error(
@@ -239,21 +274,24 @@ export const UploadArea = ({ onFileUpload, isProcessing, hideFeatures = false, m
           className="hidden"
           accept=".pdf,.jpg,.jpeg,.png"
           onChange={handleFileSelect}
-          disabled={isProcessing}
+          disabled={isProcessing || isStorageFull}
         />
 
         <div className="flex items-center gap-4">
           <button
-            onClick={() => !isProcessing && document.getElementById('file-input-minimal')?.click()}
-            disabled={isProcessing}
+            onClick={() => !isProcessing && !isStorageFull && document.getElementById('file-input-minimal')?.click()}
+            disabled={isProcessing || isStorageFull}
+            title={isStorageFull ? "Storage full - delete some documents first" : undefined}
             className="inline-flex items-center gap-2 rounded-lg bg-[hsl(var(--primary))] px-4 py-2 text-sm font-medium text-white hover:bg-[hsl(var(--primary))]/90 transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isProcessing ? (
               <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+            ) : isStorageFull ? (
+              <AlertTriangle className="h-4 w-4" />
             ) : (
               <Upload className="h-4 w-4" />
             )}
-            {isProcessing ? 'Processing...' : 'Upload Document'}
+            {isProcessing ? 'Processing...' : isStorageFull ? 'Storage Full' : 'Upload Document'}
           </button>
 
           {/* Show selected file name if any (though usually it processes immediately) */}
@@ -291,19 +329,34 @@ export const UploadArea = ({ onFileUpload, isProcessing, hideFeatures = false, m
         </Alert>
       )}
 
+      {/* Storage Full Warning */}
+      {isStorageFull && (
+        <Alert className="mb-8 max-w-2xl mx-auto bg-red-500/10 border-red-500/30 p-6">
+          <AlertTriangle className="h-6 w-6 top-6 text-red-500" />
+          <AlertTitle className="text-lg mb-2 text-red-600">Storage Full - 100 Documents Reached</AlertTitle>
+          <AlertDescription className="text-base text-[hsl(var(--muted-foreground))]">
+            You have reached the maximum of 100 stored documents.{' '}
+            <Link href="/dashboard" className="text-red-500 hover:underline font-medium">
+              Go to Dashboard
+            </Link>{' '}
+            to delete some documents before uploading new ones.
+          </AlertDescription>
+        </Alert>
+      )}
+
       <div
         className={`
           relative border-2 border-dashed rounded-2xl ${hideFeatures ? 'p-6' : 'p-12'} text-center transition-all duration-300
-          ${isDragOver
+          ${isDragOver && !isStorageFull
             ? 'border-[hsl(var(--primary))] bg-[hsl(var(--primary))]/5 scale-[1.02]'
             : 'border-[hsl(var(--border))] bg-[hsl(var(--card))] hover:border-[hsl(var(--primary))]/50'
           }
-          ${isProcessing ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+          ${(isProcessing || isStorageFull) ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
         `}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
-        onClick={() => !isProcessing && document.getElementById('file-input')?.click()}
+        onDragOver={!isStorageFull ? handleDragOver : undefined}
+        onDragLeave={!isStorageFull ? handleDragLeave : undefined}
+        onDrop={!isStorageFull ? handleDrop : undefined}
+        onClick={() => !isProcessing && !isStorageFull && document.getElementById('file-input')?.click()}
       >
         {/* Hidden file input */}
         <input
@@ -312,7 +365,7 @@ export const UploadArea = ({ onFileUpload, isProcessing, hideFeatures = false, m
           className="hidden"
           accept=".pdf,.jpg,.jpeg,.png"
           onChange={handleFileSelect}
-          disabled={isProcessing}
+          disabled={isProcessing || isStorageFull}
           multiple={isSignedIn}
         />
 

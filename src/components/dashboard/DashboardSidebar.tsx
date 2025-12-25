@@ -37,8 +37,8 @@ export const DashboardSidebar = ({ className }: SidebarProps) => {
     ];
 
     const accountItems: NavItem[] = [
-        { icon: CreditCard, label: "Billing", active: false, href: "/billing" },
-        { icon: Settings, label: "Settings", active: false, href: "/settings" },
+        { icon: CreditCard, label: "Billing", disabled: true, badge: "Soon" },
+        { icon: Settings, label: "Settings", disabled: true, badge: "Soon" },
     ];
 
     return (
@@ -135,13 +135,15 @@ export const DashboardSidebar = ({ className }: SidebarProps) => {
                     {accountItems.map((item) => (
                         <a
                             key={item.label}
-                            href={item.href || "#"}
+                            href={item.disabled ? undefined : (item.href || "#")}
                             className={cn(
                                 "flex w-full items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors",
                                 isCollapsed ? "justify-center px-2" : "justify-between",
                                 item.active
                                     ? "bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))]"
-                                    : "text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))] hover:text-[hsl(var(--foreground))]"
+                                    : item.disabled
+                                        ? "text-[hsl(var(--muted-foreground))] opacity-70 cursor-not-allowed"
+                                        : "text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))] hover:text-[hsl(var(--foreground))]"
                             )}
                             title={isCollapsed ? item.label : undefined}
                         >
@@ -149,6 +151,11 @@ export const DashboardSidebar = ({ className }: SidebarProps) => {
                                 <item.icon className="h-4 w-4 shrink-0" />
                                 {!isCollapsed && <span>{item.label}</span>}
                             </div>
+                            {!isCollapsed && item.badge && (
+                                <span className="rounded-full bg-[hsl(var(--primary))]/10 px-1.5 py-0.5 text-[9px] font-medium text-[hsl(var(--primary))]">
+                                    {item.badge}
+                                </span>
+                            )}
                         </a>
                     ))}
                 </nav>
