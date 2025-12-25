@@ -39,7 +39,7 @@ export const Footer = () => {
               <a href="https://x.com/statement3376" target="_blank" rel="noopener noreferrer" className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors" aria-label="Twitter/X">
                 <Twitter className="h-5 w-5" />
               </a>
-              <a href="https://www.linkedin.com/in/statement-extract/" target="_blank" rel="noopener noreferrer" className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors" aria-label="LinkedIn">
+              <a href="https://www.linkedin.com/company/statement-extract/" target="_blank" rel="noopener noreferrer" className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors" aria-label="LinkedIn">
                 <Linkedin className="h-5 w-5" />
               </a>
               <a href="https://www.reddit.com/user/statementextract/" target="_blank" rel="noopener noreferrer" className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors" aria-label="Reddit">
@@ -168,6 +168,6 @@ export const Footer = () => {
           <p>© 2025 Statement Extract. All rights reserved.</p>
         </div>
       </div>
-    </footer>
+    </footer >
   );
 };

@@ -149,7 +149,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               "description": "AI-powered document processing platform for extracting structured data from bank statements, invoices, and financial documents.",
               "foundingDate": "2024",
               "sameAs": [
-                "https://www.linkedin.com/company/statementextract"
+                "https://www.linkedin.com/company/statement-extract/"
               ],
               "contactPoint": {
                 "@type": "ContactPoint",
