@@ -123,9 +123,9 @@ export const DashboardContent = () => {
             let userFriendlyMessage = `Failed: ${file.name}`;
 
             // Check for server overload (503)
-            if (error.message?.includes("503") || error.message?.includes("capacity") || error.message?.includes("overload")) {
-                errorMessage = "Server is busy. Your file will retry automatically.";
-                userFriendlyMessage = "🔄 Server busy - retrying in a moment...";
+            if (error.message?.includes("503") || error.message?.includes("capacity") || error.message?.includes("overload") || error.message?.includes("high traffic")) {
+                errorMessage = "We're experiencing high traffic on our free tier model. Please try again in a few minutes.";
+                userFriendlyMessage = "We're experiencing high traffic on our free tier model. Please try again in a few minutes.";
 
                 // Auto-retry after 10 seconds
                 setTimeout(() => {

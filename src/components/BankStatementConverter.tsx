@@ -69,6 +69,7 @@ export const BankStatementConverter = ({
     processingRef.current = true;
 
     setIsProcessing(true);
+    setExtractedData(null); // Clear previous data
     setShowResults(true); // Show modal immediately
     setProcessingProgress(0);
 
@@ -148,21 +149,59 @@ export const BankStatementConverter = ({
       console.error('❌ Processing error:', error);
       setIsProcessing(false);
       processingRef.current = false;
-      setSelectedFile(null); // Clear the selected file on error
 
       // Don't show any error message for OCR authentication - it's handled by the modal
       if (error instanceof Error && error.message.includes('OCR processing requires a free account')) {
-        return; // Silent fail - modal handles the user communication
+        setSelectedFile(null);
+        return;
       }
 
       let errorMessage = "Failed to process the file. Please try again.";
-
       if (error instanceof Error) {
         errorMessage = error.message;
       }
 
+      // Special handling for high traffic / capacity errors
+      const isCapacityError =
+        errorMessage.includes("503") ||
+        errorMessage.includes("capacity") ||
+        errorMessage.includes("overload") ||
+        errorMessage.includes("high traffic");
+
+      if (isCapacityError) {
+        errorMessage = "We're experiencing high traffic on our free tier model. Please try again in a few minutes.";
+      }
+
+      // Create empty result to show UI
+      const failedResult: ExtractedData = {
+        transactions: [],
+        userInfo: {
+          name: "Extraction Failed",
+          bankName: "Unknown",
+          accountNumber: "N/A",
+          statementPeriod: "N/A",
+          currency: "$"
+        },
+        validation_summary: {
+          status: "FAILED",
+          confidence: 0,
+          issues: ["No transactions found", errorMessage],
+          chain_integrity: 0
+        },
+        summary: {
+          totalCredits: 0,
+          totalDebits: 0,
+          netBalance: 0,
+          transactionCount: 0
+        },
+        llm_used: false
+      };
+
+      setExtractedData(failedResult);
+      setShowResults(true);
+
       toast.error(errorMessage, {
-        duration: 5000,
+        duration: 6000,
       });
     }
   }, [isSignedIn, isLoaded, getToken]);
