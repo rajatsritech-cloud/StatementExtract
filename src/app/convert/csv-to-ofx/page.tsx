@@ -112,10 +112,10 @@ const useCases = [
 ];
 
 const relatedTools = [
+    { href: "/convert/qfx-to-pdf", title: "QFX to PDF" },
     { href: "/convert/csv-to-qbo", title: "CSV to QBO" },
     { href: "/convert/qbo-to-csv", title: "QBO to CSV" },
     { href: "/convert-bank-statement-to-csv-excel", title: "PDF to Excel" },
-    { href: "/convert-bank-statement-to-quickbooks-xero", title: "PDF to QBO" },
 ];
 
 export default function CsvToOfxPage() {

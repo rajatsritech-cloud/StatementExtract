@@ -140,6 +140,13 @@ const toolSections = [
                 icon: "FileText",
                 badge: null,
             },
+            {
+                title: "QFX to PDF Converter",
+                description: "Convert Quicken QFX/OFX files to printable PDF transaction reports.",
+                href: "/convert/qfx-to-pdf",
+                icon: "FileText",
+                badge: "New",
+            },
         ],
     },
     // 3. Image Converters - Good volume, evergreen traffic

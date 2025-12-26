@@ -104,10 +104,10 @@ const useCases = [
 ];
 
 const relatedTools = [
+    { href: "/convert/qfx-to-pdf", title: "QFX to PDF" },
     { href: "/convert-bank-statement-to-csv-excel", title: "PDF to Excel" },
     { href: "/convert-bank-statement-to-quickbooks-xero", title: "PDF to QBO" },
-    { href: "/convert/json-to-sql", title: "JSON to SQL" },
-    { href: "/convert/split-pdf", title: "Split PDF" },
+    { href: "/convert/csv-to-qbo", title: "CSV to QBO" },
 ];
 
 export default function QboToCsvPage() {

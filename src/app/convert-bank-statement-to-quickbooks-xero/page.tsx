@@ -55,7 +55,7 @@ export default function BankStatementXeroPage() {
                             "@type": "Offer",
                             "price": "0",
                             "priceCurrency": "USD",
-                            "priceValidUntil": "2025-12-31"
+                            "priceValidUntil": "2026-12-31"
                         },
                         "featureList": [
                             "PDF to QBO (Web Connect) Conversion",

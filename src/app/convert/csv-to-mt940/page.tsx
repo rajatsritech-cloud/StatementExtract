@@ -103,10 +103,10 @@ const useCases = [
 ];
 
 const relatedTools = [
+    { href: "/convert/qfx-to-pdf", title: "QFX to PDF" },
     { href: "/convert/csv-to-ofx", title: "CSV to OFX" },
     { href: "/convert/csv-to-qbo", title: "CSV to QBO" },
     { href: "/convert/pdf-to-mt940", title: "PDF to MT940" },
-    { href: "/convert-bank-statement-to-csv-excel", title: "PDF to Excel" },
 ];
 
 export default function CsvToMt940Page() {

@@ -102,7 +102,7 @@ const useCases = [
 ];
 
 const relatedTools = [
-    { href: "/tools/invoice-generator", title: "Invoice Generator" },
+    { href: "/convert/qfx-to-pdf", title: "QFX to PDF" },
     { href: "/convert/csv-to-qbo", title: "CSV to QBO" },
     { href: "/convert/qbo-to-csv", title: "QBO to CSV" },
     { href: "/convert-bank-statement-to-quickbooks-xero", title: "PDF to QBO" },
