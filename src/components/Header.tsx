@@ -180,7 +180,7 @@ export const Header = () => {
                         {/* Left: Company column */}
                         <div className="col-span-1 flex flex-col justify-between p-6">
                           <div>
-                            <p className="text-xs font-semibold tracking-[0.2em] text-[hsl(var(--muted-foreground))] mb-4">COMPANY</p>
+                            <p className="text-xs font-bold tracking-[0.2em] text-[hsl(var(--muted-foreground))] mb-4">COMPANY</p>
                             <div className="grid grid-cols-2 gap-3">
                               <Link
                                 href="/about"
@@ -246,7 +246,7 @@ export const Header = () => {
                         <div className="col-span-2 p-6">
                           <div className="mb-5 flex items-start justify-between">
                             <div>
-                              <p className="text-xs font-semibold tracking-[0.2em] text-[hsl(var(--muted-foreground))] mb-2">SOLUTIONS</p>
+                              <p className="text-xs font-bold tracking-[0.2em] text-[hsl(var(--muted-foreground))] mb-4">SOLUTIONS</p>
                               <h3 className="text-sm font-semibold text-[hsl(var(--foreground))]">Bank Statement Processing</h3>
                               <p className="mt-1 text-xs text-[hsl(var(--muted-foreground))] max-w-md">
                                 Convert PDF bank statements to Excel, CSV, QuickBooks, and Xero for accountants and bookkeepers.
