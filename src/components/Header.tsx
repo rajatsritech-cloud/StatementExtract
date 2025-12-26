@@ -139,7 +139,7 @@ export const Header = () => {
 
   return (
     <>
-      <header className="sticky top-0 z-50 w-full border-b border-[hsl(var(--border))]/40 bg-[hsl(var(--background))]/80 backdrop-blur-md transition-all support-[backdrop-filter]:bg-[hsl(var(--background))]/60">
+      <header className="sticky top-0 z-50 w-full border-[hsl(var(--border))]/40 bg-[hsl(var(--background))]/80 backdrop-blur-md transition-all support-[backdrop-filter]:bg-[hsl(var(--background))]/60">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 pt-3 pb-0">
           <div className="flex h-[4.5rem] items-center justify-between rounded-2xl border border-[hsl(var(--primary))]/30 bg-[hsl(var(--background))]/95 px-3 sm:px-5">
             <Link
