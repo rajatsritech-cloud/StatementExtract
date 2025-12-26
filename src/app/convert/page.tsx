@@ -106,6 +106,20 @@ const toolSections = [
                 badge: "Popular",
             },
             {
+                title: "Stripe to QuickBooks",
+                description: "Convert Stripe CSV exports to QBO format for QuickBooks. Free, private, no signup.",
+                href: "/convert/stripe-to-qbo",
+                icon: "CreditCard",
+                badge: "New",
+            },
+            {
+                title: "PayPal to QuickBooks",
+                description: "Convert PayPal transaction CSV to QBO format. Import PayPal payments to QuickBooks free.",
+                href: "/convert/paypal-to-qbo",
+                icon: "Wallet",
+                badge: "New",
+            },
+            {
                 title: "QIF to QBO Converter",
                 description: "Convert Quicken QIF files to QuickBooks QBO format. Migrate from Quicken to QuickBooks.",
                 href: "/convert/qif-to-qbo",

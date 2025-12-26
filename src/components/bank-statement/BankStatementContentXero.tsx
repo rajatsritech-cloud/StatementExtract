@@ -151,6 +151,23 @@ export const BankStatementSEOContentXero = () => {
                 </p>
 
                 <h3 className="text-2xl font-semibold text-[hsl(var(--foreground))] mb-4">
+                    Import Stripe & PayPal to QuickBooks
+                </h3>
+                <p className="text-[hsl(var(--muted-foreground))] mb-6">
+                    We also offer specialized free tools for payment processors. If you need to import data from payment platforms, use our dedicated converters:
+                </p>
+                <div className="grid sm:grid-cols-2 gap-4 mb-8">
+                    <Link href="/convert/stripe-to-qbo" className="block p-4 rounded-xl border border-[hsl(var(--border))] hover:border-[hsl(var(--primary))] transition-colors bg-[hsl(var(--card))]">
+                        <span className="font-semibold text-[hsl(var(--foreground))] block mb-1">Stripe to QuickBooks</span>
+                        <span className="text-sm text-[hsl(var(--muted-foreground))]">Convert Stripe CSV exports to QBO format.</span>
+                    </Link>
+                    <Link href="/convert/paypal-to-qbo" className="block p-4 rounded-xl border border-[hsl(var(--border))] hover:border-[hsl(var(--primary))] transition-colors bg-[hsl(var(--card))]">
+                        <span className="font-semibold text-[hsl(var(--foreground))] block mb-1">PayPal to QuickBooks</span>
+                        <span className="text-sm text-[hsl(var(--muted-foreground))]">Convert PayPal CSV exports to QBO format.</span>
+                    </Link>
+                </div>
+
+                <h3 className="text-2xl font-semibold text-[hsl(var(--foreground))] mb-4">
                     How it Works
                 </h3>
                 <ul className="list-disc pl-6 text-[hsl(var(--muted-foreground))] mb-6 space-y-2">

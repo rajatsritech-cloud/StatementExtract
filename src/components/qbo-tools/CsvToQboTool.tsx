@@ -226,7 +226,7 @@ const DATE_FORMATS = [
     { pattern: /^\d{1,2}[-\/][A-Za-z]{3,9}$/, label: "D-Month (e.g., 1-September)", parse: parseDayMonthDate },
 ];
 
-export function CsvToQboTool() {
+export function CsvToQboTool({ hideHeader = false }: { hideHeader?: boolean } = {}) {
     const [csvHeaders, setCsvHeaders] = useState<string[]>([]);
     const [csvData, setCsvData] = useState<string[][]>([]);
     const [fileName, setFileName] = useState<string>("");
@@ -853,15 +853,17 @@ NEWFILEUID:NONE
 
     return (
         <div className="max-w-5xl mx-auto">
-            {/* Header */}
-            <div className="text-center mb-4">
-                <h1 className="text-2xl md:text-3xl font-bold text-[hsl(var(--foreground))] mb-2">
-                    Convert CSV to QBO Online
-                </h1>
-                <p className="text-[hsl(var(--muted-foreground))] max-w-xl mx-auto">
-                    Import your bank transactions into QuickBooks. Map columns, preview, and export to .qbo format.
-                </p>
-            </div>
+            {/* Header - hidden when hideHeader prop is true */}
+            {!hideHeader && (
+                <div className="text-center mb-4">
+                    <h1 className="text-2xl md:text-3xl font-bold text-[hsl(var(--foreground))] mb-2">
+                        Convert CSV to QBO Online
+                    </h1>
+                    <p className="text-[hsl(var(--muted-foreground))] max-w-xl mx-auto">
+                        Import your bank transactions into QuickBooks. Map columns, preview, and export to .qbo format.
+                    </p>
+                </div>
+            )}
 
             {/* Upload Zone (shown when no file) */}
             {!hasFile && (

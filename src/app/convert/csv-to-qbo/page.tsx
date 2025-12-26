@@ -245,9 +245,26 @@ export default function CsvToQboPage() {
                         <li>Bank statement exports (Chase, Bank of America, Wells Fargo, etc.)</li>
                         <li>Accounting software exports (Xero, Sage, FreshBooks, Wave)</li>
                         <li>Spreadsheet transaction logs</li>
-                        <li>Payment processor reports (Stripe, PayPal, Square)</li>
+                        <li>Payment processor reports (<Link href="/convert/stripe-to-qbo" className="text-[hsl(var(--primary))] hover:underline">Stripe</Link>, <Link href="/convert/paypal-to-qbo" className="text-[hsl(var(--primary))] hover:underline">PayPal</Link>, Square)</li>
                         <li>Credit card statement downloads</li>
                     </ul>
+
+                    <h3 className="text-xl font-semibold text-[hsl(var(--foreground))] mb-4 mt-8">
+                        Specialized Payment Converters
+                    </h3>
+                    <p className="text-[hsl(var(--muted-foreground))] mb-4">
+                        For payment platforms, checking out our specialized free tools might be easier:
+                    </p>
+                    <div className="grid sm:grid-cols-2 gap-4 mb-6">
+                        <Link href="/convert/stripe-to-qbo" className="block p-4 rounded-xl border border-[hsl(var(--border))] hover:border-[hsl(var(--primary))] transition-colors bg-[hsl(var(--card))]">
+                            <span className="font-semibold text-[hsl(var(--foreground))] block mb-1">Stripe to QuickBooks</span>
+                            <span className="text-sm text-[hsl(var(--muted-foreground))]">Convert Stripe payments, payouts, and fees to QBO.</span>
+                        </Link>
+                        <Link href="/convert/paypal-to-qbo" className="block p-4 rounded-xl border border-[hsl(var(--border))] hover:border-[hsl(var(--primary))] transition-colors bg-[hsl(var(--card))]">
+                            <span className="font-semibold text-[hsl(var(--foreground))] block mb-1">PayPal to QuickBooks</span>
+                            <span className="text-sm text-[hsl(var(--muted-foreground))]">Convert PayPal activity and fees to QBO format.</span>
+                        </Link>
+                    </div>
                 </div>
             </section>
 

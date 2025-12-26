@@ -15,6 +15,9 @@ import {
     FileText,
     TrendingUp,
     Layers,
+    CreditCard,
+    Wallet,
+    Eye,
     LucideIcon
 } from "lucide-react";
 import { CategoryFilter } from "@/components/tools/CategoryFilter";
@@ -33,6 +36,9 @@ const iconMap: Record<string, LucideIcon> = {
     TrendingUp,
     Layers,
     ArrowRight,
+    CreditCard,
+    Wallet,
+    Eye,
 };
 
 interface Tool {

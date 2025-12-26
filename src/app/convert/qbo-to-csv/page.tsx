@@ -108,6 +108,8 @@ const relatedTools = [
     { href: "/convert-bank-statement-to-csv-excel", title: "PDF to Excel" },
     { href: "/convert-bank-statement-to-quickbooks-xero", title: "PDF to QBO" },
     { href: "/convert/csv-to-qbo", title: "CSV to QBO" },
+    { href: "/convert/stripe-to-qbo", title: "Stripe to QBO" },
+    { href: "/convert/paypal-to-qbo", title: "PayPal to QBO" },
 ];
 
 export default function QboToCsvPage() {
