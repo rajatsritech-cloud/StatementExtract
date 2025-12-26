@@ -1,9 +1,10 @@
-"use client";
+﻿"use client";
 
 import { Button } from "@/components/ui/button";
 import {
   FileText,
   Menu,
+  X,
   ChevronDown,
   Building,
   FileText as FileIcon,
@@ -675,7 +676,7 @@ export const Header = () => {
                             className="mt-6 flex items-center justify-end gap-2 text-sm font-bold hover:text-purple-500 hover:underline transition-colors"
                             onClick={closeToolsDropdown}
                           >
-                            View All Tools →
+                            View All Tools â†’
                           </Link>
                         </div>
                       </div>
@@ -766,16 +767,22 @@ export const Header = () => {
                 aria-label="Toggle navigation menu"
                 onClick={() => setIsMobileMenuOpen((open) => !open)}
               >
-                <Menu className="h-5 w-5" />
+                {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
               </Button>
             </div>
           </div>
         </div >
 
-        {isMobileMenuOpen && (
-          <div className="fixed inset-0 top-[4.5rem] z-50 bg-[hsl(var(--background))] lg:hidden animate-in slide-in-from-top-8 duration-300">
-            <nav className="flex flex-col h-full overflow-y-auto">
-              <div className="flex flex-col py-4">
+
+
+
+      </header>
+
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 top-[5.25rem] z-50 bg-[hsl(var(--background))] lg:hidden animate-in slide-in-from-top-8 duration-300">
+          <nav className="flex flex-col h-full overflow-y-auto">
+            <div className="flex flex-col py-4">
+              <SignedIn>
                 <Link
                   href="/dashboard"
                   className="flex w-full items-center justify-between px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))]"
@@ -786,202 +793,173 @@ export const Header = () => {
                     <span>Dashboard</span>
                   </span>
                 </Link>
+              </SignedIn>
 
-                {/* Mobile Converters Accordion */}
-                <div>
-                  <button
-                    className="flex w-full items-center justify-between px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))]"
-                    onClick={() => setIsMobileConvertersOpen(!isMobileConvertersOpen)}
-                  >
-                    <span className="flex items-center gap-3">
-                      <RotateCcw className="h-4 w-4 text-[hsl(var(--primary))]" />
-                      <span>Converters</span>
-                    </span>
-                    <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isMobileConvertersOpen ? 'rotate-180' : ''}`} />
-                  </button>
+              {/* Mobile Converters Accordion */}
+              <div>
+                <button
+                  className="flex w-full items-center justify-between px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))]"
+                  onClick={() => setIsMobileConvertersOpen(!isMobileConvertersOpen)}
+                >
+                  <span className="flex items-center gap-3">
+                    <RotateCcw className="h-4 w-4 text-[hsl(var(--primary))]" />
+                    <span>Converters</span>
+                  </span>
+                  <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isMobileConvertersOpen ? 'rotate-180' : ''}`} />
+                </button>
 
-                  {isMobileConvertersOpen && (
-                    <div className="bg-[hsl(var(--muted))]/30 px-4 py-2 space-y-1">
-                      <div className="mb-2">
-                        <p className="text-[10px] font-semibold tracking-wider text-[hsl(var(--muted-foreground))] uppercase px-2 py-1">PDF Tools</p>
-                        <Link href="/convert/merge-pdf" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Merge PDF</Link>
-                        <Link href="/convert/compress-pdf" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Compress PDF</Link>
-                        <Link href="/convert/split-pdf" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Split PDF</Link>
-                        <Link href="/convert/jpg-to-pdf" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">JPG to PDF</Link>
-                      </div>
-                      <div className="mb-2">
-                        <p className="text-[10px] font-semibold tracking-wider text-[hsl(var(--muted-foreground))] uppercase px-2 py-1">Finance</p>
-                        <Link href="/convert-bank-statement-to-csv-excel" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Bank to Excel/CSV</Link>
-                        <Link href="/convert/csv-to-qbo" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">CSV to QBO</Link>
-                        <Link href="/convert/csv-to-ofx" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">CSV to OFX</Link>
-                        <Link href="/convert-bank-statement-to-csv-excel" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Financial Auditing</Link>
-                      </div >
+                {isMobileConvertersOpen && (
+                  <div className="bg-[hsl(var(--muted))]/30 px-4 py-2 space-y-1">
+                    <div className="mb-2">
+                      <p className="text-[10px] font-semibold tracking-wider text-[hsl(var(--muted-foreground))] uppercase px-2 py-1">PDF Tools</p>
+                      <Link href="/convert/merge-pdf" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Merge PDF</Link>
+                      <Link href="/convert/compress-pdf" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Compress PDF</Link>
+                      <Link href="/convert/split-pdf" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Split PDF</Link>
+                      <Link href="/convert/jpg-to-pdf" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">JPG to PDF</Link>
+                    </div>
+                    <div className="mb-2">
+                      <p className="text-[10px] font-semibold tracking-wider text-[hsl(var(--muted-foreground))] uppercase px-2 py-1">Finance</p>
+                      <Link href="/convert-bank-statement-to-csv-excel" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Bank to Excel/CSV</Link>
+                      <Link href="/convert/csv-to-qbo" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">CSV to QBO</Link>
+                      <Link href="/convert/csv-to-ofx" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">CSV to OFX</Link>
+                      <Link href="/convert-bank-statement-to-csv-excel" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Financial Auditing</Link>
                     </div >
-                  )}
-                </div >
-
-                <Link
-                  href="/blogs"
-                  className="flex w-full items-center justify-between px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))]"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  <span className="flex items-center gap-3">
-                    <FileIcon className="h-4 w-4 text-[hsl(var(--primary))]" />
-                    <span>Blogs</span>
-                  </span>
-                </Link>
-
-                <Link
-                  href="/#faq"
-                  className="flex w-full items-center justify-between px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))]"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  <span className="flex items-center gap-3">
-                    <HelpCircle className="h-4 w-4 text-[hsl(var(--primary))]" />
-                    <span>FAQ</span>
-                  </span>
-                </Link>
-
-                {/* Mobile Converters Accordion */}
-                <div>
-                  <button
-                    className="flex w-full items-center justify-between px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))]"
-                    onClick={() => setIsMobileConvertersOpen(!isMobileConvertersOpen)}
-                  >
-                    <span className="flex items-center gap-3">
-                      <RotateCcw className="h-4 w-4 text-[hsl(var(--primary))]" />
-                      <span>Converters</span>
-                    </span>
-                    <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isMobileConvertersOpen ? 'rotate-180' : ''}`} />
-                  </button>
-
-                  {isMobileConvertersOpen && (
-                    <div className="bg-[hsl(var(--muted))]/30 px-4 py-2 space-y-1">
-                      <div className="mb-2">
-                        <p className="text-[10px] font-semibold tracking-wider text-[hsl(var(--muted-foreground))] uppercase px-2 py-1">PDF Tools</p>
-                        <Link href="/convert/merge-pdf" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Merge PDF</Link>
-                        <Link href="/convert/compress-pdf" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Compress PDF</Link>
-                        <Link href="/convert/split-pdf" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Split PDF</Link>
-                        <Link href="/convert/jpg-to-pdf" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">JPG to PDF</Link>
-                      </div>
-                      <div className="mb-2">
-                        <p className="text-[10px] font-semibold tracking-wider text-[hsl(var(--muted-foreground))] uppercase px-2 py-1">Finance</p>
-                        <Link href="/convert-bank-statement-to-csv-excel" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Bank to Excel/CSV</Link>
-                        <Link href="/convert/csv-to-qbo" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">CSV to QBO</Link>
-                        <Link href="/convert/csv-to-ofx" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">CSV to OFX</Link>
-                      </div>
-                      <div>
-                        <p className="text-[10px] font-semibold tracking-wider text-[hsl(var(--muted-foreground))] uppercase px-2 py-1">Image & Dev</p>
-                        <Link href="/convert/batch-converter" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">HEIC/AVIF Batch</Link>
-                        <Link href="/convert/image-compressor" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Image Compressor</Link>
-                        <Link href="/convert/json-to-sql" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">JSON to SQL</Link>
-                      </div>
-                      <Link href="/convert" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-center rounded-lg px-2 py-2 mt-2 text-sm font-medium text-[hsl(var(--primary))] bg-[hsl(var(--primary))]/10">View All Converters</Link>
+                    <div className="mb-2">
+                      <p className="text-[10px] font-semibold tracking-wider text-[hsl(var(--muted-foreground))] uppercase px-2 py-1">Image & Dev</p>
+                      <Link href="/convert/batch-converter" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">HEIC/AVIF Batch</Link>
+                      <Link href="/convert/image-compressor" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Image Compressor</Link>
+                      <Link href="/convert/json-to-sql" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">JSON to SQL</Link>
                     </div>
-                  )}
-                </div>
-
-                {/* Mobile Tools Accordion */}
-                <div>
-                  <button
-                    className="flex w-full items-center justify-between px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))]"
-                    onClick={() => setIsMobileToolsOpen(!isMobileToolsOpen)}
-                  >
-                    <span className="flex items-center gap-3">
-                      <Zap className="h-4 w-4 text-[hsl(var(--primary))]" />
-                      <span>Tools</span>
-                    </span>
-                    <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isMobileToolsOpen ? 'rotate-180' : ''}`} />
-                  </button>
-
-                  {isMobileToolsOpen && (
-                    <div className="bg-[hsl(var(--muted))]/30 px-4 py-2 space-y-1">
-                      <div className="mb-2">
-                        <p className="text-[10px] font-semibold tracking-wider text-[hsl(var(--muted-foreground))] uppercase px-2 py-1">Invoicing</p>
-                        <Link href="/tools/invoice-generator" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Invoice Generator</Link>
-                        <Link href="/tools/profit-margin-calculator" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Profit Margin</Link>
-                        <Link href="/tools/markup-calculator" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Markup Calculator</Link>
-                      </div>
-                      <div className="mb-2">
-                        <p className="text-[10px] font-semibold tracking-wider text-[hsl(var(--muted-foreground))] uppercase px-2 py-1">Tax Tools</p>
-                        <Link href="/tools/gst-vat-calculator" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">GST/VAT Calculator</Link>
-                        <Link href="/tools/self-employed-tax-calculator" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Self-Employed Tax</Link>
-                      </div>
-                      <div>
-                        <p className="text-[10px] font-semibold tracking-wider text-[hsl(var(--muted-foreground))] uppercase px-2 py-1">Investments</p>
-                        <Link href="/tools/amortization-calculator" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Amortization</Link>
-                        <Link href="/tools/rental-roi-calculator" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Rental ROI</Link>
-                        <Link href="/tools/fire-calculator" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">FIRE Calculator</Link>
-                      </div>
-                      <Link href="/tools" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-center rounded-lg px-2 py-2 mt-2 text-sm font-medium text-[hsl(var(--primary))] bg-[hsl(var(--primary))]/10">View All Tools</Link>
-                    </div>
-                  )}
-                </div>
-
-                {/* Mobile Theme Toggle */}
-                <div className="flex items-center justify-between px-4 py-3">
-                  <span className="text-sm font-medium text-[hsl(var(--foreground))]">Theme</span>
-                  <div className="flex items-center gap-3">
-                    <button
-                      onClick={() => setTheme("green")}
-                      className={`h-5 w-5 rounded-full bg-[#16a34a] transition-all ${theme === 'green' ? 'ring-2 ring-offset-2 ring-[#16a34a] scale-110' : ''}`}
-                      aria-label="Green theme"
-                    />
-                    <button
-                      onClick={() => setTheme("blue")}
-                      className={`h-5 w-5 rounded-full bg-[#3b82f6] transition-all ${theme === 'blue' ? 'ring-2 ring-offset-2 ring-[#3b82f6] scale-110' : ''}`}
-                      aria-label="Blue theme"
-                    />
-                    <button
-                      onClick={() => setTheme("violet")}
-                      className={`h-5 w-5 rounded-full bg-[#8b5cf6] transition-all ${theme === 'violet' ? 'ring-2 ring-offset-2 ring-[#8b5cf6] scale-110' : ''}`}
-                      aria-label="Violet theme"
-                    />
-                    <button
-                      onClick={() => setTheme("orange")}
-                      className={`h-5 w-5 rounded-full bg-[#f97316] transition-all ${theme === 'orange' ? 'ring-2 ring-offset-2 ring-[#f97316] scale-110' : ''}`}
-                      aria-label="Orange theme"
-                    />
+                    <Link href="/convert" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-center rounded-lg px-2 py-2 mt-2 text-sm font-medium text-[hsl(var(--primary))] bg-[hsl(var(--primary))]/10">View All Converters</Link>
                   </div>
-                </div>
+                )}
+              </div>
 
-                {/* Mobile Auth Buttons */}
-                <div className="p-4 space-y-3">
-                  <SignedOut>
-                    <div suppressHydrationWarning className="grid grid-cols-2 gap-3">
-                      <SignInButton mode="modal">
-                        <Button variant="outline" className="w-full justify-center" onClick={() => setIsMobileMenuOpen(false)}>
-                          Sign In
-                        </Button>
-                      </SignInButton>
-                      <SignUpButton mode="modal">
-                        <Button className="w-full justify-center bg-gradient-button text-white shadow-lg" onClick={() => setIsMobileMenuOpen(false)}>
-                          Get Started
-                        </Button>
-                      </SignUpButton>
-                    </div>
-                  </SignedOut>
-                  <SignedIn>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-[hsl(var(--muted-foreground))]">Signed in as {user?.primaryEmailAddress?.emailAddress}</span>
-                      <UserButton afterSignOutUrl="/" />
-                    </div>
-                  </SignedIn>
-                </div>
+              <Link
+                href="/blogs"
+                className="flex w-full items-center justify-between px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))]"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                <span className="flex items-center gap-3">
+                  <FileIcon className="h-4 w-4 text-[hsl(var(--primary))]" />
+                  <span>Blogs</span>
+                </span>
+              </Link>
 
-              </div >
-            </nav >
-          </div >
-        )}
-      </header>
+              <Link
+                href="/#faq"
+                className="flex w-full items-center justify-between px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))]"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                <span className="flex items-center gap-3">
+                  <HelpCircle className="h-4 w-4 text-[hsl(var(--primary))]" />
+                  <span>FAQ</span>
+                </span>
+              </Link>
+
+
+              {/* Mobile Tools Accordion */}
+              <div>
+                <button
+                  className="flex w-full items-center justify-between px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))]"
+                  onClick={() => setIsMobileToolsOpen(!isMobileToolsOpen)}
+                >
+                  <span className="flex items-center gap-3">
+                    <Zap className="h-4 w-4 text-[hsl(var(--primary))]" />
+                    <span>Tools</span>
+                  </span>
+                  <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isMobileToolsOpen ? 'rotate-180' : ''}`} />
+                </button>
+
+                {isMobileToolsOpen && (
+                  <div className="bg-[hsl(var(--muted))]/30 px-4 py-2 space-y-1">
+                    <div className="mb-2">
+                      <p className="text-[10px] font-semibold tracking-wider text-[hsl(var(--muted-foreground))] uppercase px-2 py-1">Invoicing</p>
+                      <Link href="/tools/invoice-generator" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Invoice Generator</Link>
+                      <Link href="/tools/profit-margin-calculator" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Profit Margin</Link>
+                      <Link href="/tools/markup-calculator" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Markup Calculator</Link>
+                    </div>
+                    <div className="mb-2">
+                      <p className="text-[10px] font-semibold tracking-wider text-[hsl(var(--muted-foreground))] uppercase px-2 py-1">Tax Tools</p>
+                      <Link href="/tools/gst-vat-calculator" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">GST/VAT Calculator</Link>
+                      <Link href="/tools/self-employed-tax-calculator" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Self-Employed Tax</Link>
+                    </div>
+                    <div>
+                      <p className="text-[10px] font-semibold tracking-wider text-[hsl(var(--muted-foreground))] uppercase px-2 py-1">Investments</p>
+                      <Link href="/tools/amortization-calculator" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Amortization</Link>
+                      <Link href="/tools/rental-roi-calculator" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Rental ROI</Link>
+                      <Link href="/tools/fire-calculator" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">FIRE Calculator</Link>
+                    </div>
+                    <Link href="/tools" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-center rounded-lg px-2 py-2 mt-2 text-sm font-medium text-[hsl(var(--primary))] bg-[hsl(var(--primary))]/10">View All Tools</Link>
+                  </div>
+                )}
+              </div>
+
+              {/* Mobile Theme Toggle */}
+              <div className="flex items-center justify-between px-4 py-3">
+                <span className="text-sm font-medium text-[hsl(var(--foreground))]">Theme</span>
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => setTheme("green")}
+                    className={`h-5 w-5 rounded-full bg-[#16a34a] transition-all ${theme === 'green' ? 'ring-2 ring-offset-2 ring-[#16a34a] scale-110' : ''}`}
+                    aria-label="Green theme"
+                  />
+                  <button
+                    onClick={() => setTheme("blue")}
+                    className={`h-5 w-5 rounded-full bg-[#3b82f6] transition-all ${theme === 'blue' ? 'ring-2 ring-offset-2 ring-[#3b82f6] scale-110' : ''}`}
+                    aria-label="Blue theme"
+                  />
+                  <button
+                    onClick={() => setTheme("violet")}
+                    className={`h-5 w-5 rounded-full bg-[#8b5cf6] transition-all ${theme === 'violet' ? 'ring-2 ring-offset-2 ring-[#8b5cf6] scale-110' : ''}`}
+                    aria-label="Violet theme"
+                  />
+                  <button
+                    onClick={() => setTheme("orange")}
+                    className={`h-5 w-5 rounded-full bg-[#f97316] transition-all ${theme === 'orange' ? 'ring-2 ring-offset-2 ring-[#f97316] scale-110' : ''}`}
+                    aria-label="Orange theme"
+                  />
+                </div>
+              </div>
+
+              {/* Mobile Auth Buttons */}
+              <div className="p-4 space-y-3">
+                <SignedOut>
+                  <div suppressHydrationWarning className="grid grid-cols-2 gap-3">
+                    <SignInButton mode="modal">
+                      <Button variant="outline" className="w-full justify-center" onClick={() => setIsMobileMenuOpen(false)}>
+                        Sign In
+                      </Button>
+                    </SignInButton>
+                    <Link href="/convert-bank-statement-to-csv-excel" onClick={() => setIsMobileMenuOpen(false)} className="w-full">
+                      <Button className="w-full justify-center bg-gradient-button text-white shadow-lg">
+                        Get Started
+                      </Button>
+                    </Link>
+                  </div>
+                </SignedOut>
+                <SignedIn>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-[hsl(var(--muted-foreground))]">Signed in as {user?.primaryEmailAddress?.emailAddress}</span>
+                    <UserButton afterSignOutUrl="/" />
+                  </div>
+                </SignedIn>
+              </div>
+
+            </div >
+          </nav >
+        </div >
+      )}
 
       {/* Backdrop Blur Overlay */}
-      {isAnyDropdownOpen && (
-        <div
-          className="fixed inset-0 top-[4.5rem] z-40 bg-black/10 backdrop-blur-[2px] transition-all duration-300 animate-in fade-in"
-          aria-hidden="true"
-        />
-      )}
+      {
+        isAnyDropdownOpen && (
+          <div
+            className="fixed inset-0 top-[5.25rem] z-40 bg-black/10 backdrop-blur-[2px] transition-all duration-300 animate-in fade-in"
+            aria-hidden="true"
+          />
+        )
+      }
     </>
   );
 };
