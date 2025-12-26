@@ -121,6 +121,15 @@ const whoIsThisFor = [
     { icon: Briefcase, title: "Auditors", desc: "Review bank statement files for audit documentation purposes." },
 ];
 
+const useCases = [
+    { title: "Preview Before Import", desc: "Check transaction counts and date ranges before importing into QuickBooks or other accounting software." },
+    { title: "Verify Bank Downloads", desc: "Confirm your bank exported the correct transactions and account information." },
+    { title: "Client File Review", desc: "Accountants can quickly review client QBO files without importing them into their own software." },
+    { title: "Troubleshoot Import Errors", desc: "Identify problematic transactions when QuickBooks import fails." },
+    { title: "Multi-Bank Comparison", desc: "View files from different banks side-by-side to reconcile accounts." },
+    { title: "Transaction Auditing", desc: "Review historical bank data for compliance or tax preparation purposes." },
+];
+
 const relatedTools = [
     { href: "/tools/ofx-viewer", title: "OFX Viewer" },
     { href: "/convert/qbo-to-csv", title: "QBO to CSV" },
@@ -223,8 +232,28 @@ export default function QboViewerPage() {
                 </div>
             </section>
 
-            {/* SEO Content Block */}
+            {/* Common Use Cases Section */}
             <section className="py-12 md:py-16 px-6">
+                <div className="max-w-4xl mx-auto">
+                    <h2 className="text-2xl md:text-3xl font-bold text-center text-[hsl(var(--foreground))] mb-10">
+                        Common Use Cases for QBO File Viewer
+                    </h2>
+                    <div className="grid md:grid-cols-2 gap-6">
+                        {useCases.map((useCase, i) => (
+                            <div key={i} className="flex gap-4 items-start p-5 rounded-xl bg-[hsl(var(--card))] border border-[hsl(var(--border))]">
+                                <CheckCircle className="w-6 h-6 text-[hsl(var(--primary))] shrink-0 mt-0.5" />
+                                <div>
+                                    <h3 className="font-semibold text-[hsl(var(--foreground))] mb-1">{useCase.title}</h3>
+                                    <p className="text-sm text-[hsl(var(--muted-foreground))]">{useCase.desc}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* SEO Content Block */}
+            <section className="py-12 md:py-16 px-6 bg-[hsl(var(--muted))]/30">
                 <div className="max-w-4xl mx-auto prose prose-lg dark:prose-invert">
                     <h2 className="text-2xl font-bold text-[hsl(var(--foreground))] mb-6">
                         The Best Free QBO File Viewer in 2026
@@ -246,25 +275,57 @@ export default function QboViewerPage() {
                     </ul>
 
                     <h3 className="text-xl font-semibold text-[hsl(var(--foreground))] mb-4 mt-8">
+                        QBO File Structure and Key Tags
+                    </h3>
+                    <p className="text-[hsl(var(--muted-foreground))] mb-4">
+                        QBO files use OFX (Open Financial Exchange) SGML/XML structure. Key tags include:
+                    </p>
+                    <ul className="text-[hsl(var(--muted-foreground))] mb-4 list-disc pl-6 space-y-2">
+                        <li><strong>&lt;STMTTRN&gt;:</strong> Statement transaction container</li>
+                        <li><strong>&lt;TRNTYPE&gt;:</strong> Transaction type (DEBIT, CREDIT, CHECK)</li>
+                        <li><strong>&lt;DTPOSTED&gt;:</strong> Transaction date in YYYYMMDD format</li>
+                        <li><strong>&lt;TRNAMT&gt;:</strong> Transaction amount (positive or negative)</li>
+                        <li><strong>&lt;FITID&gt;:</strong> Unique financial institution transaction ID</li>
+                        <li><strong>&lt;NAME&gt;:</strong> Payee or merchant name</li>
+                        <li><strong>&lt;MEMO&gt;:</strong> Additional transaction description</li>
+                        <li><strong>&lt;BANKACCTFROM&gt;:</strong> Account identification block</li>
+                    </ul>
+
+                    <h3 className="text-xl font-semibold text-[hsl(var(--foreground))] mb-4 mt-8">
                         QBO vs OFX vs QFX: What's the Difference?
                     </h3>
                     <ul className="text-[hsl(var(--muted-foreground))] mb-4 list-disc pl-6 space-y-2">
-                        <li><strong>QBO:</strong> QuickBooks Web Connect format, optimized for QuickBooks import.</li>
-                        <li><strong>OFX:</strong> Open Financial Exchange, the open standard for bank data sharing.</li>
-                        <li><strong>QFX:</strong> Quicken Financial Exchange, proprietary Quicken variant of OFX.</li>
+                        <li><strong>QBO (QuickBooks Web Connect):</strong> Intuit's format optimized for QuickBooks import. Contains additional headers for QuickBooks compatibility.</li>
+                        <li><strong>OFX (Open Financial Exchange):</strong> The open industry standard for financial data exchange. Used by banks, brokerages, and financial institutions worldwide.</li>
+                        <li><strong>QFX (Quicken Financial Exchange):</strong> Intuit's Quicken-specific variant of OFX with proprietary INTU headers.</li>
                     </ul>
                     <p className="text-[hsl(var(--muted-foreground))] mb-4">
-                        Our viewer supports all three formats since they share the same underlying structure.
+                        Our <strong>QBO file viewer</strong> supports all three formats since they share the same underlying OFX structure.
                     </p>
 
                     <h3 className="text-xl font-semibold text-[hsl(var(--foreground))] mb-4 mt-8">
                         Why Use an Online QBO Viewer?
                     </h3>
                     <ul className="text-[hsl(var(--muted-foreground))] mb-4 list-disc pl-6 space-y-2">
-                        <li><strong>No QuickBooks License Needed:</strong> View files without expensive software.</li>
-                        <li><strong>Quick Preview:</strong> Check file contents before importing into accounting software.</li>
-                        <li><strong>Verify Bank Downloads:</strong> Confirm your bank exported the correct transactions.</li>
-                        <li><strong>Client File Review:</strong> Accountants can preview client files without importing.</li>
+                        <li><strong>No QuickBooks License Needed:</strong> View QBO files without purchasing expensive accounting software.</li>
+                        <li><strong>Quick Preview:</strong> Check file contents before importing into accounting software to verify accuracy.</li>
+                        <li><strong>Verify Bank Downloads:</strong> Confirm your bank exported the correct transactions and date range.</li>
+                        <li><strong>Client File Review:</strong> Accountants can preview client files without importing into their own QuickBooks.</li>
+                        <li><strong>Troubleshoot Import Issues:</strong> Identify malformed data that causes QuickBooks import errors.</li>
+                        <li><strong>Cross-Platform Access:</strong> Works on Windows, Mac, Linux, tablets, and phones - any device with a browser.</li>
+                    </ul>
+
+                    <h3 className="text-xl font-semibold text-[hsl(var(--foreground))] mb-4 mt-8">
+                        Banks That Provide QBO Downloads
+                    </h3>
+                    <p className="text-[hsl(var(--muted-foreground))] mb-4">
+                        Most major banks offer QBO file downloads for QuickBooks users, including:
+                    </p>
+                    <ul className="text-[hsl(var(--muted-foreground))] mb-4 list-disc pl-6 space-y-2">
+                        <li>Chase, Bank of America, Wells Fargo, Citibank</li>
+                        <li>Capital One, PNC Bank, US Bank, TD Bank</li>
+                        <li>American Express, Discover, most credit unions</li>
+                        <li>PayPal Business, Stripe, Square</li>
                     </ul>
                 </div>
             </section>

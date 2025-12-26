@@ -104,6 +104,15 @@ const whoIsThisFor = [
     { icon: Briefcase, title: "ERP Administrators", desc: "Validate MT940 files before importing into accounting systems." },
 ];
 
+const useCases = [
+    { title: "SAP Bank Statement Analysis", desc: "Export MT940 files from SAP to Excel for detailed transaction analysis outside the ERP." },
+    { title: "Cash Position Reporting", desc: "Convert SWIFT statements to Excel for treasury cash flow reporting and forecasting." },
+    { title: "Bank Reconciliation", desc: "Import MT940 data to Excel to reconcile bank balances with internal records." },
+    { title: "Audit Documentation", desc: "Create Excel archives of MT940 statements for audit trails and compliance." },
+    { title: "Oracle EBS Analysis", desc: "Convert MT940 files to Excel for Oracle E-Business Suite transaction review." },
+    { title: "Multi-Bank Consolidation", desc: "Export statements from multiple banks to Excel for consolidated reporting." },
+];
+
 const relatedTools = [
     { href: "/convert/csv-to-mt940", title: "CSV to MT940" },
     { href: "/convert/ofx-to-excel", title: "OFX to Excel" },
@@ -202,13 +211,33 @@ export default function Mt940ToExcelPage() {
                 </div>
             </section>
 
+            {/* Common Use Cases Section */}
             <section className="py-12 md:py-16 px-6">
+                <div className="max-w-4xl mx-auto">
+                    <h2 className="text-2xl md:text-3xl font-bold text-center text-[hsl(var(--foreground))] mb-10">
+                        Common Use Cases for MT940 to Excel Converter
+                    </h2>
+                    <div className="grid md:grid-cols-2 gap-6">
+                        {useCases.map((useCase, i) => (
+                            <div key={i} className="flex gap-4 items-start p-5 rounded-xl bg-[hsl(var(--card))] border border-[hsl(var(--border))]">
+                                <CheckCircle className="w-6 h-6 text-[hsl(var(--primary))] shrink-0 mt-0.5" />
+                                <div>
+                                    <h3 className="font-semibold text-[hsl(var(--foreground))] mb-1">{useCase.title}</h3>
+                                    <p className="text-sm text-[hsl(var(--muted-foreground))]">{useCase.desc}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            <section className="py-12 md:py-16 px-6 bg-[hsl(var(--muted))]/30">
                 <div className="max-w-4xl mx-auto prose prose-lg dark:prose-invert">
                     <h2 className="text-2xl font-bold text-[hsl(var(--foreground))] mb-6">
                         The Best Free MT940 to Excel Converter in 2026
                     </h2>
                     <p className="text-[hsl(var(--muted-foreground))] mb-4">
-                        Need to <strong>convert MT940 to Excel</strong>? Our free online converter transforms SWIFT bank statement files into Excel spreadsheets instantly. Ideal for SAP, Oracle, and Sage users who need to analyze bank data outside of the ERP.
+                        Need to <strong>convert MT940 to Excel</strong>? Our free <strong>online MT940 to Excel converter</strong> transforms SWIFT bank statement files into Excel spreadsheets instantly. Ideal for SAP, Oracle, Microsoft Dynamics, and Sage users who need to analyze bank data outside of the ERP.
                     </p>
 
                     <h3 className="text-xl font-semibold text-[hsl(var(--foreground))] mb-4 mt-8">

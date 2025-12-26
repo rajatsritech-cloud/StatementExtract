@@ -112,6 +112,15 @@ const whoIsThisFor = [
     { icon: Briefcase, title: "Bookkeepers", desc: "Prepare bank data for import into various accounting systems." },
 ];
 
+const useCases = [
+    { title: "Financial Reporting", desc: "Convert OFX bank data to Excel for creating monthly financial reports and dashboards." },
+    { title: "Expense Analysis", desc: "Import transactions into Excel to analyze spending patterns and identify cost savings." },
+    { title: "Tax Documentation", desc: "Export bank statements to Excel for tax preparation and deduction categorization." },
+    { title: "Audit Preparation", desc: "Convert bank files to Excel for audit trails and compliance documentation." },
+    { title: "Budget Tracking", desc: "Import transactions to Excel spreadsheets for budget vs actual comparison." },
+    { title: "ERP Integration", desc: "Convert OFX to Excel as an intermediate step for importing into ERP systems." },
+];
+
 const relatedTools = [
     { href: "/tools/ofx-viewer", title: "OFX Viewer" },
     { href: "/tools/qbo-viewer", title: "QBO Viewer" },
@@ -210,14 +219,54 @@ export default function OfxToExcelPage() {
                 </div>
             </section>
 
+            {/* Common Use Cases Section */}
             <section className="py-12 md:py-16 px-6">
+                <div className="max-w-4xl mx-auto">
+                    <h2 className="text-2xl md:text-3xl font-bold text-center text-[hsl(var(--foreground))] mb-10">
+                        Common Use Cases for OFX to Excel Converter
+                    </h2>
+                    <div className="grid md:grid-cols-2 gap-6">
+                        {useCases.map((useCase, i) => (
+                            <div key={i} className="flex gap-4 items-start p-5 rounded-xl bg-[hsl(var(--card))] border border-[hsl(var(--border))]">
+                                <CheckCircle className="w-6 h-6 text-[hsl(var(--primary))] shrink-0 mt-0.5" />
+                                <div>
+                                    <h3 className="font-semibold text-[hsl(var(--foreground))] mb-1">{useCase.title}</h3>
+                                    <p className="text-sm text-[hsl(var(--muted-foreground))]">{useCase.desc}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            <section className="py-12 md:py-16 px-6 bg-[hsl(var(--muted))]/30">
                 <div className="max-w-4xl mx-auto prose prose-lg dark:prose-invert">
                     <h2 className="text-2xl font-bold text-[hsl(var(--foreground))] mb-6">
                         The Best Free OFX to Excel Converter in 2026
                     </h2>
                     <p className="text-[hsl(var(--muted-foreground))] mb-4">
-                        Need to <strong>convert OFX to Excel</strong>? Our free online converter transforms OFX bank statement files into Excel spreadsheets instantly. Perfect for accountants, bookkeepers, and business owners who need to analyze bank data in Microsoft Excel.
+                        Need to <strong>convert OFX to Excel</strong>? Our free <strong>online OFX to Excel converter</strong> transforms OFX bank statement files into Excel spreadsheets instantly. Perfect for accountants, bookkeepers, and business owners who need to analyze bank data in Microsoft Excel.
                     </p>
+
+                    <h3 className="text-xl font-semibold text-[hsl(var(--foreground))] mb-4 mt-8">
+                        What is OFX Format?
+                    </h3>
+                    <p className="text-[hsl(var(--muted-foreground))] mb-4">
+                        <strong>OFX (Open Financial Exchange)</strong> is the industry standard for financial data exchange between banks and software. Most banks worldwide offer OFX downloads for their customers. OFX files contain complete transaction details that can be converted to Excel for analysis.
+                    </p>
+
+                    <h3 className="text-xl font-semibold text-[hsl(var(--foreground))] mb-4 mt-8">
+                        OFX File Tags Extracted to Excel
+                    </h3>
+                    <ul className="text-[hsl(var(--muted-foreground))] mb-4 list-disc pl-6 space-y-2">
+                        <li><strong>&lt;DTPOSTED&gt;:</strong> Transaction date → Date column</li>
+                        <li><strong>&lt;TRNAMT&gt;:</strong> Amount → Amount column with proper sign</li>
+                        <li><strong>&lt;NAME&gt;:</strong> Payee → Name column in Excel</li>
+                        <li><strong>&lt;MEMO&gt;:</strong> Description → Memo column</li>
+                        <li><strong>&lt;TRNTYPE&gt;:</strong> Type → Transaction Type column</li>
+                        <li><strong>&lt;FITID&gt;:</strong> ID → Reference column</li>
+                        <li><strong>&lt;CHECKNUM&gt;:</strong> Check # → Check Number column</li>
+                    </ul>
 
                     <h3 className="text-xl font-semibold text-[hsl(var(--foreground))] mb-4 mt-8">
                         What Data is Extracted?

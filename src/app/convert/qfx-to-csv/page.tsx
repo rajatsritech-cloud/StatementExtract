@@ -120,6 +120,15 @@ const whoIsThisFor = [
     { icon: Briefcase, title: "Bookkeepers", desc: "Prepare transaction data for import into accounting systems that accept CSV." },
 ];
 
+const useCases = [
+    { title: "Excel Data Analysis", desc: "Convert QFX bank data to CSV for pivot tables, charts, and financial analysis in Excel." },
+    { title: "Expense Categorization", desc: "Export transactions to CSV to categorize and track business or personal expenses." },
+    { title: "Tax Preparation", desc: "Convert bank statements to spreadsheet format for tax documentation and deduction tracking." },
+    { title: "Software Migration", desc: "Move transaction data from Quicken to other accounting systems via CSV import." },
+    { title: "Data Backup", desc: "Create readable CSV archives of your financial transactions for long-term storage." },
+    { title: "Bulk Processing", desc: "Convert multiple QFX files to CSV for batch import into databases or ERP systems." },
+];
+
 const relatedTools = [
     { href: "/tools/qbo-viewer", title: "QBO Viewer" },
     { href: "/tools/ofx-viewer", title: "OFX Viewer" },
@@ -218,17 +227,58 @@ export default function QfxToCsvPage() {
                 </div>
             </section>
 
+            {/* Common Use Cases Section */}
             <section className="py-12 md:py-16 px-6">
+                <div className="max-w-4xl mx-auto">
+                    <h2 className="text-2xl md:text-3xl font-bold text-center text-[hsl(var(--foreground))] mb-10">
+                        Common Use Cases for QFX to CSV Converter
+                    </h2>
+                    <div className="grid md:grid-cols-2 gap-6">
+                        {useCases.map((useCase, i) => (
+                            <div key={i} className="flex gap-4 items-start p-5 rounded-xl bg-[hsl(var(--card))] border border-[hsl(var(--border))]">
+                                <CheckCircle className="w-6 h-6 text-[hsl(var(--primary))] shrink-0 mt-0.5" />
+                                <div>
+                                    <h3 className="font-semibold text-[hsl(var(--foreground))] mb-1">{useCase.title}</h3>
+                                    <p className="text-sm text-[hsl(var(--muted-foreground))]">{useCase.desc}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            <section className="py-12 md:py-16 px-6 bg-[hsl(var(--muted))]/30">
                 <div className="max-w-4xl mx-auto prose prose-lg dark:prose-invert">
                     <h2 className="text-2xl font-bold text-[hsl(var(--foreground))] mb-6">
                         The Best Free QFX to CSV Converter in 2026
                     </h2>
                     <p className="text-[hsl(var(--muted-foreground))] mb-4">
-                        Need to <strong>convert QFX to CSV</strong> for use in Excel or Google Sheets? Our free online converter transforms Quicken QFX files into standard CSV spreadsheets in seconds. Unlike other tools, it runs <strong>100% in your browser</strong> - your financial data never leaves your device.
+                        Need to <strong>convert QFX to CSV</strong> for use in Excel or Google Sheets? Our free <strong>online QFX to CSV converter</strong> transforms Quicken QFX files into standard CSV spreadsheets in seconds. Unlike other tools, it runs <strong>100% in your browser</strong> - your financial data never leaves your device.
                     </p>
 
                     <h3 className="text-xl font-semibold text-[hsl(var(--foreground))] mb-4 mt-8">
-                        What Data is Extracted?
+                        What is a QFX File?
+                    </h3>
+                    <p className="text-[hsl(var(--muted-foreground))] mb-4">
+                        <strong>QFX (Quicken Financial Exchange)</strong> is Intuit's proprietary financial file format used by Quicken personal finance software. Banks provide QFX downloads for importing transactions into Quicken. It's based on the Open Financial Exchange (OFX) standard with additional Quicken-specific headers.
+                    </p>
+
+                    <h3 className="text-xl font-semibold text-[hsl(var(--foreground))] mb-4 mt-8">
+                        QFX File Structure and Key Tags
+                    </h3>
+                    <ul className="text-[hsl(var(--muted-foreground))] mb-4 list-disc pl-6 space-y-2">
+                        <li><strong>&lt;INTU.BID&gt;:</strong> Intuit's unique bank identifier</li>
+                        <li><strong>&lt;INTU.USERID&gt;:</strong> User identification for Quicken</li>
+                        <li><strong>&lt;STMTTRN&gt;:</strong> Transaction container with all transaction data</li>
+                        <li><strong>&lt;TRNTYPE&gt;:</strong> Transaction type (DEBIT, CREDIT, CHECK, DEP)</li>
+                        <li><strong>&lt;DTPOSTED&gt;:</strong> Transaction date in YYYYMMDD format</li>
+                        <li><strong>&lt;TRNAMT&gt;:</strong> Transaction amount (positive/negative)</li>
+                        <li><strong>&lt;FITID&gt;:</strong> Unique transaction identifier</li>
+                        <li><strong>&lt;NAME&gt;:</strong> Payee or merchant name</li>
+                    </ul>
+
+                    <h3 className="text-xl font-semibold text-[hsl(var(--foreground))] mb-4 mt-8">
+                        What Data is Extracted to CSV?
                     </h3>
                     <p className="text-[hsl(var(--muted-foreground))] mb-4">
                         The converter extracts all transaction data from your QFX file:

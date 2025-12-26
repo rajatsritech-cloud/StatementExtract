@@ -112,6 +112,15 @@ const whoIsThisFor = [
     { icon: Briefcase, title: "Software Developers", desc: "Debug and validate OFX file generation or parsing." },
 ];
 
+const useCases = [
+    { title: "Preview Before Import", desc: "Verify OFX file contents and transaction counts before importing into accounting software." },
+    { title: "Verify Bank Exports", desc: "Confirm your bank correctly exported all transactions for the selected date range." },
+    { title: "Debug OFX Parsing", desc: "Developers can inspect OFX structure and tags to troubleshoot parsing issues." },
+    { title: "Multi-Bank Reconciliation", desc: "View statements from different banks side-by-side for account reconciliation." },
+    { title: "Audit Trail Review", desc: "Review historical transaction data for compliance, auditing, or tax preparation." },
+    { title: "Client File Inspection", desc: "Accountants can review client bank files without importing them into their systems." },
+];
+
 const relatedTools = [
     { href: "/tools/qbo-viewer", title: "QBO Viewer" },
     { href: "/convert/ofx-to-excel", title: "OFX to Excel" },
@@ -210,51 +219,104 @@ export default function OfxViewerPage() {
                 </div>
             </section>
 
+            {/* Common Use Cases Section */}
             <section className="py-12 md:py-16 px-6">
+                <div className="max-w-4xl mx-auto">
+                    <h2 className="text-2xl md:text-3xl font-bold text-center text-[hsl(var(--foreground))] mb-10">
+                        Common Use Cases for OFX File Viewer
+                    </h2>
+                    <div className="grid md:grid-cols-2 gap-6">
+                        {useCases.map((useCase, i) => (
+                            <div key={i} className="flex gap-4 items-start p-5 rounded-xl bg-[hsl(var(--card))] border border-[hsl(var(--border))]">
+                                <CheckCircle className="w-6 h-6 text-[hsl(var(--primary))] shrink-0 mt-0.5" />
+                                <div>
+                                    <h3 className="font-semibold text-[hsl(var(--foreground))] mb-1">{useCase.title}</h3>
+                                    <p className="text-sm text-[hsl(var(--muted-foreground))]">{useCase.desc}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            <section className="py-12 md:py-16 px-6 bg-[hsl(var(--muted))]/30">
                 <div className="max-w-4xl mx-auto prose prose-lg dark:prose-invert">
                     <h2 className="text-2xl font-bold text-[hsl(var(--foreground))] mb-6">
                         The Best Free OFX File Viewer in 2026
                     </h2>
                     <p className="text-[hsl(var(--muted-foreground))] mb-4">
-                        Need to <strong>open an OFX file</strong> but don't have financial software? Our free online OFX viewer lets you see the contents of bank statement files instantly in your browser. No downloads, no registration, and <strong>100% private processing</strong>.
+                        Need to <strong>open an OFX file</strong> but don't have financial software? Our free <strong>online OFX viewer</strong> lets you see the contents of bank statement files instantly in your browser. No downloads, no registration, and <strong>100% private processing</strong>.
                     </p>
 
                     <h3 className="text-xl font-semibold text-[hsl(var(--foreground))] mb-4 mt-8">
                         What is OFX Format?
                     </h3>
                     <p className="text-[hsl(var(--muted-foreground))] mb-4">
-                        <strong>OFX (Open Financial Exchange)</strong> is an open standard format for exchanging financial data between banks, brokerages, and personal finance software. It's the backbone of online banking downloads and contains:
+                        <strong>OFX (Open Financial Exchange)</strong> is an open standard format for exchanging financial data between banks, brokerages, and personal finance software. Developed jointly by Microsoft, Intuit, and CheckFree in 1997, it has become the backbone of online banking downloads. OFX files contain:
                     </p>
                     <ul className="text-[hsl(var(--muted-foreground))] mb-4 list-disc pl-6 space-y-2">
                         <li><strong>Transaction Data:</strong> Dates, amounts, payees, memos, and transaction types</li>
-                        <li><strong>Account Information:</strong> Bank ID, account number, and account type</li>
-                        <li><strong>Balance Information:</strong> Current or as-of-date balances</li>
-                        <li><strong>Currency Code:</strong> USD, EUR, GBP, or any ISO 4217 currency</li>
+                        <li><strong>Account Information:</strong> Bank ID (routing number), account number, and account type</li>
+                        <li><strong>Balance Information:</strong> Opening balance, closing balance, and available balance</li>
+                        <li><strong>Currency Code:</strong> USD, EUR, GBP, CAD, or any ISO 4217 currency code</li>
+                        <li><strong>Statement Period:</strong> Start and end dates for the statement range</li>
                     </ul>
 
                     <h3 className="text-xl font-semibold text-[hsl(var(--foreground))] mb-4 mt-8">
-                        OFX File Structure
+                        OFX File Structure and Key Tags
                     </h3>
                     <p className="text-[hsl(var(--muted-foreground))] mb-4">
-                        OFX files use an SGML/XML-like structure with specific tags:
+                        OFX files use an SGML/XML-like structure with specific tags for financial data:
                     </p>
                     <ul className="text-[hsl(var(--muted-foreground))] mb-4 list-disc pl-6 space-y-2">
-                        <li><strong>STMTTRN:</strong> Transaction container block</li>
-                        <li><strong>DTPOSTED:</strong> Transaction date (YYYYMMDD format)</li>
-                        <li><strong>TRNAMT:</strong> Transaction amount</li>
-                        <li><strong>TRNTYPE:</strong> DEBIT, CREDIT, CHECK, etc.</li>
-                        <li><strong>NAME:</strong> Payee or description</li>
-                        <li><strong>FITID:</strong> Unique transaction identifier</li>
+                        <li><strong>&lt;STMTTRN&gt;:</strong> Statement transaction container block</li>
+                        <li><strong>&lt;DTPOSTED&gt;:</strong> Transaction date (YYYYMMDDHHMMSS format)</li>
+                        <li><strong>&lt;TRNAMT&gt;:</strong> Transaction amount (positive for credits, negative for debits)</li>
+                        <li><strong>&lt;TRNTYPE&gt;:</strong> Transaction type (DEBIT, CREDIT, CHECK, DEP, ATM, POS, INT, FEE)</li>
+                        <li><strong>&lt;NAME&gt;:</strong> Payee or merchant name</li>
+                        <li><strong>&lt;MEMO&gt;:</strong> Additional transaction description</li>
+                        <li><strong>&lt;FITID&gt;:</strong> Financial institution's unique transaction ID</li>
+                        <li><strong>&lt;CHECKNUM&gt;:</strong> Check number (for check transactions)</li>
+                        <li><strong>&lt;BANKACCTFROM&gt;:</strong> Source account identification block</li>
                     </ul>
+
+                    <h3 className="text-xl font-semibold text-[hsl(var(--foreground))] mb-4 mt-8">
+                        OFX Versions: 1.x vs 2.x
+                    </h3>
+                    <p className="text-[hsl(var(--muted-foreground))] mb-4">
+                        There are two main versions of OFX:
+                    </p>
+                    <ul className="text-[hsl(var(--muted-foreground))] mb-4 list-disc pl-6 space-y-2">
+                        <li><strong>OFX 1.x (SGML):</strong> Uses SGML syntax without closing tags. Still widely used by most banks.</li>
+                        <li><strong>OFX 2.x (XML):</strong> Uses proper XML syntax with closing tags. Adopted by newer implementations.</li>
+                    </ul>
+                    <p className="text-[hsl(var(--muted-foreground))] mb-4">
+                        Our <strong>OFX file viewer</strong> supports both versions and automatically detects the format.
+                    </p>
 
                     <h3 className="text-xl font-semibold text-[hsl(var(--foreground))] mb-4 mt-8">
                         Why Use an Online OFX Viewer?
                     </h3>
                     <ul className="text-[hsl(var(--muted-foreground))] mb-4 list-disc pl-6 space-y-2">
-                        <li><strong>No Software Needed:</strong> View files without installing Quicken or QuickBooks.</li>
-                        <li><strong>Quick Validation:</strong> Verify bank downloads before importing.</li>
-                        <li><strong>Multi-Format Support:</strong> Works with OFX, QFX, and QBO files.</li>
-                        <li><strong>Privacy First:</strong> Your data never leaves your computer.</li>
+                        <li><strong>No Software Needed:</strong> View OFX files without installing Quicken, QuickBooks, or Money.</li>
+                        <li><strong>Quick Validation:</strong> Verify bank downloads before importing into accounting software.</li>
+                        <li><strong>Multi-Format Support:</strong> Works with OFX, QFX (Quicken), and QBO (QuickBooks) files.</li>
+                        <li><strong>Privacy First:</strong> Your sensitive financial data never leaves your computer.</li>
+                        <li><strong>Cross-Platform:</strong> Works on Windows, Mac, Linux, iOS, and Android.</li>
+                        <li><strong>Debug Support:</strong> Developers can inspect file structure for parsing troubleshooting.</li>
+                    </ul>
+
+                    <h3 className="text-xl font-semibold text-[hsl(var(--foreground))] mb-4 mt-8">
+                        Banks That Support OFX Downloads
+                    </h3>
+                    <p className="text-[hsl(var(--muted-foreground))] mb-4">
+                        Most major financial institutions provide OFX file downloads:
+                    </p>
+                    <ul className="text-[hsl(var(--muted-foreground))] mb-4 list-disc pl-6 space-y-2">
+                        <li>Chase, Bank of America, Wells Fargo, Citibank, Capital One</li>
+                        <li>PNC Bank, US Bank, TD Bank, Truist, Fifth Third</li>
+                        <li>Charles Schwab, Fidelity, Vanguard, E*TRADE</li>
+                        <li>American Express, Discover, most credit unions</li>
                     </ul>
                 </div>
             </section>
@@ -291,6 +353,6 @@ export default function OfxViewerPage() {
                 currentTool="OFX Viewer"
                 relatedTools={relatedTools}
             />
-        </main>
+        </main >
     );
 }
