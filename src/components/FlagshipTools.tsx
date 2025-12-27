@@ -26,10 +26,16 @@ const FLAGSHIP_TOOLS = [
 
 const INVOICE_TOOLS = [
     {
-        name: "Invoice to Excel/CSV",
+        name: "Invoice to Excel",
         href: "/convert-invoice-to-excel-csv",
         icon: FileText,
-        description: "Extract tables & data from invoices instantly"
+        description: "Export invoice data to Excel (.xlsx) format"
+    },
+    {
+        name: "Invoice to CSV",
+        href: "/convert-invoice-to-excel-csv",
+        icon: FileText,
+        description: "Export invoice data to CSV format for any system"
     }
 ];
 
@@ -104,18 +110,17 @@ export function FlagshipTools() {
                         <span className="bg-gradient-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent">Invoice Data</span> Converter
                     </h2>
                     <p className="text-lg text-[hsl(var(--muted-foreground))] max-w-2xl mx-auto">
-                        Eliminate manual data entry. Convert PDF invoices to Excel instantly.
+                        Eliminate manual data entry. Convert PDF invoices to csv and Excel instantly.
                     </p>
                 </div>
 
                 {/* Invoice Tools Grid */}
-                <div className="grid md:grid-cols-3 gap-6 animate-slide-up justify-center">
-                    {/* Centering the single item if grid has space, or just use grid */}
+                <div className="grid md:grid-cols-2 gap-6 animate-slide-up max-w-2xl mx-auto">
                     {INVOICE_TOOLS.map((tool, i) => (
                         <Link
                             key={tool.href + i}
                             href={tool.href}
-                            className="group relative p-6 rounded-2xl border border-emerald-500/20 bg-[hsl(var(--card))] hover:border-emerald-500/50 hover:shadow-xl hover:shadow-emerald-500/10 hover:-translate-y-1 transition-all duration-300 md:col-start-2"
+                            className="group relative p-6 rounded-2xl border border-emerald-500/20 bg-[hsl(var(--card))] hover:border-emerald-500/50 hover:shadow-xl hover:shadow-emerald-500/10 hover:-translate-y-1 transition-all duration-300"
                         >
                             {/* Hover Glow */}
                             <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-emerald-500/0 to-teal-500/0 group-hover:from-emerald-500/5 group-hover:to-teal-500/5 transition-all duration-300" />
