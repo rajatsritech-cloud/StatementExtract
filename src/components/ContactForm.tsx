@@ -16,17 +16,66 @@ export function ContactForm() {
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+    const [errors, setErrors] = useState<Record<string, string>>({});
+
+    // Client-side spam protection: simple timestamp check
+    const [lastSubmitTime, setLastSubmitTime] = useState(0);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { id, value } = e.target;
+
+        // Clear error when user types
+        if (errors[id]) {
+            setErrors((prev) => {
+                const newErrors = { ...prev };
+                delete newErrors[id];
+                return newErrors;
+            });
+        }
+
+        // Character limit logic for details
+        if (id === "details" && value.length > 500) return;
+
         setFormData((prev) => ({
             ...prev,
             [id === "use-case" ? "help_needed" : id]: value,
         }));
     };
 
+    const validateForm = () => {
+        const newErrors: Record<string, string> = {};
+
+        if (!formData.name.trim()) newErrors.name = "Name is required";
+
+        if (!formData.email.trim()) {
+            newErrors.email = "Email is required";
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+            newErrors.email = "Please enter a valid email address";
+        }
+
+        if (!formData.details.trim()) {
+            newErrors.details = "Please provide some details";
+        } else if (formData.details.length < 10) {
+            newErrors.details = "Feedback must be at least 10 characters";
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        // Spam prevention: Rate limit (e.g., 10 seconds between submissions)
+        const now = Date.now();
+        if (now - lastSubmitTime < 10000) {
+            setSubmitStatus("error");
+            setErrors({ general: "Please wait a moment before sending another message." });
+            return;
+        }
+
+        if (!validateForm()) return;
+
         setIsSubmitting(true);
         setSubmitStatus("idle");
 
@@ -46,6 +95,7 @@ export function ContactForm() {
                 throw new Error("Failed to send message");
             }
 
+            setLastSubmitTime(Date.now());
             setSubmitStatus("success");
             setFormData({
                 name: "",
@@ -66,19 +116,20 @@ export function ContactForm() {
         <form onSubmit={handleSubmit} className="grid gap-4 md:grid-cols-2">
             <div className="space-y-1">
                 <label className="text-xs font-medium text-[hsl(var(--muted-foreground))]" htmlFor="name">
-                    Name
+                    Name <span className="text-red-500">*</span>
                 </label>
                 <Input
                     id="name"
                     placeholder="Alex from Example Co."
                     value={formData.name}
                     onChange={handleChange}
-                    required
+                    className={errors.name ? "border-red-500 focus-visible:ring-red-500" : ""}
                 />
+                {errors.name && <p className="text-[10px] text-red-500">{errors.name}</p>}
             </div>
             <div className="space-y-1">
                 <label className="text-xs font-medium text-[hsl(var(--muted-foreground))]" htmlFor="email">
-                    Work email
+                    Email <span className="text-red-500">*</span>
                 </label>
                 <Input
                     id="email"
@@ -86,8 +137,9 @@ export function ContactForm() {
                     placeholder="you@company.com"
                     value={formData.email}
                     onChange={handleChange}
-                    required
+                    className={errors.email ? "border-red-500 focus-visible:ring-red-500" : ""}
                 />
+                {errors.email && <p className="text-[10px] text-red-500">{errors.email}</p>}
             </div>
             <div className="space-y-1">
                 <label className="text-xs font-medium text-[hsl(var(--muted-foreground))]" htmlFor="company">
@@ -112,17 +164,32 @@ export function ContactForm() {
                 />
             </div>
             <div className="space-y-1 md:col-span-2">
-                <label className="text-xs font-medium text-[hsl(var(--muted-foreground))]" htmlFor="message">
-                    Additional details or questions
-                </label>
+                <div className="flex justify-between">
+                    <label className="text-xs font-medium text-[hsl(var(--muted-foreground))]" htmlFor="details">
+                        Additional details or questions <span className="text-red-500">*</span>
+                    </label>
+                    <span className="text-[10px] text-[hsl(var(--muted-foreground))]">
+                        {formData.details.length}/500
+                    </span>
+                </div>
                 <Textarea
                     id="details"
                     placeholder="Share links to example files, banks you use, or anything else that would help."
                     rows={4}
                     value={formData.details}
                     onChange={handleChange}
+                    className={errors.details ? "border-red-500 focus-visible:ring-red-500" : ""}
                 />
+                {errors.details && <p className="text-[10px] text-red-500">{errors.details}</p>}
             </div>
+
+            {errors.general && (
+                <div className="md:col-span-2 flex items-center gap-2 text-sm text-red-600 bg-red-50 p-2 rounded-md">
+                    <AlertCircle className="h-4 w-4" />
+                    <span>{errors.general}</span>
+                </div>
+            )}
+
             <div className="md:col-span-2 flex flex-wrap items-center gap-3">
                 <Button type="submit" className="shadow-md" disabled={isSubmitting}>
                     {isSubmitting ? (
@@ -142,18 +209,28 @@ export function ContactForm() {
                     </div>
                 )}
 
-                {submitStatus === "error" && (
-                    <div className="flex items-center gap-2 text-sm text-red-600 animate-in fade-in slide-in-from-left-2">
-                        <AlertCircle className="h-4 w-4" />
-                        <span>Something went wrong. Please try again or email us directly.</span>
+                {submitStatus === "error" && !errors.general && (
+                    <div className="flex flex-col gap-1 w-full text-sm text-red-600 animate-in fade-in slide-in-from-left-2">
+                        <div className="flex items-center gap-2">
+                            <AlertCircle className="h-4 w-4" />
+                            <span>Server error (possibly overloaded).</span>
+                        </div>
+                        <p className="ml-6 text-xs text-red-500">
+                            Please email us directly at <a href="mailto:support@statementextract.com" className="underline hover:text-red-700">support@statementextract.com</a>
+                        </p>
                     </div>
                 )}
 
                 {submitStatus === "idle" && !isSubmitting && (
-                    <p className="text-[10px] text-[hsl(var(--muted-foreground))]">
-                        This form is for discovery and product feedback. We'll get back to you with next steps
-                        or a short demo if helpful.
-                    </p>
+                    <div className="flex flex-col gap-2 w-full">
+                        <p className="text-[10px] text-[hsl(var(--muted-foreground))]">
+                            This form is for discovery and product feedback. We'll get back to you with next steps
+                            or a short demo if helpful.
+                        </p>
+                        <p className="text-[10px] text-[hsl(var(--muted-foreground))]">
+                            You can also directly email us at <a href="mailto:support@statementextract.com" className="text-[hsl(var(--primary))] hover:underline">support@statementextract.com</a>
+                        </p>
+                    </div>
                 )}
             </div>
         </form>

@@ -43,6 +43,7 @@ import {
 import { isAdminEmail } from "@/lib/auth-client";
 import { useState, useRef } from "react";
 import { useTheme } from "@/components/ThemeProvider";
+import { FeedbackModal } from "@/components/FeedbackModal";
 
 export const Header = () => {
   const router = useRouter();
@@ -137,6 +138,16 @@ export const Header = () => {
   if (pathname?.startsWith("/dashboard")) {
     return null;
   }
+
+  // Hide Auth buttons on generic converter and tool pages
+  // Flagship tools (e.g., /convert-bank-statement-to-csv-excel) are at root so they are NOT generic.
+  const isGenericPage =
+    pathname === '/convert' ||
+    pathname?.startsWith('/convert/') ||
+    pathname === '/tools' ||
+    pathname?.startsWith('/tools/');
+
+  const shouldShowAuth = !isGenericPage;
 
   return (
     <>
@@ -676,7 +687,7 @@ export const Header = () => {
                             className="mt-6 flex items-center justify-end gap-2 text-sm font-bold hover:text-purple-500 hover:underline transition-colors"
                             onClick={closeToolsDropdown}
                           >
-                            View All Tools â†’
+                            View All Tools →
                           </Link>
                         </div>
                       </div>
@@ -684,12 +695,11 @@ export const Header = () => {
                   </div>
                 )}
               </div>
-              <Link href="/#faq" className="text-sm font-medium text-[hsl(var(--foreground))] transition-colors hover:text-[hsl(var(--primary))]">
-                FAQ
-              </Link>
+
             </nav>
 
             <div className="flex items-center gap-2 lg:gap-4">
+
               <SignedIn>
                 <Link
                   href="/dashboard"
@@ -724,20 +734,24 @@ export const Header = () => {
                 </div>
               </div>
 
-              <SignedOut>
-                <div suppressHydrationWarning className="flex items-center gap-2">
-                  <SignInButton mode="modal">
-                    <Button variant="ghost" className="hidden lg:inline-flex">
-                      Login
-                    </Button>
-                  </SignInButton>
-                  <SignUpButton mode="modal">
-                    <Button className="hidden shadow-md lg:inline-flex">
-                      Sign Up
-                    </Button>
-                  </SignUpButton>
-                </div>
-              </SignedOut>
+              <FeedbackModal />
+
+              {shouldShowAuth && (
+                <SignedOut>
+                  <div suppressHydrationWarning className="flex items-center gap-2">
+                    <SignInButton mode="modal">
+                      <Button variant="ghost" className="hidden lg:inline-flex">
+                        Login
+                      </Button>
+                    </SignInButton>
+                    <SignUpButton mode="modal">
+                      <Button className="hidden shadow-md lg:inline-flex">
+                        Sign Up
+                      </Button>
+                    </SignUpButton>
+                  </div>
+                </SignedOut>
+              )}
 
               {/* Tablet-only buttons (hidden on desktop, visible on tablet/mobile) */}
               <SignedIn>
@@ -752,13 +766,15 @@ export const Header = () => {
                 </div>
               </SignedIn>
 
-              <SignedOut>
-                <SignUpButton mode="modal">
-                  <Button className="lg:hidden shadow-md">
-                    Sign Up
-                  </Button>
-                </SignUpButton>
-              </SignedOut>
+              {shouldShowAuth && (
+                <SignedOut>
+                  <SignUpButton mode="modal">
+                    <Button className="lg:hidden shadow-md">
+                      Sign Up
+                    </Button>
+                  </SignUpButton>
+                </SignedOut>
+              )}
 
               <Button
                 variant="ghost"
@@ -771,12 +787,10 @@ export const Header = () => {
               </Button>
             </div>
           </div>
-        </div >
+        </div>
 
 
-
-
-      </header>
+      </header >
 
       {isMobileMenuOpen && (
         <div className="fixed inset-0 top-[5.25rem] z-50 bg-[hsl(var(--background))] lg:hidden animate-in slide-in-from-top-8 duration-300">
@@ -843,17 +857,6 @@ export const Header = () => {
                 <span className="flex items-center gap-3">
                   <FileIcon className="h-4 w-4 text-[hsl(var(--primary))]" />
                   <span>Blogs</span>
-                </span>
-              </Link>
-
-              <Link
-                href="/#faq"
-                className="flex w-full items-center justify-between px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))]"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                <span className="flex items-center gap-3">
-                  <HelpCircle className="h-4 w-4 text-[hsl(var(--primary))]" />
-                  <span>FAQ</span>
                 </span>
               </Link>
 
@@ -924,20 +927,22 @@ export const Header = () => {
 
               {/* Mobile Auth Buttons */}
               <div className="p-4 space-y-3">
-                <SignedOut>
-                  <div suppressHydrationWarning className="grid grid-cols-2 gap-3">
-                    <SignInButton mode="modal">
-                      <Button variant="outline" className="w-full justify-center" onClick={() => setIsMobileMenuOpen(false)}>
-                        Sign In
-                      </Button>
-                    </SignInButton>
-                    <Link href="/convert-bank-statement-to-csv-excel" onClick={() => setIsMobileMenuOpen(false)} className="w-full">
-                      <Button className="w-full justify-center bg-gradient-button text-white shadow-lg">
-                        Get Started
-                      </Button>
-                    </Link>
-                  </div>
-                </SignedOut>
+                {shouldShowAuth && (
+                  <SignedOut>
+                    <div suppressHydrationWarning className="grid grid-cols-2 gap-3">
+                      <SignInButton mode="modal">
+                        <Button variant="outline" className="w-full justify-center" onClick={() => setIsMobileMenuOpen(false)}>
+                          Sign In
+                        </Button>
+                      </SignInButton>
+                      <Link href="/convert-bank-statement-to-csv-excel" onClick={() => setIsMobileMenuOpen(false)} className="w-full">
+                        <Button className="w-full justify-center bg-gradient-button text-white shadow-lg">
+                          Get Started
+                        </Button>
+                      </Link>
+                    </div>
+                  </SignedOut>
+                )}
                 <SignedIn>
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-[hsl(var(--muted-foreground))]">Signed in as {user?.primaryEmailAddress?.emailAddress}</span>
