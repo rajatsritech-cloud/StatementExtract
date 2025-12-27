@@ -36,7 +36,7 @@ export const Integrations = () => {
   ];
 
   return (
-    <section id="integrations" aria-labelledby="integrations-heading" className="relative overflow-hidden bg-gradient-to-b from-[hsl(var(--background))] to-[hsl(var(--muted))]/30 py-16 px-6 md:py-24">
+    <section id="integrations" aria-labelledby="integrations-heading" className="relative overflow-hidden bg-gradient-to-b from-[hsl(var(--background))] to-[hsl(var(--muted))]/30 py-12 px-6 md:py-20">
       {/* Decorative Background */}
       <div className="absolute inset-0 pointer-events-none">
         {/* Themed Dot Pattern */}

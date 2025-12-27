@@ -26,7 +26,7 @@ const features = [
 
 export const Features = () => {
   return (
-    <section id="features" aria-labelledby="features-heading" className="relative py-20 px-6 md:py-28 bg-gradient-to-b from-[hsl(var(--background))] to-[hsl(var(--muted))]/30 overflow-hidden">
+    <section id="features" aria-labelledby="features-heading" className="relative py-12 px-6 md:py-20 bg-gradient-to-b from-[hsl(var(--background))] to-[hsl(var(--muted))]/30 overflow-hidden">
       {/* Decorative Background */}
       <div className="absolute inset-0 pointer-events-none">
         {/* Themed Grid Lines */}

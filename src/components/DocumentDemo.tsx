@@ -2,11 +2,11 @@ import { ArrowRight, Cpu, FileSpreadsheet, FileText, Sparkles, Upload, Check, Za
 
 export const DocumentDemo = () => {
   return (
-    <section id="document-demo" aria-labelledby="document-demo-heading" className="relative overflow-hidden bg-gradient-to-b from-[hsl(var(--muted))]/30 to-[hsl(var(--background))] py-20 px-6 md:py-28">
+    <section id="document-demo" aria-labelledby="document-demo-heading" className="relative overflow-hidden bg-gradient-to-b from-[hsl(var(--muted))]/30 to-[hsl(var(--background))] py-12 px-6 md:py-20">
       {/* Decorative Background */}
       <div className="absolute inset-0 pointer-events-none">
         {/* Themed Cross-Hatch Pattern */}
-        <div className="absolute inset-0 opacity-[0.06]" style={{
+        <div className="absolute inset-0 opacity-[0.15]" style={{
           backgroundImage: `repeating-linear-gradient(0deg, rgb(244 63 94 / 0.3) 0, rgb(244 63 94 / 0.3) 1px, transparent 0, transparent 50%), repeating-linear-gradient(90deg, rgb(244 63 94 / 0.3) 0, rgb(244 63 94 / 0.3) 1px, transparent 0, transparent 50%)`,
           backgroundSize: '30px 30px'
         }} />

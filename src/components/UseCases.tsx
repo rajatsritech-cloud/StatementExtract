@@ -30,7 +30,7 @@ const useCases = [
 
 export const UseCases = () => {
   return (
-    <section id="use-cases" aria-labelledby="use-cases-heading" className="relative bg-gradient-to-b from-[hsl(var(--muted))]/30 to-[hsl(var(--background))] py-16 px-6 md:py-24 overflow-hidden">
+    <section id="use-cases" aria-labelledby="use-cases-heading" className="relative bg-gradient-to-b from-[hsl(var(--muted))]/30 to-[hsl(var(--background))] py-12 px-6 md:py-20 overflow-hidden">
       {/* Decorative Background */}
       <div className="absolute inset-0 pointer-events-none">
         {/* Themed Grid Lines */}

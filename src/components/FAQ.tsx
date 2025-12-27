@@ -110,7 +110,7 @@ export const FAQ = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section id="faq" aria-labelledby="faq-heading" className="relative bg-gradient-to-b from-[hsl(var(--muted))]/30 to-[hsl(var(--background))] py-16 px-6 md:py-24 overflow-hidden">
+    <section id="faq" aria-labelledby="faq-heading" className="relative bg-gradient-to-b from-[hsl(var(--muted))]/30 to-[hsl(var(--background))] py-12 px-6 md:py-20 overflow-hidden">
       {/* Decorative Background */}
       <div className="absolute inset-0 pointer-events-none">
         {/* Themed Grid Lines */}

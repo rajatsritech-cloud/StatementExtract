@@ -26,7 +26,7 @@ const FLAGSHIP_TOOLS = [
 
 export function FlagshipTools() {
     return (
-        <section id="flagship-tools" aria-labelledby="flagship-tools-heading" className="relative py-16 px-6 bg-gradient-to-b from-[hsl(var(--background))] to-[hsl(var(--muted))]/30">
+        <section id="flagship-tools" aria-labelledby="flagship-tools-heading" className="relative pt-12 pb-16 px-6 bg-gradient-to-b from-[hsl(var(--background))] to-[hsl(var(--muted))]/30">
             {/* Decorative Background */}
             <div className="absolute inset-0 pointer-events-none">
                 {/* Themed Hexagon Pattern */}

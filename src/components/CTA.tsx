@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export const CTA = () => {
   return (
-    <section id="cta" aria-labelledby="cta-heading" className="py-16 px-6 md:py-24 bg-[hsl(var(--background))] overflow-hidden">
+    <section id="cta" aria-labelledby="cta-heading" className="py-12 px-6 md:py-20 bg-[hsl(var(--background))] overflow-hidden">
       <div className="mx-auto max-w-4xl">
         <div className="relative overflow-hidden rounded-3xl bg-[hsl(var(--secondary))] border border-[hsl(var(--border))] p-12 text-center shadow-2xl md:p-16">
           {/* Decorative Elements - Glow behind badge */}

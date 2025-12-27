@@ -5,14 +5,14 @@ import { PricingGrid } from "./PricingGrid";
 
 export const Pricing = () => {
     return (
-        <section id="pricing" aria-labelledby="pricing-heading" className="relative overflow-hidden bg-[hsl(var(--background))] py-24 md:py-32">
+        <section id="pricing" aria-labelledby="pricing-heading" className="relative overflow-hidden bg-[hsl(var(--background))] py-12 md:py-20">
             {/* Background Pattern */}
             <div className="absolute inset-0 bg-grid-pattern-1 bg-size-40 opacity-[0.08] pointer-events-none" />
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[hsl(var(--primary))]/5 to-transparent pointer-events-none" />
 
             <div className="relative mx-auto max-w-7xl px-6">
                 {/* Header */}
-                <div className="text-center mb-16 animate-fade-in">
+                <div className="text-center mb-12 animate-fade-in">
                     <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[hsl(var(--primary))]/30 bg-[hsl(var(--primary))]/10 px-4 py-1.5">
                         <span className="text-sm font-medium text-[hsl(var(--primary))]">
                             AI-Powered Document Intelligence
@@ -30,7 +30,7 @@ export const Pricing = () => {
                 <PricingGrid />
 
                 {/* Trust Indicators */}
-                <div className="mt-16 text-center">
+                <div className="mt-12 text-center">
                     <p className="text-sm text-[hsl(var(--muted-foreground))]">
                         Trusted by CPAs, accountants, and financial professionals worldwide. Bank-level encryption.
                     </p>

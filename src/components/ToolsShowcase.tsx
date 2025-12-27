@@ -120,7 +120,7 @@ const TOOL_CATEGORIES = [
 
 export function ToolsShowcase() {
     return (
-        <section id="tools-showcase" aria-labelledby="tools-showcase-heading" className="relative py-24 overflow-hidden bg-[hsl(var(--background))]">
+        <section id="tools-showcase" aria-labelledby="tools-showcase-heading" className="relative py-12 md:py-20 overflow-hidden bg-[hsl(var(--background))]">
             {/* Decorative Background */}
             <div className="absolute inset-0 pointer-events-none">
                 {/* Themed Grid Pattern */}
@@ -135,7 +135,7 @@ export function ToolsShowcase() {
 
             <div className="relative mx-auto max-w-7xl px-6">
                 {/* Section Header */}
-                <div className="text-center mb-20 animate-fade-in">
+                <div className="text-center mb-12 animate-fade-in">
                     <div className="inline-flex items-center gap-2 rounded-full border border-teal-500/30 bg-teal-500/10 px-4 py-1.5 mb-6">
                         <span className="text-sm font-medium text-teal-500">
                             35+ Free Tools
@@ -150,7 +150,7 @@ export function ToolsShowcase() {
                 </div>
 
                 {/* Categories */}
-                <div className="space-y-20">
+                <div className="space-y-12">
                     {TOOL_CATEGORIES.map((category, categoryIndex) => (
                         <div
                             key={category.title}
@@ -218,7 +218,7 @@ export function ToolsShowcase() {
                 </div>
 
                 {/* Bottom CTA */}
-                <div className="mt-20 text-center animate-fade-in">
+                <div className="mt-12 text-center animate-fade-in">
                     <div className="inline-flex flex-col sm:flex-row items-center gap-4 p-8 rounded-3xl bg-gradient-to-r from-teal-500/10 to-cyan-500/10 border border-teal-500/30">
                         <div className="text-left">
                             <h3 className="text-xl font-bold text-[hsl(var(--foreground))] group-hover:text-teal-500 transition-colors">

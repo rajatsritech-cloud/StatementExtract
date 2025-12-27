@@ -161,7 +161,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         />
       </head>
-      <body className="antialiased overflow-x-hidden">
+      <body className="antialiased overflow-x-hidden w-full max-w-[100vw]">
         {isProduction && (
           <>
             <Analytics />

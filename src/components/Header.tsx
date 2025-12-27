@@ -162,7 +162,7 @@ export const Header = () => {
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-primary md:h-10 md:w-10">
                 <FileText className="h-4 w-4 text-white md:h-5 md:w-5" />
               </div>
-              <span className="text-lg font-bold text-[hsl(var(--foreground))] md:text-xl">
+              <span className="text-lg font-bold text-[hsl(var(--foreground))] md:text-xl whitespace-nowrap">
                 Statement <span className="bg-gradient-primary bg-clip-text text-transparent">Extract</span>
               </span>
             </Link>
@@ -769,7 +769,7 @@ export const Header = () => {
               {shouldShowAuth && (
                 <SignedOut>
                   <SignUpButton mode="modal">
-                    <Button className="lg:hidden shadow-md">
+                    <Button className="hidden shadow-md">
                       Sign Up
                     </Button>
                   </SignUpButton>

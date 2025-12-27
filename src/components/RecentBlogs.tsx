@@ -11,7 +11,7 @@ export async function RecentBlogs() {
     }
 
     return (
-        <section id="recent-blogs" aria-labelledby="recent-blogs-heading" className="relative bg-[hsl(var(--background))] py-24 sm:py-32 overflow-hidden">
+        <section id="recent-blogs" aria-labelledby="recent-blogs-heading" className="relative bg-[hsl(var(--background))] py-12 md:py-20 overflow-hidden">
             {/* Decorative Background */}
             <div className="absolute inset-0 pointer-events-none">
                 {/* Themed Diamond Pattern */}
@@ -37,7 +37,7 @@ export async function RecentBlogs() {
                         Learn more about bank statement extraction, financial automation, and industry best practices.
                     </p>
                 </div>
-                <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+                <div className="mx-auto mt-12 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-12 lg:mx-0 lg:max-w-none lg:grid-cols-3">
                     {recentPosts.map((post) => (
                         <Link
                             key={post.slug}

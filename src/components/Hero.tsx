@@ -5,10 +5,11 @@ import { PrivacyNotice } from "@/components/PrivacyNotice";
 
 export const Hero = () => {
   return (
-    <section id="hero" aria-labelledby="hero-heading" className="relative overflow-hidden bg-[hsl(var(--background))] pt-20 pb-20 md:pt-32 md:pb-32">
+    <section id="hero" aria-labelledby="hero-heading" className="relative overflow-hidden bg-[hsl(var(--background))] pt-16 pb-12 md:pt-32 md:pb-20">
       {/* Background Grids */}
-      <div className="absolute inset-0 bg-grid-pattern-1 bg-size-40 opacity-[0.15] pointer-events-none" />
+      {/* Background Grids */}
       <div className="absolute inset-0 bg-gradient-hero pointer-events-none" />
+      <div className="absolute inset-0 bg-grid-pattern-1 bg-size-40 opacity-[0.15] pointer-events-none" />
 
       {/* Floating SVG Shapes - Theme Reactive */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -33,31 +34,31 @@ export const Hero = () => {
         <div className="flex flex-col items-center text-center">
 
           {/* Badge */}
-          <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-[hsl(var(--primary))]/30 bg-[hsl(var(--primary))]/10 px-4 py-1.5 backdrop-blur-sm animate-fade-in">
-            <span className="relative flex h-2 w-2">
+          <div className="mb-6 md:mb-8 inline-flex items-center gap-2 rounded-full border border-[hsl(var(--primary))]/30 bg-[hsl(var(--primary))]/10 px-3 py-1 md:px-4 md:py-1.5 backdrop-blur-sm animate-fade-in">
+            <span className="relative flex h-1.5 w-1.5 md:h-2 md:w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[hsl(var(--primary))] opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-[hsl(var(--primary))]"></span>
+              <span className="relative inline-flex rounded-full h-1.5 w-1.5 md:h-2 md:w-2 bg-[hsl(var(--primary))]"></span>
             </span>
-            <span className="text-sm font-medium text-[hsl(var(--primary))]">
+            <span className="text-xs md:text-sm font-medium text-[hsl(var(--primary))]">
               Next-Generation Financial Data Extraction
             </span>
           </div>
 
           {/* Headline */}
-          <h1 id="hero-heading" className="mb-6 max-w-6xl text-5xl font-bold tracking-tight text-[hsl(var(--foreground))] md:text-7xl lg:text-[5.5rem] leading-[1.1] animate-slide-up">
+          <h1 id="hero-heading" className="mb-6 max-w-6xl text-3xl font-bold tracking-tight text-[hsl(var(--foreground))] sm:text-4xl md:text-7xl lg:text-[5.5rem] leading-[1.1] animate-slide-up">
             Intelligent Document Processing <br />
             <span className="bg-gradient-primary bg-clip-text text-transparent">Reimagined for Scale</span>
           </h1>
 
           {/* Subheadline */}
-          <p className="mx-auto mb-10 max-w-2xl text-lg text-[hsl(var(--muted-foreground))] md:text-xl animate-fade-in delay-100">
+          <p className="mx-auto mb-8 md:mb-10 max-w-2xl text-base text-[hsl(var(--muted-foreground))] md:text-xl animate-fade-in delay-100">
             Automate your bookkeeping. Convert PDF Bank Statements to Excel, CSV, QuickBooks, and Xero with industry-leading accuracy. Stop juggling tools—get everything in one place.
           </p>
 
           {/* Buttons */}
-          <div className="flex flex-col items-center justify-center gap-4 sm:flex-row animate-fade-in delay-200 w-full sm:w-auto">
+          <div className="flex flex-col items-center justify-center gap-3 sm:gap-4 sm:flex-row animate-fade-in delay-200 w-full sm:w-auto">
             <Link href="/convert-bank-statement-to-csv-excel" passHref className="w-full sm:w-auto">
-              <Button size="lg" className="group gap-2 h-12 px-8 text-base shadow-glow w-full sm:w-auto">
+              <Button size="lg" className="group gap-2 h-10 px-6 text-sm sm:h-12 sm:px-8 sm:text-base shadow-glow w-full sm:w-auto">
                 Get Started
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Button>

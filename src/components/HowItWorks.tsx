@@ -26,11 +26,11 @@ export const HowItWorks = () => {
   ];
 
   return (
-    <section id="how-it-works" aria-labelledby="how-it-works-heading" className="relative py-16 px-6 md:py-24 bg-gradient-to-b from-[hsl(var(--background))] to-[hsl(var(--muted))]/30 overflow-hidden">
+    <section id="how-it-works" aria-labelledby="how-it-works-heading" className="relative py-12 px-6 md:py-20 bg-gradient-to-b from-[hsl(var(--background))] to-[hsl(var(--muted))]/30 overflow-hidden">
       {/* Decorative Background */}
       <div className="absolute inset-0 pointer-events-none">
         {/* Themed Diagonal Lines */}
-        <div className="absolute inset-0 opacity-[0.06]" style={{
+        <div className="absolute inset-0 opacity-[0.15]" style={{
           backgroundImage: `repeating-linear-gradient(45deg, rgb(168 85 247 / 0.4) 0, rgb(168 85 247 / 0.4) 1px, transparent 0, transparent 50%)`,
           backgroundSize: '40px 40px'
         }} />
