@@ -16,6 +16,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // 2. Converters & Tools - Important, but don't change daily. Priority 0.9, Weekly.
     const toolPages = [
         '/convert-bank-statement-to-csv-excel/',
+        '/convert-invoice-to-excel-csv/',
         '/convert-bank-statement-to-quickbooks-tally/',
         '/convert-bank-statement-to-quickbooks-xero/',
         '/convert/merge-pdf/',

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { FileSpreadsheet, ArrowRight, Sparkles } from "lucide-react";
+import { FileSpreadsheet, ArrowRight, Sparkles, FileText } from "lucide-react";
 
 const FLAGSHIP_TOOLS = [
     {
@@ -22,6 +22,15 @@ const FLAGSHIP_TOOLS = [
         icon: FileSpreadsheet,
         description: "Ready for Tally accounting"
     },
+];
+
+const INVOICE_TOOLS = [
+    {
+        name: "Invoice to Excel/CSV",
+        href: "/convert-invoice-to-excel-csv",
+        icon: FileText,
+        description: "Extract tables & data from invoices instantly"
+    }
 ];
 
 export function FlagshipTools() {
@@ -78,6 +87,52 @@ export function FlagshipTools() {
                                 </p>
 
                                 <div className="flex items-center gap-1 text-sm font-medium text-violet-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    Try now
+                                    <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                                </div>
+                            </div>
+                        </Link>
+                    ))}
+                </div>
+
+                {/* Spacer */}
+                <div className="h-16"></div>
+
+                {/* Section Header - Invoice */}
+                <div className="text-center mb-12 animate-fade-in">
+                    <h2 className="text-4xl font-bold tracking-tight text-[hsl(var(--foreground))] md:text-5xl mb-4">
+                        <span className="bg-gradient-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent">Invoice Data</span> Converter
+                    </h2>
+                    <p className="text-lg text-[hsl(var(--muted-foreground))] max-w-2xl mx-auto">
+                        Eliminate manual data entry. Convert PDF invoices to Excel instantly.
+                    </p>
+                </div>
+
+                {/* Invoice Tools Grid */}
+                <div className="grid md:grid-cols-3 gap-6 animate-slide-up justify-center">
+                    {/* Centering the single item if grid has space, or just use grid */}
+                    {INVOICE_TOOLS.map((tool, i) => (
+                        <Link
+                            key={tool.href + i}
+                            href={tool.href}
+                            className="group relative p-6 rounded-2xl border border-emerald-500/20 bg-[hsl(var(--card))] hover:border-emerald-500/50 hover:shadow-xl hover:shadow-emerald-500/10 hover:-translate-y-1 transition-all duration-300 md:col-start-2"
+                        >
+                            {/* Hover Glow */}
+                            <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-emerald-500/0 to-teal-500/0 group-hover:from-emerald-500/5 group-hover:to-teal-500/5 transition-all duration-300" />
+
+                            <div className="relative">
+                                <div className="inline-flex p-3 rounded-xl bg-emerald-500/10 text-emerald-500 mb-4 group-hover:scale-110 transition-transform duration-300">
+                                    <tool.icon className="h-6 w-6" />
+                                </div>
+
+                                <h3 className="font-semibold text-[hsl(var(--foreground))] group-hover:text-emerald-500 transition-colors mb-2">
+                                    {tool.name}
+                                </h3>
+                                <p className="text-sm text-[hsl(var(--muted-foreground))] mb-4">
+                                    {tool.description}
+                                </p>
+
+                                <div className="flex items-center gap-1 text-sm font-medium text-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity">
                                     Try now
                                     <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                                 </div>

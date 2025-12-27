@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { UploadArea } from "@/components/bank-statement/UploadArea";
 import { FileText, Upload } from "lucide-react";
 import { ResultsModal } from "@/components/bank-statement/ResultsModal";
+import { InvoiceResultsModal } from "@/components/invoice/InvoiceResultsModal";
 
 import { toast } from "react-hot-toast";
 import { ExtractedData } from "@/lib/pdfProcessor";
@@ -13,11 +14,19 @@ import { useAuth } from "@clerk/clerk-react";
 interface BankStatementConverterProps {
   titleSuffix?: React.ReactNode;
   description?: string;
+  title?: React.ReactNode;
+  subtitle?: React.ReactNode; // Alias for description for cleaner API
+  endpoint?: string;
+  mode?: 'bank-statement' | 'invoice';
 }
 
 export const BankStatementConverter = ({
   titleSuffix = <span className="bg-gradient-primary bg-clip-text text-transparent"> Excel or CSV</span>,
-  description = "World's most trusted Intelligent Document Processing bank statement converter, working with thousands of banks globally. Automatically extract transactions, balances, and references into clean Excel or CSV files with industry-leading accuracy."
+  description = "World's most trusted Intelligent Document Processing bank statement converter, working with thousands of banks globally. Automatically extract transactions, balances, and references into clean Excel or CSV files with industry-leading accuracy.",
+  title,
+  subtitle,
+  endpoint,
+  mode = 'bank-statement'
 }: BankStatementConverterProps) => {
   // Trigger HMR update
   const [isProcessing, setIsProcessing] = useState(false);
@@ -79,7 +88,7 @@ export const BankStatementConverter = ({
     // Reset UploadArea UI by changing its key
     setUploadKey(prev => prev + 1);
 
-    toast("Processing your bank statement...", {
+    toast(mode === 'invoice' ? "Processing your invoice..." : "Processing your bank statement...", {
       icon: '⏳',
       duration: 4000,
     });
@@ -107,13 +116,13 @@ export const BankStatementConverter = ({
         let token = await getToken();
 
         try {
-          extracted = await PDFProcessor.processPDF(file, isSignedIn, token);
+          extracted = await PDFProcessor.processPDF(file, isSignedIn, token, endpoint);
         } catch (err: any) {
           // Retry on token expiration (401)
           if (err.message && (err.message.includes("Token has expired") || err.message.includes("401"))) {
             console.log("🔄 Token expired, refreshing and retrying...");
             token = await getToken(); // Fetch fresh token
-            extracted = await PDFProcessor.processPDF(file, isSignedIn, token);
+            extracted = await PDFProcessor.processPDF(file, isSignedIn, token, endpoint);
           } else {
             throw err;
           }
@@ -253,12 +262,16 @@ export const BankStatementConverter = ({
             {/* Left Column - Hero Content */}
             <div className="text-left">
               <h1 className="mb-6 text-4xl font-bold tracking-tight text-[hsl(var(--foreground))] md:text-5xl lg:text-6xl animate-slide-up">
-                Accurately Convert PDF Bank Statements to
-                {titleSuffix}
+                {title ? title : (
+                  <>
+                    Accurately Convert PDF Bank Statements to
+                    {titleSuffix}
+                  </>
+                )}
               </h1>
 
               <p className="mb-8 max-w-xl text-lg text-[hsl(var(--muted-foreground))] animate-fade-in">
-                {description}
+                {subtitle || description}
               </p>
 
               {/* Feature Badges */}
@@ -321,15 +334,26 @@ export const BankStatementConverter = ({
 
       {/* Results Modal (Handles both processing and results) */}
       {showResults && (
-        <ResultsModal
-          data={extractedData}
-          file={selectedFile}
-          isProcessing={isProcessing}
-          progress={processingProgress}
-          onClose={() => setShowResults(false)}
-          onTryAnother={handleTryAnother}
-          onExport={handleExport}
-        />
+        mode === 'invoice' ? (
+          <InvoiceResultsModal
+            data={extractedData}
+            file={selectedFile}
+            isProcessing={isProcessing}
+            progress={processingProgress}
+            onClose={() => setShowResults(false)}
+            onTryAnother={handleTryAnother}
+          />
+        ) : (
+          <ResultsModal
+            data={extractedData}
+            file={selectedFile}
+            isProcessing={isProcessing}
+            progress={processingProgress}
+            onClose={() => setShowResults(false)}
+            onTryAnother={handleTryAnother}
+            onExport={handleExport}
+          />
+        )
       )}
     </div>
   );

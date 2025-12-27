@@ -22,6 +22,8 @@ interface StorageStatus {
     maxDocuments: number;
     usedSpaceKB: number | null;
     isNearLimit: boolean;
+    bankStatementCount: number;
+    invoiceCount: number;
 }
 
 export const PrivacyNotice = ({ className, size = 'default' }: { className?: string; size?: 'default' | 'large' }) => {
@@ -88,7 +90,7 @@ export const PrivacyNotice = ({ className, size = 'default' }: { className?: str
                         <div className={`flex items-center gap-2 ${storageStatus.isNearLimit ? 'text-amber-500' : 'text-[hsl(var(--muted-foreground))]'}`}>
                             <Database className="h-3 w-3" />
                             <span className="font-medium">
-                                {storageStatus.documentCount} / {storageStatus.maxDocuments} documents stored
+                                {storageStatus.bankStatementCount} statements, {storageStatus.invoiceCount} invoices
                                 {storageStatus.usedSpaceKB !== null && storageStatus.usedSpaceKB > 0 && (
                                     <span className="opacity-75"> • {formatUsedSpace(storageStatus.usedSpaceKB)} used</span>
                                 )}

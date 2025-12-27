@@ -1,7 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { FileText, Receipt, FileSpreadsheet, Settings, CreditCard, LayoutDashboard, Shield, Truck, Activity, ChevronLeft, ChevronRight } from "lucide-react";
+import { useState } from "react";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
+import { FileText, Receipt, Settings, CreditCard, LayoutDashboard, Shield, Truck, Activity, ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { UserButton, useUser } from "@clerk/clerk-react";
 import { useUsage } from "@/hooks/useUsage";
@@ -12,25 +14,25 @@ interface SidebarProps {
 
 export const DashboardSidebar = ({ className }: SidebarProps) => {
     const { user } = useUser();
-    const { usage: usageData, isLoading } = useUsage();
+    const { usage: usageData } = useUsage();
     const [isCollapsed, setIsCollapsed] = useState(false);
+    const pathname = usePathname();
 
     type NavItem = {
         icon: React.ElementType;
         label: string;
-        active?: boolean;
         href?: string;
         badge?: string;
         disabled?: boolean;
     };
 
     const mainNav: NavItem[] = [
-        { icon: LayoutDashboard, label: "Home", active: false, href: "/" },
+        { icon: LayoutDashboard, label: "Home", href: "/" },
     ];
 
     const productItems: NavItem[] = [
-        { icon: FileText, label: "Bank Statements", active: true, href: "/dashboard" },
-        { icon: Receipt, label: "Invoices", disabled: true, badge: "Soon" },
+        { icon: FileText, label: "Bank Statements", href: "/dashboard" },
+        { icon: Receipt, label: "Invoices", href: "/dashboard/invoices" },
         { icon: Shield, label: "Insurance", disabled: true, badge: "Soon" },
         { icon: Truck, label: "Logistics", disabled: true, badge: "Soon" },
         { icon: Activity, label: "Healthcare", disabled: true, badge: "Soon" },
@@ -40,6 +42,21 @@ export const DashboardSidebar = ({ className }: SidebarProps) => {
         { icon: CreditCard, label: "Billing", disabled: true, badge: "Soon" },
         { icon: Settings, label: "Settings", disabled: true, badge: "Soon" },
     ];
+
+    // Helper to determine if nav item is active
+    const isItemActive = (item: NavItem): boolean => {
+        if (!item.href || !pathname) return false;
+        // Normalize pathname - remove trailing slash for comparison
+        const normalizedPath = pathname.endsWith('/') && pathname !== '/'
+            ? pathname.slice(0, -1)
+            : pathname;
+        // Exact match for /dashboard (Bank Statements)
+        if (item.href === '/dashboard') {
+            return normalizedPath === '/dashboard';
+        }
+        // Starts with for nested routes like /dashboard/invoices
+        return normalizedPath.startsWith(item.href);
+    };
 
     return (
         <div
@@ -63,22 +80,20 @@ export const DashboardSidebar = ({ className }: SidebarProps) => {
                         <FileText className="h-4 w-4 text-white" />
                     </div>
                     {!isCollapsed && <span>Statement <span className="bg-gradient-primary bg-clip-text text-transparent">Extract</span></span>}
-                </div >
-            </div >
+                </div>
+            </div>
 
             <div className="flex-1 px-3 py-2 overflow-y-auto overflow-x-hidden [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
                 {/* Main Nav */}
                 <nav className="space-y-0.5 mb-4">
                     {mainNav.map((item) => (
-                        <a
+                        <Link
                             key={item.label}
-                            href={item.href || "#"}
+                            href={item.href || "/"}
                             className={cn(
                                 "flex w-full items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors",
                                 isCollapsed ? "justify-center px-2" : "justify-between",
-                                item.active
-                                    ? "bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))]"
-                                    : "text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))] hover:text-[hsl(var(--foreground))]"
+                                "text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))] hover:text-[hsl(var(--foreground))]"
                             )}
                             title={isCollapsed ? item.label : undefined}
                         >
@@ -86,7 +101,7 @@ export const DashboardSidebar = ({ className }: SidebarProps) => {
                                 <item.icon className="h-4 w-4 shrink-0" />
                                 {!isCollapsed && <span>{item.label}</span>}
                             </div>
-                        </a>
+                        </Link>
                     ))}
                 </nav>
 
@@ -97,32 +112,60 @@ export const DashboardSidebar = ({ className }: SidebarProps) => {
                     </div>
                 )}
                 <nav className="space-y-0.5 mb-4">
-                    {productItems.map((item) => (
-                        <a
-                            key={item.label}
-                            href={item.disabled ? undefined : (item.href || "#")}
-                            className={cn(
-                                "flex w-full items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-                                isCollapsed ? "justify-center px-2" : "justify-between",
-                                item.active
-                                    ? "bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))]"
-                                    : item.disabled
-                                        ? "text-[hsl(var(--muted-foreground))] opacity-70 cursor-not-allowed"
+                    {productItems.map((item) => {
+                        const isActive = isItemActive(item);
+
+                        // For disabled items, use a div
+                        if (item.disabled) {
+                            return (
+                                <div
+                                    key={item.label}
+                                    className={cn(
+                                        "flex w-full items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                                        isCollapsed ? "justify-center px-2" : "justify-between",
+                                        "text-[hsl(var(--muted-foreground))] opacity-70 cursor-not-allowed"
+                                    )}
+                                    title={isCollapsed ? item.label : undefined}
+                                >
+                                    <div className={cn("flex items-center gap-3", isCollapsed && "justify-center")}>
+                                        <item.icon className="h-4 w-4 shrink-0" />
+                                        {!isCollapsed && <span>{item.label}</span>}
+                                    </div>
+                                    {!isCollapsed && item.badge && (
+                                        <span className="rounded-full bg-[hsl(var(--primary))]/10 px-1.5 py-0.5 text-[9px] font-medium text-[hsl(var(--primary))]">
+                                            {item.badge}
+                                        </span>
+                                    )}
+                                </div>
+                            );
+                        }
+
+                        // For enabled items, use Next Link
+                        return (
+                            <Link
+                                key={item.label}
+                                href={item.href || "/dashboard"}
+                                className={cn(
+                                    "flex w-full items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                                    isCollapsed ? "justify-center px-2" : "justify-between",
+                                    isActive
+                                        ? "bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))]"
                                         : "text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))] hover:text-[hsl(var(--foreground))]"
-                            )}
-                            title={isCollapsed ? item.label : undefined}
-                        >
-                            <div className={cn("flex items-center gap-3", isCollapsed && "justify-center")}>
-                                <item.icon className="h-4 w-4 shrink-0" />
-                                {!isCollapsed && <span>{item.label}</span>}
-                            </div>
-                            {!isCollapsed && item.badge && (
-                                <span className="rounded-full bg-[hsl(var(--primary))]/10 px-1.5 py-0.5 text-[9px] font-medium text-[hsl(var(--primary))]">
-                                    {item.badge}
-                                </span>
-                            )}
-                        </a>
-                    ))}
+                                )}
+                                title={isCollapsed ? item.label : undefined}
+                            >
+                                <div className={cn("flex items-center gap-3", isCollapsed && "justify-center")}>
+                                    <item.icon className="h-4 w-4 shrink-0" />
+                                    {!isCollapsed && <span>{item.label}</span>}
+                                </div>
+                                {!isCollapsed && item.badge && (
+                                    <span className="rounded-full bg-[hsl(var(--primary))]/10 px-1.5 py-0.5 text-[9px] font-medium text-[hsl(var(--primary))]">
+                                        {item.badge}
+                                    </span>
+                                )}
+                            </Link>
+                        );
+                    })}
                 </nav>
 
                 {/* Account Section */}
@@ -133,17 +176,12 @@ export const DashboardSidebar = ({ className }: SidebarProps) => {
                 )}
                 <nav className="space-y-0.5">
                     {accountItems.map((item) => (
-                        <a
+                        <div
                             key={item.label}
-                            href={item.disabled ? undefined : (item.href || "#")}
                             className={cn(
                                 "flex w-full items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors",
                                 isCollapsed ? "justify-center px-2" : "justify-between",
-                                item.active
-                                    ? "bg-[hsl(var(--primary))]/10 text-[hsl(var(--primary))]"
-                                    : item.disabled
-                                        ? "text-[hsl(var(--muted-foreground))] opacity-70 cursor-not-allowed"
-                                        : "text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))] hover:text-[hsl(var(--foreground))]"
+                                "text-[hsl(var(--muted-foreground))] opacity-70 cursor-not-allowed"
                             )}
                             title={isCollapsed ? item.label : undefined}
                         >
@@ -156,7 +194,7 @@ export const DashboardSidebar = ({ className }: SidebarProps) => {
                                     {item.badge}
                                 </span>
                             )}
-                        </a>
+                        </div>
                     ))}
                 </nav>
             </div>
@@ -184,7 +222,6 @@ export const DashboardSidebar = ({ className }: SidebarProps) => {
                         </div>
                     </div>
                 ) : (
-                    // Collapsed Usage Indicator (Simple dot or mini-bar)
                     <div className="flex justify-center" title={usageData ? `${usageData.usage}/${usageData.limit} pages` : "Usage"}>
                         <div className="h-1.5 w-8 rounded-full bg-[hsl(var(--background))] overflow-hidden border border-[hsl(var(--border))]">
                             <div
@@ -214,6 +251,6 @@ export const DashboardSidebar = ({ className }: SidebarProps) => {
                     )}
                 </div>
             </div>
-        </div >
+        </div>
     );
 };

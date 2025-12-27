@@ -39,6 +39,27 @@ export interface TransactionSection {
   };
 }
 
+// NEW: Invoice Data Structure
+export interface InvoiceData {
+  metadata: {
+    invoiceNumber?: string;
+    invoiceDate?: string;
+    dueDate?: string;
+    vendorName?: string;
+    customerName?: string;
+    currency?: string;
+    subtotal?: number;
+    taxAmount?: number;
+    totalAmount?: number;
+  };
+  lineItems: Array<{
+    description: string;
+    quantity?: number;
+    unitPrice?: number;
+    amount?: number;
+  }>;
+}
+
 export interface ExtractedData {
   userInfo: {
     name?: string;
@@ -155,10 +176,13 @@ export interface ExtractedData {
     duplicate_of: number;
     message: string;
   }>;
+
+  // Invoice Specific Data
+  invoiceData?: InvoiceData;
 }
 
 export class PDFProcessor {
-  static async processPDF(file: File, isSignedIn: boolean = false, token?: string | null): Promise<ExtractedData> {
+  static async processPDF(file: File, isSignedIn: boolean = false, token?: string | null, customEndpoint?: string): Promise<ExtractedData> {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('confidence_threshold', '0.3');
@@ -190,7 +214,10 @@ export class PDFProcessor {
         headers['Authorization'] = `Bearer ${token}`;
       }
 
-      const response = await fetch(`${apiUrl}/api/v1/pdf-extract/extract`, {
+      const targetEndpoint = customEndpoint || '/api/v1/pdf-extract/extract';
+      const fullUrl = targetEndpoint.startsWith('http') ? targetEndpoint : `${apiUrl}${targetEndpoint}`;
+
+      const response = await fetch(fullUrl, {
         method: 'POST',
         headers: headers,
         body: formData,
@@ -343,6 +370,49 @@ export class PDFProcessor {
           chain_validation: result.chain_validation,
           missing_transaction_warnings: result.missing_transaction_warnings,
           duplicate_warnings: result.duplicate_warnings,
+        };
+      }
+
+      // Handle Invoice Extraction Response
+      if (result.success && result.metadata && result.line_items) {
+        console.log("Using Invoice extraction endpoint:", result);
+        return {
+          userInfo: {
+            // Map Invoice metadata to generic fields where it makes sense for fallback
+            bankName: result.metadata.vendor_name || 'Invoice Vendor',
+            accountSummary: {
+              beginningBalance: 0,
+              endingBalance: result.metadata.total_amount || 0,
+              totalDeposits: 0,
+              totalWithdrawals: 0
+            }
+          },
+          transactions: [], // No bank transactions
+          summary: {
+            totalCredits: 0,
+            totalDebits: 0,
+            netBalance: 0,
+            transactionCount: 0
+          },
+          invoiceData: {
+            metadata: {
+              invoiceNumber: result.metadata.invoice_number,
+              invoiceDate: result.metadata.invoice_date,
+              dueDate: result.metadata.due_date,
+              vendorName: result.metadata.vendor_name,
+              customerName: result.metadata.customer_name,
+              currency: result.metadata.currency,
+              subtotal: result.metadata.subtotal,
+              taxAmount: result.metadata.tax_amount,
+              totalAmount: result.metadata.total_amount,
+            },
+            lineItems: result.line_items.map((item: any) => ({
+              description: item.description,
+              quantity: item.quantity,
+              unitPrice: item.unit_price,
+              amount: item.amount
+            }))
+          }
         };
       }
 
