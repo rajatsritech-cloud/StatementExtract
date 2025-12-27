@@ -24,7 +24,7 @@ const faqs = [
     },
     {
         question: "Is my data secure?",
-        answer: "Absolutely. We use bank-level encryption and your documents are automatically deleted after processing. We never store or share your data."
+        answer: "Yes. We use industry-standard encryption and your documents are processed securely. We minimize data retention and prioritize your privacy."
     },
 ];
 
@@ -65,7 +65,7 @@ export default function PricingPage() {
                             <div className="p-3 rounded-full bg-[hsl(var(--primary))]/10 mb-4">
                                 <ShieldCheck className="h-8 w-8 text-[hsl(var(--primary))]" />
                             </div>
-                            <h3 className="font-semibold text-[hsl(var(--foreground))] mb-2">Bank-Level Security</h3>
+                            <h3 className="font-semibold text-[hsl(var(--foreground))] mb-2">Secure Processing</h3>
                             <p className="text-sm text-[hsl(var(--muted-foreground))]">
                                 256-bit encryption. Your documents are never stored.
                             </p>

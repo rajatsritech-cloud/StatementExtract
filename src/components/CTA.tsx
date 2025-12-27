@@ -4,18 +4,20 @@ import Link from "next/link";
 
 export const CTA = () => {
   return (
-    <section className="py-12 px-6 md:py-20 bg-[hsl(var(--background))]">
+    <section id="cta" aria-labelledby="cta-heading" className="py-16 px-6 md:py-24 bg-[hsl(var(--background))] overflow-hidden">
       <div className="mx-auto max-w-4xl">
         <div className="relative overflow-hidden rounded-3xl bg-[hsl(var(--secondary))] border border-[hsl(var(--border))] p-12 text-center shadow-2xl md:p-16">
-          <div className="absolute inset-0 bg-gradient-primary opacity-5"></div>
+          {/* Decorative Elements - Glow behind badge */}
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute top-12 left-1/2 -translate-x-1/2 w-64 h-32 bg-[hsl(var(--primary))]/20 rounded-full blur-3xl" />
+          </div>
 
           <div className="relative">
             <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-[hsl(var(--primary))]/20 border border-[hsl(var(--primary))]/30 px-4 py-2 backdrop-blur-sm">
-              <Sparkles className="h-4 w-4 text-[hsl(var(--primary))]" />
               <span className="text-sm font-medium text-[hsl(var(--foreground))]">Ready to get started?</span>
             </div>
 
-            <h2 className="mb-6 text-4xl font-bold text-[hsl(var(--foreground))] md:text-5xl">
+            <h2 id="cta-heading" className="mb-6 text-4xl font-bold tracking-tight text-[hsl(var(--foreground))] md:text-5xl">
               Start extracting data in minutes
             </h2>
 
@@ -52,3 +54,5 @@ export const CTA = () => {
     </section>
   );
 };
+
+

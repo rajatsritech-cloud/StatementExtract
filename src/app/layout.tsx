@@ -10,6 +10,7 @@ import { Footer } from "@/components/Footer";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { ServerWarmup } from "@/components/ServerWarmup";
 import { TopLoader } from "@/components/TopLoader";
+import { ScrollToTop } from "@/components/ScrollToTop";
 import { CookieConsent } from "@/components/CookieConsent";
 import { Analytics } from "@/components/Analytics";
 
@@ -178,8 +179,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <Footer />
             </div>
             {/* <CookieConsent /> */}
+            <TopLoader />
+            <ScrollToTop />
             <Toaster
-              position="top-right"
+              position="bottom-right"
               toastOptions={{
                 className: 'bg-[hsl(var(--card))] text-[hsl(var(--card-foreground))] border border-[hsl(var(--border))]',
                 style: {

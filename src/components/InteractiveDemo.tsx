@@ -80,11 +80,11 @@ export const InteractiveDemo = () => {
                         <div className="w-full max-w-3xl animate-fade-in relative">
                             <div
                                 onClick={handleUpload}
-                                className="relative border-2 border-dashed rounded-2xl p-12 text-center transition-all duration-300 border-[hsl(var(--border))] bg-[hsl(var(--card))] hover:border-[hsl(var(--primary))]/50 cursor-pointer group"
+                                className="relative border-2 border-dashed rounded-2xl p-12 text-center transition-all duration-300 border-[hsl(var(--border))] bg-[hsl(var(--card))] hover:border-purple-500/50 cursor-pointer group"
                             >
                                 {/* Upload Icon */}
                                 <div className="mb-6 flex justify-center">
-                                    <div className="flex h-20 w-20 items-center justify-center rounded-full bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))] group-hover:bg-[hsl(var(--primary))] group-hover:text-white transition-colors duration-300">
+                                    <div className="flex h-20 w-20 items-center justify-center rounded-full bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))] group-hover:bg-purple-500 group-hover:text-white transition-colors duration-300">
                                         <Upload className="h-8 w-8" />
                                     </div>
                                 </div>
@@ -116,7 +116,7 @@ export const InteractiveDemo = () => {
                                 </div>
 
                                 {/* Upload Button */}
-                                <button className="px-6 py-3 inline-flex items-center gap-2 rounded-lg bg-gradient-button bg-200% text-[hsl(var(--primary-foreground))] font-medium shadow-glow hover:animate-gradient-shift transition-all duration-300">
+                                <button className="px-6 py-3 inline-flex items-center gap-2 rounded-lg bg-purple-500 hover:bg-purple-600 text-white font-medium shadow-lg transition-all">
                                     <Upload className="h-4 w-4" />
                                     Choose File
                                 </button>
@@ -128,7 +128,7 @@ export const InteractiveDemo = () => {
                             </div>
 
                             {/* Floating "Cursor" Hint - Moved clearly below */}
-                            <div className="absolute -bottom-16 left-1/2 -translate-x-1/2 animate-bounce text-lg text-[hsl(var(--primary))] font-bold whitespace-nowrap z-50 drop-shadow-md">
+                            <div className="absolute -bottom-16 left-1/2 -translate-x-1/2 animate-bounce text-lg text-purple-500 font-bold whitespace-nowrap z-50 drop-shadow-md">
                                 Click anywhere to try!
                             </div>
                         </div>

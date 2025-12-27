@@ -16,10 +16,11 @@ export default function AboutPage() {
           <h1 className="text-3xl md:text-4xl font-semibold tracking-tight text-[hsl(var(--foreground))] mb-4">
             Turning messy bank statements into clean, reliable data.
           </h1>
+          <p className="text-sm md:text-base text-[hsl(var(--muted-foreground))] max-w-xl mb-4">
+            Statement Extract is built to simplify bookkeeping and financial data processing for small businesses, accountants, and finance professionals worldwide. Our focus is accuracy, privacy, and automation—reducing manual work while keeping users in control of their data.
+          </p>
           <p className="text-sm md:text-base text-[hsl(var(--muted-foreground))] max-w-xl">
-            Statement Extractor helps founders, finance teams, and operators convert PDF bank
-            statements into structured CSV and Excel files in minutes without manual copy-paste,
-            broken formulas, or custom scripts.
+            We help founders, finance teams, and operators convert PDF bank statements into structured CSV and Excel files in minutes—without manual copy-paste, broken formulas, or custom scripts.
           </p>
 
           <div className="mt-6 flex flex-wrap gap-3">
@@ -184,6 +185,12 @@ export default function AboutPage() {
           <div className="flex flex-col gap-2 text-sm text-[hsl(var(--muted-foreground))]">
             <span className="font-medium text-[hsl(var(--foreground))]">Talk to an expert</span>
             <span>Get a free 15-minute conversation about your statement workflows.</span>
+            <span className="mt-2">
+              Email us directly:{" "}
+              <a href="mailto:support@statementextract.com" className="text-[hsl(var(--primary))] hover:underline font-medium">
+                support@statementextract.com
+              </a>
+            </span>
           </div>
         </div>
 

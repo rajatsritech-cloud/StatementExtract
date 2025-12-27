@@ -110,18 +110,26 @@ export const FAQ = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section id="faq" className="relative bg-[hsl(var(--background))] py-12 px-6 md:py-20 border-y border-[hsl(var(--border))]">
-      <div className="absolute inset-0 bg-grid-pattern-3 bg-size-40" />
+    <section id="faq" aria-labelledby="faq-heading" className="relative bg-gradient-to-b from-[hsl(var(--muted))]/30 to-[hsl(var(--background))] py-16 px-6 md:py-24 overflow-hidden">
+      {/* Decorative Background */}
+      <div className="absolute inset-0 pointer-events-none">
+        {/* Themed Grid Lines */}
+        <div className="absolute inset-0 opacity-[0.08]" style={{
+          backgroundImage: `linear-gradient(to right, rgb(6 182 212 / 0.3) 1px, transparent 1px), linear-gradient(to bottom, rgb(6 182 212 / 0.3) 1px, transparent 1px)`,
+          backgroundSize: '60px 60px'
+        }} />
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl" />
+      </div>
 
       <div className="relative mx-auto max-w-7xl z-10">
         <div className="grid gap-12 md:grid-cols-[minmax(0,1.2fr)_minmax(0,1.8fr)] items-start">
           <div className="space-y-5 animate-fade-in">
-            <div className="inline-flex items-center gap-2 rounded-full bg-[hsl(var(--primary))]/10 px-4 py-2 text-xs font-medium text-[hsl(var(--primary))]">
-              <HelpCircle className="h-4 w-4" />
+            <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/30 bg-cyan-500/10 px-4 py-2 text-xs font-medium text-cyan-500">
               <span>Got more questions?</span>
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-[hsl(var(--foreground))]">
-              Need further assistance with Statement Extract?
+            <h2 id="faq-heading" className="text-3xl font-bold tracking-tight text-[hsl(var(--foreground))] md:text-4xl">
+              Need further <span className="bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent">assistance</span>?
             </h2>
             <p className="text-[hsl(var(--muted-foreground))] text-base md:text-lg max-w-xl">
               Got more questions? Need further assistance? Contact us at
@@ -132,21 +140,21 @@ export const FAQ = () => {
             <div className="flex flex-wrap gap-3 pt-2">
               <a
                 href="mailto:support@statementextract.com"
-                className="inline-flex items-center gap-2 rounded-lg bg-[hsl(var(--primary))] px-4 py-2 text-sm font-medium text-[hsl(var(--primary-foreground))] shadow-md hover:shadow-lg transition-shadow"
+                className="inline-flex items-center gap-2 rounded-lg bg-cyan-500 px-4 py-2 text-sm font-medium text-white shadow-md hover:bg-cyan-600 hover:shadow-lg transition-all"
               >
                 <Mail className="h-4 w-4" />
                 Contact us
               </a>
               <a
                 href="/blogs"
-                className="inline-flex items-center gap-2 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-4 py-2 text-sm font-medium text-[hsl(var(--foreground))] hover:border-[hsl(var(--primary))]/50 hover:bg-[hsl(var(--muted))] transition-colors"
+                className="inline-flex items-center gap-2 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-4 py-2 text-sm font-medium text-[hsl(var(--foreground))] hover:border-cyan-500/50 hover:bg-[hsl(var(--muted))] transition-colors"
               >
                 <BookOpen className="h-4 w-4" />
                 Read documentation & guides
               </a>
               <a
                 href="mailto:support@statementextract.com?subject=Book%20a%20demo%20of%20StatementExtract"
-                className="inline-flex items-center gap-2 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-4 py-2 text-sm font-medium text-[hsl(var(--foreground))] hover:border-[hsl(var(--primary))]/60 hover:bg-[hsl(var(--muted))] transition-colors"
+                className="inline-flex items-center gap-2 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-4 py-2 text-sm font-medium text-[hsl(var(--foreground))] hover:border-cyan-500/50 hover:bg-[hsl(var(--muted))] transition-colors"
               >
                 <Calendar className="h-4 w-4" />
                 Book a demo
@@ -167,16 +175,16 @@ export const FAQ = () => {
                   setOpenIndex(openIndex === index ? null : index)
                 }
                 aria-expanded={openIndex === index}
-                className="w-full rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-4 py-3 text-left text-sm md:text-base text-[hsl(var(--foreground))] hover:border-[hsl(var(--primary))]/50 hover:bg-[hsl(var(--muted))]/60 transition-colors"
+                className="w-full rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-4 py-3 text-left text-sm md:text-base text-[hsl(var(--foreground))] hover:border-cyan-500/50 hover:bg-[hsl(var(--muted))]/60 transition-colors"
               >
                 <div className="flex items-start justify-between gap-3">
                   <span className="flex items-center gap-3">
-                    <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[hsl(var(--primary))]/10 text-[0.7rem] font-medium text-[hsl(var(--primary))]">
+                    <span className="flex h-6 w-6 items-center justify-center rounded-full bg-cyan-500/10 text-[0.7rem] font-medium text-cyan-500">
                       {String(index + 1).padStart(2, "0")}
                     </span>
                     <span>{item.question}</span>
                   </span>
-                  <MessageCircle className="h-4 w-4 text-[hsl(var(--muted-foreground))]" />
+                  <MessageCircle className="h-4 w-4 text-cyan-500" />
                 </div>
                 {openIndex === index && (
                   <div className="mt-2 space-y-2 text-xs md:text-sm text-[hsl(var(--muted-foreground))]">

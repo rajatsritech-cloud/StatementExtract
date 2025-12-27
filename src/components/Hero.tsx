@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, FileText, CheckCircle2, ShieldCheck, Zap } from "lucide-react";
+import { ArrowRight, FileText, CheckCircle2, ShieldCheck } from "lucide-react";
 import { PrivacyNotice } from "@/components/PrivacyNotice";
 
 export const Hero = () => {
   return (
-    <section className="relative overflow-hidden bg-[hsl(var(--background))] pt-20 pb-20 md:pt-32 md:pb-32">
+    <section id="hero" aria-labelledby="hero-heading" className="relative overflow-hidden bg-[hsl(var(--background))] pt-20 pb-20 md:pt-32 md:pb-32">
       {/* Background Grids */}
       <div className="absolute inset-0 bg-grid-pattern-1 bg-size-40 opacity-[0.15] pointer-events-none" />
       <div className="absolute inset-0 bg-gradient-hero pointer-events-none" />
@@ -44,7 +44,7 @@ export const Hero = () => {
           </div>
 
           {/* Headline */}
-          <h1 className="mb-6 max-w-6xl text-5xl font-bold tracking-tight text-[hsl(var(--foreground))] md:text-7xl lg:text-[5.5rem] leading-[1.1] animate-slide-up">
+          <h1 id="hero-heading" className="mb-6 max-w-6xl text-5xl font-bold tracking-tight text-[hsl(var(--foreground))] md:text-7xl lg:text-[5.5rem] leading-[1.1] animate-slide-up">
             Intelligent Document Processing <br />
             <span className="bg-gradient-primary bg-clip-text text-transparent">Reimagined for Scale</span>
           </h1>
@@ -62,6 +62,11 @@ export const Hero = () => {
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Button>
             </Link>
+            <Link href="/tools" passHref className="w-full sm:w-auto">
+              <Button size="lg" variant="outline" className="gap-2 h-12 px-8 text-base w-full sm:w-auto">
+                Browse Free Tools
+              </Button>
+            </Link>
           </div>
 
           {/* Privacy Notice */}
@@ -75,7 +80,7 @@ export const Hero = () => {
             </div>
             <div className="flex items-center gap-2">
               <ShieldCheck className="h-4 w-4 text-[hsl(var(--primary))]" />
-              <span>Bank-Level Security</span>
+              <span>Secure Processing</span>
             </div>
             <div className="flex items-center gap-2">
               <FileText className="h-4 w-4 text-[hsl(var(--primary))]" />
@@ -87,3 +92,5 @@ export const Hero = () => {
     </section>
   );
 };
+
+

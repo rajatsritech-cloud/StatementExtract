@@ -2,8 +2,13 @@
 
 import dynamic from 'next/dynamic';
 import { Hero } from "@/components/Hero";
+import { LandingPageSchema } from "@/components/LandingPageSchema";
 
-// Dynamic imports for below-fold components to reduce initial bundle
+// Dynamic imports for components
+const FlagshipTools = dynamic(() => import("@/components/FlagshipTools").then(mod => ({ default: mod.FlagshipTools })), {
+  loading: () => <div className="min-h-[300px] bg-[hsl(var(--background))]" />,
+});
+
 const DocumentDemo = dynamic(() => import("@/components/DocumentDemo").then(mod => ({ default: mod.DocumentDemo })), {
   loading: () => <div className="min-h-[600px] bg-[hsl(var(--background))]" />,
 });
@@ -18,6 +23,10 @@ const HowItWorks = dynamic(() => import("@/components/HowItWorks").then(mod => (
 
 const UseCases = dynamic(() => import("@/components/UseCases").then(mod => ({ default: mod.UseCases })), {
   loading: () => <div className="min-h-[400px] bg-[hsl(var(--background))]" />,
+});
+
+const ToolsShowcase = dynamic(() => import("@/components/ToolsShowcase").then(mod => ({ default: mod.ToolsShowcase })), {
+  loading: () => <div className="min-h-[600px] bg-[hsl(var(--background))]" />,
 });
 
 const Pricing = dynamic(() => import("@/components/Pricing").then(mod => ({ default: mod.Pricing })), {
@@ -43,8 +52,11 @@ const RecentBlogs = dynamic(() => import("@/components/RecentBlogs").then(mod =>
 export default function Home() {
   return (
     <>
+      <LandingPageSchema />
       <Hero />
+      <FlagshipTools />
       <DocumentDemo />
+      <ToolsShowcase />
       <Features />
       <HowItWorks />
       <UseCases />
@@ -56,3 +68,5 @@ export default function Home() {
     </>
   );
 }
+
+
