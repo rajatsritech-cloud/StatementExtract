@@ -14,7 +14,7 @@ export const metadata: Metadata = {
         url: "https://statementextract.com/convert/image-compressor",
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/image-compressor",
+        canonical: "https://statementextract.com/convert/image-compressor/",
     },
 };
 

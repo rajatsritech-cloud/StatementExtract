@@ -15,7 +15,7 @@ export const metadata: Metadata = {
         url: "https://statementextract.com/convert/batch-converter",
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/batch-converter",
+        canonical: "https://statementextract.com/convert/batch-converter/",
     },
 };
 

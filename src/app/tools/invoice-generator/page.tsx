@@ -24,7 +24,7 @@ export const metadata: Metadata = {
         url: "https://statementextract.com/tools/invoice-generator",
     },
     alternates: {
-        canonical: "https://statementextract.com/tools/invoice-generator",
+        canonical: "https://statementextract.com/tools/invoice-generator/",
     },
 };
 

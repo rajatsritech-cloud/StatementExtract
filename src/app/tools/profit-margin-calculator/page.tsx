@@ -25,7 +25,7 @@ export const metadata: Metadata = {
         images: ["https://statementextract.com/assets/StatementExtract_Workflow_img.png"],
     },
     alternates: {
-        canonical: "https://statementextract.com/tools/profit-margin-calculator",
+        canonical: "https://statementextract.com/tools/profit-margin-calculator/",
     },
     robots: {
         index: true,

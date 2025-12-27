@@ -25,7 +25,7 @@ export const metadata: Metadata = {
         url: "https://statementextract.com/convert/stripe-to-qbo",
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/stripe-to-qbo",
+        canonical: "https://statementextract.com/convert/stripe-to-qbo/",
     },
 };
 

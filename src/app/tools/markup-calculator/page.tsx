@@ -24,7 +24,7 @@ export const metadata: Metadata = {
         images: ["https://statementextract.com/assets/StatementExtract_Workflow_img.png"],
     },
     alternates: {
-        canonical: "https://statementextract.com/tools/markup-calculator",
+        canonical: "https://statementextract.com/tools/markup-calculator/",
     },
     robots: {
         index: true,

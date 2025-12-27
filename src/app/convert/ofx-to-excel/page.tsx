@@ -33,7 +33,7 @@ export const metadata: Metadata = {
         images: ["https://statementextract.com/assets/StatementExtract_Workflow_img.png"],
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/ofx-to-excel",
+        canonical: "https://statementextract.com/convert/ofx-to-excel/",
     },
 };
 

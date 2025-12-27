@@ -14,7 +14,7 @@ export const metadata: Metadata = {
         url: "https://statementextract.com/convert/merge-pdf",
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/merge-pdf",
+        canonical: "https://statementextract.com/convert/merge-pdf/",
     },
 };
 

@@ -14,7 +14,7 @@ export const metadata: Metadata = {
         url: "https://statementextract.com/convert/avif-converter/avif-to-webp",
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/avif-converter/avif-to-webp",
+        canonical: "https://statementextract.com/convert/avif-converter/avif-to-webp/",
     },
 };
 

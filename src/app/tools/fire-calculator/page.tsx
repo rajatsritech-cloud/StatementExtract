@@ -13,6 +13,9 @@ export const metadata: Metadata = {
         description: 'Calculate your path to Financial Independence. See how your savings rate impacts your retirement date.',
         type: 'website',
     },
+    alternates: {
+        canonical: "https://statementextract.com/tools/fire-calculator/",
+    },
 };
 
 const relatedTools = [

@@ -20,7 +20,7 @@ export const metadata: Metadata = {
         description: "Convert images to Base64 in milliseconds. 100% client-side, private.",
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/image-to-base64",
+        canonical: "https://statementextract.com/convert/image-to-base64/",
     },
     robots: {
         index: true,

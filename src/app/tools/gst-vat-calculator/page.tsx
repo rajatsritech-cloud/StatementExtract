@@ -23,7 +23,7 @@ export const metadata: Metadata = {
         description: "Calculate GST, VAT, and sales tax for any country. Free for business owners.",
     },
     alternates: {
-        canonical: "https://statementextract.com/tools/gst-vat-calculator",
+        canonical: "https://statementextract.com/tools/gst-vat-calculator/",
     },
     robots: {
         index: true,

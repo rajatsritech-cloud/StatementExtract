@@ -35,7 +35,7 @@ export const metadata: Metadata = {
         images: ["https://statementextract.com/assets/StatementExtract_Workflow_img.png"],
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/qfx-to-pdf",
+        canonical: "https://statementextract.com/convert/qfx-to-pdf/",
     },
 };
 

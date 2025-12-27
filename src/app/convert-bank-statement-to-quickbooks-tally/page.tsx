@@ -31,7 +31,7 @@ export const metadata: Metadata = {
         url: "/convert-bank-statement-to-quickbooks-tally"
     },
     alternates: {
-        canonical: "/convert-bank-statement-to-quickbooks-tally"
+        canonical: "/convert-bank-statement-to-quickbooks-tally/"
     }
 };
 

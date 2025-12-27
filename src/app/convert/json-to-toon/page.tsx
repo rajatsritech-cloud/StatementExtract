@@ -14,7 +14,7 @@ export const metadata: Metadata = {
         url: "https://statementextract.com/convert/json-to-toon",
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/json-to-toon",
+        canonical: "https://statementextract.com/convert/json-to-toon/",
     },
 };
 

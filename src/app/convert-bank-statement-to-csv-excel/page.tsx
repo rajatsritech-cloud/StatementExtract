@@ -90,7 +90,7 @@ export const metadata: Metadata = {
     description: "Convert any bank statement PDF to Excel or CSV. Works with Chase, Wells Fargo, Bank of America & more. Free to try.",
   },
   alternates: {
-    canonical: "/convert-bank-statement-to-csv-excel",
+    canonical: "/convert-bank-statement-to-csv-excel/",
     languages: {
       "en-US": "https://statementextract.com/convert-bank-statement-to-csv-excel",
     },

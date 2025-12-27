@@ -14,7 +14,7 @@ export const metadata: Metadata = {
         url: "https://statementextract.com/convert/avif-converter/image-to-avif",
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/avif-converter/image-to-avif",
+        canonical: "https://statementextract.com/convert/avif-converter/image-to-avif/",
     },
 };
 

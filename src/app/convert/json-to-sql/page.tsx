@@ -20,7 +20,7 @@ export const metadata: Metadata = {
         description: "Convert JSON to SQL INSERT statements instantly. Multi-dialect support.",
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/json-to-sql",
+        canonical: "https://statementextract.com/convert/json-to-sql/",
     },
     robots: {
         index: true,

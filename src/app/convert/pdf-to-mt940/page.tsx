@@ -65,6 +65,9 @@ export const metadata: Metadata = {
             },
         ],
     },
+    alternates: {
+        canonical: "https://statementextract.com/convert/pdf-to-mt940/",
+    },
 };
 
 const schemaData = {

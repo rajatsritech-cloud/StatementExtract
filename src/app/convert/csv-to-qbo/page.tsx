@@ -25,7 +25,7 @@ export const metadata: Metadata = {
         url: "https://statementextract.com/convert/csv-to-qbo",
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/csv-to-qbo",
+        canonical: "https://statementextract.com/convert/csv-to-qbo/",
     },
 };
 

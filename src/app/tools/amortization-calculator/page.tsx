@@ -20,7 +20,7 @@ export const metadata: Metadata = {
         description: "Calculate mortgage and loan payments. See savings from extra payments.",
     },
     alternates: {
-        canonical: "https://statementextract.com/tools/amortization-calculator",
+        canonical: "https://statementextract.com/tools/amortization-calculator/",
     },
     robots: {
         index: true,

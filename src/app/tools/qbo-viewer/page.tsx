@@ -34,7 +34,7 @@ export const metadata: Metadata = {
         images: ["https://statementextract.com/assets/StatementExtract_Workflow_img.png"],
     },
     alternates: {
-        canonical: "https://statementextract.com/tools/qbo-viewer",
+        canonical: "https://statementextract.com/tools/qbo-viewer/",
     },
 };
 

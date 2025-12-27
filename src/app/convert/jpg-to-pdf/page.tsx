@@ -21,7 +21,7 @@ export const metadata: Metadata = {
         description: "Convert images to PDF instantly. No watermark, no signup.",
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/jpg-to-pdf",
+        canonical: "https://statementextract.com/convert/jpg-to-pdf/",
     },
     robots: {
         index: true,

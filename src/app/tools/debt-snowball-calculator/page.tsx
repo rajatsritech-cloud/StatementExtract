@@ -13,6 +13,9 @@ export const metadata: Metadata = {
         description: 'Create your personalized debt payoff plan instantly. See how the snowball method can help you become debt-free faster.',
         type: 'website',
     },
+    alternates: {
+        canonical: "https://statementextract.com/tools/debt-snowball-calculator/",
+    },
 };
 
 const relatedTools = [

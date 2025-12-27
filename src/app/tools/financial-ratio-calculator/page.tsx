@@ -22,7 +22,7 @@ export const metadata: Metadata = {
         description: "Calculate 20+ key financial ratios instantly. Free for finance professionals.",
     },
     alternates: {
-        canonical: "https://statementextract.com/tools/financial-ratio-calculator",
+        canonical: "https://statementextract.com/tools/financial-ratio-calculator/",
     },
     robots: {
         index: true,

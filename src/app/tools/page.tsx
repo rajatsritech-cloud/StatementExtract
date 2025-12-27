@@ -19,7 +19,7 @@ export const metadata: Metadata = {
         url: "https://statementextract.com/tools",
     },
     alternates: {
-        canonical: "https://statementextract.com/tools",
+        canonical: "https://statementextract.com/tools/",
     },
 };
 

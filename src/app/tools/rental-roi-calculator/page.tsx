@@ -13,6 +13,9 @@ export const metadata: Metadata = {
         description: 'Is it a good deal? Calculate cash flow and ROI in seconds.',
         type: 'website',
     },
+    alternates: {
+        canonical: "https://statementextract.com/tools/rental-roi-calculator/",
+    },
 };
 
 const relatedTools = [

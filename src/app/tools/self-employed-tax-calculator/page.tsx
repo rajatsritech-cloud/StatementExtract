@@ -23,7 +23,7 @@ export const metadata: Metadata = {
         url: "https://statementextract.com/tools/self-employed-tax-calculator",
     },
     alternates: {
-        canonical: "https://statementextract.com/tools/self-employed-tax-calculator",
+        canonical: "https://statementextract.com/tools/self-employed-tax-calculator/",
     },
 };
 

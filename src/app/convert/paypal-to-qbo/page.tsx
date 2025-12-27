@@ -25,7 +25,7 @@ export const metadata: Metadata = {
         url: "https://statementextract.com/convert/paypal-to-qbo",
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/paypal-to-qbo",
+        canonical: "https://statementextract.com/convert/paypal-to-qbo/",
     },
 };
 

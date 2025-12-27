@@ -31,7 +31,7 @@ export const metadata: Metadata = {
         url: "/convert-bank-statement-to-quickbooks-xero"
     },
     alternates: {
-        canonical: "/convert-bank-statement-to-quickbooks-xero"
+        canonical: "/convert-bank-statement-to-quickbooks-xero/"
     }
 };
 
