@@ -57,27 +57,42 @@ interface InvoiceMetadata {
 }
 
 // Compact Invoice Summary Bar (minimal - only Invoice # and Total)
-const InvoiceSummaryBar = ({ metadata }: { metadata: InvoiceMetadata }) => {
+// Detailed Invoice Metadata Card
+const InvoiceMetadataCard = ({ metadata }: { metadata: InvoiceMetadata }) => {
     const currency = metadata?.currency || '$';
 
-    // Only show Invoice # and Total (the essentials)
-    const hasData = metadata?.invoiceNumber || metadata?.totalAmount !== undefined;
-    if (!hasData) return null;
-
     return (
-        <div className="mb-3 flex items-center gap-6 px-3 py-2 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--muted))]/20 text-xs">
-            {metadata?.invoiceNumber && (
-                <div className="flex items-center gap-1.5">
-                    <span className="text-[hsl(var(--muted-foreground))]">Invoice #:</span>
-                    <span className="font-medium text-[hsl(var(--foreground))] font-mono">{metadata.invoiceNumber}</span>
+        <div className="mb-4 p-4 rounded-lg border border-[hsl(var(--border))] bg-[hsl(var(--card))]">
+            <h4 className="text-xs font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wider mb-3">Invoice Details</h4>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {/* Invoice # */}
+                <div>
+                    <span className="block text-[10px] text-[hsl(var(--muted-foreground))] uppercase">Invoice #</span>
+                    <span className="block text-sm font-medium font-mono text-[hsl(var(--foreground))]">
+                        {metadata?.invoiceNumber || '-'}
+                    </span>
                 </div>
-            )}
-            {metadata?.totalAmount !== undefined && (
-                <div className="flex items-center gap-1.5">
-                    <span className="text-[hsl(var(--muted-foreground))]">Total:</span>
-                    <span className="font-semibold text-green-600">{formatCurrency(metadata.totalAmount, currency)}</span>
+
+                {/* Vendor - Only show if present */}
+                {metadata?.vendorName && (
+                    <div className="col-span-2 md:col-span-1">
+                        <span className="block text-[10px] text-[hsl(var(--muted-foreground))] uppercase">Vendor</span>
+                        <span className="block text-sm font-medium text-[hsl(var(--foreground))] truncate" title={metadata.vendorName}>
+                            {metadata.vendorName}
+                        </span>
+                    </div>
+                )}
+
+                {/* Total - prominent */}
+                <div>
+                    <span className="block text-[10px] text-[hsl(var(--muted-foreground))] uppercase">Total Amount</span>
+                    <span className={`block text-sm font-bold ${metadata?.totalAmount ? 'text-green-600' : 'text-[hsl(var(--muted-foreground))]'}`}>
+                        {metadata?.totalAmount !== undefined && metadata?.totalAmount !== null
+                            ? formatCurrency(metadata.totalAmount, currency)
+                            : '-'}
+                    </span>
                 </div>
-            )}
+            </div>
         </div>
     );
 };
@@ -618,7 +633,10 @@ export const InvoiceResultsModal = ({ data, file, onClose, onTryAnother, isProce
         );
     }
 
-    if (!data || !data.invoiceData) return null;
+    if (!data || !data.invoiceData) {
+        console.log("InvoiceResultsModal: No data or invoiceData", data);
+        return null;
+    }
 
     const { metadata, lineItems } = data.invoiceData;
     const currency = metadata?.currency || 'USD';
@@ -738,8 +756,8 @@ export const InvoiceResultsModal = ({ data, file, onClose, onTryAnother, isProce
                     {/* Right Side - Extracted Data */}
                     <div className={`${showInvoice ? 'w-1/2' : 'w-full'} flex flex-col relative`}>
                         <div className="flex-1 flex flex-col overflow-hidden p-4">
-                            {/* Compact Invoice Summary */}
-                            <InvoiceSummaryBar metadata={metadata} />
+                            {/* Detailed Invoice Metadata */}
+                            <InvoiceMetadataCard metadata={metadata} />
 
                             {/* Line Items Table with Editing, Delete, Undo */}
                             <LineItemsTable

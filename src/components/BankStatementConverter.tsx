@@ -206,7 +206,16 @@ export const BankStatementConverter = ({
           netBalance: 0,
           transactionCount: 0
         },
-        llm_used: false
+        llm_used: false,
+        // Ensure invoiceData exists so modal opens in invoice mode
+        invoiceData: {
+          metadata: {
+            invoiceNumber: "Error",
+            vendorName: "Extraction Failed",
+            totalAmount: 0
+          },
+          lineItems: []
+        }
       };
 
       setExtractedData(failedResult);

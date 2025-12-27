@@ -99,8 +99,11 @@ export const InvoiceDashboardContent = () => {
             const token = await getToken();
             const extracted = await PDFProcessor.processPDF(file, isSignedIn || false, token, '/api/v1/invoice-extract/extract');
 
-            // Check if extraction was successful
-            if (!extracted.invoiceData || !extracted.invoiceData.lineItems || extracted.invoiceData.lineItems.length === 0) {
+            // RELAXED CHECK: Allow success if we at least found Invoice # or Total, even if line items failed.
+            const hasMetadata = extracted.invoiceData?.metadata?.invoiceNumber || extracted.invoiceData?.metadata?.totalAmount !== undefined;
+            const hasLineItems = extracted.invoiceData?.lineItems && extracted.invoiceData.lineItems.length > 0;
+
+            if (!extracted.invoiceData || (!hasMetadata && !hasLineItems)) {
                 setDocuments(prev => prev.map(doc =>
                     doc.id === docId ? {
                         ...doc,

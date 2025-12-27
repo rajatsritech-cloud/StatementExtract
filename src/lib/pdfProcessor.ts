@@ -396,15 +396,15 @@ export class PDFProcessor {
           },
           invoiceData: {
             metadata: {
-              invoiceNumber: result.metadata.invoice_number,
-              invoiceDate: result.metadata.invoice_date,
-              dueDate: result.metadata.due_date,
-              vendorName: result.metadata.vendor_name,
-              customerName: result.metadata.customer_name,
+              invoiceNumber: result.metadata.invoice_number || result.metadata.invoiceNumber,
+              invoiceDate: result.metadata.invoice_date || result.metadata.invoiceDate,
+              dueDate: result.metadata.due_date || result.metadata.dueDate,
+              vendorName: result.metadata.vendor_name || result.metadata.vendorName,
+              customerName: result.metadata.customer_name || result.metadata.customerName,
               currency: result.metadata.currency,
-              subtotal: result.metadata.subtotal,
-              taxAmount: result.metadata.tax_amount,
-              totalAmount: result.metadata.total_amount,
+              subtotal: result.metadata.subtotal || result.metadata.subTotal,
+              taxAmount: result.metadata.tax_amount || result.metadata.taxAmount,
+              totalAmount: result.metadata.total_amount || result.metadata.totalAmount,
             },
             lineItems: result.line_items.map((item: any) => ({
               description: item.description,
