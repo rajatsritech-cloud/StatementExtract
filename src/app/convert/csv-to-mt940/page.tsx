@@ -25,7 +25,7 @@ export const metadata: Metadata = {
         url: "https://statementextract.com/convert/csv-to-mt940",
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/csv-to-mt940",
+        canonical: "https://statementextract.com/convert/csv-to-mt940/",
     },
 };
 
