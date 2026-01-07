@@ -81,8 +81,9 @@ const useCases = [
 const relatedTools = [
     { href: "/convert/merge-pdf", title: "Merge PDF" },
     { href: "/convert/compress-pdf", title: "Compress PDF" },
-    { href: "/convert-bank-statement-to-csv-excel", title: "Bank Statement to Excel" },
-    { href: "/convert/batch-converter", title: "Image Converter" },
+    { href: "/convert/rotate-pdf", title: "Rotate PDF" },
+    { href: "/convert/add-page-numbers-pdf", title: "Add Page Numbers" },
+    { href: "/convert/unlock-pdf", title: "Unlock PDF" },
 ];
 
 export default function SplitPDFPage() {

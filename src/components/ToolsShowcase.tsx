@@ -73,12 +73,14 @@ const TOOL_CATEGORIES = [
             arrow: "text-purple-500"
         },
         tools: [
+            { name: "Rotate PDF", href: "/convert/rotate-pdf", icon: Layers, description: "Fix orientation" },
+            { name: "Add Page Numbers", href: "/convert/add-page-numbers-pdf", icon: FileText, description: "Number pages" },
+            { name: "Unlock PDF", href: "/convert/unlock-pdf", icon: Layers, description: "Remove restrictions" },
             { name: "Compress PDF", href: "/convert/compress-pdf", icon: Minimize2, description: "Reduce file size" },
             { name: "Merge PDF", href: "/convert/merge-pdf", icon: Layers, description: "Combine PDFs" },
             { name: "Split PDF", href: "/convert/split-pdf", icon: Split, description: "Extract pages" },
             { name: "JPG to PDF", href: "/convert/jpg-to-pdf", icon: FileImage, description: "Images to PDF" },
             { name: "Image Compressor", href: "/convert/image-compressor", icon: Minimize2, description: "Reduce image size" },
-            { name: "Image to Base64", href: "/convert/image-to-base64", icon: Code, description: "Encode images" },
         ]
     },
     {

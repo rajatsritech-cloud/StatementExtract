@@ -69,10 +69,11 @@ const faqSchema = {
 };
 
 const relatedTools = [
-    { href: "/convert-bank-statement-to-csv-excel", title: "Bank Statement to Excel" },
-    { href: "/convert/image-compressor", title: "Image Compressor" },
-    { href: "/convert/batch-converter", title: "HEIC Converter" },
-    { href: "/convert/json-to-toon", title: "JSON to TOON" },
+    { href: "/convert/split-pdf", title: "Split PDF" },
+    { href: "/convert/compress-pdf", title: "Compress PDF" },
+    { href: "/convert/rotate-pdf", title: "Rotate PDF" },
+    { href: "/convert/add-page-numbers-pdf", title: "Add Page Numbers" },
+    { href: "/convert/unlock-pdf", title: "Unlock PDF" },
 ];
 
 export default function MergePDFPage() {

@@ -84,9 +84,10 @@ const targetSizes = [
 
 const relatedTools = [
     { href: "/convert/merge-pdf", title: "Merge PDF" },
-    { href: "/convert-bank-statement-to-csv-excel", title: "Bank Statement to Excel" },
-    { href: "/convert/batch-converter", title: "Image Converter" },
-    { href: "/convert/image-compressor", title: "Image Compressor" },
+    { href: "/convert/split-pdf", title: "Split PDF" },
+    { href: "/convert/rotate-pdf", title: "Rotate PDF" },
+    { href: "/convert/add-page-numbers-pdf", title: "Add Page Numbers" },
+    { href: "/convert/unlock-pdf", title: "Unlock PDF" },
 ];
 
 export default function CompressPDFPage() {
