@@ -48,6 +48,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         '/tools/rental-roi-calculator/',
         '/convert/qbo-to-csv/',
         '/tools/financial-ratio-calculator/',
+        '/tools/compound-interest-calculator/',
     ]
 
     // 3. Secondary Tools - Niche use cases. Priority 0.8, Weekly.

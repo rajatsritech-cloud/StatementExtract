@@ -23,6 +23,7 @@ const TOOL_CATEGORIES = [
             arrow: "text-emerald-500"
         },
         tools: [
+            { name: "Compound Interest", href: "/tools/compound-interest-calculator", icon: TrendingUp, description: "Investment growth" },
             { name: "Amortization Calculator", href: "/tools/amortization-calculator", icon: Calculator, description: "Loan payment schedules" },
             { name: "Debt Snowball", href: "/tools/debt-snowball-calculator", icon: PiggyBank, description: "Pay off debt faster" },
             { name: "FIRE Calculator", href: "/tools/fire-calculator", icon: TrendingUp, description: "Financial independence" },
@@ -47,6 +48,7 @@ const TOOL_CATEGORIES = [
             arrow: "text-blue-500"
         },
         tools: [
+            { name: "Invoice to Excel", href: "/convert-invoice-to-excel-csv", icon: FileText, description: "Extract invoice data" },
             { name: "CSV to QBO", href: "/convert/csv-to-qbo", icon: ArrowRightLeft, description: "QuickBooks format" },
             { name: "CSV to OFX", href: "/convert/csv-to-ofx", icon: ArrowRightLeft, description: "Open Financial Exchange" },
             { name: "CSV to MT940", href: "/convert/csv-to-mt940", icon: ArrowRightLeft, description: "Bank statement format" },

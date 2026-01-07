@@ -223,6 +223,13 @@ const toolSections = [
         featured: false,
         tools: [
             {
+                title: "Compound Interest Calculator",
+                description: "Calculate investment growth with daily, monthly, or annual compounding. Add monthly contributions.",
+                href: "/tools/compound-interest-calculator",
+                icon: "TrendingUp",
+                badge: "New",
+            },
+            {
                 title: "Amortization Calculator",
                 description: "Full loan payment schedules with extra payment analysis. Mortgage, auto, & student loans.",
                 href: "/tools/amortization-calculator",
@@ -248,7 +255,7 @@ const toolSections = [
                 description: "Financial Independence, Retire Early. See when you can retire based on your savings.",
                 href: "/tools/fire-calculator",
                 icon: "Zap",
-                badge: "New",
+                badge: null,
             },
         ],
     }

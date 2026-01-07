@@ -64,6 +64,14 @@ export const Footer = () => {
               </li>
               <li>
                 <Link
+                  href="/convert-invoice-to-excel-csv"
+                  className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors"
+                >
+                  Invoice to Excel Converter
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/convert"
                   className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors"
                 >

@@ -428,6 +428,19 @@ export const Header = () => {
                               </div>
                             </Link>
                             <Link
+                              href="/convert-invoice-to-excel-csv"
+                              className="group flex items-start gap-3 rounded-xl border border-amber-500/50 bg-amber-500/5 px-3 py-2.5 cursor-pointer transition-all duration-200 hover:border-amber-500/50 hover:bg-amber-500/5"
+                              onClick={closeConvertersDropdown}
+                            >
+                              <div className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/10 text-amber-500 group-hover:bg-amber-500 group-hover:text-white transition-colors">
+                                <FileText className="h-4 w-4" />
+                              </div>
+                              <div>
+                                <p className="text-sm font-bold text-[hsl(var(--foreground))] group-hover:text-amber-500 transition-colors">Invoice to Excel</p>
+                                <p className="text-[11px] text-[hsl(var(--muted-foreground))] group-hover:text-[hsl(var(--muted-foreground))]/80">Extract invoice data</p>
+                              </div>
+                            </Link>
+                            <Link
                               href="/convert/csv-to-qbo"
                               className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-2.5 cursor-pointer transition-all duration-200 hover:border-amber-500/50 hover:bg-amber-500/5"
                               onClick={closeConvertersDropdown}
@@ -564,6 +577,19 @@ export const Header = () => {
                               </div>
                             </Link>
                             <Link
+                              href="/convert-invoice-to-excel-csv"
+                              className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-2.5 cursor-pointer transition-all duration-200 hover:border-orange-500/50 hover:bg-orange-500/5"
+                              onClick={closeToolsDropdown}
+                            >
+                              <div className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-orange-500/10 text-orange-500 group-hover:bg-orange-500 group-hover:text-white transition-colors">
+                                <FileSpreadsheet className="h-4 w-4" />
+                              </div>
+                              <div>
+                                <p className="text-sm font-bold text-[hsl(var(--foreground))] group-hover:text-orange-500 transition-colors">Invoice to Excel</p>
+                                <p className="text-[11px] text-[hsl(var(--muted-foreground))] group-hover:text-[hsl(var(--muted-foreground))]/80">Convert PDF to Excel</p>
+                              </div>
+                            </Link>
+                            <Link
                               href="/tools/profit-margin-calculator"
                               className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-2.5 cursor-pointer transition-all duration-200 hover:border-orange-500/50 hover:bg-orange-500/5"
                               onClick={closeToolsDropdown}
@@ -642,6 +668,19 @@ export const Header = () => {
                         <div className="col-span-1 p-6">
                           <p className="text-xs font-bold tracking-[0.2em] text-[hsl(var(--muted-foreground))] mb-4">INVESTMENTS</p>
                           <div className="space-y-2">
+                            <Link
+                              href="/tools/compound-interest-calculator"
+                              className="group flex items-start gap-3 rounded-xl border border-purple-500/50 bg-purple-500/5 px-3 py-2.5 cursor-pointer transition-all duration-200 hover:border-purple-500/50 hover:bg-purple-500/5"
+                              onClick={closeToolsDropdown}
+                            >
+                              <div className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-purple-500/10 text-purple-500 group-hover:bg-purple-500 group-hover:text-white transition-colors">
+                                <TrendingUp className="h-4 w-4" />
+                              </div>
+                              <div>
+                                <p className="text-sm font-bold text-[hsl(var(--foreground))] group-hover:text-purple-500 transition-colors">Compound Interest</p>
+                                <p className="text-[11px] text-[hsl(var(--muted-foreground))] group-hover:text-[hsl(var(--muted-foreground))]/80">Investment growth</p>
+                              </div>
+                            </Link>
                             <Link
                               href="/tools/amortization-calculator"
                               className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-2.5 cursor-pointer transition-all duration-200 hover:border-purple-500/50 hover:bg-purple-500/5"
