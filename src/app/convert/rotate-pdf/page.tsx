@@ -314,28 +314,6 @@ export default function RotatePDFPage() {
                 <RotatePdfTool />
             </section>
 
-            {/* Quick Stats Bar - Trust Signals */}
-            <section className="py-6 px-4 bg-[hsl(var(--primary))]/5 border-y border-[hsl(var(--border))]">
-                <div className="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-                    <div>
-                        <p className="text-2xl font-bold text-[hsl(var(--primary))]">18,000+</p>
-                        <p className="text-sm text-[hsl(var(--muted-foreground))]">PDFs Rotated Daily</p>
-                    </div>
-                    <div>
-                        <p className="text-2xl font-bold text-[hsl(var(--primary))]">Local</p>
-                        <p className="text-sm text-[hsl(var(--muted-foreground))]">Browser Processing</p>
-                    </div>
-                    <div>
-                        <p className="text-2xl font-bold text-[hsl(var(--primary))]">0 Uploads</p>
-                        <p className="text-sm text-[hsl(var(--muted-foreground))]">Files Stay on Device</p>
-                    </div>
-                    <div>
-                        <p className="text-2xl font-bold text-[hsl(var(--primary))]">4.9★</p>
-                        <p className="text-sm text-[hsl(var(--muted-foreground))]">User Rating</p>
-                    </div>
-                </div>
-            </section>
-
             {/* Step-by-Step How To Section (matches HowTo schema) */}
             <section className="py-16 px-4">
                 <div className="max-w-4xl mx-auto">

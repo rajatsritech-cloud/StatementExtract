@@ -211,6 +211,46 @@ export default function CsvToOfxPage() {
                 </div>
             </section>
 
+            {/* Comparison Table - Best Free CSV to OFX Converter */}
+            <section className="py-12 md:py-16 px-4">
+                <div className="max-w-3xl mx-auto">
+                    <h2 className="text-2xl md:text-3xl font-bold text-center mb-3">
+                        Best Free CSV to OFX Converter (No Upload, No Signup)
+                    </h2>
+                    <p className="text-center text-[hsl(var(--muted-foreground))] mb-8">
+                        Compare our free tool to MoneyThumb, Bank2OFX, and Transactions Pro
+                    </p>
+                    <div className="overflow-x-auto">
+                        <table className="w-full border-collapse">
+                            <thead>
+                                <tr className="bg-[hsl(var(--primary))]/10">
+                                    <th className="text-left p-4 font-semibold text-[hsl(var(--foreground))]">Feature</th>
+                                    <th className="text-left p-4 font-semibold text-[hsl(var(--primary))]">Statement Extract</th>
+                                    <th className="text-left p-4 font-semibold text-[hsl(var(--muted-foreground))]">Others</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {[
+                                    { feature: "Price", us: "Free forever", competitors: "$39-99/year" },
+                                    { feature: "File Upload", us: "None (browser only)", competitors: "Uploads to servers" },
+                                    { feature: "Output Formats", us: "OFX, QBO, QFX", competitors: "Usually 1 format" },
+                                    { feature: "Excel Support", us: "XLS & XLSX", competitors: "CSV only usually" },
+                                    { feature: "Column Mapping", us: "Auto + Manual", competitors: "Manual only" },
+                                    { feature: "Transaction Limit", us: "Unlimited", competitors: "25-100 free" },
+                                    { feature: "Software Support", us: "QB, Xero, Sage+", competitors: "QuickBooks only" },
+                                ].map((row, i) => (
+                                    <tr key={i} className="border-b border-[hsl(var(--border))]">
+                                        <td className="p-4 text-[hsl(var(--foreground))]">{row.feature}</td>
+                                        <td className="p-4 text-[hsl(var(--primary))] font-medium">{row.us}</td>
+                                        <td className="p-4 text-[hsl(var(--muted-foreground))]">{row.competitors}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
             {/* SEO Content Block */}
             <section className="py-12 md:py-16 px-6">
                 <div className="max-w-4xl mx-auto prose prose-lg dark:prose-invert">

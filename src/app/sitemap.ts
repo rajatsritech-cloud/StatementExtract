@@ -130,7 +130,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         ...toolPages.map((route) => ({
             url: `${baseUrl}${route}`,
             lastModified: currentDate,
-            changeFrequency: 'weekly' as const, // Changed from Daily to Weekly
+            changeFrequency: 'daily' as const,
             priority: 0.9,
         })),
 
@@ -138,7 +138,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         ...secondaryTools.map((route) => ({
             url: `${baseUrl}${route}`,
             lastModified: currentDate,
-            changeFrequency: 'weekly' as const,
+            changeFrequency: 'daily' as const,
             priority: 0.8,
         })),
 
@@ -150,11 +150,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             priority: 0.9,
         },
 
-        // Individual Blog Posts (0.7 - Content is static once published)
+        // Individual Blog Posts (0.7 - Weekly for new site, move to monthly after 6 months)
         ...blogPosts.map((route) => ({
             url: `${baseUrl}${route}`,
             lastModified: currentDate, // Ideally this should be the post's update date
-            changeFrequency: 'monthly' as const,
+            changeFrequency: 'weekly' as const,
             priority: 0.7,
         })),
 

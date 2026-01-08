@@ -239,6 +239,45 @@ export default function QifToCsvPage() {
                 </div>
             </section>
 
+            {/* Comparison Table - Best Free QIF to CSV Converter */}
+            <section className="py-12 md:py-16 px-4">
+                <div className="max-w-3xl mx-auto">
+                    <h2 className="text-2xl md:text-3xl font-bold text-center mb-3">
+                        Best Free QIF to CSV Converter
+                    </h2>
+                    <p className="text-center text-[hsl(var(--muted-foreground))] mb-8">
+                        Compare our free tool to other QIF converters
+                    </p>
+                    <div className="overflow-x-auto">
+                        <table className="w-full border-collapse">
+                            <thead>
+                                <tr className="bg-[hsl(var(--primary))]/10">
+                                    <th className="text-left p-4 font-semibold text-[hsl(var(--foreground))]">Feature</th>
+                                    <th className="text-left p-4 font-semibold text-[hsl(var(--primary))]">Statement Extract</th>
+                                    <th className="text-left p-4 font-semibold text-[hsl(var(--muted-foreground))]">Others</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {[
+                                    { feature: "Price", us: "Free forever", competitors: "$15-40 per conversion" },
+                                    { feature: "File Upload", us: "None (browser only)", competitors: "Uploads to servers" },
+                                    { feature: "Quicken Versions", us: "All versions supported", competitors: "Limited support" },
+                                    { feature: "Category Export", us: "Full categories preserved", competitors: "Often lost" },
+                                    { feature: "Date Format", us: "Clean YYYY-MM-DD", competitors: "Varies" },
+                                    { feature: "File Limits", us: "Unlimited", competitors: "Per-file charges" },
+                                ].map((row, i) => (
+                                    <tr key={i} className="border-b border-[hsl(var(--border))]">
+                                        <td className="p-4 text-[hsl(var(--foreground))]">{row.feature}</td>
+                                        <td className="p-4 text-[hsl(var(--primary))] font-medium">{row.us}</td>
+                                        <td className="p-4 text-[hsl(var(--muted-foreground))]">{row.competitors}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
             <section className="py-12 md:py-16 px-6 bg-[hsl(var(--muted))]/30">
                 <div className="max-w-4xl mx-auto prose prose-lg dark:prose-invert">
                     <h2 className="text-2xl font-bold text-[hsl(var(--foreground))] mb-6">

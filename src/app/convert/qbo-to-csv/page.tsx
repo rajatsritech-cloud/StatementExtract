@@ -204,6 +204,45 @@ export default function QboToCsvPage() {
                 </div>
             </section>
 
+            {/* Comparison Table - Best Free QBO to CSV Converter */}
+            <section className="py-12 md:py-16 px-4">
+                <div className="max-w-3xl mx-auto">
+                    <h2 className="text-2xl md:text-3xl font-bold text-center mb-3">
+                        Best Free QBO to CSV Converter
+                    </h2>
+                    <p className="text-center text-[hsl(var(--muted-foreground))] mb-8">
+                        Compare our free tool to other QBO converters
+                    </p>
+                    <div className="overflow-x-auto">
+                        <table className="w-full border-collapse">
+                            <thead>
+                                <tr className="bg-[hsl(var(--primary))]/10">
+                                    <th className="text-left p-4 font-semibold text-[hsl(var(--foreground))]">Feature</th>
+                                    <th className="text-left p-4 font-semibold text-[hsl(var(--primary))]">Statement Extract</th>
+                                    <th className="text-left p-4 font-semibold text-[hsl(var(--muted-foreground))]">Others</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {[
+                                    { feature: "Price", us: "Free forever", competitors: "$10-30/conversion" },
+                                    { feature: "File Upload", us: "None (browser only)", competitors: "Uploads to servers" },
+                                    { feature: "Processing Time", us: "Instant", competitors: "Minutes to hours" },
+                                    { feature: "Excel Compatible", us: "Yes, perfect CSV", competitors: "Sometimes" },
+                                    { feature: "Offline Capable", us: "Yes", competitors: "No" },
+                                    { feature: "File Limits", us: "Unlimited", competitors: "Per-file charges" },
+                                ].map((row, i) => (
+                                    <tr key={i} className="border-b border-[hsl(var(--border))]">
+                                        <td className="p-4 text-[hsl(var(--foreground))]">{row.feature}</td>
+                                        <td className="p-4 text-[hsl(var(--primary))] font-medium">{row.us}</td>
+                                        <td className="p-4 text-[hsl(var(--muted-foreground))]">{row.competitors}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
             {/* SEO Content Block */}
             <section className="py-12 md:py-16 px-6">
                 <div className="max-w-4xl mx-auto prose prose-lg dark:prose-invert">
