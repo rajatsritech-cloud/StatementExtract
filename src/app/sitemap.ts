@@ -63,6 +63,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         '/tools/ofx-viewer/',
         '/convert/qfx-to-csv/',
         '/convert/ofx-to-excel/',
+        '/convert/ofx-to-qbo/',
         '/convert/mt940-to-excel/',
         '/convert/qif-to-csv/',
     ]

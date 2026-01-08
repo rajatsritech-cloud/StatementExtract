@@ -113,6 +113,7 @@ const useCases = [
 ];
 
 const relatedTools = [
+    { href: "/convert/ofx-to-qbo", title: "OFX to QBO" },
     { href: "/convert/qfx-to-pdf", title: "QFX to PDF" },
     { href: "/convert/qbo-to-csv", title: "QBO to CSV" },
     { href: "/convert-bank-statement-to-csv-excel", title: "PDF to Excel" },

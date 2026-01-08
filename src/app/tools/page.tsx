@@ -179,6 +179,13 @@ const toolSections = [
                 badge: "New",
             },
             {
+                title: "OFX to QBO Converter",
+                description: "Convert OFX bank files to QuickBooks QBO format. Import OFX into QuickBooks.",
+                href: "/convert/ofx-to-qbo",
+                icon: "FileText",
+                badge: "New",
+            },
+            {
                 title: "MT940 to Excel Converter",
                 description: "Convert SWIFT MT940 bank statements to Excel. Perfect for SAP and Oracle users.",
                 href: "/convert/mt940-to-excel",
