@@ -53,10 +53,8 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
     if (headings.length === 0) return null;
 
     return (
-        // ADDED 'self-start' here. This is CRITICAL for sticky positioning in CSS Grid.
-        // Without it, the aside stretches to the full height of the parent grid cell,
-        // leaving no room to "stick" (scroll).
-        <aside className="hidden lg:block lg:sticky lg:top-28 mb-10 w-64 self-start">
+        // Sticky sidebar - stays fixed while scrolling until content ends
+        <aside className="hidden lg:block lg:sticky lg:top-24 h-fit mb-10 w-64 self-start">
             <div className="relative">
                 <h2 className="mb-4 text-sm font-bold tracking-wide text-[hsl(var(--foreground))] uppercase flex items-center gap-2">
                     <span>Table of Contents</span>

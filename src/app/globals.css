@@ -190,8 +190,8 @@ All colors MUST be HSL.
     max-width: 100%;
   }
 
+  /* NOTE: Do NOT add overflow-x: hidden to html - it breaks sticky positioning */
   html {
-    overflow-x: hidden;
     max-width: 100%;
   }
 

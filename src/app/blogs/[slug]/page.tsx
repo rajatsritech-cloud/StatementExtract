@@ -515,7 +515,7 @@ export default async function BlogPostPage({ params }: PageParams) {
         </div>
       </section>
       <section className={`${styles['blog-light-theme']} bg-[hsl(var(--background))]`}>
-        <div className="mx-auto max-w-6xl px-6 py-12 lg:py-16 lg:grid lg:grid-cols-[minmax(0,260px)_minmax(0,1fr)] lg:gap-10 animate-slide-up">
+        <div className="mx-auto max-w-6xl px-6 py-12 lg:py-16 lg:grid lg:grid-cols-[minmax(0,260px)_minmax(0,1fr)] lg:gap-10 lg:items-start animate-slide-up">
           <TableOfContents headings={headings} />
 
           {/* Mobile TOC - Keep simplified collapsible or move above content if needed, refining style */}
