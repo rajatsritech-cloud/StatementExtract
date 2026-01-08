@@ -23,7 +23,7 @@ export const InvoiceFeatures = () => {
             description: "Process invoices from anywhere. We support multi-currency detection (USD, EUR, GBP, AUD, CAD, INR) and international date formats."
         },
         {
-            icon: styles => <FileText {...styles} />, // Using basic icon for now
+            icon: FileText,
             title: "Excel & CSV Ready",
             description: "Download structured data compatible with Xero, QBO, Sage, and NetSuite. No more manual data entry for accounts payable."
         }
