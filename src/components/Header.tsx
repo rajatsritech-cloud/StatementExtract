@@ -466,19 +466,6 @@ export const Header = () => {
                                 <p className="text-[11px] text-[hsl(var(--muted-foreground))] group-hover:text-[hsl(var(--muted-foreground))]/80">Universal banking</p>
                               </div>
                             </Link>
-                            <Link
-                              href="/convert/csv-to-mt940"
-                              className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-2.5 cursor-pointer transition-all duration-200 hover:border-amber-500/50 hover:bg-amber-500/5"
-                              onClick={closeConvertersDropdown}
-                            >
-                              <div className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/10 text-amber-500 group-hover:bg-amber-500 group-hover:text-white transition-colors">
-                                <FileSpreadsheet className="h-4 w-4" />
-                              </div>
-                              <div>
-                                <p className="text-sm font-bold text-[hsl(var(--foreground))] group-hover:text-amber-500 transition-colors">CSV to MT940</p>
-                                <p className="text-[11px] text-[hsl(var(--muted-foreground))] group-hover:text-[hsl(var(--muted-foreground))]/80">SWIFT format</p>
-                              </div>
-                            </Link>
                           </div>
                         </div>
 
