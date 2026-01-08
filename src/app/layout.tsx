@@ -33,26 +33,34 @@ const isProduction = process.env.NODE_ENV === "production";
 export const metadata: Metadata = {
   metadataBase: new URL("https://statementextract.com"),
   title: {
-    default: "Statement Extract – AI-Powered Document Processing for Modern Teams",
+    default: "Statement Extract – AI Document Processing Made Easy",
     template: "%s | Statement Extract",
   },
   description:
-    "Extract structured data from any document—bank statements, invoices, contracts, healthcare records and more. Intelligent Document Processing with no templates, no training, just results.",
+    "Extract data from bank statements, invoices & documents instantly. AI-powered processing—no templates, no training required. Free to try.",
   keywords: [
-    "document processing",
+    // Primary high-volume terms
     "bank statement converter",
-    "PDF to Excel",
-    "PDF to CSV",
-    "invoice extraction",
-    "contract analysis",
-    "OCR software",
-    "intelligent document processing",
-    "financial data extraction",
-    "automated data entry",
-    "document automation",
-    "AI document processing",
+    "PDF to Excel converter",
     "bank statement to excel",
-    "convert PDF bank statement"
+    "convert PDF bank statement",
+    "invoice data extraction",
+    // AI/IDP terms
+    "AI document processing",
+    "intelligent document processing",
+    "OCR software",
+    "document automation",
+    // Specific use cases
+    "bank statement to CSV",
+    "bank statement to QuickBooks",
+    "PDF to QBO converter",
+    "invoice to Excel",
+    "financial data extraction",
+    // Free tool keywords  
+    "free PDF converter",
+    "free bank statement converter",
+    "merge PDF online free",
+    "compress PDF free",
   ],
   authors: [{ name: "Statement Extract" }],
   creator: "Statement Extract",
