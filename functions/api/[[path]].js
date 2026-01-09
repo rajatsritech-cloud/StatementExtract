@@ -59,42 +59,99 @@ export async function onRequest(context) {
   const timeoutId = setTimeout(() => controller.abort(), GLOBAL_TIMEOUT_MS);
 
   try {
+    // ---------------------------------------------------------
+    // OPTIMIZATION: Smart Failover (Health Check First)
+    // ---------------------------------------------------------
+    // Problem: If Primary is a "zombie" (accepts conn but hangs), we wait too long.
+    // Solution: Quick ping (2s timeout) to Primary's health endpoint.
+
+    let targetBackend = PRIMARY_BACKEND;
+
+    try {
+      // Only check health if we are targeting the Primary
+      const healthController = new AbortController();
+      const healthTimeout = setTimeout(() => healthController.abort(), 2000); // 2s hard timeout
+
+      // We assume backend has a lightweight /api/v1/health endpoint
+      // Using HTTP here because we are in the internal proxy network context
+      const healthUrl = `http://${PRIMARY_BACKEND}/api/v1/health`;
+
+      const healthRes = await fetch(healthUrl, {
+        method: "GET",
+        signal: healthController.signal
+      });
+
+      clearTimeout(healthTimeout);
+
+      if (!healthRes.ok) {
+        console.log(`[Proxy] Primary is unhealthy (${healthRes.status}), failing over instantly.`);
+        targetBackend = SECONDARY_BACKEND;
+      }
+    } catch (err) {
+      console.log("[Proxy] Primary health check failed/timed out. Switch to Secondary.");
+      targetBackend = SECONDARY_BACKEND;
+    }
+
+    // ---------------------------------------------------------
+    // MAIN REQUEST
+    // ---------------------------------------------------------
+    // Now we try the determined target. If that fails (unexpectedly), we can still fallback (optional),
+    // but this pre-check solves the "slow latency" issue.
+
+    const backendsToTry = targetBackend === SECONDARY_BACKEND
+      ? [SECONDARY_BACKEND]
+      : [PRIMARY_BACKEND, SECONDARY_BACKEND];
+
+    // To handle potential body consumption issues on retries, we'll clone the request body
+    // if it's not a GET/HEAD request and we might need to retry.
+    let requestBody = ["GET", "HEAD"].includes(request.method) ? undefined : request.body;
+    let clonedBody = null;
+
+    if (requestBody) {
+      // If we might retry (i.e., backendsToTry has more than one element), clone the body.
+      // This is a simplification; a more robust solution might buffer the body.
+      if (backendsToTry.length > 1) {
+        const [body1, body2] = request.body.tee();
+        requestBody = body1;
+        clonedBody = body2;
+      }
+    }
+
     let lastError;
 
-    for (const backend of attemptOrder) {
+    for (let i = 0; i < backendsToTry.length; i++) {
+      const backendHost = backendsToTry[i];
       try {
-        const targetUrl = `http://${backend}/api/${pathStr}${url.search}`;
-        console.log(`[Proxy] Forwarding to: ${targetUrl}`);
+        const targetUrl = new URL(request.url);
+        targetUrl.protocol = "http:"; // Communicate internally over HTTP
+        targetUrl.host = backendHost;
+        targetUrl.port = "8000";
+        targetUrl.pathname = `/api/${pathStr}${targetUrl.search}`; // Reconstruct path with /api/ prefix
 
-        const response = await fetch(targetUrl, {
+        console.log(`[Proxy] Forwarding to: ${targetUrl.toString()}`);
+
+        const currentRequestBody = (i === 0) ? requestBody : clonedBody;
+
+        const response = await fetch(targetUrl.toString(), {
           method: request.method,
           headers,
-          body: ["GET", "HEAD"].includes(request.method) ? undefined : request.body,
-          // We share the signal, but if one fails fast, we continue.
-          // Note: Re-using signal for sequential fetches is risky if aborted.
-          // Better: Create a new signal for each IF we wanted per-request timeouts.
-          // Checks: backend connectivity usually fails fast (TCP).
-          // Processing hangs are different.
+          body: currentRequestBody,
+          signal: controller.signal // Use the global timeout signal
         });
 
-        // If we got a response (even 404/500), the server is "reachable".
-        // Use 5xx as a signal to retry on secondary?
-        if (response.ok || response.status < 500) {
-          clearTimeout(timeoutId);
-          return new Response(response.body, {
-            status: response.status,
-            headers: response.headers
-          });
+        clearTimeout(timeoutId); // Clear global timeout if a response is received
+        const newResponse = new Response(response.body, response);
+        newResponse.headers.set("X-Proxy-Target", backendHost);
+        return newResponse;
+
+      } catch (e) {
+        console.error(`[Proxy] Connection failed to ${backendHost}:`, e);
+        lastError = e;
+
+        // If there's another backend to try, and we haven't exhausted our options
+        if (i < backendsToTry.length - 1) {
+          continue; // Try next
         }
-
-        console.warn(`[Proxy] Backend ${backend} returned ${response.status}. trying next...`);
-        // If 500+, we treat as failure and try next.
-        lastError = new Error(`Status ${response.status}`);
-
-      } catch (err) {
-        console.error(`[Proxy] Connection failed to ${backend}: ${err.message}`);
-        lastError = err;
-        // Continue loop
       }
     }
 
