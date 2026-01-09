@@ -2,123 +2,63 @@
 
 // Configuration
 const DEFAULT_TIMEOUT_MS = 15000; // 15 seconds default timeout (good for quick reads)
-const MAX_RETRIES = 1;
 
 // Define the server URLs
-// Primary: From env var or default
-// Secondary: Hardcoded fallback based on your deployment script or a second env var
 const getApiUrls = () => {
     // Logic:
-    // 1. Primary is NEXT_PUBLIC_API_URL
-    // 2. Secondary is NEXT_PUBLIC_API_URL_SECONDARY or specific IP from deployment script
+    // In Production: Return EMPTY string. This forces relative path usage (/api/...).
+    // Next.js/Cloudflare Pages will then route this to functions/api/[[path]].js,
+    // which handles the Proxy + Failover logic securely (fixing Mixed Content).
 
-    let primary = process.env.NEXT_PUBLIC_API_URL;
+    // In Development: Use localhost or env var.
 
-    // Default for dev vs prod
-    if (!primary) {
-        primary = process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:8000' : '';
+    if (process.env.NODE_ENV === 'production') {
+        return { primary: '', secondary: '' };
     }
 
-    // Clean strings
-    primary = primary.replace(/['"]+/g, '').trim();
-
-    // Secondary Server (Instance 2 from your deploy script)
-    // You can also add this to your .env.local: NEXT_PUBLIC_API_URL_SECONDARY=http://129.80.181.100:8000
-    let secondary = process.env.NEXT_PUBLIC_API_URL_SECONDARY || 'http://129.80.181.100:8000';
-    secondary = secondary.replace(/['"]+/g, '').trim();
-
-    return { primary, secondary };
+    // Dev Fallback
+    let primary = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+    return { primary, secondary: '' };
 };
 
-// Export for manual usage (e.g. in PDFProcessor)
+// Export for manual usage
 export { getApiUrls };
 
+interface FetchOptions extends RequestInit {
+    timeout?: number;
+    skipFailover?: boolean; // Kept for interface compatibility but largely unused now
+}
+
 /**
- * Checks if a server is healthy (responds within 2 seconds).
- * Returns true if healthy, false if unhealthy/timeout.
+ * Simplified Fetch Wrapper.
+ * In Production, it simply calls the relative endpoint (e.g. /api/v1/extract).
+ * The Backup/Failover logic is now handled Server-Side by Cloudflare Functions.
  */
-export async function isServerHealthy(baseUrl: string): Promise<boolean> {
-    if (!baseUrl) return false;
+export async function fetchWithFailover(endpoint: string, options: FetchOptions = {}): Promise<Response> {
+    const { primary } = getApiUrls();
+    const { timeout = DEFAULT_TIMEOUT_MS, ...fetchOptions } = options;
+
+    // Construct URL (Relative in Prod, Absolute in Dev)
+    const baseUrl = primary;
+    // Ensure endpoint strictly follows base
+    const url = baseUrl ? `${baseUrl}${endpoint}` : endpoint;
 
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 2000); // 2s Strict Timeout
+    const timeoutId = setTimeout(() => controller.abort(), timeout);
 
     try {
-        // Try /api/v1/health (standard) or fallback to root if needed, but existing script shows /health exists
-        const response = await fetch(`${baseUrl}/api/v1/health`, {
-            method: 'GET',
+        console.log(`[ApiClient] Request: ${url}`);
+        const response = await fetch(url, {
+            ...fetchOptions,
             signal: controller.signal
         });
-        return response.ok;
+
+        return response;
     } catch (error) {
-        console.warn(`[ApiClient] Health check failed for ${baseUrl}`, error);
-        return false;
+        console.error(`[ApiClient] Request failed:`, error);
+        throw error;
     } finally {
         clearTimeout(timeoutId);
     }
 }
 
-interface FetchOptions extends RequestInit {
-    timeout?: number;
-    skipFailover?: boolean;
-}
-
-/**
- * standard fetch wrapper with failover logic.
- * Tries Primary URL first. On network error or 5xx or Timeout => Tries Secondary URL.
- */
-export async function fetchWithFailover(endpoint: string, options: FetchOptions = {}): Promise<Response> {
-    const { primary, secondary } = getApiUrls();
-    const { timeout = DEFAULT_TIMEOUT_MS, skipFailover = false, ...fetchOptions } = options;
-
-    // Helper to perform a single fetch with timeout
-    const doFetch = async (baseUrl: string): Promise<Response> => {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), timeout);
-
-        try {
-            // Ensure endpoint starts with / if base doesn't end with one, and handle empty base (relative)
-            const url = baseUrl ? `${baseUrl}${endpoint}` : endpoint;
-
-            console.log(`[ApiClient] Attempting request to: ${url}`);
-
-            const response = await fetch(url, {
-                ...fetchOptions,
-                signal: controller.signal
-            });
-
-            return response;
-        } finally {
-            clearTimeout(timeoutId);
-        }
-    };
-
-    // 1. Try Primary
-    try {
-        const response = await doFetch(primary);
-
-        // If successful or client error (4xx), return immediately. 
-        // We only failover on 5xx or network errors.
-        if (response.ok || (response.status >= 400 && response.status < 500)) {
-            return response;
-        }
-
-        console.warn(`[ApiClient] Primary server returned ${response.status}. Initiating failover...`);
-        throw new Error(`Primary server error: ${response.status}`);
-    } catch (error: any) {
-        if (skipFailover) throw error;
-
-        console.warn(`[ApiClient] Primary server failed (${error.name}: ${error.message}). Trying secondary...`);
-
-        // 2. Try Secondary
-        try {
-            const response = await doFetch(secondary);
-            return response;
-        } catch (secondaryError: any) {
-            console.error(`[ApiClient] Secondary server also failed:`, secondaryError);
-            // Throw the original error or a combined one? 
-            // Usually better to throw the secondary error so we know both failed.
-            throw secondaryError;
-        }
-    }
-}
