@@ -36,45 +36,119 @@ export const metadata: Metadata = {
 };
 
 export default function BankStatementXeroPage() {
+    const softwareApplicationSchema = {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Bank Statement to QuickBooks/Xero Converter",
+        "description": "AI-powered tool to convert PDF bank statements into QuickBooks (.QBO) and Xero (.CSV) formats with 99.9% accuracy.",
+        "url": "https://statementextract.com/convert-bank-statement-to-quickbooks-xero",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Web Browser, Windows, macOS, iOS, Android",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD",
+            "priceValidUntil": "2026-12-31",
+            "availability": "https://schema.org/InStock"
+        },
+        "featureList": [
+            "PDF to QBO (Web Connect) Conversion",
+            "PDF to Xero CSV Conversion",
+            "Automatic Bank Reconciliation",
+            "High Accuracy OCR for Scanned Docs",
+            "Secure & Private Processing"
+        ],
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.9",
+            "ratingCount": "1847",
+            "bestRating": "5",
+            "worstRating": "1"
+        },
+        "author": {
+            "@type": "Organization",
+            "name": "Statement Extract",
+            "url": "https://statementextract.com"
+        }
+    };
+
+    const breadcrumbSchema = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://statementextract.com"
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Bank Statement to QuickBooks & Xero",
+                "item": "https://statementextract.com/convert-bank-statement-to-quickbooks-xero"
+            }
+        ]
+    };
+
+    const faqSchema = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "What is a QBO file and how do I import it into QuickBooks?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "A QBO file is a QuickBooks Web Connect file format. To import, go to Banking > Upload Transactions in QuickBooks Online, then select your QBO file."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Can I convert bank statements directly to Xero format?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes! Our converter exports CSV files formatted specifically for Xero's bank import feature, with correct date formatting and column mapping."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Does this work with scanned PDF statements?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Absolutely. Our AI-powered OCR can extract data from scanned PDFs, images, and even photographed documents with high accuracy."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Which banks are supported?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "We support 1000+ banks worldwide including Chase, Wells Fargo, Bank of America, HSBC, Barclays, and most major financial institutions."
+                }
+            }
+        ]
+    };
+
     return (
         <>
             <RedirectIfAuthenticated />
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{
-                    __html: JSON.stringify({
-                        "@context": "https://schema.org",
-                        "@type": "SoftwareApplication",
-                        "name": "Bank Statement to QuickBooks/Xero Converter",
-                        "headline": "Convert PDF Statements to QuickBooks & Xero",
-                        "description": "AI-powered tool to convert PDF bank statements into QuickBooks (.QBO) and Xero (.CSV) formats with 99.9% accuracy.",
-                        "url": "https://statementextract.com/convert-bank-statement-to-quickbooks-xero",
-                        "applicationCategory": "BusinessApplication",
-                        "operatingSystem": "Web Browser, Windows, macOS, iOS, Android",
-                        "offers": {
-                            "@type": "Offer",
-                            "price": "0",
-                            "priceCurrency": "USD",
-                            "priceValidUntil": "2026-12-31"
-                        },
-                        "featureList": [
-                            "PDF to QBO (Web Connect) Conversion",
-                            "PDF to Xero CSV Conversion",
-                            "Automatic Bank Reconciliation",
-                            "High Accuracy OCR for Scanned Docs",
-                            "Secure & Private Processing"
-                        ],
-                        "aggregateRating": {
-                            "@type": "AggregateRating",
-                            "ratingValue": "4.9",
-                            "ratingCount": "1847"
-                        },
-                        "author": {
-                            "@type": "Organization",
-                            "name": "Statement Extract",
-                            "url": "https://statementextract.com"
-                        }
-                    })
+                    __html: JSON.stringify(softwareApplicationSchema)
+                }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify(breadcrumbSchema)
+                }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify(faqSchema)
                 }}
             />
 

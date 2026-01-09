@@ -63,7 +63,7 @@ export const metadata: Metadata = {
     },
 };
 
-const schemaData = {
+const softwareApplicationSchema = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     "name": "Invoice Data Converter by Statement Extract",
@@ -75,7 +75,8 @@ const schemaData = {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD",
-        "availability": "https://schema.org/InStock"
+        "availability": "https://schema.org/InStock",
+        "priceValidUntil": "2026-12-31"
     },
     "featureList": [
         "Invoice PDF to Excel",
@@ -84,9 +85,74 @@ const schemaData = {
         "Multi-Currency Support",
         "Geo AI Layout Analysis"
     ],
+    "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "ratingCount": "1520",
+        "bestRating": "5",
+        "worstRating": "1"
+    },
     "softwareVersion": "1.0",
     "datePublished": "2024-01-01",
     "inLanguage": "en-US"
+};
+
+const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://statementextract.com"
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Invoice to Excel Converter",
+            "item": "https://statementextract.com/convert-invoice-to-excel-csv"
+        }
+    ]
+};
+
+const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+        {
+            "@type": "Question",
+            "name": "Can I extract line items from invoices?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes! Our AI automatically detects and extracts line item tables including product descriptions, quantities, unit prices, and totals into separate columns."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Does it work with invoices in different languages?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Absolutely. Our multi-language OCR supports invoices in English, Spanish, French, German, Chinese, Japanese, and 50+ other languages."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Can I process multiple invoices at once?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes! You can upload multiple invoice PDFs and our batch processing will extract all of them into a single consolidated Excel file or individual files."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "What invoice formats are supported?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "We support PDF invoices, scanned documents, images (JPG, PNG), and even multi-page invoices. Our AI handles any layout automatically."
+            }
+        }
+    ]
 };
 
 export default function InvoiceConverterPage() {
@@ -96,7 +162,19 @@ export default function InvoiceConverterPage() {
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{
-                    __html: JSON.stringify(schemaData)
+                    __html: JSON.stringify(softwareApplicationSchema)
+                }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify(breadcrumbSchema)
+                }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify(faqSchema)
                 }}
             />
             {/* Main Converter Tool */}

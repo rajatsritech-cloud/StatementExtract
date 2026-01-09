@@ -98,7 +98,7 @@ export const metadata: Metadata = {
 };
 
 // Enhanced Schema.org data for better rich snippets
-const schemaData = {
+const softwareApplicationSchema = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
   "name": "Bank Statement Converter by Statement Extract",
@@ -140,6 +140,64 @@ const schemaData = {
   "inLanguage": "en-US"
 };
 
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://statementextract.com"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Bank Statement Converter",
+      "item": "https://statementextract.com/convert-bank-statement-to-csv-excel"
+    }
+  ]
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Can I convert scanned PDF bank statements?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes! Our tool uses advanced Intelligent Document Processing to read data from scanned images and flattened PDFs with industry-leading accuracy."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is my financial data secure?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Absolutely. We use bank-level 256-bit encryption. Your files are processed automatically and are not stored permanently on our servers after processing."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does it work with credit card statements?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, we support credit card statements, bank account statements, and investment portfolio summaries from almost any financial institution."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I import the data into QuickBooks or Xero?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Simply download the CSV output. Our format is compatible with the import features of QuickBooks, Xero, Sage, and other major accounting software."
+      }
+    }
+  ]
+};
+
 export default function BankStatementConverterPage() {
   return (
     <>
@@ -147,7 +205,19 @@ export default function BankStatementConverterPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(schemaData)
+          __html: JSON.stringify(softwareApplicationSchema)
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbSchema)
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(faqSchema)
         }}
       />
       <BankStatementConverter />
