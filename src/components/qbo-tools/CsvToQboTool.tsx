@@ -14,7 +14,8 @@ import {
     CheckCircle2,
     Info,
     AlertTriangle,
-    Globe
+    Globe,
+    FileText
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PrivacyBadge } from "@/components/ui/PrivacyBadge";
@@ -218,10 +219,10 @@ const COUNTRY_PRESETS = [
 // Date format detection patterns
 const DATE_FORMATS = [
     { pattern: /^\d{4}-\d{2}-\d{2}$/, label: "YYYY-MM-DD", parse: (d: string) => d },
-    { pattern: /^\d{2}\/\d{2}\/\d{4}$/, label: "MM/DD/YYYY", parse: (d: string) => { const [m, day, y] = d.split("/"); return `${y}-${m.padStart(2, "0")}-${day.padStart(2, "0")}`; } },
-    { pattern: /^\d{2}-\d{2}-\d{4}$/, label: "MM-DD-YYYY", parse: (d: string) => { const [m, day, y] = d.split("-"); return `${y}-${m.padStart(2, "0")}-${day.padStart(2, "0")}`; } },
-    { pattern: /^\d{2}\/\d{2}\/\d{4}$/, label: "DD/MM/YYYY", parse: (d: string) => { const [day, m, y] = d.split("/"); return `${y}-${m.padStart(2, "0")}-${day.padStart(2, "0")}`; } },
-    { pattern: /^\d{1,2}\/\d{1,2}\/\d{2,4}$/, label: "M/D/YYYY", parse: (d: string) => { const [m, day, y] = d.split("/"); const fullYear = y.length === 2 ? `20${y}` : y; return `${fullYear}-${m.padStart(2, "0")}-${day.padStart(2, "0")}`; } },
+    { pattern: /^\d{2}\/\d{2}\/\d{4}$/, label: "MM/DD/YYYY", parse: (d: string) => { const parts = d.split("/"); if (parts.length < 3) return d; const [m, day, y] = parts; return `${y}-${m.padStart(2, "0")}-${day.padStart(2, "0")}`; } },
+    { pattern: /^\d{2}-\d{2}-\d{4}$/, label: "MM-DD-YYYY", parse: (d: string) => { const parts = d.split("-"); if (parts.length < 3) return d; const [m, day, y] = parts; return `${y}-${m.padStart(2, "0")}-${day.padStart(2, "0")}`; } },
+    { pattern: /^\d{2}\/\d{2}\/\d{4}$/, label: "DD/MM/YYYY", parse: (d: string) => { const parts = d.split("/"); if (parts.length < 3) return d; const [day, m, y] = parts; return `${y}-${m.padStart(2, "0")}-${day.padStart(2, "0")}`; } },
+    { pattern: /^\d{1,2}\/\d{1,2}\/\d{2,4}$/, label: "M/D/YYYY", parse: (d: string) => { const parts = d.split("/"); if (parts.length < 3) return d; const [m, day, y] = parts; const fullYear = y.length === 2 ? `20${y}` : y; return `${fullYear}-${m.padStart(2, "0")}-${day.padStart(2, "0")}`; } },
     { pattern: /^\d{1,2}[-\/][A-Za-z]{3}$/, label: "D-MMM (e.g., 1-Sep)", parse: parseDayMonthDate },
     { pattern: /^\d{1,2}[-\/][A-Za-z]{3,9}$/, label: "D-Month (e.g., 1-September)", parse: parseDayMonthDate },
 ];
@@ -245,6 +246,9 @@ export function CsvToQboTool({ hideHeader = false }: { hideHeader?: boolean } = 
     const [isDragging, setIsDragging] = useState(false);
     const [isProcessing, setIsProcessing] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [showMappingFeedback, setShowMappingFeedback] = useState(false);
+    const [missingColumns, setMissingColumns] = useState<string[]>([]);
+    const [success, setSuccess] = useState(false);
     const [hasFile, setHasFile] = useState(false);
     const [editingCell, setEditingCell] = useState<{ row: number; field: keyof Transaction } | null>(null);
     const [draggedRow, setDraggedRow] = useState<number | null>(null);
@@ -574,12 +578,27 @@ export function CsvToQboTool({ hideHeader = false }: { hideHeader?: boolean } = 
                     const autoMapping = autoMapColumns(headers);
                     setMapping(autoMapping);
 
-                    // Auto-detect date format
-                    if (autoMapping.date !== null) {
-                        const dates = data.slice(0, 10).map(row => row[autoMapping.date!]).filter(Boolean);
-                        const detected = detectDateFormat(dates);
-                        setDetectedFormat(detected);
-                        setDateFormat(detected);
+                    // Check for missing required columns
+                    const missing: string[] = [];
+                    if (autoMapping.date === null) missing.push("Date");
+                    if (autoMapping.description === null) missing.push("Description/Payee");
+                    // Need either amount OR credit+debit
+                    if (autoMapping.amount === null && (autoMapping.credit === null || autoMapping.debit === null)) {
+                        missing.push("Amount (or Credit/Debit)");
+                    }
+
+                    if (missing.length > 0) {
+                        setMissingColumns(missing);
+                        setShowMappingFeedback(true);
+                    } else {
+                        setShowMappingFeedback(false);
+                        // Only auto-detect date format if we have a valid date column
+                        if (autoMapping.date !== null) {
+                            const dates = data.slice(0, 10).map(row => row[autoMapping.date!]).filter(Boolean);
+                            const detected = detectDateFormat(dates);
+                            setDetectedFormat(detected);
+                            setDateFormat(detected);
+                        }
                     }
 
                     setHasFile(true);
@@ -617,11 +636,25 @@ export function CsvToQboTool({ hideHeader = false }: { hideHeader?: boolean } = 
                     const autoMapping = autoMapColumns(headers);
                     setMapping(autoMapping);
 
-                    if (autoMapping.date !== null) {
-                        const dates = filteredData.slice(0, 10).map(row => row[autoMapping.date!]).filter(Boolean);
-                        const detected = detectDateFormat(dates);
-                        setDetectedFormat(detected);
-                        setDateFormat(detected);
+                    // Check for missing required columns for Excel too
+                    const missing: string[] = [];
+                    if (autoMapping.date === null) missing.push("Date");
+                    if (autoMapping.description === null) missing.push("Description/Payee");
+                    if (autoMapping.amount === null && (autoMapping.credit === null || autoMapping.debit === null)) {
+                        missing.push("Amount (or Credit/Debit)");
+                    }
+
+                    if (missing.length > 0) {
+                        setMissingColumns(missing);
+                        setShowMappingFeedback(true);
+                    } else {
+                        setShowMappingFeedback(false);
+                        if (autoMapping.date !== null) {
+                            const dates = filteredData.slice(0, 10).map(row => row[autoMapping.date!]).filter(Boolean);
+                            const detected = detectDateFormat(dates);
+                            setDetectedFormat(detected);
+                            setDateFormat(detected);
+                        }
                     }
 
                     setHasFile(true);
@@ -852,7 +885,45 @@ NEWFILEUID:NONE
     const isMappingValid = mapping.date !== null && mapping.amount !== null && mapping.description !== null;
 
     return (
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-5xl mx-auto space-y-8">
+            {/* Missing Columns Modal */}
+            {showMappingFeedback && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
+                    <div className="bg-[hsl(var(--card))] rounded-2xl shadow-xl max-w-md w-full border border-[hsl(var(--border))] overflow-hidden animate-in zoom-in-95 duration-200">
+                        <div className="p-6">
+                            <div className="w-12 h-12 rounded-full bg-amber-500/10 flex items-center justify-center mb-4">
+                                <FileText className="w-6 h-6 text-amber-500" />
+                            </div>
+                            <h3 className="text-xl font-bold text-[hsl(var(--foreground))] mb-2">Wait! Some columns are missing</h3>
+                            <p className="text-[hsl(var(--muted-foreground))] mb-4">
+                                We couldn't automatically match all the required columns in your file. Please manually map the following:
+                            </p>
+                            <div className="bg-[hsl(var(--muted))/30] rounded-xl p-4 mb-6">
+                                <ul className="space-y-2">
+                                    {missingColumns.map((col, i) => (
+                                        <li key={i} className="flex items-center gap-2 text-sm font-medium text-[hsl(var(--foreground))]">
+                                            <X className="w-4 h-4 text-red-500" />
+                                            {col}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                            <Button
+                                onClick={() => {
+                                    setShowMappingFeedback(false);
+                                    // Scroll to mapping section
+                                    const element = document.getElementById('column-mapping-section');
+                                    element?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                }}
+                                className="w-full bg-[hsl(var(--primary))] hover:bg-[hsl(var(--primary))/90] text-white"
+                            >
+                                OK, I'll map them manually
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {/* Header - hidden when hideHeader prop is true */}
             {!hideHeader && (
                 <div className="text-center mb-4">
