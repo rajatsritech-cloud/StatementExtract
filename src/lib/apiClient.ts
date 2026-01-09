@@ -6,15 +6,21 @@ const DEFAULT_TIMEOUT_MS = 15000; // 15 seconds default timeout (good for quick 
 // Define the server URLs
 const getApiUrls = () => {
     // Logic:
+    // 1. If running in browser and on HTTPS, FORCE relative URL to prevent Mixed Content.
+    //    This assumes the serving host (Cloudflare) has the /api proxy set up.
+    if (typeof window !== 'undefined' && window.location.protocol === 'https:') {
+        return { primary: '', secondary: '' };
+    }
+
+    // 2. If explicit Production build
     // In Production: Return EMPTY string. This forces relative path usage (/api/...).
     // Next.js/Cloudflare Pages will then route this to functions/api/[[path]].js,
     // which handles the Proxy + Failover logic securely (fixing Mixed Content).
-
-    // In Development: Use localhost or env var.
-
     if (process.env.NODE_ENV === 'production') {
         return { primary: '', secondary: '' };
     }
+
+    // In Development: Use localhost or env var.
 
     // Dev Fallback
     let primary = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';

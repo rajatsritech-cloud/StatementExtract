@@ -192,477 +192,513 @@ export class PDFProcessor {
       const timeoutId = setTimeout(() => controller.abort(), 300000);
 
       const headers: HeadersInit = {};
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
 
-      // Get account summary from the response
-      const accountSummary = result.account_summary || {};
+      const targetEndpoint = customEndpoint || '/api/v1/pdf-extract/extract';
 
-      const mapTransaction = (t: any) => {
-        const debitVal = t.debit_parsed ?? (t.debit ? parseFloat(String(t.debit).replace(/[^0-9.-]/g, '')) : 0);
-        const creditVal = t.credit_parsed ?? (t.credit ? parseFloat(String(t.credit).replace(/[^0-9.-]/g, '')) : 0);
-        const balanceVal = t.balance_parsed ?? (t.balance ? parseFloat(String(t.balance).replace(/[^0-9.-]/g, '')) : 0);
+      const { fetchWithFailover } = await import('./apiClient');
 
-        return {
-          ...t, // Included all other fields (e.g. Reference, Particulars)
-          date: t.date,
-          date_iso: t.date_iso,
-          description: t.description,
-          amount: creditVal > 0 ? creditVal : debitVal,
-          balance: balanceVal,
-          type: creditVal > 0 ? 'credit' as const : 'debit' as const,
-          moneyIn: creditVal || 0,
-          moneyOut: debitVal || 0,
-          source_page: t.source_page || 1,
-          normalized_payee: t.normalized_payee,
+      // Note: We use fetchWithFailover which now points to the relative path /api/...
+      // The Cloudflare Worker intercepts this and handles the Failover/Health Check server-side.
 
-          // Map validation fields
-          suggested: t.suggested,
-          balance_corrected: t.balance_corrected,
-          debit_corrected: t.debit_corrected,
-          credit_corrected: t.credit_corrected,
-          _ledger_fixed: t._ledger_fixed,
-          _validation_message: t._validation_message,
+      console.log(`[PDFProcessor] Uploading to ${targetEndpoint}...`);
 
-          // Preserve original balance string for UI display (since 'balance' is overwritten with number)
-          balance_display: t.balance
-        };
-      };
-
-      console.log("PDFProcessor: Validation Summary present?", !!result.validation_summary, result.validation_summary);
-
-
-
-      return {
-        userInfo: {
-          name: accountSummary.account_holder || '',
-          email: '',
-          accountNumber: accountSummary.account_number || '',
-          bankName: accountSummary.bank_name || 'Bank Statement',
-          statementPeriod: accountSummary.period_start && accountSummary.period_end
-            ? `${accountSummary.period_start} - ${accountSummary.period_end}`
-            : '',
-          currency: accountSummary.currency || '$',
-          accountSummary: {
-            beginningBalance: accountSummary.opening_balance || 0,
-            endingBalance: accountSummary.closing_balance || 0,
-            totalDeposits: accountSummary.total_credits || 0,
-            totalWithdrawals: accountSummary.total_debits || 0,
-
-            // Map validation fields
-            totalDepositsComputed: accountSummary.total_credits_computed,
-            totalDepositsDiscrepancy: accountSummary.total_credits_discrepancy,
-            totalWithdrawalsComputed: accountSummary.total_debits_computed,
-            totalWithdrawalsDiscrepancy: accountSummary.total_debits_discrepancy,
-          }
-        },
-        transactions: result.transactions.map(mapTransaction),
-        sections: undefined,
-        summary: {
-          totalCredits: accountSummary.total_credits || 0,
-          totalDebits: accountSummary.total_debits || 0,
-          netBalance: (accountSummary.total_credits || 0) - (accountSummary.total_debits || 0),
-          transactionCount: result.transaction_count || result.transactions?.length || 0
-        },
-        // Standardized financial headers - use clean UI labels instead of raw PDF headers
-        // This ensures trust and consistency regardless of PDF formatting issues
-        column_names: (() => {
-          const STANDARD_HEADERS: Record<string, string> = {
-            date: 'Date',
-            description: 'Description',
-            debit: 'Debit',
-            credit: 'Credit',
-            balance: 'Balance',
-            amount: 'Amount',
-            reference: 'Reference',
-            particulars: 'Particulars',
-          };
-
-          const columns: Record<string, string> = {};
-          let headersWereInferred = false;
-
-          if (result.columns) {
-            Object.entries(result.columns).forEach(([key, val]: [string, any]) => {
-              // Use standardized header if available
-              const standardLabel = STANDARD_HEADERS[key.toLowerCase()];
-              if (standardLabel) {
-                columns[key] = standardLabel;
-              } else {
-                // For unknown columns, check if it was normalized
-                const rawLabel = val?.label || key;
-                const normalizedFrom = val?.normalized_from;
-
-                if (normalizedFrom) {
-                  headersWereInferred = true;
-                  columns[key] = STANDARD_HEADERS[key] || key;
-                } else {
-                  columns[key] = rawLabel;
-                }
-              }
-            });
-          }
-
-          return columns;
-        })(),
-        // Confidence indicator for UI
-        headers_inferred: result.ledger_stats?.fixed > 0 ||
-          Object.values(result.columns || {}).some((col: any) => col?.normalized_from),
-        ledger_confidence: result.ledger_stats?.confidence,
-        markdown: '',
-        fraud_analysis: undefined,
-        reconciliation: undefined,
-        human_review: undefined,
-        processing_steps: undefined,
-        processing_stats: {
-          extraction_method: result.metadata?.extraction_method || 'pdfium-production',
-          payees_normalized: 0,
-          total_steps: 10,
-          steps_passed: 10
-        },
-        num_pages: result.metadata?.page_count,
-        llm_used: false,
-
-        // Enterprise Validation Data
-        validation_summary: result.validation_summary,
-        chain_validation: result.chain_validation,
-        missing_transaction_warnings: result.missing_transaction_warnings,
-        duplicate_warnings: result.duplicate_warnings,
-      };
-    }
-
-      // Handle Invoice Extraction Response
-      if (result.success && result.metadata && result.line_items) {
-      console.log("Using Invoice extraction endpoint:", result);
-      return {
-        userInfo: {
-          // Map Invoice metadata to generic fields where it makes sense for fallback
-          bankName: result.metadata.vendor_name || 'Invoice Vendor',
-          accountSummary: {
-            beginningBalance: 0,
-            endingBalance: result.metadata.total_amount || 0,
-            totalDeposits: 0,
-            totalWithdrawals: 0
-          }
-        },
-        transactions: [], // No bank transactions
-        summary: {
-          totalCredits: 0,
-          totalDebits: 0,
-          netBalance: 0,
-          transactionCount: 0
-        },
-        invoiceData: {
-          metadata: {
-            invoiceNumber: result.metadata.invoice_number || result.metadata.invoiceNumber,
-            invoiceDate: result.metadata.invoice_date || result.metadata.invoiceDate,
-            dueDate: result.metadata.due_date || result.metadata.dueDate,
-            vendorName: result.metadata.vendor_name || result.metadata.vendorName,
-            customerName: result.metadata.customer_name || result.metadata.customerName,
-            currency: result.metadata.currency,
-            subtotal: result.metadata.subtotal || result.metadata.subTotal,
-            taxAmount: result.metadata.tax_amount || result.metadata.taxAmount,
-            totalAmount: result.metadata.total_amount || result.metadata.totalAmount,
-          },
-          lineItems: result.line_items.map((item: any) => ({
-            description: item.description,
-            quantity: item.quantity,
-            unitPrice: item.unit_price,
-            amount: item.amount
-          }))
-        }
-      };
-    }
-
-    // Fallback: Handle /fast endpoint response (legacy path)
-    if (result.data) {
-      console.log("Using structured data from backend:", result.data);
-      const backendData = result.data;
-
-      // Map backend structure to frontend ExtractedData interface
-      const userInfoRaw = backendData.userInfo || backendData.user_info || {};
-      const summaryRaw = backendData.summary || {};
-
-      // Map transactions
-      const mapTransaction = (t: any) => ({
-        date: t.date,
-        description: t.description,
-        amount: t.money_in > 0 ? t.money_in : t.money_out,
-        balance: t.balance,
-        type: t.money_in > 0 ? 'credit' as const : 'debit' as const,
-        moneyIn: t.money_in,
-        moneyOut: t.money_out,
-        source_page: t.source_page,  // Add source page for audit trail
-        normalized_payee: t.normalized_payee  // Add normalized payee name
+      const response = await fetchWithFailover(targetEndpoint, {
+        method: 'POST',
+        headers: headers,
+        body: formData,
+        signal: controller.signal,
+        timeout: 300000, // 5 minutes timeout for PDF processing
       });
 
-      // Map sections if available (NEW: multi-table support)
-      const sections = backendData.sections?.map((s: any) => ({
-        name: s.name,
-        transactions: s.transactions.map(mapTransaction),
-        summary: s.summary
-      })) || undefined;
+      clearTimeout(timeoutId);
+
+      // Handle Errors
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.detail || `Backend API error: ${response.statusText}`);
+      }
+
+      const result = await response.json();
+
+      // --------------------------------------------------------------------------
+      // 1. Handle "Extract" Endpoint Response (New PDFium/LLM Pipeline)
+      // --------------------------------------------------------------------------
+      if (result.success && result.transactions) {
+        console.log("Using PDFium extract endpoint:", result);
+
+        // Get account summary from the response
+        const accountSummary = result.account_summary || {};
+
+        const mapTransaction = (t: any) => {
+          const debitVal = t.debit_parsed ?? (t.debit ? parseFloat(String(t.debit).replace(/[^0-9.-]/g, '')) : 0);
+          const creditVal = t.credit_parsed ?? (t.credit ? parseFloat(String(t.credit).replace(/[^0-9.-]/g, '')) : 0);
+          const balanceVal = t.balance_parsed ?? (t.balance ? parseFloat(String(t.balance).replace(/[^0-9.-]/g, '')) : 0);
+
+          return {
+            ...t, // Included all other fields (e.g. Reference, Particulars)
+            date: t.date,
+            date_iso: t.date_iso,
+            description: t.description,
+            amount: creditVal > 0 ? creditVal : debitVal,
+            balance: balanceVal,
+            type: creditVal > 0 ? 'credit' as const : 'debit' as const,
+            moneyIn: creditVal || 0,
+            moneyOut: debitVal || 0,
+            source_page: t.source_page || 1,
+            normalized_payee: t.normalized_payee,
+
+            // Map validation fields
+            suggested: t.suggested,
+            balance_corrected: t.balance_corrected,
+            debit_corrected: t.debit_corrected,
+            credit_corrected: t.credit_corrected,
+            _ledger_fixed: t._ledger_fixed,
+            _validation_message: t._validation_message,
+
+            // Preserve original balance string for UI display (since 'balance' is overwritten with number)
+            balance_display: t.balance
+          };
+        };
+
+        console.log("PDFProcessor: Validation Summary present?", !!result.validation_summary, result.validation_summary);
+
+        return {
+          userInfo: {
+            name: accountSummary.account_holder || '',
+            email: '',
+            accountNumber: accountSummary.account_number || '',
+            bankName: accountSummary.bank_name || 'Bank Statement',
+            statementPeriod: accountSummary.period_start && accountSummary.period_end
+              ? `${accountSummary.period_start} - ${accountSummary.period_end}`
+              : '',
+            currency: accountSummary.currency || '$',
+            accountSummary: {
+              beginningBalance: accountSummary.opening_balance || 0,
+              endingBalance: accountSummary.closing_balance || 0,
+              totalDeposits: accountSummary.total_credits || 0,
+              totalWithdrawals: accountSummary.total_debits || 0,
+
+              // Map validation fields
+              totalDepositsComputed: accountSummary.total_credits_computed,
+              totalDepositsDiscrepancy: accountSummary.total_credits_discrepancy,
+              totalWithdrawalsComputed: accountSummary.total_debits_computed,
+              totalWithdrawalsDiscrepancy: accountSummary.total_debits_discrepancy,
+            }
+          },
+          transactions: result.transactions.map(mapTransaction),
+          sections: undefined,
+          summary: {
+            totalCredits: accountSummary.total_credits || 0,
+            totalDebits: accountSummary.total_debits || 0,
+            netBalance: (accountSummary.total_credits || 0) - (accountSummary.total_debits || 0),
+            transactionCount: result.transaction_count || result.transactions?.length || 0
+          },
+          // Standardized financial headers - use clean UI labels instead of raw PDF headers
+          // This ensures trust and consistency regardless of PDF formatting issues
+          column_names: (() => {
+            const STANDARD_HEADERS: Record<string, string> = {
+              date: 'Date',
+              description: 'Description',
+              debit: 'Debit',
+              credit: 'Credit',
+              balance: 'Balance',
+              amount: 'Amount',
+              reference: 'Reference',
+              particulars: 'Particulars',
+            };
+
+            const columns: Record<string, string> = {};
+            let headersWereInferred = false;
+
+            if (result.columns) {
+              Object.entries(result.columns).forEach(([key, val]: [string, any]) => {
+                // Use standardized header if available
+                const standardLabel = STANDARD_HEADERS[key.toLowerCase()];
+                if (standardLabel) {
+                  columns[key] = standardLabel;
+                } else {
+                  // For unknown columns, check if it was normalized
+                  const rawLabel = val?.label || key;
+                  const normalizedFrom = val?.normalized_from;
+
+                  if (normalizedFrom) {
+                    headersWereInferred = true;
+                    columns[key] = STANDARD_HEADERS[key] || key;
+                  } else {
+                    columns[key] = rawLabel;
+                  }
+                }
+              });
+            }
+
+            return columns;
+          })(),
+          // Confidence indicator for UI
+          headers_inferred: result.ledger_stats?.fixed > 0 ||
+            Object.values(result.columns || {}).some((col: any) => col?.normalized_from),
+          ledger_confidence: result.ledger_stats?.confidence,
+          markdown: '',
+          fraud_analysis: undefined,
+          reconciliation: undefined,
+          human_review: undefined,
+          processing_steps: undefined,
+          processing_stats: {
+            extraction_method: result.metadata?.extraction_method || 'pdfium-production',
+            payees_normalized: 0,
+            total_steps: 10,
+            steps_passed: 10
+          },
+          num_pages: result.metadata?.page_count,
+          llm_used: false,
+
+          // Enterprise Validation Data
+          validation_summary: result.validation_summary,
+          chain_validation: result.chain_validation,
+          missing_transaction_warnings: result.missing_transaction_warnings,
+          duplicate_warnings: result.duplicate_warnings,
+        };
+      }
+
+      // --------------------------------------------------------------------------
+      // 2. Handle Invoice Extraction Response
+      // --------------------------------------------------------------------------
+      if (result.success && result.metadata && result.line_items) {
+        console.log("Using Invoice extraction endpoint:", result);
+        return {
+          userInfo: {
+            // Map Invoice metadata to generic fields where it makes sense for fallback
+            bankName: result.metadata.vendor_name || 'Invoice Vendor',
+            accountSummary: {
+              beginningBalance: 0,
+              endingBalance: result.metadata.total_amount || 0,
+              totalDeposits: 0,
+              totalWithdrawals: 0
+            }
+          },
+          transactions: [], // No bank transactions
+          summary: {
+            totalCredits: 0,
+            totalDebits: 0,
+            netBalance: 0,
+            transactionCount: 0
+          },
+          invoiceData: {
+            metadata: {
+              invoiceNumber: result.metadata.invoice_number || result.metadata.invoiceNumber,
+              invoiceDate: result.metadata.invoice_date || result.metadata.invoiceDate,
+              dueDate: result.metadata.due_date || result.metadata.dueDate,
+              vendorName: result.metadata.vendor_name || result.metadata.vendorName,
+              customerName: result.metadata.customer_name || result.metadata.customerName,
+              currency: result.metadata.currency,
+              subtotal: result.metadata.subtotal || result.metadata.subTotal,
+              taxAmount: result.metadata.tax_amount || result.metadata.taxAmount,
+              totalAmount: result.metadata.total_amount || result.metadata.totalAmount,
+            },
+            lineItems: result.line_items.map((item: any) => ({
+              description: item.description,
+              quantity: item.quantity,
+              unitPrice: item.unit_price,
+              amount: item.amount
+            }))
+          }
+        };
+      }
+
+      // Fallback: Handle /fast endpoint response (legacy path)
+      if (result.data) {
+        console.log("Using structured data from backend:", result.data);
+        const backendData = result.data;
+
+        // Map backend structure to frontend ExtractedData interface
+        const userInfoRaw = backendData.userInfo || backendData.user_info || {};
+        const summaryRaw = backendData.summary || {};
+
+        // Map transactions
+        const mapTransaction = (t: any) => ({
+          date: t.date,
+          description: t.description,
+          amount: t.money_in > 0 ? t.money_in : t.money_out,
+          balance: t.balance,
+          type: t.money_in > 0 ? 'credit' as const : 'debit' as const,
+          moneyIn: t.money_in,
+          moneyOut: t.money_out,
+          source_page: t.source_page,  // Add source page for audit trail
+          normalized_payee: t.normalized_payee  // Add normalized payee name
+        });
+
+        // Map sections if available (NEW: multi-table support)
+        const sections = backendData.sections?.map((s: any) => ({
+          name: s.name,
+          transactions: s.transactions.map(mapTransaction),
+          summary: s.summary
+        })) || undefined;
+
+        return {
+          userInfo: {
+            name: userInfoRaw.name,
+            email: userInfoRaw.email,
+            accountNumber: userInfoRaw.account_number || userInfoRaw.accountNumber,
+            bankName: userInfoRaw.bank_name || userInfoRaw.bankName || "Bank Statement",
+            statementPeriod: userInfoRaw.statement_period || userInfoRaw.statementPeriod,
+            currency: backendData.currency || userInfoRaw.currency || '$',
+            accountSummary: {
+              beginningBalance: summaryRaw.opening_balance || summaryRaw.beginningBalance || 0,
+              endingBalance: summaryRaw.closing_balance || summaryRaw.endingBalance || 0,
+              totalDeposits: summaryRaw.total_money_in || summaryRaw.totalDeposits || 0,
+              totalWithdrawals: summaryRaw.total_money_out || summaryRaw.totalWithdrawals || 0,
+            }
+          },
+          transactions: backendData.transactions.map(mapTransaction),
+          sections: sections,  // NEW: Include sections for multi-table UI
+          summary: {
+            totalCredits: summaryRaw.total_money_in || 0,
+            totalDebits: summaryRaw.total_money_out || 0,
+            netBalance: (summaryRaw.total_money_in || 0) - (summaryRaw.total_money_out || 0),
+            transactionCount: backendData.transactions?.length || 0
+          },
+          column_names: backendData.column_names, // Pass column names
+          markdown: result.markdown,
+          fraud_analysis: result.fraud_analysis,
+          reconciliation: result.reconciliation,
+          human_review: result.human_review,
+          processing_steps: result.processing_steps,  // Processing pipeline steps
+          processing_stats: backendData.processing_stats,  // Processing statistics
+          num_pages: result.num_pages,
+          llm_used: result.llm_used
+        };
+      }
+
+      // Fallback to frontend parsing (Legacy)
+      const transactions = this.parseMarkdownToTransactions(result.markdown);
+      const summary = this.calculateSummary(transactions);
+      const userInfo = this.parseUserInfo(result.markdown);
 
       return {
-        userInfo: {
-          name: userInfoRaw.name,
-          email: userInfoRaw.email,
-          accountNumber: userInfoRaw.account_number || userInfoRaw.accountNumber,
-          bankName: userInfoRaw.bank_name || userInfoRaw.bankName || "Bank Statement",
-          statementPeriod: userInfoRaw.statement_period || userInfoRaw.statementPeriod,
-          currency: backendData.currency || userInfoRaw.currency || '$',
-          accountSummary: {
-            beginningBalance: summaryRaw.opening_balance || summaryRaw.beginningBalance || 0,
-            endingBalance: summaryRaw.closing_balance || summaryRaw.endingBalance || 0,
-            totalDeposits: summaryRaw.total_money_in || summaryRaw.totalDeposits || 0,
-            totalWithdrawals: summaryRaw.total_money_out || summaryRaw.totalWithdrawals || 0,
-          }
-        },
-        transactions: backendData.transactions.map(mapTransaction),
-        sections: sections,  // NEW: Include sections for multi-table UI
-        summary: {
-          totalCredits: summaryRaw.total_money_in || 0,
-          totalDebits: summaryRaw.total_money_out || 0,
-          netBalance: (summaryRaw.total_money_in || 0) - (summaryRaw.total_money_out || 0),
-          transactionCount: backendData.transactions?.length || 0
-        },
-        column_names: backendData.column_names, // Pass column names
+        userInfo: userInfo,
+        transactions: transactions,
+        summary: summary,
         markdown: result.markdown,
         fraud_analysis: result.fraud_analysis,
         reconciliation: result.reconciliation,
-        human_review: result.human_review,
-        processing_steps: result.processing_steps,  // Processing pipeline steps
-        processing_stats: backendData.processing_stats,  // Processing statistics
-        num_pages: result.num_pages,
-        llm_used: result.llm_used
+        human_review: result.human_review
       };
+
+    } catch (error) {
+      console.error('PDF processing error:', error);
+      throw error;
     }
-
-    // Fallback to frontend parsing (Legacy)
-    const transactions = this.parseMarkdownToTransactions(result.markdown);
-    const summary = this.calculateSummary(transactions);
-    const userInfo = this.parseUserInfo(result.markdown);
-
-    return {
-      userInfo: userInfo,
-      transactions: transactions,
-      summary: summary,
-      markdown: result.markdown,
-      fraud_analysis: result.fraud_analysis,
-      reconciliation: result.reconciliation,
-      human_review: result.human_review
-    };
-
-  } catch(error) {
-    console.error('PDF processing error:', error);
-    throw error;
   }
-}
 
-  static async processImage(file: File, isSignedIn: boolean = false, token ?: string | null): Promise < ExtractedData > {
-  return this.processPDF(file, isSignedIn, token);
-}
+  static async processImage(file: File, isSignedIn: boolean = false, token?: string | null): Promise<ExtractedData> {
+    return this.processPDF(file, isSignedIn, token);
+  }
 
   static parseTableStructure(markdown: string): { headers: string[], rows: string[][] } {
-  if (!markdown) return { headers: [], rows: [] };
+    if (!markdown) return { headers: [], rows: [] };
 
-  const lines = markdown.split('\n');
-  let headers: string[] = [];
-  const rows: string[][] = [];
-  let isTable = false;
+    const lines = markdown.split('\n');
+    let headers: string[] = [];
+    const rows: string[][] = [];
+    let isTable = false;
 
-  for (const line of lines) {
-    const trimmedLine = line.trim();
+    for (const line of lines) {
+      const trimmedLine = line.trim();
 
-    // Check for header row
-    if (trimmedLine.startsWith('|') && !isTable) {
-      if (trimmedLine.includes('---')) continue; // Skip separator
-      const cols = trimmedLine.split('|').map(c => c.trim()).filter(c => c);
-      // Simple heuristic: if it looks like a header (has date/desc/amount keywords), treat as start
-      if (cols.some(c => /date|description|money|amount|balance|credit|debit/i.test(c))) {
-        headers = cols;
-        isTable = true;
-        continue;
+      // Check for header row
+      if (trimmedLine.startsWith('|') && !isTable) {
+        if (trimmedLine.includes('---')) continue; // Skip separator
+        const cols = trimmedLine.split('|').map(c => c.trim()).filter(c => c);
+        // Simple heuristic: if it looks like a header (has date/desc/amount keywords), treat as start
+        if (cols.some(c => /date|description|money|amount|balance|credit|debit/i.test(c))) {
+          headers = cols;
+          isTable = true;
+          continue;
+        }
+      }
+
+      // Process table rows
+      if (isTable && trimmedLine.startsWith('|')) {
+        if (trimmedLine.includes('---')) continue;
+        const cols = trimmedLine.split('|').map(c => c.trim()).filter(c => c !== '');
+
+        if (cols.length > 0) {
+          rows.push(cols);
+        }
       }
     }
 
-    // Process table rows
-    if (isTable && trimmedLine.startsWith('|')) {
-      if (trimmedLine.includes('---')) continue;
-      const cols = trimmedLine.split('|').map(c => c.trim()).filter(c => c !== '');
-
-      if (cols.length > 0) {
-        rows.push(cols);
-      }
-    }
+    return { headers, rows };
   }
-
-  return { headers, rows };
-}
 
   private static parseUserInfo(markdown: string): ExtractedData['userInfo'] {
-  const userInfo: ExtractedData['userInfo'] = {
-    accountSummary: {
-      beginningBalance: 0,
-      endingBalance: 0,
-      totalDeposits: 0,
-      totalWithdrawals: 0
-    }
-  };
-
-  if (!markdown) return userInfo;
-
-  // Helper to extract value using regex (robust against markdown formatting)
-  const extract = (regex: RegExp): string | undefined => {
-    const match = markdown.match(regex);
-    return match ? match[1].replace(/\*\*/g, '').trim() : undefined;
-  };
-
-  // Helper to extract currency value
-  const extractCurrency = (regex: RegExp): number => {
-    const match = markdown.match(regex);
-    if (match) {
-      let valStr = match[1].replace(/,/g, '');
-      // Handle trailing negative sign (e.g., "100.00-")
-      if (valStr.endsWith('-')) {
-        valStr = '-' + valStr.slice(0, -1);
+    const userInfo: ExtractedData['userInfo'] = {
+      accountSummary: {
+        beginningBalance: 0,
+        endingBalance: 0,
+        totalDeposits: 0,
+        totalWithdrawals: 0
       }
+    };
 
-      // Handle comma as decimal separator logic if needed, but for now standardizing on dot
-      // If the document uses commas for decimals (e.g. 40.000,00), simple replace might fail.
-      // But the user's example showed "40,000,00" which is ambiguous (could be 40k or 40).
-      // Assuming standard US/UK format for now as per previous success, but being robust to trailing chars.
+    if (!markdown) return userInfo;
 
-      return parseFloat(valStr.replace(/[^0-9.-]/g, '')) || 0;
+    // Helper to extract value using regex (robust against markdown formatting)
+    const extract = (regex: RegExp): string | undefined => {
+      const match = markdown.match(regex);
+      return match ? match[1].replace(/\*\*/g, '').trim() : undefined;
+    };
+
+    // Helper to extract currency value
+    const extractCurrency = (regex: RegExp): number => {
+      const match = markdown.match(regex);
+      if (match) {
+        let valStr = match[1].replace(/,/g, '');
+        // Handle trailing negative sign (e.g., "100.00-")
+        if (valStr.endsWith('-')) {
+          valStr = '-' + valStr.slice(0, -1);
+        }
+
+        // Handle comma as decimal separator logic if needed, but for now standardizing on dot
+        // If the document uses commas for decimals (e.g. 40.000,00), simple replace might fail.
+        // But the user's example showed "40,000,00" which is ambiguous (could be 40k or 40).
+        // Assuming standard US/UK format for now as per previous success, but being robust to trailing chars.
+
+        return parseFloat(valStr.replace(/[^0-9.-]/g, '')) || 0;
+      }
+      return 0;
+    };
+
+    // Attempt to detect currency symbol
+    const currencyMatch = markdown.match(/([£$€¥])/);
+    if (currencyMatch) {
+      userInfo.currency = currencyMatch[1];
+    } else {
+      userInfo.currency = '$'; // Default
     }
-    return 0;
-  };
 
-  // Attempt to detect currency symbol
-  const currencyMatch = markdown.match(/([£$€¥])/);
-  if (currencyMatch) {
-    userInfo.currency = currencyMatch[1];
-  } else {
-    userInfo.currency = '$'; // Default
-  }
+    // Extract Account Details
+    userInfo.name = extract(/(?:Account Name|Name)[:\s*]+(?:\*\*)?(.*?)(?:\*\*)?$/m);
+    userInfo.accountNumber = extract(/(?:Account Number)[:\s*]+(?:\*\*)?(.*?)(?:\*\*)?$/m);
+    userInfo.bankName = extract(/(?:Bank Name)[:\s*]+(?:\*\*)?(.*?)(?:\*\*)?$/m) || "Bank Statement";
+    userInfo.statementPeriod = extract(/(?:Statement Period|Period|Statement Date)[:\s*]+(?:\*\*)?(.*?)(?:\*\*)?$/m);
 
-  // Extract Account Details
-  userInfo.name = extract(/(?:Account Name|Name)[:\s*]+(?:\*\*)?(.*?)(?:\*\*)?$/m);
-  userInfo.accountNumber = extract(/(?:Account Number)[:\s*]+(?:\*\*)?(.*?)(?:\*\*)?$/m);
-  userInfo.bankName = extract(/(?:Bank Name)[:\s*]+(?:\*\*)?(.*?)(?:\*\*)?$/m) || "Bank Statement";
-  userInfo.statementPeriod = extract(/(?:Statement Period|Period|Statement Date)[:\s*]+(?:\*\*)?(.*?)(?:\*\*)?$/m);
+    // Extract Email if present
+    userInfo.email = extract(/(?:Email)[:\s*]+(?:\*\*)?(.*?)(?:\*\*)?$/m);
 
-  // Extract Email if present
-  userInfo.email = extract(/(?:Email)[:\s*]+(?:\*\*)?(.*?)(?:\*\*)?$/m);
+    // Extract Account Summary
+    if (userInfo.accountSummary) {
+      // Regex looks for label, optional bold, optional currency symbol, and the number
 
-  // Extract Account Summary
-  if (userInfo.accountSummary) {
-    // Regex looks for label, optional bold, optional currency symbol, and the number
+      userInfo.accountSummary.beginningBalance = extractCurrency(/(?:Opening Balance|Beginning Balance|Balance at [0-9]+ [A-Za-z]+)[^0-9]*[£$€]?([0-9,.]+)/i);
+      userInfo.accountSummary.endingBalance = extractCurrency(/(?:Closing Balance|Ending Balance|Balance at [0-9]+ [A-Za-z]+)[^0-9]*[£$€]?([0-9,.]+)/i);
 
-    userInfo.accountSummary.beginningBalance = extractCurrency(/(?:Opening Balance|Beginning Balance|Balance at [0-9]+ [A-Za-z]+)[^0-9]*[£$€]?([0-9,.]+)/i);
-    userInfo.accountSummary.endingBalance = extractCurrency(/(?:Closing Balance|Ending Balance|Balance at [0-9]+ [A-Za-z]+)[^0-9]*[£$€]?([0-9,.]+)/i);
+      // Try to find Total Credits/Deposits/Money In
+      userInfo.accountSummary.totalDeposits = extractCurrency(/(?:Total )?(?:Deposits|Credits|Money In)[^0-9]*[£$€]?([0-9,.]+)/i);
 
-    // Try to find Total Credits/Deposits/Money In
-    userInfo.accountSummary.totalDeposits = extractCurrency(/(?:Total )?(?:Deposits|Credits|Money In)[^0-9]*[£$€]?([0-9,.]+)/i);
+      // Try to find Total Debits/Withdrawals/Money Out
+      userInfo.accountSummary.totalWithdrawals = extractCurrency(/(?:Total )?(?:Debits|Withdrawals|Money Out)[^0-9]*[£$€]?([0-9,.]+)/i);
 
-    // Try to find Total Debits/Withdrawals/Money Out
-    userInfo.accountSummary.totalWithdrawals = extractCurrency(/(?:Total )?(?:Debits|Withdrawals|Money Out)[^0-9]*[£$€]?([0-9,.]+)/i);
-
-    // Fallback: If Total Debits is 0, try summing "Card Withdrawals" and "Other Withdrawals"
-    if (userInfo.accountSummary.totalWithdrawals === 0) {
-      const cardWithdrawals = extractCurrency(/Card Withdrawals[^0-9]*[£$€]?([0-9,.]+)/i);
-      const otherWithdrawals = extractCurrency(/Other Withdrawals[^0-9]*[£$€]?([0-9,.]+)/i);
-      if (cardWithdrawals > 0 || otherWithdrawals > 0) {
-        userInfo.accountSummary.totalWithdrawals = cardWithdrawals + otherWithdrawals;
+      // Fallback: If Total Debits is 0, try summing "Card Withdrawals" and "Other Withdrawals"
+      if (userInfo.accountSummary.totalWithdrawals === 0) {
+        const cardWithdrawals = extractCurrency(/Card Withdrawals[^0-9]*[£$€]?([0-9,.]+)/i);
+        const otherWithdrawals = extractCurrency(/Other Withdrawals[^0-9]*[£$€]?([0-9,.]+)/i);
+        if (cardWithdrawals > 0 || otherWithdrawals > 0) {
+          userInfo.accountSummary.totalWithdrawals = cardWithdrawals + otherWithdrawals;
+        }
       }
     }
-  }
 
-  return userInfo;
-}
+    return userInfo;
+  }
 
   private static parseMarkdownToTransactions(markdown: string): TransactionData[] {
-  if (!markdown) return [];
+    if (!markdown) return [];
 
-  const transactions: TransactionData[] = [];
-  const lines = markdown.split('\n');
-  let isTable = false;
-  let headers: string[] = [];
+    const transactions: TransactionData[] = [];
+    const lines = markdown.split('\n');
+    let isTable = false;
+    let headers: string[] = [];
 
-  for (const line of lines) {
-    const trimmedLine = line.trim();
+    for (const line of lines) {
+      const trimmedLine = line.trim();
 
-    if (trimmedLine.startsWith('|') && !isTable) {
-      if (trimmedLine.includes('---')) continue;
-      const cols = trimmedLine.split('|').map(c => c.trim()).filter(c => c);
-      if (cols.some(c => /date|description|money|amount|balance/i.test(c))) {
-        headers = cols.map(c => c.toLowerCase());
-        isTable = true;
-        continue;
+      if (trimmedLine.startsWith('|') && !isTable) {
+        if (trimmedLine.includes('---')) continue;
+        const cols = trimmedLine.split('|').map(c => c.trim()).filter(c => c);
+        if (cols.some(c => /date|description|money|amount|balance/i.test(c))) {
+          headers = cols.map(c => c.toLowerCase());
+          isTable = true;
+          continue;
+        }
       }
-    }
 
-    if (isTable && trimmedLine.startsWith('|')) {
-      if (trimmedLine.includes('---')) continue;
-      const cols = trimmedLine.split('|').map(c => c.trim()).filter(c => c !== '');
+      if (isTable && trimmedLine.startsWith('|')) {
+        if (trimmedLine.includes('---')) continue;
+        const cols = trimmedLine.split('|').map(c => c.trim()).filter(c => c !== '');
 
-      if (cols.length >= 3) {
-        const transaction: any = {};
-        let moneyIn = 0;
-        let moneyOut = 0;
+        if (cols.length >= 3) {
+          const transaction: any = {};
+          let moneyIn = 0;
+          let moneyOut = 0;
 
-        headers.forEach((header, index) => {
-          if (index >= cols.length) return;
-          const value = cols[index];
+          headers.forEach((header, index) => {
+            if (index >= cols.length) return;
+            const value = cols[index];
 
-          if (header.includes('date')) {
-            transaction.date = value;
-          } else if (header.includes('description')) {
-            transaction.description = value;
-          } else if (header.includes('money in') || header.includes('credit')) {
-            if (value !== '-') {
-              const amount = parseFloat(value.replace(/[^0-9.-]/g, ''));
-              if (!isNaN(amount)) moneyIn = Math.abs(amount);
+            if (header.includes('date')) {
+              transaction.date = value;
+            } else if (header.includes('description')) {
+              transaction.description = value;
+            } else if (header.includes('money in') || header.includes('credit')) {
+              if (value !== '-') {
+                const amount = parseFloat(value.replace(/[^0-9.-]/g, ''));
+                if (!isNaN(amount)) moneyIn = Math.abs(amount);
+              }
+            } else if (header.includes('money out') || header.includes('debit')) {
+              if (value !== '-') {
+                const amount = parseFloat(value.replace(/[^0-9.-]/g, ''));
+                if (!isNaN(amount)) moneyOut = Math.abs(amount);
+              }
+            } else if (header.includes('balance')) {
+              transaction.balance = parseFloat(value.replace(/[^0-9.-]/g, '')) || 0;
             }
-          } else if (header.includes('money out') || header.includes('debit')) {
-            if (value !== '-') {
-              const amount = parseFloat(value.replace(/[^0-9.-]/g, ''));
-              if (!isNaN(amount)) moneyOut = Math.abs(amount);
-            }
-          } else if (header.includes('balance')) {
-            transaction.balance = parseFloat(value.replace(/[^0-9.-]/g, '')) || 0;
+          });
+
+          if (moneyIn > 0) {
+            transaction.amount = moneyIn;
+            transaction.type = 'credit';
+          } else if (moneyOut > 0) {
+            transaction.amount = moneyOut;
+            transaction.type = 'debit';
           }
-        });
 
-        if (moneyIn > 0) {
-          transaction.amount = moneyIn;
-          transaction.type = 'credit';
-        } else if (moneyOut > 0) {
-          transaction.amount = moneyOut;
-          transaction.type = 'debit';
-        }
-
-        if (transaction.date && transaction.description && transaction.amount) {
-          transactions.push(transaction as TransactionData);
+          if (transaction.date && transaction.description && transaction.amount) {
+            transactions.push(transaction as TransactionData);
+          }
         }
       }
     }
+
+    return transactions;
   }
 
-  return transactions;
-}
-
   private static calculateSummary(transactions: TransactionData[]) {
-  let totalCredits = 0;
-  let totalDebits = 0;
+    let totalCredits = 0;
+    let totalDebits = 0;
 
-  transactions.forEach(t => {
-    if (t.type === 'credit') totalCredits += t.amount;
-    else totalDebits += t.amount;
-  });
+    transactions.forEach(t => {
+      if (t.type === 'credit') totalCredits += t.amount;
+      else totalDebits += t.amount;
+    });
 
-  return {
-    totalCredits,
-    totalDebits,
-    netBalance: totalCredits - totalDebits,
-    transactionCount: transactions.length
-  };
-}
+    return {
+      totalCredits,
+      totalDebits,
+      netBalance: totalCredits - totalDebits,
+      transactionCount: transactions.length
+    };
+  }
 }
