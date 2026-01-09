@@ -453,19 +453,7 @@ export const Header = () => {
                                 <p className="text-[11px] text-[hsl(var(--muted-foreground))] group-hover:text-[hsl(var(--muted-foreground))]/80">QuickBooks format</p>
                               </div>
                             </Link>
-                            <Link
-                              href="/convert/csv-to-ofx"
-                              className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-2.5 cursor-pointer transition-all duration-200 hover:border-amber-500/50 hover:bg-amber-500/5"
-                              onClick={closeConvertersDropdown}
-                            >
-                              <div className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/10 text-amber-500 group-hover:bg-amber-500 group-hover:text-white transition-colors">
-                                <FileSpreadsheet className="h-4 w-4" />
-                              </div>
-                              <div>
-                                <p className="text-sm font-bold text-[hsl(var(--foreground))] group-hover:text-amber-500 transition-colors">CSV to OFX</p>
-                                <p className="text-[11px] text-[hsl(var(--muted-foreground))] group-hover:text-[hsl(var(--muted-foreground))]/80">Universal banking</p>
-                              </div>
-                            </Link>
+
                             <Link
                               href="/convert/ofx-to-qbo"
                               className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-2.5 cursor-pointer transition-all duration-200 hover:border-amber-500/50 hover:bg-amber-500/5"
@@ -873,9 +861,9 @@ export const Header = () => {
                     <div className="mb-2">
                       <p className="text-[10px] font-semibold tracking-wider text-[hsl(var(--muted-foreground))] uppercase px-2 py-1">Finance</p>
                       <Link href="/convert-bank-statement-to-csv-excel" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Bank to Excel/CSV</Link>
+                      <Link href="/convert-invoice-to-excel-csv" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Invoice to Excel</Link>
                       <Link href="/convert/csv-to-qbo" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">CSV to QBO</Link>
-                      <Link href="/convert/csv-to-ofx" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">CSV to OFX</Link>
-                      <Link href="/convert-bank-statement-to-csv-excel" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">Financial Auditing</Link>
+                      <Link href="/convert/ofx-to-qbo" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">OFX to QBO</Link>
                     </div >
                     <div className="mb-2">
                       <p className="text-[10px] font-semibold tracking-wider text-[hsl(var(--muted-foreground))] uppercase px-2 py-1">Image & Dev</p>

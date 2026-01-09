@@ -105,16 +105,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ]
 
     // Try to fetch dynamic posts (Enterprise way), fallback to static list if empty
-    let dynamicBlogRoutes: string[] = []
+    let dynamicPosts: { slug: string; date: string }[] = []
     try {
-        const posts = await getAllPosts()
-        dynamicBlogRoutes = posts.map(post => `/blogs/${post.slug}/`)
+        dynamicPosts = await getAllPosts()
     } catch (e) {
         console.warn('Could not fetch dynamic blogs, using fallback list')
     }
 
     // Use dynamic list if available, otherwise fallback to the hardcoded list
-    const blogPosts = dynamicBlogRoutes.length > 0 ? dynamicBlogRoutes : staticBlogPosts
+    // const blogPosts = dynamicBlogRoutes.length > 0 ? dynamicBlogRoutes : staticBlogPosts
 
     const currentDate = new Date().toISOString().split('T')[0]
 
@@ -151,13 +150,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             priority: 0.9,
         },
 
-        // Individual Blog Posts (0.7 - Weekly for new site, move to monthly after 6 months)
-        ...blogPosts.map((route) => ({
-            url: `${baseUrl}${route}`,
-            lastModified: currentDate, // Ideally this should be the post's update date
-            changeFrequency: 'weekly' as const,
-            priority: 0.7,
-        })),
+        // Individual Blog Posts
+        ...(dynamicPosts.length > 0
+            ? dynamicPosts.map((post) => ({
+                url: `${baseUrl}/blogs/${post.slug}/`,
+                lastModified: post.date || currentDate,
+                changeFrequency: 'weekly' as const,
+                priority: 0.7,
+            }))
+            : staticBlogPosts.map((route) => ({
+                url: `${baseUrl}${route}`,
+                lastModified: currentDate,
+                changeFrequency: 'weekly' as const,
+                priority: 0.7,
+            }))
+        ),
 
         // Info (0.5)
         ...infoPages.map((route) => ({
