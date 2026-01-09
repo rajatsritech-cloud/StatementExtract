@@ -19,12 +19,12 @@ export async function onRequest(context) {
   }
 
   // ---------------------------------------------------------
-  // CONFIGURATION: Backend IPs
+  // CONFIGURATION: Backend Hosts
   // ---------------------------------------------------------
-  // Using direct IPs avoids DNS propagation issues and allows HTTP access
-  // without mixed-content errors (since Cloudflare -> Backend is hidden).
-  const PRIMARY_BACKEND = "150.136.48.30:8000";
-  const SECONDARY_BACKEND = "129.80.181.100:8000";
+  // Use Domain Names to ensure proper Host resolution and avoid Cloudflare 1003 errors.
+  // Port 8000 is used by the backend.
+  const PRIMARY_BACKEND = "backend1.statementextract.com:8000";
+  const SECONDARY_BACKEND = "backend2.statementextract.com:8000";
 
   // Deterministic Failover: Always try Primary first, then Secondary.
   const attemptOrder = [PRIMARY_BACKEND, SECONDARY_BACKEND];
