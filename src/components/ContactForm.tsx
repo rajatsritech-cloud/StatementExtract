@@ -80,15 +80,15 @@ export function ContactForm() {
         setSubmitStatus("idle");
 
         try {
-            // Determine API URL
-            let apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
+            const { fetchWithFailover } = await import('@/lib/apiClient');
 
-            const response = await fetch(`${apiUrl}/api/v1/contact/submit`, {
+            const response = await fetchWithFailover('/api/v1/contact/submit', {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(formData),
+                timeout: 10000 // 10s timeout for contact form is plenty
             });
 
             if (!response.ok) {

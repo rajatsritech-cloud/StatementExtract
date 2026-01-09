@@ -191,47 +191,62 @@ export class PDFProcessor {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 300000);
 
-      // Use environment variable for API URL
-      // If NEXT_PUBLIC_API_URL is undefined, fallback to localhost for dev
-      // If it is explicitly empty string (for proxy), use empty string
-      // Logic:
-      // 1. If env var is set, use it.
-      // 2. If env var is NOT set:
-      //    - If dev, use localhost.
-      //    - If prod (or unknown), use empty string (relative).
-
-      let apiUrl = process.env.NEXT_PUBLIC_API_URL;
-
-      if (apiUrl === undefined) {
-        apiUrl = process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:8000' : '';
-      }
-
-      // Sanitize: Remove accidental quotes (e.g. if user set "" in env)
-      apiUrl = apiUrl.replace(/['"]+/g, '').trim();
-
       const headers: HeadersInit = {};
       if (token) {
         headers['Authorization'] = `Bearer ${token}`;
       }
 
       const targetEndpoint = customEndpoint || '/api/v1/pdf-extract/extract';
-      const fullUrl = targetEndpoint.startsWith('http') ? targetEndpoint : `${apiUrl}${targetEndpoint}`;
 
-      const response = await fetch(fullUrl, {
+      const { fetchWithFailover, getApiUrls, isServerHealthy } = await import('./apiClient');
+
+      // ---------------------------------------------------------
+      // SMART FAILOVER: Check Health First, Then Upload
+      // ---------------------------------------------------------
+      const { primary, secondary } = getApiUrls();
+      let targetBaseUrl = primary;
+
+      // 1. Quick Health Check (2s timeout) to see if Primary is hanging
+      console.log(`[PDFProcessor] Checking health of primary: ${primary}...`);
+      const isPrimaryHealthy = await isServerHealthy(primary);
+
+      if (!isPrimaryHealthy) {
+        console.warn(`[PDFProcessor] Primary server unhealthy/hanging. Switching to Secondary: ${secondary}`);
+        targetBaseUrl = secondary;
+      } else {
+        console.log(`[PDFProcessor] Primary is healthy. Proceeding with upload.`);
+      }
+
+      // 2. Perform the actual upload to the chosen server
+      // We explicitly construct the URL here to prevent fetchWithFailover from
+      // trying to be "smart" again (double-failover). We just want to hit the live one.
+      // We use a LONG timeout (300s) because we know the server is alive, so any wait is just processing time.
+
+      const fullUrl = targetBaseUrl ? `${targetBaseUrl}${targetEndpoint}` : targetEndpoint;
+
+      // WAIT: fetchWithFailover doesn't let us force a URL easily. 
+      // Let's use native fetch for the final upload to be precise.
+
+      const finalNativeResponse = await fetch(fullUrl, {
         method: 'POST',
         headers: headers,
         body: formData,
         signal: controller.signal,
       });
 
-      clearTimeout(timeoutId);
+      // Clear the timeout we set for the whole op (though we rely on browser mostly)
+      // Note: we need to handle the timeout manually if using native fetch
+      // But we passed signal from the 300s controller above. Correct.
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.detail || `Backend API error: ${response.statusText}`);
+      // Let's standardise variable name to match downstream
+      const responseToUse = finalNativeResponse;
+
+      if (!responseToUse.ok) {
+        const errorData = await responseToUse.json().catch(() => ({}));
+        throw new Error(errorData.detail || `Backend API error: ${responseToUse.statusText}`);
       }
 
-      const result = await response.json();
+      const result = await responseToUse.json();
 
       // Handle /extract endpoint response (PDFium accuracy endpoint)
       // Response has: success, transactions, account_summary, columns, confidence_score

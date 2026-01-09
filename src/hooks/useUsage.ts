@@ -54,16 +54,8 @@ export const useUsage = () => {
                 const token = await getToken();
                 if (!token) return null;
 
-                // Determine API URL:
-                // 1. Use explicit env var if set
-                // 2. In development, default to localhost:8000
-                // 3. In production, default to empty string (relative path) for proxying
-                let apiUrl = process.env.NEXT_PUBLIC_API_URL;
-                if (!apiUrl) {
-                    apiUrl = process.env.NODE_ENV === 'development' ? 'http://localhost:8000' : '';
-                }
-
-                const response = await fetch(`${apiUrl}/api/v1/user/usage`, {
+                const { fetchWithFailover } = await import('@/lib/apiClient');
+                const response = await fetchWithFailover('/api/v1/user/usage', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
 
