@@ -151,6 +151,20 @@ const toolSections = [
                 badge: null,
             },
             {
+                title: "CSV to Excel Converter",
+                description: "Convert CSV to Excel (XLSX) with smart formatting. Preserves leading zeros and dates.",
+                href: "/convert/csv-to-excel",
+                icon: "FileSpreadsheet",
+                badge: "New",
+            },
+            {
+                title: "Excel to CSV Converter",
+                description: "Convert Excel files to clean, UTF-8 formatted CSVs. Ideal for importing into software.",
+                href: "/convert/excel-to-csv",
+                icon: "FileText",
+                badge: "New",
+            },
+            {
                 title: "QFX to PDF Converter",
                 description: "Convert Quicken QFX/OFX files to printable PDF transaction reports.",
                 href: "/convert/qfx-to-pdf",

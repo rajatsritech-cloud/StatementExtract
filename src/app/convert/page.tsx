@@ -141,6 +141,20 @@ const toolSections = [
                 badge: "New",
             },
             {
+                title: "CSV to Excel Converter",
+                description: "Convert CSV to Excel (XLSX). Preserves leading zeros and date formats.",
+                href: "/convert/csv-to-excel",
+                icon: "FileSpreadsheet",
+                badge: "New",
+            },
+            {
+                title: "Excel to CSV Converter",
+                description: "Convert Excel spreadsheets to CSV format. Clean UTF-8 output.",
+                href: "/convert/excel-to-csv",
+                icon: "FileText",
+                badge: "New",
+            },
+            {
                 title: "QBO to CSV Converter",
                 description: "Convert QuickBooks .qbo files to CSV/Excel online for free. Open QBO files in Excel.",
                 href: "/convert/qbo-to-csv",

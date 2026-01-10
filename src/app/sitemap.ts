@@ -170,7 +170,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
                 priority: 0.7,
             }))
         ),
-
+        {
+            url: 'https://statementextract.com/convert/csv-to-excel',
+            lastModified: new Date(),
+            changeFrequency: 'weekly',
+            priority: 0.8,
+        },
+        {
+            url: 'https://statementextract.com/convert/excel-to-csv',
+            lastModified: new Date(),
+            changeFrequency: 'weekly',
+            priority: 0.8,
+        },
+        {
+            url: 'https://statementextract.com/convert/csv-to-mk940',
+            lastModified: new Date(),
+            changeFrequency: 'monthly',
+            priority: 0.6,
+        },
         // Info (0.5)
         ...infoPages.map((route) => ({
             url: `${baseUrl}${route}`,
