@@ -52,6 +52,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         '/convert/rotate-pdf/',
         '/convert/add-page-numbers-pdf/',
         '/convert/unlock-pdf/',
+        // New high-traffic tools
+        '/tools/paycheck-calculator/',
+        '/convert/chase-bank-statement-to-excel/',
+        '/convert/wells-fargo-statement-to-excel/',
+        '/convert/bank-of-america-statement-to-excel/',
     ]
 
     // 3. Secondary Tools - Niche use cases. Priority 0.8, Weekly.

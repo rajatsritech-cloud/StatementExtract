@@ -120,6 +120,27 @@ const toolSections = [
                 badge: "Popular",
             },
             {
+                title: "Chase Statement to Excel",
+                description: "Convert Chase Bank PDF statements to Excel or CSV. Works with checking, savings, and credit cards.",
+                href: "/convert/chase-bank-statement-to-excel",
+                icon: "Building2",
+                badge: "New",
+            },
+            {
+                title: "Wells Fargo Statement to Excel",
+                description: "Convert Wells Fargo PDF statements to Excel or CSV format instantly.",
+                href: "/convert/wells-fargo-statement-to-excel",
+                icon: "Building2",
+                badge: "New",
+            },
+            {
+                title: "Bank of America Statement to Excel",
+                description: "Convert BoA PDF statements to Excel or CSV. All account types supported.",
+                href: "/convert/bank-of-america-statement-to-excel",
+                icon: "Building2",
+                badge: "New",
+            },
+            {
                 title: "QBO to CSV Converter",
                 description: "Convert QuickBooks .qbo files to CSV/Excel online for free. Open QBO files in Excel.",
                 href: "/convert/qbo-to-csv",

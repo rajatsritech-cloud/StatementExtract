@@ -215,6 +215,13 @@ const toolSections = [
         featured: false,
         tools: [
             {
+                title: "Paycheck Calculator",
+                description: "Calculate take-home pay after federal, state, Social Security, and Medicare taxes. 2024 tax brackets.",
+                href: "/tools/paycheck-calculator",
+                icon: "DollarSign",
+                badge: "New",
+            },
+            {
                 title: "GST/VAT Calculator",
                 description: "Calculate GST, VAT, and sales tax for any country. Add or remove tax easily.",
                 href: "/tools/gst-vat-calculator",
@@ -226,7 +233,7 @@ const toolSections = [
                 description: "Calculate 1099 taxes, self-employment tax, and quarterly estimated payments.",
                 href: "/tools/self-employed-tax-calculator",
                 icon: "Calculator",
-                badge: "New",
+                badge: null,
             },
         ],
     },
