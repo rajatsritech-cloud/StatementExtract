@@ -165,6 +165,13 @@ const toolSections = [
                 badge: "New",
             },
             {
+                title: "VCF to CSV Converter",
+                description: "Convert VCF (vCard) contact files to Excel/CSV. Export iPhone/Android contacts to spreadsheet.",
+                href: "/convert/vcf-to-csv",
+                icon: "FileSpreadsheet",
+                badge: "New",
+            },
+            {
                 title: "QFX to PDF Converter",
                 description: "Convert Quicken QFX/OFX files to printable PDF transaction reports.",
                 href: "/convert/qfx-to-pdf",

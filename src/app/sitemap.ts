@@ -56,7 +56,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         '/tools/paycheck-calculator/',
         '/convert/chase-bank-statement-to-excel/',
         '/convert/wells-fargo-statement-to-excel/',
+
         '/convert/bank-of-america-statement-to-excel/',
+        '/convert/vcf-to-csv/',
     ]
 
     // 3. Secondary Tools - Niche use cases. Priority 0.8, Weekly.
