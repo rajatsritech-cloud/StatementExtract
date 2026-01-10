@@ -199,6 +199,32 @@ export const BankStatementSEOContent = () => {
                 </p>
 
                 <h3 className="text-2xl font-semibold text-[hsl(var(--foreground))] mb-4">
+                    Related Bank Statement Converters
+                </h3>
+                <p className="text-[hsl(var(--muted-foreground))] mb-4">
+                    Need to import directly into accounting software? Try our specialized converters:
+                </p>
+                <ul className="list-disc pl-6 text-[hsl(var(--muted-foreground))] mb-8 space-y-2">
+                    <li><a href="/convert-bank-statement-to-quickbooks-xero" className="text-[hsl(var(--primary))] hover:underline font-semibold">Bank Statement to QuickBooks & Xero</a> – Convert PDF to QBO and Xero-ready CSV format</li>
+                    <li><a href="/convert-bank-statement-to-quickbooks-tally" className="text-[hsl(var(--primary))] hover:underline font-semibold">Bank Statement to Tally Prime</a> – Convert PDF to Tally XML voucher format for Indian accountants</li>
+                    <li><a href="/convert-invoice-to-excel-csv" className="text-[hsl(var(--primary))] hover:underline font-semibold">Invoice to Excel Converter</a> – Extract line items and totals from PDF invoices</li>
+                    <li><a href="/convert/csv-to-qbo" className="text-[hsl(var(--primary))] hover:underline">CSV to QBO Converter</a> – Convert any CSV to QuickBooks Web Connect format</li>
+                </ul>
+
+                <h3 className="text-2xl font-semibold text-[hsl(var(--foreground))] mb-4">
+                    Learn More: Bank Statement Guides
+                </h3>
+                <p className="text-[hsl(var(--muted-foreground))] mb-4">
+                    Read our detailed guides on bank statement processing:
+                </p>
+                <ul className="list-disc pl-6 text-[hsl(var(--muted-foreground))] mb-8 space-y-2">
+                    <li><a href="/blogs/bank-statement-converter-pdf-to-excel-csv" className="text-[hsl(var(--primary))] hover:underline">Complete Guide: Bank Statement PDF to Excel/CSV Conversion</a></li>
+                    <li><a href="/blogs/convert-bank-statement-to-quickbooks-xero-guide" className="text-[hsl(var(--primary))] hover:underline">How to Import Bank Statements to QuickBooks & Xero</a></li>
+                    <li><a href="/blogs/best-bank-statement-extraction-software-comparison" className="text-[hsl(var(--primary))] hover:underline">Best Bank Statement Extraction Software Compared</a></li>
+                    <li><a href="/blogs/bank-statement-for-visa-application-guide" className="text-[hsl(var(--primary))] hover:underline">Bank Statement for Visa Application: Complete Guide</a></li>
+                </ul>
+
+                <h3 className="text-2xl font-semibold text-[hsl(var(--foreground))] mb-4">
                     Related Free Finance Tools
                 </h3>
                 <p className="text-[hsl(var(--muted-foreground))] mb-4">
@@ -210,7 +236,7 @@ export const BankStatementSEOContent = () => {
                     <li><a href="/tools/financial-ratio-calculator" className="text-[hsl(var(--primary))] hover:underline">Financial Ratio Calculator</a> – Calculate 20+ key business ratios</li>
                     <li><a href="/tools/profit-margin-calculator" className="text-[hsl(var(--primary))] hover:underline">Profit Margin Calculator</a> – Calculate gross, operating, and net margins</li>
                     <li><a href="/tools/amortization-calculator" className="text-[hsl(var(--primary))] hover:underline">Amortization Calculator</a> – See loan payments and extra payment savings</li>
-                    <li><a href="/tools/fire-calculator" className="text-[hsl(var(--primary))] hover:underline font-bold">Explore All Financial Tools →</a></li>
+                    <li><a href="/tools" className="text-[hsl(var(--primary))] hover:underline font-bold">Explore All Financial Tools →</a></li>
                 </ul>
             </div>
         </section>

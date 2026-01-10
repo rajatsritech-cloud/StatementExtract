@@ -180,11 +180,24 @@ export const BankStatementSEOContentXero = () => {
                 <h3 className="text-2xl font-semibold text-[hsl(var(--foreground))] mb-4">
                     Trusted by CPAs and Bookkeepers Across the US
                 </h3>
-                <p className="text-[hsl(var(--muted-foreground))]">
+                <p className="text-[hsl(var(--muted-foreground))] mb-8">
                     We understand that one decimal error can ruin a reconciliation. Our <strong>Triple-Check Validation</strong> engine verifies
                     open/close balances against transaction totals before letting you download, guaranteeing 99%+ mathematical consistency.
                     Thousands of accountants trust Statement Extract for their daily <Link href="/blogs/best-bank-statement-extraction-software-comparison" className="text-primary hover:underline">bank statement processing</Link> needs.
                 </p>
+
+                <h3 className="text-2xl font-semibold text-[hsl(var(--foreground))] mb-4">
+                    Related Converters
+                </h3>
+                <p className="text-[hsl(var(--muted-foreground))] mb-4">
+                    Explore our other flagship document conversion tools:
+                </p>
+                <ul className="list-disc pl-6 text-[hsl(var(--muted-foreground))] space-y-2">
+                    <li><Link href="/convert-bank-statement-to-csv-excel" className="text-[hsl(var(--primary))] hover:underline font-semibold">Bank Statement to Excel/CSV</Link> – General PDF to Excel conversion for any bank</li>
+                    <li><Link href="/convert-bank-statement-to-quickbooks-tally" className="text-[hsl(var(--primary))] hover:underline font-semibold">Bank Statement to Tally Prime</Link> – Convert PDF to Tally XML for Indian accountants</li>
+                    <li><Link href="/convert-invoice-to-excel-csv" className="text-[hsl(var(--primary))] hover:underline font-semibold">Invoice to Excel Converter</Link> – Extract line items from PDF invoices</li>
+                    <li><Link href="/convert" className="text-[hsl(var(--primary))] hover:underline font-bold">View All Converters →</Link></li>
+                </ul>
             </div>
         </section>
     );

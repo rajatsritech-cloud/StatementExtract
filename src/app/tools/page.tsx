@@ -81,6 +81,13 @@ const toolSections = [
                 badge: null,
             },
             {
+                title: "Bank Statement to Tally",
+                description: "Convert PDF bank statements to Tally XML & QuickBooks QBO. Perfect for Indian accountants.",
+                href: "/convert-bank-statement-to-quickbooks-tally",
+                icon: "Building2",
+                badge: "Popular",
+            },
+            {
                 title: "QBO to CSV Converter",
                 description: "Convert QuickBooks .qbo files to CSV/Excel online for free. Open QBO files in Excel.",
                 href: "/convert/qbo-to-csv",

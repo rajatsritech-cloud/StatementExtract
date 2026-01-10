@@ -198,16 +198,19 @@ export const InvoiceSEOContent = () => {
                 </ul>
 
                 <h3 className="text-2xl font-semibold text-[hsl(var(--foreground))] mb-4">
-                    Related Tools
+                    Related Converters & Tools
                 </h3>
                 <p className="text-[hsl(var(--muted-foreground))] mb-4">
                     Explore our suite of financial data tools:
                 </p>
                 <ul className="list-disc pl-6 text-[hsl(var(--muted-foreground))] space-y-2">
-                    <li><a href="/convert-bank-statement-to-csv-excel" className="text-[hsl(var(--primary))] hover:underline font-semibold">Bank Statement Converter</a> – PDF to Excel for bank feeds</li>
-                    <li><a href="/tools/invoice-generator" className="text-[hsl(var(--primary))] hover:underline">Invoice Generator</a> – Create invoices in seconds</li>
-                    <li><a href="/convert/pdf-to-mt940" className="text-[hsl(var(--primary))] hover:underline">PDF to MT940</a> – Convert statements to MT940 format</li>
+                    <li><a href="/convert-bank-statement-to-csv-excel" className="text-[hsl(var(--primary))] hover:underline font-semibold">Bank Statement to Excel/CSV</a> – AI-powered PDF bank statement extraction</li>
+                    <li><a href="/convert-bank-statement-to-quickbooks-xero" className="text-[hsl(var(--primary))] hover:underline font-semibold">Bank Statement to QuickBooks & Xero</a> – QBO and Xero CSV format</li>
+                    <li><a href="/convert-bank-statement-to-quickbooks-tally" className="text-[hsl(var(--primary))] hover:underline font-semibold">Bank Statement to Tally Prime</a> – Tally XML format for Indian accountants</li>
+                    <li><a href="/tools/invoice-generator" className="text-[hsl(var(--primary))] hover:underline">Invoice Generator</a> – Create professional invoices in seconds</li>
+                    <li><a href="/convert/pdf-to-mt940" className="text-[hsl(var(--primary))] hover:underline">PDF to MT940</a> – Convert statements to MT940 SWIFT format</li>
                     <li><a href="/tools/gst-vat-calculator" className="text-[hsl(var(--primary))] hover:underline">GST/VAT Calculator</a> – Calculate tax amounts quickly</li>
+                    <li><a href="/convert" className="text-[hsl(var(--primary))] hover:underline font-bold">View All Converters →</a></li>
                 </ul>
             </div>
         </section>
