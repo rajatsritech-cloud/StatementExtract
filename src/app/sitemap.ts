@@ -59,6 +59,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
         '/convert/bank-of-america-statement-to-excel/',
         '/convert/vcf-to-csv/',
+        '/tools/hourly-to-salary-calculator/',
+        '/tools/percentage-calculator/',
+        '/tools/routing-number-validator/',
     ]
 
     // 3. Secondary Tools - Niche use cases. Priority 0.8, Weekly.

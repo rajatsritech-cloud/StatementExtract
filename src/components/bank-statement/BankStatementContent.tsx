@@ -159,26 +159,57 @@ export const BankStatementSEOContent = () => {
                     <strong>Financial OCR</strong> technology to extract every transaction with 100% accuracy.
                 </p>
 
+                {/* Deep Dive: Smart Parsing vs Generic OCR */}
+                <div className="my-12 p-8 rounded-2xl bg-[hsl(var(--card))] border border-[hsl(var(--border))] not-prose">
+                    <h3 className="text-2xl font-bold text-[hsl(var(--foreground))] mb-6 flex items-center gap-3">
+                        <Zap className="text-yellow-500 w-8 h-8" />
+                        Why Generic PDF Tools Fail
+                    </h3>
+                    <div className="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h4 className="font-semibold text-red-500 mb-2">Standard OCR Tools</h4>
+                            <p className="text-sm text-[hsl(var(--muted-foreground))]">
+                                Generic tools simply extract text line-by-line. They often merge "Deposit" and "Withdrawal" columns or confuse headers, leading to messy spreadsheets that require hours of cleanup.
+                            </p>
+                        </div>
+                        <div>
+                            <h4 className="font-semibold text-green-500 mb-2">Our Smart Parsing Engine</h4>
+                            <p className="text-sm text-[hsl(var(--muted-foreground))]">
+                                We use <strong>Layout Recognition Algorithms</strong> specifically designed for bank statements. Our system identifies table boundaries, detects multi-line descriptions, and separates credit/debit columns based on geometric alignment.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
                 <h3 className="text-2xl font-semibold text-[hsl(var(--foreground))] mb-4">
-                    Why Automated Extraction is Better than Manual Entry
+                    Built-in Accuracy Checks
                 </h3>
                 <p className="text-[hsl(var(--muted-foreground))] mb-6">
-                    Our specialized AI engine is trained on millions of bank statements from major institutions like <strong>Chase, Wells Fargo, Bank of America, and HSBC</strong>.
-                    Unlike standard PDF converters, we understand the financial context:
+                    We don't just extract text; we validate it. Our parser runs mathematical checks on every statement to minimize errors:
                 </p>
                 <ul className="list-disc pl-6 text-[hsl(var(--muted-foreground))] mb-6 space-y-2">
-                    <li><strong>Smart Column Detection:</strong> We distinguish between "Description", "Reference Number", and "Transaction Date" columns automatically.</li>
-                    <li><strong>Credit/Debit Separation:</strong> We precisely identify money-in and money-out flows, even if they share a single "Amount" column in the PDF.</li>
-                    <li><strong>Running Balance Validation:</strong> Our algorithm mathematically verifies that <em>Opening Balance + Credits - Debits = Closing Balance</em>, ensuring zero errors.</li>
+                    <li><strong>Column Separation:</strong> Geometric analysis distinguishes between "Description", "Reference", and numeric columns.</li>
+                    <li><strong>Transaction Logic:</strong> We algorithmically detect money-in vs money-out flows, even in single-column formats.</li>
+                    <li><strong>The "Balance Check":</strong> We automatically verify that <em>Opening Balance + Credits - Debits = Closing Balance</em>. If the math doesn't add up, we alert you.</li>
                 </ul>
 
                 <h3 className="text-2xl font-semibold text-[hsl(var(--foreground))] mb-4">
                     Convert Scanned PDFs and Images
                 </h3>
                 <p className="text-[hsl(var(--muted-foreground))] mb-6">
-                    Have paper statements? No problem. Our tool supports <strong>scanned PDF bank statements</strong> and image formats (JPG, PNG).
-                    Our Optical Character Recognition (OCR) engine flattens, deskews, and digitizes paper documents into editable Excel spreadsheets in seconds.
+                    Have paper statements? Our tool supports <strong>scanned PDF bank statements</strong> and image formats (JPG, PNG).
+                    We use Optical Character Recognition (OCR) to digitize scanned documents before running our parsing logic to structure the data.
                 </p>
+
+                {/* Bank Specific Tips */}
+                <div className="my-8 p-6 bg-blue-500/5 border border-blue-500/10 rounded-xl not-prose">
+                    <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400 mb-3">Bank-Specific Conversion Tips</h3>
+                    <ul className="space-y-3 text-sm text-[hsl(var(--muted-foreground))]">
+                        <li><strong>Chase Bank:</strong> Supports the new 2024 "Blue Headers" PDF format perfectly.</li>
+                        <li><strong>Wells Fargo:</strong> We automatically strip the "Cheque Images" from the bottom of statements to keep the Excel file clean.</li>
+                        <li><strong>Bank of America:</strong> Handles the "e-Statement" password protection (if you provide the password).</li>
+                    </ul>
+                </div>
 
                 <h3 className="text-2xl font-semibold text-[hsl(var(--foreground))] mb-4">
                     Supported Export Formats
@@ -239,6 +270,6 @@ export const BankStatementSEOContent = () => {
                     <li><a href="/tools" className="text-[hsl(var(--primary))] hover:underline font-bold">Explore All Financial Tools →</a></li>
                 </ul>
             </div>
-        </section>
+        </section >
     );
 };

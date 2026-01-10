@@ -256,28 +256,72 @@ export default function ExcelToCsvPage() {
                 </div>
             </section>
 
-            {/* SEO Content Block */}
-            <section className="py-12 md:py-16 px-6">
+            {/* Deep Technical Dive: The Encoding Nightmare */}
+            <section className="py-12 px-6 bg-[hsl(var(--muted))]/10">
                 <div className="max-w-4xl mx-auto prose prose-lg dark:prose-invert">
-                    <h2 className="text-2xl font-bold text-[hsl(var(--foreground))] mb-6">
-                        The Best Free Excel to CSV Converter Online
-                    </h2>
-                    <p className="text-[hsl(var(--muted-foreground))] mb-4">
-                        Converting Excel spreadsheets to CSV should be simple, but software compatibility issues often make it a headache. Our <strong>free Excel to CSV converter</strong> ensures that your data is exported in a clean, standard format that works with any system. Whether you're uploading products to Shopify, importing contacts to Salesforce, or migrating a database, our tool handles the technical details for you.
+                    <h2 className="text-center mb-8">Why Do My CSVs Have Broken Characters?</h2>
+                    <p>
+                        If you've ever seen text like <code>RenÃ©e</code> instead of <code>Renée</code>, you've been a victim of encoding mismatch. Excel often saves CSVs in an older format called "ANSI" (Windows-1252), which cannot handle international characters.
                     </p>
-                    <p className="text-[hsl(var(--muted-foreground))] mb-4">
-                        By handling the conversion in your browser, we eliminate the need for expensive office software. You can convert files on a Chromebook, a tablet, or a computer without Microsoft Office installed. Any .xlsx or .xls file is transformed into a universal text format in seconds.
-                    </p>
+                    <div className="grid md:grid-cols-2 gap-8 not-prose my-8">
+                        <div className="bg-red-500/10 p-6 rounded-2xl border border-red-500/20">
+                            <h3 className="font-bold text-red-600 dark:text-red-400 mb-2 flex items-center gap-2">
+                                <Shield className="w-5 h-5" />
+                                Standard Excel Export
+                            </h3>
+                            <pre className="text-xs md:text-sm bg-[hsl(var(--background))] p-3 rounded-lg overflow-x-auto">
+                                Name: RenÃ©e
+                                <br />
+                                Price: â‚¬50.00
+                                <br />
+                                Status: ðŸš€ (Broken)
+                            </pre>
+                            <p className="text-sm mt-3 text-[hsl(var(--muted-foreground))]">
+                                Without a BOM (Byte Order Mark), web apps guess the wrong language.
+                            </p>
+                        </div>
+                        <div className="bg-green-500/10 p-6 rounded-2xl border border-green-500/20">
+                            <h3 className="font-bold text-green-600 dark:text-green-400 mb-2 flex items-center gap-2">
+                                <CheckCircle className="w-5 h-5" />
+                                Our UTF-8 Converter
+                            </h3>
+                            <pre className="text-xs md:text-sm bg-[hsl(var(--background))] p-3 rounded-lg overflow-x-auto">
+                                Name: Renée
+                                <br />
+                                Price: €50.00
+                                <br />
+                                Status: 🚀 (Preserved)
+                            </pre>
+                            <p className="text-sm mt-3 text-[hsl(var(--muted-foreground))]">
+                                We enforce <code>UTF-8 with BOM</code>, ensuring Shopify, Xero, and SQL read it correctly.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-                    <h3 className="text-xl font-semibold text-[hsl(var(--foreground))] mb-4 mt-8">
-                        The UTF-8 Advantage
-                    </h3>
-                    <p className="text-[hsl(var(--muted-foreground))] mb-4">
-                        One of the biggest issues with Excel's native "Save as CSV" function is that it often defaults to older character encodings like ANSI. This causes names with accents (like "Renée") or symbols (like "€") to turn into garbage characters (like "RenÃ©e").
-                    </p>
-                    <p className="text-[hsl(var(--muted-foreground))] mb-4">
-                        Our converter forces <strong>UTF-8 encoding</strong>, the modern web standard. This safeguards your special characters, emojis, and international text, ensuring your data looks exactly right when you import it into your next destination.
-                    </p>
+            {/* Data Cleanliness Checklist */}
+            <section className="py-12 md:py-16 px-6">
+                <div className="max-w-3xl mx-auto">
+                    <h2 className="text-2xl md:text-3xl font-bold text-center mb-8">
+                        Pre-Export Checklist: Is Your File Ready?
+                    </h2>
+                    <div className="space-y-4">
+                        {[
+                            { title: "No Merged Cells", desc: "CSVs cannot carry merged cells. Unmerge everything before converting to prevent data shifting." },
+                            { title: "Single Header Row", desc: "Ensure your first row contains unique column names (e.g., 'Email', 'First Name'). Remove pure title rows." },
+                            { title: "Remove Formulas", desc: "Our tool extracts the *value*, but it's safer to Paste Values in Excel first if you have complex macros." },
+                            { title: "Check Dates", desc: "Standardize dates to YYYY-MM-DD for the best compatibility with SQL databases." },
+                        ].map((item, i) => (
+                            <div key={i} className="flex gap-4 p-4 rounded-xl bg-[hsl(var(--card))] border border-[hsl(var(--border))]">
+                                <CheckCircle className="w-6 h-6 text-green-500 shrink-0" />
+                                <div>
+                                    <h3 className="font-semibold text-[hsl(var(--foreground))]">{item.title}</h3>
+                                    <p className="text-sm text-[hsl(var(--muted-foreground))]">{item.desc}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </section>
 
@@ -308,6 +352,6 @@ export default function ExcelToCsvPage() {
                 currentTool="Excel to CSV"
                 relatedTools={relatedTools}
             />
-        </main>
+        </main >
     );
 }

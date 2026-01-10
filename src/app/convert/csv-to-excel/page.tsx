@@ -256,6 +256,88 @@ export default function CsvToExcelPage() {
                 </div>
             </section>
 
+            {/* Deep Technical Dive: The Leading Zero Problem */}
+            <section className="py-12 px-6 bg-[hsl(var(--muted))]/10">
+                <div className="max-w-4xl mx-auto prose prose-lg dark:prose-invert">
+                    <h2 className="text-center mb-8">Why Does Excel Delete Leading Zeros?</h2>
+                    <p>
+                        It is one of the most frustrating "features" in modern data analysis. You open a CSV containing Zip Codes (e.g., <code>02110</code>) or SKUs (e.g., <code>005432</code>), and Excel automatically converts them to <code>2110</code> and <code>5432</code>.
+                    </p>
+                    <div className="grid md:grid-cols-2 gap-8 not-prose my-8">
+                        <div className="bg-red-500/10 p-6 rounded-2xl border border-red-500/20">
+                            <h3 className="font-bold text-red-600 dark:text-red-400 mb-2 flex items-center gap-2">
+                                <Shield className="w-5 h-5" />
+                                What Excel Does (Wrong)
+                            </h3>
+                            <pre className="text-xs md:text-sm bg-[hsl(var(--background))] p-3 rounded-lg overflow-x-auto">
+                                Input:  0012345
+                                <br />
+                                Action: Detects "Number"
+                                <br />
+                                Result: 12345 ❌
+                            </pre>
+                            <p className="text-sm mt-3 text-[hsl(var(--muted-foreground))]">
+                                Excel attempts to "clean" your data by removing mathematically insignificant zeros, corrupting IDs.
+                            </p>
+                        </div>
+                        <div className="bg-green-500/10 p-6 rounded-2xl border border-green-500/20">
+                            <h3 className="font-bold text-green-600 dark:text-green-400 mb-2 flex items-center gap-2">
+                                <CheckCircle className="w-5 h-5" />
+                                What We Do (Right)
+                            </h3>
+                            <pre className="text-xs md:text-sm bg-[hsl(var(--background))] p-3 rounded-lg overflow-x-auto">
+                                Input:  0012345
+                                <br />
+                                Action: Force "Text" Type
+                                <br />
+                                Result: 0012345 ✅
+                            </pre>
+                            <p className="text-sm mt-3 text-[hsl(var(--muted-foreground))]">
+                                We explicitly define the cell format as Text during the XML generation process.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Technical Specs: CSV vs Excel */}
+            <section className="py-12 md:py-16 px-6">
+                <div className="max-w-4xl mx-auto">
+                    <h2 className="text-2xl md:text-3xl font-bold text-center mb-3">
+                        File Format Showdown: CSV vs. XLSX
+                    </h2>
+                    <p className="text-center text-[hsl(var(--muted-foreground))] mb-8">
+                        When should you use which? A technical breakdown.
+                    </p>
+                    <div className="overflow-x-auto">
+                        <table className="w-full border-collapse">
+                            <thead>
+                                <tr className="bg-[hsl(var(--primary))]/10">
+                                    <th className="text-left p-4 font-semibold text-[hsl(var(--foreground))]">Feature</th>
+                                    <th className="text-left p-4 font-semibold text-[hsl(var(--primary))]">CSV (Comma Separated)</th>
+                                    <th className="text-left p-4 font-semibold text-[hsl(var(--muted-foreground))]">Excel (XLSX)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {[
+                                    { feature: "File Size", csv: "Tiny (Text only)", xlsx: "Larger (XML compression)" },
+                                    { feature: "Row Limit", csv: "Unlimited (System dependent)", xlsx: "1,048,576 rows" },
+                                    { feature: "Formatting", csv: "None (Raw data)", xlsx: "Colors, Bolding, Fonts" },
+                                    { feature: "Formulas", csv: "Not Supported", xlsx: "Full Support (=SUM, etc)" },
+                                    { feature: "Leading Zeros", csv: "Varies by viewer", xlsx: "Supported (as Text)" },
+                                ].map((row, i) => (
+                                    <tr key={i} className="border-b border-[hsl(var(--border))]">
+                                        <td className="p-4 text-[hsl(var(--foreground))]">{row.feature}</td>
+                                        <td className="p-4 text-[hsl(var(--primary))] font-medium">{row.csv}</td>
+                                        <td className="p-4 text-[hsl(var(--muted-foreground))]">{row.xlsx}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
             {/* SEO Content Block */}
             <section className="py-12 md:py-16 px-6">
                 <div className="max-w-4xl mx-auto prose prose-lg dark:prose-invert">

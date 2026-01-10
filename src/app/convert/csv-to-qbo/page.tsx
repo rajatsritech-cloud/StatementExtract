@@ -253,59 +253,63 @@ export default function CsvToQboPage() {
                 </div>
             </section>
 
-            {/* SEO Content Block */}
-            <section className="py-12 md:py-16 px-6">
+            {/* Deep Technical Dive: Troubleshooting QBO Imports */}
+            <section className="py-12 px-6 bg-[hsl(var(--muted))]/10">
                 <div className="max-w-4xl mx-auto prose prose-lg dark:prose-invert">
-                    <h2 className="text-2xl font-bold text-[hsl(var(--foreground))] mb-6">
-                        The Best Free CSV/Excel to QBO Converter Online
-                    </h2>
-                    <p className="text-[hsl(var(--muted-foreground))] mb-4">
-                        Need to import bank transactions into QuickBooks but only have a CSV or Excel file? Our <strong>free CSV/Excel to QBO converter</strong> transforms any bank export into QuickBooks Web Connect format in seconds. Unlike other tools that require subscriptions or uploads to external servers, our converter runs <strong>100% in your browser</strong>—your financial data never leaves your device.
-                    </p>
-                    <p className="text-[hsl(var(--muted-foreground))] mb-4">
-                        Whether you're an accountant importing client data, a bookkeeper migrating from another system, or a business owner cleaning up historical records, this <strong>CSV/Excel to QBO converter free</strong> tool handles it all. Smart column detection automatically identifies Date, Amount, and Description fields from CSV or Excel files, while the interactive preview lets you edit, reorder, and validate transactions before export.
+                    <h2 className="text-center mb-8">Why Does QuickBooks Reject My CSV?</h2>
+                    <p className="lead text-center mb-12">
+                        QuickBooks Online is notoriously strict. If your file is rejected, it's usually due to one of these three common formatting errors.
                     </p>
 
-                    <h3 className="text-xl font-semibold text-[hsl(var(--foreground))] mb-4 mt-8">
-                        Why Convert CSV to QBO Format?
-                    </h3>
-                    <ul className="text-[hsl(var(--muted-foreground))] mb-4 list-disc pl-6 space-y-2">
-                        <li><strong>QuickBooks Compatibility:</strong> QBO is the native import format for QuickBooks Online and Desktop.</li>
-                        <li><strong>Bank Feed Alternative:</strong> Import transactions when bank feeds aren't available or supported.</li>
-                        <li><strong>Historical Data Import:</strong> Bring in years of transaction history from CSV archives.</li>
-                        <li><strong>Data Migration:</strong> Move from Xero, Sage, Wave, or spreadsheets to QuickBooks easily.</li>
-                        <li><strong>Clean Data Entry:</strong> Edit and validate transactions before they enter your books.</li>
-                    </ul>
+                    <div className="grid md:grid-cols-2 gap-8 not-prose my-8">
+                        <div className="bg-[hsl(var(--card))] p-6 rounded-2xl border border-[hsl(var(--border))]">
+                            <h3 className="font-bold text-red-600 dark:text-red-400 mb-4 flex items-center gap-2">
+                                <Shield className="w-5 h-5" />
+                                The "3-Column Rule"
+                            </h3>
+                            <p className="text-sm text-[hsl(var(--muted-foreground))] mb-4">
+                                QBO Web Connect requires <strong>exactly</strong> three mapped fields to be valid. Extra data is fine, but missing data triggers "Error 350".
+                            </p>
+                            <div className="bg-[hsl(var(--background))] p-4 rounded-lg border border-[hsl(var(--border))] text-sm font-mono leading-relaxed">
+                                <span className="text-green-500 font-bold">✓ Date</span> (MM/DD/YYYY)<br />
+                                <span className="text-green-500 font-bold">✓ Amount</span> (-100.00 for spend)<br />
+                                <span className="text-green-500 font-bold">✓ Description</span> (Payee Name)<br />
+                                <span className="text-red-500 line-through">✗ Check Number</span> (Optional)<br />
+                                <span className="text-red-500 line-through">✗ Running Balance</span> (Ignored)
+                            </div>
+                        </div>
 
-                    <h3 className="text-xl font-semibold text-[hsl(var(--foreground))] mb-4 mt-8">
-                        Supported CSV Formats
-                    </h3>
-                    <p className="text-[hsl(var(--muted-foreground))] mb-4">
-                        Our converter works with any CSV file structure. Common formats include:
-                    </p>
-                    <ul className="text-[hsl(var(--muted-foreground))] mb-4 list-disc pl-6 space-y-2">
-                        <li>Bank statement exports (Chase, Bank of America, Wells Fargo, etc.)</li>
-                        <li>Accounting software exports (Xero, Sage, FreshBooks, Wave)</li>
-                        <li>Spreadsheet transaction logs</li>
-                        <li>Payment processor reports (<Link href="/convert/stripe-to-qbo" className="text-[hsl(var(--primary))] hover:underline">Stripe</Link>, <Link href="/convert/paypal-to-qbo" className="text-[hsl(var(--primary))] hover:underline">PayPal</Link>, Square)</li>
-                        <li>Credit card statement downloads</li>
-                    </ul>
+                        <div className="bg-[hsl(var(--card))] p-6 rounded-2xl border border-[hsl(var(--border))]">
+                            <h3 className="font-bold text-blue-600 dark:text-blue-400 mb-4 flex items-center gap-2">
+                                <Globe className="w-5 h-5" />
+                                Bank Feed vs. Web Connect
+                            </h3>
+                            <p className="text-sm text-[hsl(var(--muted-foreground))] mb-4">
+                                Why convert files when "Bank Feeds" exist?
+                            </p>
+                            <ul className="text-sm space-y-3 text-[hsl(var(--muted-foreground))]">
+                                <li className="flex gap-2">
+                                    <CheckCircle className="w-4 h-4 text-green-500 shrink-0 mt-0.5" />
+                                    <span><strong>History Limits:</strong> Bank feeds often only go back 90 days. Our tool lets you import years of history.</span>
+                                </li>
+                                <li className="flex gap-2">
+                                    <CheckCircle className="w-4 h-4 text-green-500 shrink-0 mt-0.5" />
+                                    <span><strong>Smaller Banks:</strong> Many credit unions don't support direct QuickBooks connections.</span>
+                                </li>
+                                <li className="flex gap-2">
+                                    <CheckCircle className="w-4 h-4 text-green-500 shrink-0 mt-0.5" />
+                                    <span><strong>Clean Up:</strong> Edit descriptions *before* import to save hours of categorization.</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
 
-                    <h3 className="text-xl font-semibold text-[hsl(var(--foreground))] mb-4 mt-8">
-                        Specialized Payment Converters
-                    </h3>
-                    <p className="text-[hsl(var(--muted-foreground))] mb-4">
-                        For payment platforms, checking out our specialized free tools might be easier:
-                    </p>
-                    <div className="grid sm:grid-cols-2 gap-4 mb-6">
-                        <Link href="/convert/stripe-to-qbo" className="block p-4 rounded-xl border border-[hsl(var(--border))] hover:border-[hsl(var(--primary))] transition-colors bg-[hsl(var(--card))]">
-                            <span className="font-semibold text-[hsl(var(--foreground))] block mb-1">Stripe to QuickBooks</span>
-                            <span className="text-sm text-[hsl(var(--muted-foreground))]">Convert Stripe payments, payouts, and fees to QBO.</span>
-                        </Link>
-                        <Link href="/convert/paypal-to-qbo" className="block p-4 rounded-xl border border-[hsl(var(--border))] hover:border-[hsl(var(--primary))] transition-colors bg-[hsl(var(--card))]">
-                            <span className="font-semibold text-[hsl(var(--foreground))] block mb-1">PayPal to QuickBooks</span>
-                            <span className="text-sm text-[hsl(var(--muted-foreground))]">Convert PayPal activity and fees to QBO format.</span>
-                        </Link>
+                    <div className="mt-12 p-6 rounded-2xl bg-amber-500/10 border border-amber-500/20 not-prose">
+                        <h3 className="text-lg font-bold text-amber-700 dark:text-amber-400 mb-2">FIX: "QuickBooks Error 350" (Input is not a valid money)</h3>
+                        <p className="text-[hsl(var(--muted-foreground))]">
+                            This cryptic error usually means you have <strong>commas</strong> in your numbers (e.g., <code>1,234.00</code>) or currency symbols (<code>$1234</code>).
+                            Our converter automatically strips these out during processing to ensure a clean numeric format (<code>1234.00</code>) that QBO accepts.
+                        </p>
                     </div>
                 </div>
             </section>
@@ -345,6 +349,6 @@ export default function CsvToQboPage() {
                 currentTool="CSV to QBO"
                 relatedTools={relatedTools}
             />
-        </main>
+        </main >
     );
 }

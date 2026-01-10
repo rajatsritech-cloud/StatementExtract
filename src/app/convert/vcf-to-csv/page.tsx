@@ -255,6 +255,63 @@ export default function VcfToCsvPage() {
                 </div>
             </section>
 
+            {/* Deep Technical Dive: The iPhone Context */}
+            <section className="py-12 px-6 bg-[hsl(var(--muted))]/10">
+                <div className="max-w-4xl mx-auto prose prose-lg dark:prose-invert">
+                    <h2 className="text-center mb-8">The "Apple Contacts" Trap</h2>
+                    <p>
+                        Apple uses a specific version of vCard (3.0) with custom fields for photos and "related names". When you try to open this directly in Excel, it fails because Excel expects a comma-separated list, not a vCard block.
+                    </p>
+                    <div className="grid md:grid-cols-2 gap-8 not-prose my-8">
+                        <div className="bg-[hsl(var(--card))] p-6 rounded-2xl border border-[hsl(var(--border))]">
+                            <h3 className="font-bold text-[hsl(var(--foreground))] mb-4 flex items-center gap-2">
+                                <Smartphone className="w-5 h-5 text-[hsl(var(--primary))]" />
+                                How to Export from iPhone (iCloud)
+                            </h3>
+                            <ol className="list-decimal pl-4 space-y-3 text-sm text-[hsl(var(--muted-foreground))]">
+                                <li>Go to <strong>iCloud.com</strong> on your computer.</li>
+                                <li>Click <strong>Contacts</strong>.</li>
+                                <li>Select the contacts you want (or press generic Ctrl+A).</li>
+                                <li>Click the <strong>Gear Icon</strong> (Settings) → <strong>Export vCard</strong>.</li>
+                                <li>Upload that file here!</li>
+                            </ol>
+                        </div>
+                        <div className="bg-[hsl(var(--card))] p-6 rounded-2xl border border-[hsl(var(--border))]">
+                            <h3 className="font-bold text-[hsl(var(--foreground))] mb-4 flex items-center gap-2">
+                                <Database className="w-5 h-5 text-[hsl(var(--primary))]" />
+                                VCard Version Wars
+                            </h3>
+                            <table className="w-full text-sm">
+                                <thead>
+                                    <tr className="border-b border-[hsl(var(--border))]">
+                                        <th className="text-left pb-2">Ver</th>
+                                        <th className="text-left pb-2">Used By</th>
+                                        <th className="text-left pb-2">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="text-[hsl(var(--muted-foreground))]">
+                                    <tr className="border-b border-[hsl(var(--border))]/50">
+                                        <td className="py-2">2.1</td>
+                                        <td>Ancient Mobiles (Nokia)</td>
+                                        <td className="text-yellow-500">Supported</td>
+                                    </tr>
+                                    <tr className="border-b border-[hsl(var(--border))]/50">
+                                        <td className="py-2">3.0</td>
+                                        <td><strong>iPhone / iOS / Mac</strong></td>
+                                        <td className="text-green-500 font-bold">Supported</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="py-2">4.0</td>
+                                        <td>Modern Standards (RFC 6350)</td>
+                                        <td className="text-green-500 font-bold">Supported</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             {/* SEO Content Block */}
             <section className="py-12 md:py-16 px-6">
                 <div className="max-w-4xl mx-auto prose prose-lg dark:prose-invert">
@@ -274,18 +331,6 @@ export default function VcfToCsvPage() {
                     <p className="text-[hsl(var(--muted-foreground))] mb-4">
                         Most online converters require you to upload your file to their server. For personal contact lists, this is a privacy risk. We built this tool to run <strong>entirely in your browser</strong>. Your contacts are parsed by your own device's processor, and the CSV is generated locally. We never see your data.
                     </p>
-
-                    <h3 className="text-xl font-semibold text-[hsl(var(--foreground))] mb-4 mt-8">
-                        Supported VCard Versions & Compatibility
-                    </h3>
-                    <p className="text-[hsl(var(--muted-foreground))] mb-4">
-                        The VCard standard has evolved over time (2.1, 3.0, 4.0). Different devices export different versions:
-                    </p>
-                    <ul className="text-[hsl(var(--muted-foreground))] mb-4 list-disc pl-6 space-y-2">
-                        <li><strong>Android:</strong> Typically uses VCard 2.1 or 3.0. Our tool normalizes the subtle differences in phone number formatting.</li>
-                        <li><strong>iPhone (iOS):</strong> Exports VCard 3.0. We correctly handle the unique photo encoding (ignoring it to keep the CSV light) and special characters.</li>
-                        <li><strong>Outlook / Gmail:</strong> Often uses messy or non-standard fields. We filter for the core data (Name, Email, Phone, Company) to ensure a clean grid.</li>
-                    </ul>
                 </div>
             </section>
 
@@ -299,6 +344,6 @@ export default function VcfToCsvPage() {
                 currentTool="VCF to CSV"
                 relatedTools={relatedTools}
             />
-        </main>
+        </main >
     );
 }

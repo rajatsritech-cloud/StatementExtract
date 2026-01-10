@@ -272,6 +272,27 @@ const toolSections = [
                 badge: "New",
             },
             {
+                title: "Hourly to Salary Calculator",
+                description: "Convert hourly wage to annual salary instantly. See monthly, weekly, and daily income.",
+                href: "/tools/hourly-to-salary-calculator",
+                icon: "DollarSign",
+                badge: "New",
+            },
+            {
+                title: "Percentage Calculator",
+                description: "Calculate increase, decrease, difference, and percentages of numbers.",
+                href: "/tools/percentage-calculator",
+                icon: "Percent",
+                badge: "New",
+            },
+            {
+                title: "Routing Number Validator",
+                description: "Verify US Bank routing numbers instantly. Details on ACH vs Wire formats.",
+                href: "/tools/routing-number-validator",
+                icon: "ShieldCheck",
+                badge: "New",
+            },
+            {
                 title: "Amortization Calculator",
                 description: "Full loan payment schedules with extra payment analysis. Mortgage, auto, & student loans.",
                 href: "/tools/amortization-calculator",
