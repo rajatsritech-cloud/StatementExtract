@@ -142,7 +142,7 @@ export function CsvToIifTool() {
                 ...t,
                 rawDate: mapping.date !== null ? vals[mapping.date] : "",
                 amount: mapping.amount !== null ? vals[mapping.amount] : "",
-                name: mapping.name !== null ? vals[mapping.name] : (mapping.description !== null ? vals[mapping.description] : ""), // Fallback
+                name: mapping.name !== null ? vals[mapping.name] : "",
                 memo: mapping.memo !== null ? vals[mapping.memo] : "",
                 docNum: mapping.docNum !== null ? vals[mapping.docNum] : "",
                 account: mapping.account !== null ? vals[mapping.account] : "",
