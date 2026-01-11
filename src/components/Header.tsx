@@ -349,8 +349,8 @@ export const Header = () => {
                     onMouseEnter={handleConvertersMouseEnter}
                     onMouseLeave={handleConvertersMouseLeave}
                   >
-                    <div className="relative w-[880px] rounded-2xl bg-[hsl(var(--card))] shadow-2xl border border-[hsl(var(--border))] overflow-hidden animate-dropdown-enter">
-                      <div className="grid grid-cols-3 divide-x divide-[hsl(var(--border))]/70">
+                    <div className="relative w-[1100px] rounded-2xl bg-[hsl(var(--card))] shadow-2xl border border-[hsl(var(--border))] overflow-hidden animate-dropdown-enter">
+                      <div className="grid grid-cols-4 divide-x divide-[hsl(var(--border))]/70">
                         {/* PDF TOOLS - Orange Theme */}
                         <div className="col-span-1 p-6">
                           <p className="text-xs font-bold tracking-[0.2em] text-[hsl(var(--muted-foreground))] mb-4">PDF TOOLS</p>
@@ -514,9 +514,68 @@ export const Header = () => {
                               </div>
                             </Link>
                           </div>
+                        </div>
+
+                        {/* QUICKEN FORMATS - Teal Theme */}
+                        <div className="col-span-1 p-6">
+                          <p className="text-xs font-bold tracking-[0.2em] text-[hsl(var(--muted-foreground))] mb-4">QUICKEN FORMATS</p>
+                          <div className="space-y-2">
+                            <Link
+                              href="/convert/qfx-to-excel"
+                              className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-2.5 cursor-pointer transition-all duration-200 hover:border-teal-500/50 hover:bg-teal-500/5"
+                              onClick={closeConvertersDropdown}
+                            >
+                              <div className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-teal-500/10 text-teal-500 group-hover:bg-teal-500 group-hover:text-white transition-colors">
+                                <FileSpreadsheet className="h-4 w-4" />
+                              </div>
+                              <div>
+                                <p className="text-sm font-bold text-[hsl(var(--foreground))] group-hover:text-teal-500 transition-colors">QFX to Excel</p>
+                                <p className="text-[11px] text-[hsl(var(--muted-foreground))] group-hover:text-[hsl(var(--muted-foreground))]/80">Quicken to spreadsheet</p>
+                              </div>
+                            </Link>
+                            <Link
+                              href="/convert/qif-to-csv"
+                              className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-2.5 cursor-pointer transition-all duration-200 hover:border-teal-500/50 hover:bg-teal-500/5"
+                              onClick={closeConvertersDropdown}
+                            >
+                              <div className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-teal-500/10 text-teal-500 group-hover:bg-teal-500 group-hover:text-white transition-colors">
+                                <FileSpreadsheet className="h-4 w-4" />
+                              </div>
+                              <div>
+                                <p className="text-sm font-bold text-[hsl(var(--foreground))] group-hover:text-teal-500 transition-colors">QIF to CSV</p>
+                                <p className="text-[11px] text-[hsl(var(--muted-foreground))] group-hover:text-[hsl(var(--muted-foreground))]/80">Legacy format</p>
+                              </div>
+                            </Link>
+                            <Link
+                              href="/convert/iif-to-excel"
+                              className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-2.5 cursor-pointer transition-all duration-200 hover:border-teal-500/50 hover:bg-teal-500/5"
+                              onClick={closeConvertersDropdown}
+                            >
+                              <div className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-teal-500/10 text-teal-500 group-hover:bg-teal-500 group-hover:text-white transition-colors">
+                                <FileSpreadsheet className="h-4 w-4" />
+                              </div>
+                              <div>
+                                <p className="text-sm font-bold text-[hsl(var(--foreground))] group-hover:text-teal-500 transition-colors">IIF to Excel</p>
+                                <p className="text-[11px] text-[hsl(var(--muted-foreground))] group-hover:text-[hsl(var(--muted-foreground))]/80">QuickBooks Desktop</p>
+                              </div>
+                            </Link>
+                            <Link
+                              href="/convert/csv-to-iif"
+                              className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-2.5 cursor-pointer transition-all duration-200 hover:border-teal-500/50 hover:bg-teal-500/5"
+                              onClick={closeConvertersDropdown}
+                            >
+                              <div className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-teal-500/10 text-teal-500 group-hover:bg-teal-500 group-hover:text-white transition-colors">
+                                <FileSpreadsheet className="h-4 w-4" />
+                              </div>
+                              <div>
+                                <p className="text-sm font-bold text-[hsl(var(--foreground))] group-hover:text-teal-500 transition-colors">CSV to IIF</p>
+                                <p className="text-[11px] text-[hsl(var(--muted-foreground))] group-hover:text-[hsl(var(--muted-foreground))]/80">Import to QB Desktop</p>
+                              </div>
+                            </Link>
+                          </div>
                           <Link
                             href="/convert"
-                            className="mt-6 flex items-center justify-end gap-2 text-sm font-bold hover:text-purple-500 hover:underline transition-colors"
+                            className="mt-4 flex items-center justify-end gap-2 text-sm font-bold hover:text-teal-500 hover:underline transition-colors"
                             onClick={closeConvertersDropdown}
                           >
                             View All Converters →
@@ -545,8 +604,8 @@ export const Header = () => {
                     onMouseEnter={handleToolsMouseEnter}
                     onMouseLeave={handleToolsMouseLeave}
                   >
-                    <div className="relative w-[880px] rounded-2xl bg-[hsl(var(--card))] shadow-xl border border-[hsl(var(--border))] overflow-hidden animate-dropdown-enter">
-                      <div className="grid grid-cols-3 divide-x divide-[hsl(var(--border))]/70">
+                    <div className="relative w-[1100px] rounded-2xl bg-[hsl(var(--card))] shadow-xl border border-[hsl(var(--border))] overflow-hidden animate-dropdown-enter">
+                      <div className="grid grid-cols-4 divide-x divide-[hsl(var(--border))]/70">
                         {/* INVOICING - Orange Theme */}
                         <div className="col-span-1 p-6">
                           <p className="text-xs font-bold tracking-[0.2em] text-[hsl(var(--muted-foreground))] mb-4">INVOICING</p>
@@ -709,9 +768,68 @@ export const Header = () => {
                               </div>
                             </Link>
                           </div>
+                        </div>
+
+                        {/* PAYCHECK & SALARY - Teal Theme */}
+                        <div className="col-span-1 p-6">
+                          <p className="text-xs font-bold tracking-[0.2em] text-[hsl(var(--muted-foreground))] mb-4">PAYCHECK & SALARY</p>
+                          <div className="space-y-2">
+                            <Link
+                              href="/tools/paycheck-calculator"
+                              className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-2.5 cursor-pointer transition-all duration-200 hover:border-teal-500/50 hover:bg-teal-500/5"
+                              onClick={closeToolsDropdown}
+                            >
+                              <div className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-teal-500/10 text-teal-500 group-hover:bg-teal-500 group-hover:text-white transition-colors">
+                                <Calculator className="h-4 w-4" />
+                              </div>
+                              <div>
+                                <p className="text-sm font-bold text-[hsl(var(--foreground))] group-hover:text-teal-500 transition-colors">Paycheck Calculator</p>
+                                <p className="text-[11px] text-[hsl(var(--muted-foreground))] group-hover:text-[hsl(var(--muted-foreground))]/80">Take-home pay</p>
+                              </div>
+                            </Link>
+                            <Link
+                              href="/tools/hourly-to-salary-calculator"
+                              className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-2.5 cursor-pointer transition-all duration-200 hover:border-teal-500/50 hover:bg-teal-500/5"
+                              onClick={closeToolsDropdown}
+                            >
+                              <div className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-teal-500/10 text-teal-500 group-hover:bg-teal-500 group-hover:text-white transition-colors">
+                                <Calculator className="h-4 w-4" />
+                              </div>
+                              <div>
+                                <p className="text-sm font-bold text-[hsl(var(--foreground))] group-hover:text-teal-500 transition-colors">Hourly to Salary</p>
+                                <p className="text-[11px] text-[hsl(var(--muted-foreground))] group-hover:text-[hsl(var(--muted-foreground))]/80">Wage converter</p>
+                              </div>
+                            </Link>
+                            <Link
+                              href="/tools/percentage-calculator"
+                              className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-2.5 cursor-pointer transition-all duration-200 hover:border-teal-500/50 hover:bg-teal-500/5"
+                              onClick={closeToolsDropdown}
+                            >
+                              <div className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-teal-500/10 text-teal-500 group-hover:bg-teal-500 group-hover:text-white transition-colors">
+                                <Calculator className="h-4 w-4" />
+                              </div>
+                              <div>
+                                <p className="text-sm font-bold text-[hsl(var(--foreground))] group-hover:text-teal-500 transition-colors">Percentage Calc</p>
+                                <p className="text-[11px] text-[hsl(var(--muted-foreground))] group-hover:text-[hsl(var(--muted-foreground))]/80">Increase/decrease</p>
+                              </div>
+                            </Link>
+                            <Link
+                              href="/tools/debt-snowball-calculator"
+                              className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-2.5 cursor-pointer transition-all duration-200 hover:border-teal-500/50 hover:bg-teal-500/5"
+                              onClick={closeToolsDropdown}
+                            >
+                              <div className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-teal-500/10 text-teal-500 group-hover:bg-teal-500 group-hover:text-white transition-colors">
+                                <TrendingDown className="h-4 w-4" />
+                              </div>
+                              <div>
+                                <p className="text-sm font-bold text-[hsl(var(--foreground))] group-hover:text-teal-500 transition-colors">Debt Snowball</p>
+                                <p className="text-[11px] text-[hsl(var(--muted-foreground))] group-hover:text-[hsl(var(--muted-foreground))]/80">Payoff planner</p>
+                              </div>
+                            </Link>
+                          </div>
                           <Link
                             href="/tools"
-                            className="mt-6 flex items-center justify-end gap-2 text-sm font-bold hover:text-purple-500 hover:underline transition-colors"
+                            className="mt-4 flex items-center justify-end gap-2 text-sm font-bold hover:text-teal-500 hover:underline transition-colors"
                             onClick={closeToolsDropdown}
                           >
                             View All Tools →

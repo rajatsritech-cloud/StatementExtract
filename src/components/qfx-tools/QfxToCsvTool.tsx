@@ -199,10 +199,7 @@ export function QfxToCsvTool() {
                 </p>
             </div>
 
-            <div className="flex justify-center mb-6">
-                <PrivacyBadge />
-            </div>
-
+            {/* File Drop Area */}
             <div
                 onDrop={handleDrop}
                 onDragOver={handleDragOver}
@@ -248,6 +245,8 @@ export function QfxToCsvTool() {
                     </div>
                 </div>
             </div>
+
+            <PrivacyBadge />
 
             {error && (
                 <div className="mt-4 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 text-center">

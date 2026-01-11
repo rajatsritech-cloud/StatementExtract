@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useRef, useEffect } from "react";
-import { FileUp, X, Download, Loader2, FileSpreadsheet, Plus, Trash2 } from "lucide-react";
+import { FileUp, X, Download, Loader2, FileSpreadsheet, Plus, Trash2, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PrivacyBadge } from "@/components/ui/PrivacyBadge";
 
@@ -12,7 +12,7 @@ interface OfxFile {
     size: string;
 }
 
-export function OfxToExcelTool() {
+export function FinanceToExcelTool() {
     const [files, setFiles] = useState<OfxFile[]>([]);
     const [isDragging, setIsDragging] = useState(false);
     const [isProcessing, setIsProcessing] = useState(false);
@@ -41,11 +41,13 @@ export function OfxToExcelTool() {
         const validFiles = Array.from(fileList).filter(f =>
             f.name.toLowerCase().endsWith(".ofx") ||
             f.name.toLowerCase().endsWith(".qfx") ||
-            f.name.toLowerCase().endsWith(".qbo")
+            f.name.toLowerCase().endsWith(".qbo") ||
+            f.name.toLowerCase().endsWith(".qif") ||
+            f.name.toLowerCase().endsWith(".iif")
         );
 
         if (validFiles.length === 0) {
-            setError("Please select .ofx, .qfx, or .qbo files only.");
+            setError("Please select .ofx, .qfx, .qbo, .qif, or .iif files.");
             return;
         }
 
@@ -90,65 +92,24 @@ export function OfxToExcelTool() {
         setError(null);
     };
 
-    const parseOfxToCsv = async (file: File): Promise<string> => {
+
+    const convertFile = async (file: File): Promise<string> => {
         const text = await file.text();
-        const transactions: any[] = [];
+        const { FinanceParsers } = await import("@/lib/financeParsers");
 
-        const getValue = (content: string, tag: string): string => {
-            const regex = new RegExp(`<${tag}>\\s*([^<\\r\\n]+)`);
-            const match = content.match(regex);
-            return match ? match[1].trim() : "";
-        };
+        const ext = file.name.split('.').pop()?.toLowerCase();
+        let transactions;
 
-        // Get account info
-        const acctId = getValue(text, "ACCTID");
-        const bankId = getValue(text, "BANKID");
-        const currency = getValue(text, "CURDEF") || "USD";
-
-        const trnRegex = /<STMTTRN>([\s\S]*?)<\/STMTTRN>/g;
-        let match;
-
-        while ((match = trnRegex.exec(text)) !== null) {
-            const block = match[1];
-
-            const getDate = (tag: string) => {
-                const val = getValue(block, tag);
-                if (val.length >= 8) {
-                    return `${val.slice(0, 4)}-${val.slice(4, 6)}-${val.slice(6, 8)}`;
-                }
-                return val;
-            };
-
-            transactions.push({
-                Date: getDate("DTPOSTED"),
-                Amount: getValue(block, "TRNAMT"),
-                Name: getValue(block, "NAME"),
-                Memo: getValue(block, "MEMO"),
-                Type: getValue(block, "TRNTYPE"),
-                CheckNum: getValue(block, "CHECKNUM"),
-                RefNum: getValue(block, "REFNUM") || getValue(block, "FITID"),
-                Account: acctId,
-                Currency: currency,
-            });
+        if (ext === 'qif') {
+            transactions = FinanceParsers.parseQif(text);
+        } else if (ext === 'iif') {
+            transactions = FinanceParsers.parseIif(text);
+        } else {
+            // OFX, QFX, QBO
+            transactions = FinanceParsers.parseOfxOrQfx(text);
         }
 
-        if (transactions.length === 0) {
-            throw new Error(`No transactions found in ${file.name}`);
-        }
-
-        const headers = ["Date", "Amount", "Name", "Memo", "Type", "CheckNum", "RefNum", "Account", "Currency"];
-        const csvRows = [headers.join("\t")]; // TSV for Excel compatibility
-
-        for (const t of transactions) {
-            const row = headers.map(h => {
-                const val = t[h] || "";
-                // Escape tabs and quotes
-                return val.replace(/\t/g, " ").replace(/"/g, '""');
-            });
-            csvRows.push(row.join("\t"));
-        }
-
-        return csvRows.join("\n");
+        return FinanceParsers.toTsv(transactions);
     };
 
     const downloadExcel = (content: string, originalFileName: string) => {
@@ -158,7 +119,7 @@ export function OfxToExcelTool() {
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = originalFileName.replace(/\.(ofx|qfx|qbo)$/i, "") + ".xls";
+        a.download = originalFileName.replace(/\.(ofx|qfx|qbo|qif)$/i, "") + ".xls";
         a.click();
         URL.revokeObjectURL(url);
     };
@@ -168,9 +129,9 @@ export function OfxToExcelTool() {
         setError(null);
 
         try {
-            for (const ofxFile of files) {
-                const content = await parseOfxToCsv(ofxFile.file);
-                downloadExcel(content, ofxFile.name);
+            for (const f of files) {
+                const content = await convertFile(f.file);
+                downloadExcel(content, f.name);
             }
         } catch (err) {
             setError(err instanceof Error ? err.message : "Conversion failed");
@@ -179,13 +140,13 @@ export function OfxToExcelTool() {
         }
     };
 
-    const convertSingle = async (ofxFile: OfxFile) => {
+    const convertSingle = async (f: OfxFile) => {
         setIsProcessing(true);
         setError(null);
 
         try {
-            const content = await parseOfxToCsv(ofxFile.file);
-            downloadExcel(content, ofxFile.name);
+            const content = await convertFile(f.file);
+            downloadExcel(content, f.name);
         } catch (err) {
             setError(err instanceof Error ? err.message : "Conversion failed");
         } finally {
@@ -197,18 +158,15 @@ export function OfxToExcelTool() {
         <div className="max-w-4xl mx-auto">
             <div className="text-center mb-6">
                 <h1 className="text-3xl md:text-4xl font-bold text-[hsl(var(--foreground))] mb-3">
-                    OFX to Excel Converter Online
+                    Bank File to Excel Converter
                 </h1>
                 <p className="text-[hsl(var(--muted-foreground))] max-w-2xl mx-auto">
-                    Convert OFX bank statement files to Excel spreadsheets. Also works with QFX and QBO files.
-                    100% private - files never leave your device.
+                    Convert QFX, OFX, QBO, QIF, and IIF files to editable Excel spreadsheets instantly.
+                    Secure & Private.
                 </p>
             </div>
 
-            <div className="flex justify-center mb-6">
-                <PrivacyBadge />
-            </div>
-
+            {/* File Drop Area */}
             <div
                 onDrop={handleDrop}
                 onDragOver={handleDragOver}
@@ -229,7 +187,7 @@ export function OfxToExcelTool() {
                 <input
                     ref={fileInputRef}
                     type="file"
-                    accept=".ofx,.qfx,.qbo"
+                    accept=".ofx,.qfx,.qbo,.qif,.iif"
                     multiple
                     onChange={handleFileInput}
                     className="hidden"
@@ -240,20 +198,23 @@ export function OfxToExcelTool() {
                     </div>
                     <div>
                         <p className="text-xl font-semibold text-[hsl(var(--foreground))]">
-                            Drop your OFX, QFX, or QBO files here
+                            Drop your QFX, OFX, QBO, or QIF files here
                         </p>
                         <p className="text-sm text-[hsl(var(--muted-foreground))] mt-1">
                             or click to browse
                         </p>
                     </div>
                     <div className="flex flex-wrap justify-center gap-2 text-xs text-[hsl(var(--muted-foreground))]">
-                        <span className="px-2 py-1 rounded-full bg-[hsl(var(--muted))]">.OFX</span>
                         <span className="px-2 py-1 rounded-full bg-[hsl(var(--muted))]">.QFX</span>
+                        <span className="px-2 py-1 rounded-full bg-[hsl(var(--muted))]">.OFX</span>
                         <span className="px-2 py-1 rounded-full bg-[hsl(var(--muted))]">.QBO</span>
-                        <span className="px-2 py-1 rounded-full bg-[hsl(var(--muted))]">Client-side only</span>
+                        <span className="px-2 py-1 rounded-full bg-[hsl(var(--muted))]">.QIF</span>
+                        <span className="px-2 py-1 rounded-full bg-[hsl(var(--muted))]">.IIF</span>
                     </div>
                 </div>
             </div>
+
+            <PrivacyBadge />
 
             {error && (
                 <div className="mt-4 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 text-center">

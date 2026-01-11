@@ -76,6 +76,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         '/convert/ofx-to-qbo/',
         '/convert/mt940-to-excel/',
         '/convert/qif-to-csv/',
+        '/convert/qfx-to-excel/',
+        '/convert/qif-to-excel/',
+        '/convert/iif-to-excel/',
+        '/convert/csv-to-iif/',
     ]
 
     // 4. Static Info Pages - Low priority, rarely change. Priority 0.5, Monthly/Yearly.
