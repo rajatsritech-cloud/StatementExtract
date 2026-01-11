@@ -144,6 +144,14 @@ interface Transaction {
     type: string;
 }
 
+interface ValidationSummary {
+    isValid: boolean;
+    invalidDates: number;
+    invalidAmounts: number;
+    emptyDescriptions: number;
+    issues: { row: number; field: string; message: string }[];
+}
+
 const COUNTRY_PRESETS = [
     { value: "US", label: "🇺🇸 United States", dateFormat: "MM/DD/YYYY" },
     { value: "UK", label: "🇬🇧 United Kingdom", dateFormat: "DD/MM/YYYY" },
