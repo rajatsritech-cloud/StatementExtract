@@ -96,6 +96,21 @@ const relatedTools = [
     { href: "/tools/ofx-viewer", title: "OFX Viewer" },
     { href: "/convert-bank-statement-to-csv-excel", title: "PDF to Excel" },
 ];
+
+const whoIsThisFor = [
+    { icon: Briefcase, title: "Accountants & Bookkeepers", desc: "Reconcile client bank statements with accounting software easily." },
+    { icon: Building2, title: "Small Business Owners", desc: "Track expenses and manage cash flow in familiar Excel format." },
+    { icon: Users, title: "Finance Teams", desc: "Analyze transaction data for budgeting and reporting." },
+    { icon: BarChart3, title: "Financial Analysts", desc: "Import bank data for financial modeling and analysis." },
+];
+
+const useCases = [
+    { title: "Bank Reconciliation", desc: "Compare your bank's OFX export with your accounting records." },
+    { title: "Expense Tracking", desc: "Categorize and analyze business expenses in Excel." },
+    { title: "Tax Preparation", desc: "Prepare transaction summaries for tax filing." },
+    { title: "Audit Support", desc: "Provide clean transaction records for auditors." },
+];
+
 export default function OfxToExcelPage() {
     return (
         <main className="min-h-screen bg-[hsl(var(--background))]">
