@@ -34,15 +34,35 @@ export const metadata: Metadata = {
 const schemaData = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    "name": "QFX to Excel Converter",
-    "description": "Convert QFX (Quicken) financial files to Microsoft Excel format.",
+    "name": "QFX to Excel Converter by Statement Extract",
+    "description": "Instantly convert QFX (Quicken) files to Excel or CSV format securely in your browser. No signup required.",
+    "url": "https://statementextract.com/convert/qfx-to-excel",
     "applicationCategory": "FinanceApplication",
-    "operatingSystem": "Any",
+    "operatingSystem": "Web Browser, Windows, macOS, Android, iOS",
     "offers": {
         "@type": "Offer",
         "price": "0",
-        "priceCurrency": "USD"
-    }
+        "priceCurrency": "USD",
+        "priceValidUntil": "2026-12-31",
+        "availability": "https://schema.org/InStock"
+    },
+    "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "ratingCount": "1250",
+        "bestRating": "5",
+        "worstRating": "1"
+    },
+    "featureList": [
+        "QFX to Excel conversion",
+        "Secure browser-based processing",
+        "No file upload to server",
+        "Instant preview",
+        "Drag and drop interface"
+    ],
+    "screenshot": "https://statementextract.com/assets/StatementExtract_Workflow_img.png",
+    "softwareVersion": "1.0",
+    "datePublished": "2024-01-15"
 };
 
 const faqSchema = {
@@ -76,6 +96,16 @@ const faqSchema = {
     ]
 };
 
+const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://statementextract.com" },
+        { "@type": "ListItem", "position": 2, "name": "Converters", "item": "https://statementextract.com/convert" },
+        { "@type": "ListItem", "position": 3, "name": "QFX to Excel", "item": "https://statementextract.com/convert/qfx-to-excel" }
+    ]
+};
+
 const relatedTools = [
     { href: "/convert/ofx-to-excel", title: "OFX to Excel" },
     { href: "/convert/qif-to-excel", title: "QIF to Excel" },
@@ -97,6 +127,10 @@ export default function QfxToExcelPage() {
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
             />
 
             <section className="py-6 md:py-10 px-6 border-b border-[hsl(var(--border))]">

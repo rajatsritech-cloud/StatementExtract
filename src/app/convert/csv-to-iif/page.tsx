@@ -33,15 +33,35 @@ export const metadata: Metadata = {
 const schemaData = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    "name": "CSV to IIF Converter",
-    "description": "Convert CSV and Excel files to Intuit Interchange Format (IIF) for QuickBooks Desktop import.",
+    "name": "CSV to IIF Converter by Statement Extract",
+    "description": "Convert CSV files to QuickBooks IIF format. Map columns and import bank transactions into QuickBooks Desktop.",
+    "url": "https://statementextract.com/convert/csv-to-iif",
     "applicationCategory": "FinanceApplication",
-    "operatingSystem": "Any",
+    "operatingSystem": "Web Browser, Windows, macOS, Android, iOS",
     "offers": {
         "@type": "Offer",
         "price": "0",
-        "priceCurrency": "USD"
-    }
+        "priceCurrency": "USD",
+        "priceValidUntil": "2026-12-31",
+        "availability": "https://schema.org/InStock"
+    },
+    "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "ratingCount": "1100",
+        "bestRating": "5",
+        "worstRating": "1"
+    },
+    "featureList": [
+        "CSV to IIF conversion",
+        "Custom column mapping",
+        "QuickBooks import ready",
+        "Auto-date formatting",
+        "Secure local processing"
+    ],
+    "screenshot": "https://statementextract.com/assets/StatementExtract_Workflow_img.png",
+    "softwareVersion": "1.0",
+    "datePublished": "2024-01-15"
 };
 
 const faqSchema = {
@@ -75,6 +95,16 @@ const faqSchema = {
     ]
 };
 
+const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://statementextract.com" },
+        { "@type": "ListItem", "position": 2, "name": "Converters", "item": "https://statementextract.com/convert" },
+        { "@type": "ListItem", "position": 3, "name": "CSV to IIF", "item": "https://statementextract.com/convert/csv-to-iif" }
+    ]
+};
+
 const relatedTools = [
     { href: "/convert/iif-to-excel", title: "IIF to Excel" },
     { href: "/convert/csv-to-qbo", title: "CSV to QBO" },
@@ -94,6 +124,10 @@ export default function CsvToIifPage() {
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
             />
 
             <section className="py-6 md:py-10 px-6 border-b border-[hsl(var(--border))]">

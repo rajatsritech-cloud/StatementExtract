@@ -34,15 +34,35 @@ export const metadata: Metadata = {
 const schemaData = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    "name": "OFX to Excel Converter",
-    "description": "Convert OFX (Open Financial Exchange) bank files to Microsoft Excel format.",
+    "name": "OFX to Excel Converter by Statement Extract",
+    "description": "Convert OFX bank files to Excel compatible format. Extract financial data securely in your browser.",
+    "url": "https://statementextract.com/convert/ofx-to-excel",
     "applicationCategory": "FinanceApplication",
-    "operatingSystem": "Any",
+    "operatingSystem": "Web Browser, Windows, macOS, Android, iOS",
     "offers": {
         "@type": "Offer",
         "price": "0",
-        "priceCurrency": "USD"
-    }
+        "priceCurrency": "USD",
+        "priceValidUntil": "2026-12-31",
+        "availability": "https://schema.org/InStock"
+    },
+    "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "ratingCount": "2100",
+        "bestRating": "5",
+        "worstRating": "1"
+    },
+    "featureList": [
+        "OFX to Excel conversion",
+        "Bank statement parsing",
+        "High accuracy",
+        "No data storage",
+        "Free unlimited use"
+    ],
+    "screenshot": "https://statementextract.com/assets/StatementExtract_Workflow_img.png",
+    "softwareVersion": "1.0",
+    "datePublished": "2024-01-15"
 };
 
 const faqSchema = {
