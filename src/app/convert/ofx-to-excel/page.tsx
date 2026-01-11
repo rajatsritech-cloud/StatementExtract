@@ -1,10 +1,101 @@
+import { Metadata } from "next";
 import { FinanceToExcelTool } from "@/components/tools/FinanceToExcelTool";
 import { ToolPageFooter } from "@/components/tools/ToolPageFooter";
 import { PageMeta } from "@/components/PageMeta";
-// ... (imports remain)
+import {
+    Zap,
+    Shield,
+    Globe,
+    CheckCircle,
+    Lock,
+    FileSpreadsheet,
+    Users,
+    Building2,
+    BarChart3,
+    Briefcase
+} from "lucide-react";
 
-// ... (metadata remains)
+export const metadata: Metadata = {
+    title: "OFX to Excel Converter Free Online | Convert Bank Files to XLSX",
+    description: "Free OFX to Excel converter. Turn OFX bank files into editable Excel spreadsheets instantly. No signup, secure browser-based conversion.",
+    keywords: "ofx to excel, convert ofx to excel, ofx to xlsx, bank statement to excel, ofx converter, convert ofx file",
+    openGraph: {
+        title: "OFX to Excel Converter Free Online | Bank Files to XLSX",
+        description: "Convert OFX bank files to Excel spreadsheets instantly and securely.",
+        type: "website",
+        url: "https://statementextract.com/convert/ofx-to-excel",
+        images: ["https://statementextract.com/assets/StatementExtract_Workflow_img.png"],
+    },
+    alternates: {
+        canonical: "https://statementextract.com/convert/ofx-to-excel/",
+    },
+};
 
+const schemaData = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "OFX to Excel Converter",
+    "description": "Convert OFX (Open Financial Exchange) bank files to Microsoft Excel format.",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Any",
+    "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+    }
+};
+
+const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+        {
+            "@type": "Question",
+            "name": "How do I convert an OFX file to Excel?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Upload your OFX file to our free tool. We parse the bank data and instantly generate a formatted Excel (.xlsx) file for you to download."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "What is an OFX file?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "OFX (Open Financial Exchange) is a data-stream format for exchanging financial information. Banks use it to provide transaction data for download."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Is it safe to upload my bank files?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. Our tool processes files locally in your browser. Your financial data is never sent to our servers or stored anywhere."
+            }
+        }
+    ]
+};
+
+const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://statementextract.com" },
+        { "@type": "ListItem", "position": 2, "name": "Converters", "item": "https://statementextract.com/convert" },
+        { "@type": "ListItem", "position": 3, "name": "OFX to Excel", "item": "https://statementextract.com/convert/ofx-to-excel" }
+    ]
+};
+
+const relatedTools = [
+    { href: "/convert/qfx-to-excel", title: "QFX to Excel" },
+    { href: "/convert/qif-to-excel", title: "QIF to Excel" },
+    { href: "/convert/iif-to-excel", title: "IIF to Excel" },
+    { href: "/convert/csv-to-iif", title: "CSV to IIF" },
+    { href: "/convert/qbo-to-csv", title: "QBO to CSV" },
+    { href: "/convert/csv-to-qbo", title: "CSV to QBO" },
+    { href: "/tools/ofx-viewer", title: "OFX Viewer" },
+    { href: "/convert-bank-statement-to-csv-excel", title: "PDF to Excel" },
+];
 export default function OfxToExcelPage() {
     return (
         <main className="min-h-screen bg-[hsl(var(--background))]">
