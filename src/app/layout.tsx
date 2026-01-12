@@ -156,7 +156,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               "url": "https://statementextract.com",
               "logo": "https://statementextract.com/favicon-512x512.png",
               "description": "AI-powered document processing platform for extracting structured data from bank statements, invoices, and financial documents.",
-              "foundingDate": "2024",
+              "foundingDate": "2025",
               "sameAs": [
                 "https://www.linkedin.com/company/statement-extract/"
               ],
