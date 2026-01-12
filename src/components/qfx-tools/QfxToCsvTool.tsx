@@ -3,6 +3,7 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { FileUp, X, Download, Loader2, FileSpreadsheet, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { PrivacyBadge } from "@/components/ui/PrivacyBadge";
 
 interface QfxFile {
@@ -190,6 +191,12 @@ export function QfxToCsvTool() {
     return (
         <div className="max-w-4xl mx-auto">
             <div className="text-center mb-6">
+                <Breadcrumb
+                    items={[
+                        { label: "All Converters", href: "/convert" },
+                        { label: "QFX to CSV" }
+                    ]}
+                />
                 <h1 className="text-3xl md:text-4xl font-bold text-[hsl(var(--foreground))] mb-3">
                     QFX to CSV Converter Online
                 </h1>

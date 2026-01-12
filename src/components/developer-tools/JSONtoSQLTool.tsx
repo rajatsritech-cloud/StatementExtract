@@ -3,6 +3,7 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { Database, Copy, Download, RefreshCw, CheckCircle, AlertCircle, Code2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { PrivacyBadge } from "@/components/ui/PrivacyBadge";
 
 type SQLDialect = "mysql" | "postgresql" | "sqlite" | "mssql";
@@ -230,6 +231,12 @@ export function JSONtoSQLTool() {
         <div className="max-w-6xl mx-auto">
             {/* Header */}
             <div className="text-center mb-4">
+                <Breadcrumb
+                    items={[
+                        { label: "Developer Tools", href: "/convert" },
+                        { label: "JSON to SQL" }
+                    ]}
+                />
                 <h1 className="text-2xl md:text-3xl font-bold text-[hsl(var(--foreground))] mb-2">
                     JSON to SQL Converter
                 </h1>

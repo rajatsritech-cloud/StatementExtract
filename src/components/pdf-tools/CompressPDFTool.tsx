@@ -5,6 +5,7 @@ import { FileUp, Download, Loader2, FileText, Trash2, CheckCircle, AlertCircle }
 import { Button } from "@/components/ui/button";
 import { PrivacyBadge } from "@/components/ui/PrivacyBadge";
 import { PDFDocument } from "pdf-lib";
+import { Breadcrumb } from "@/components/ui/Breadcrumb";
 
 interface CompressedFile {
     name: string;
@@ -138,6 +139,12 @@ export function CompressPDFTool() {
         <div className="max-w-3xl mx-auto">
             {/* Header */}
             <div className="text-center mb-4">
+                <Breadcrumb
+                    items={[
+                        { label: "All Converters", href: "/convert" },
+                        { label: "Compress PDF" }
+                    ]}
+                />
                 <h1 className="text-2xl md:text-3xl font-bold text-[hsl(var(--foreground))] mb-2">
                     Compress PDF to Any Size
                 </h1>

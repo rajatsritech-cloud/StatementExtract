@@ -102,15 +102,6 @@ export default function DebtSnowballPage() {
             />
 
             <div className="py-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
-                <div className="text-center mb-10">
-                    <h1 className="text-3xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[hsl(var(--primary))] to-blue-600 mb-4">
-                        Debt Snowball Calculator
-                    </h1>
-                    <p className="text-lg md:text-xl text-[hsl(var(--muted-foreground))] max-w-2xl mx-auto">
-                        Stop guessing when you'll be free. Create a concrete plan to eliminate your debt once and for all.
-                    </p>
-                </div>
-
                 <DebtSnowballCalculator />
             </div>
 

@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useRef, useEffect } from "react";
 import { Upload, FileImage, Trash2, Download, Plus, ArrowUp, ArrowDown, RefreshCw, FileText } from "lucide-react";
+import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { Button } from "@/components/ui/button";
 import { PrivacyBadge } from "@/components/ui/PrivacyBadge";
 import { PDFDocument } from "pdf-lib";
@@ -219,6 +220,12 @@ export function JPGtoPDFTool() {
         <div className="max-w-4xl mx-auto">
             {/* Header */}
             <div className="text-center mb-4">
+                <Breadcrumb
+                    items={[
+                        { label: "All Converters", href: "/convert" },
+                        { label: "JPG to PDF" }
+                    ]}
+                />
                 <h1 className="text-2xl md:text-3xl font-bold text-[hsl(var(--foreground))] mb-2">
                     JPG to PDF Converter
                 </h1>

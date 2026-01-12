@@ -3,6 +3,7 @@
 import { useState, useCallback } from "react";
 import { Calculator, DollarSign, Percent, TrendingUp, RefreshCw, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Breadcrumb } from "@/components/ui/Breadcrumb";
 
 type CalculatorMode = "margin" | "markup" | "selling";
 
@@ -104,12 +105,18 @@ export function ProfitMarginCalculator() {
         <div className="max-w-3xl mx-auto">
             {/* Header */}
             <div className="text-center mb-4">
+                <Breadcrumb
+                    items={[
+                        { label: "Business Tools", href: "/tools" },
+                        { label: "Profit Margin Calculator" }
+                    ]}
+                />
                 <h1 className="text-2xl md:text-3xl font-bold text-[hsl(var(--foreground))] mb-2">
                     Free Profit Margin Calculator
                 </h1>
-                <p className="text-[hsl(var(--muted-foreground))] max-w-xl mx-auto">
+                <h2 className="text-base md:text-lg text-[hsl(var(--muted-foreground))] max-w-xl mx-auto font-normal">
                     Calculate gross profit margin, markup percentage, and selling price instantly.
-                </p>
+                </h2>
             </div>
 
             {/* Calculator Card */}

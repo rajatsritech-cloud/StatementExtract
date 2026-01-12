@@ -3,6 +3,7 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { FileUp, X, Download, Loader2, FileSpreadsheet, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { PrivacyBadge } from "@/components/ui/PrivacyBadge";
 
 interface QboFile {
@@ -195,6 +196,12 @@ export function QboToCsvTool() {
         <div className="max-w-3xl mx-auto">
             {/* Header */}
             <div className="text-center mb-4">
+                <Breadcrumb
+                    items={[
+                        { label: "All Converters", href: "/convert" },
+                        { label: "QBO to CSV" }
+                    ]}
+                />
                 <h1 className="text-2xl md:text-3xl font-bold text-[hsl(var(--foreground))] mb-2">
                     QBO to CSV Converter
                 </h1>

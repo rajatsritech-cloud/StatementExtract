@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useEffect } from "react";
 import { Copy, Check, ArrowRight, Zap, AlertTriangle, Code2, FileJson } from "lucide-react";
+import { Breadcrumb } from "@/components/ui/Breadcrumb";
 
 // Custom JSON to TOON converter
 function jsonToToon(obj: unknown, indent: number = 0): string {
@@ -215,6 +216,12 @@ export const JsonToToonConverter = () => {
         <div className="w-full max-w-7xl mx-auto">
             {/* Header */}
             <div className="text-center mb-8">
+                <Breadcrumb
+                    items={[
+                        { label: "Developer Tools", href: "/convert" },
+                        { label: "JSON to TOON" }
+                    ]}
+                />
                 <h1 className="text-3xl md:text-4xl font-bold text-[hsl(var(--foreground))] mb-3">
                     JSON to TOON Converter
                 </h1>

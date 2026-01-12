@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Percent, ArrowUp, ArrowDown, Calculator, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Breadcrumb } from "@/components/ui/Breadcrumb";
 
 type Mode = "increase" | "percentOf" | "whatPercent";
 
@@ -64,6 +65,12 @@ export function PercentageTool() {
                     <div className="inline-flex items-center justify-center p-3 rounded-2xl bg-[hsl(var(--primary))]/10 mb-4">
                         <Percent className="w-8 h-8 text-[hsl(var(--primary))]" />
                     </div>
+                    <Breadcrumb
+                        items={[
+                            { label: "Business Tools", href: "/tools" },
+                            { label: "Percentage Calculator" }
+                        ]}
+                    />
                     <h1 className="text-3xl md:text-3xl font-bold text-[hsl(var(--foreground))] mb-2">
                         Percentage Calculator
                     </h1>

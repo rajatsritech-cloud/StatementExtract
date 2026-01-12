@@ -18,6 +18,7 @@ import {
     FileText
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { PrivacyBadge } from "@/components/ui/PrivacyBadge";
 import * as XLSX from "xlsx";
 
@@ -559,6 +560,12 @@ export function CsvToIifTool({ hideHeader = false }: { hideHeader?: boolean } = 
 
             {!hideHeader && (
                 <div className="text-center mb-4">
+                    <Breadcrumb
+                        items={[
+                            { label: "All Converters", href: "/convert" },
+                            { label: "CSV to IIF" }
+                        ]}
+                    />
                     <h1 className="text-2xl md:text-3xl font-bold mb-2 text-[hsl(var(--foreground))]">Convert CSV to IIF</h1>
                     <h2 className="text-base md:text-lg text-[hsl(var(--muted-foreground))] max-w-xl mx-auto font-normal">Import transactions into QuickBooks Desktop (IIF).</h2>
                 </div>

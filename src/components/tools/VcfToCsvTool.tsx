@@ -5,6 +5,7 @@ import * as XLSX from "xlsx";
 import { PrivacyBadge } from "@/components/ui/PrivacyBadge";
 import { FileText, Upload, Download, AlertCircle, CheckCircle, Loader2, CheckCircle2, User, Table, X, Contact } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Breadcrumb } from "@/components/ui/Breadcrumb";
 
 interface Contact {
     [key: string]: string;
@@ -190,6 +191,12 @@ export const VcfToCsvTool = () => {
             {!file ? (
                 <>
                     <div className="text-center mb-4">
+                        <Breadcrumb
+                            items={[
+                                { label: "All Converters", href: "/convert" },
+                                { label: "VCF to CSV" }
+                            ]}
+                        />
                         <h1 className="text-2xl md:text-3xl font-bold text-[hsl(var(--foreground))] mb-2">
                             Convert VCF to Excel / CSV Online
                         </h1>

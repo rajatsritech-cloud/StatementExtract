@@ -58,6 +58,7 @@ export default function BatchConverterPage() {
                     targetFormat="png"
                     title="HEIC & AVIF Batch Converter"
                     description="Batch convert iPhone HEIC photos and AVIF images to PNG. Select multiple files at once."
+                    breadcrumbLabel="Batch Converter"
                 />
 
                 {/* Format Toggle */}

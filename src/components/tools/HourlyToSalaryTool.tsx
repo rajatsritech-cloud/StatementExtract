@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { DollarSign, Clock, Calendar, Calculator, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Breadcrumb } from "@/components/ui/Breadcrumb";
 
 interface SalaryData {
     hourly: number;
@@ -74,6 +75,12 @@ export function HourlyToSalaryTool() {
                     <div className="inline-flex items-center justify-center p-3 rounded-2xl bg-[hsl(var(--primary))]/10 mb-4">
                         <Calculator className="w-8 h-8 text-[hsl(var(--primary))]" />
                     </div>
+                    <Breadcrumb
+                        items={[
+                            { label: "Business Tools", href: "/tools" },
+                            { label: "Hourly to Salary" }
+                        ]}
+                    />
                     <h1 className="text-3xl md:text-4xl font-bold text-[hsl(var(--foreground))] mb-2">
                         Hourly to Salary Calculator
                     </h1>

@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import { Calculator, Download, RefreshCw, TrendingUp, DollarSign, Percent, Calendar, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Breadcrumb } from "@/components/ui/Breadcrumb";
 
 type CompoundFrequency = "daily" | "monthly" | "quarterly" | "annually";
 type CurrencyCode = "USD" | "GBP" | "EUR" | "AUD" | "CAD" | "INR" | "NZD" | "CHF";
@@ -193,12 +194,18 @@ export function CompoundInterestCalculator() {
         <div className="max-w-4xl mx-auto">
             {/* Header */}
             <div className="text-center mb-4">
+                <Breadcrumb
+                    items={[
+                        { label: "Business Tools", href: "/tools" },
+                        { label: "Compound Interest Calculator" }
+                    ]}
+                />
                 <h1 className="text-3xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[hsl(var(--primary))] to-emerald-600 mb-4">
                     Compound Interest Calculator
                 </h1>
-                <p className="text-[hsl(var(--muted-foreground))] max-w-xl mx-auto">
+                <h2 className="text-base md:text-lg text-[hsl(var(--muted-foreground))] max-w-xl mx-auto font-normal">
                     See how your money grows with daily, monthly, or annual compounding. Add monthly contributions to accelerate your wealth building.
-                </p>
+                </h2>
             </div>
 
             {/* Currency & Frequency Selectors */}

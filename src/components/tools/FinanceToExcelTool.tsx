@@ -3,6 +3,7 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { FileUp, X, Download, Loader2, FileSpreadsheet, Plus, Trash2, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { PrivacyBadge } from "@/components/ui/PrivacyBadge";
 
 interface OfxFile {
@@ -157,6 +158,12 @@ export function FinanceToExcelTool() {
     return (
         <div className="max-w-4xl mx-auto">
             <div className="text-center mb-6">
+                <Breadcrumb
+                    items={[
+                        { label: "All Converters", href: "/convert" },
+                        { label: "Bank File to Excel" }
+                    ]}
+                />
                 <h1 className="text-3xl md:text-4xl font-bold text-[hsl(var(--foreground))] mb-3">
                     Bank File to Excel Converter
                 </h1>

@@ -102,15 +102,6 @@ export default function FIREPage() {
             />
 
             <div className="py-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
-                <div className="text-center mb-10">
-                    <h1 className="text-3xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[hsl(var(--primary))] to-purple-600 mb-4">
-                        FIRE Calculator
-                    </h1>
-                    <p className="text-lg md:text-xl text-[hsl(var(--muted-foreground))] max-w-2xl mx-auto">
-                        Financial Independence, Retire Early. Discover the math behind your freedom.
-                    </p>
-                </div>
-
                 <FIRECalculator />
             </div>
 

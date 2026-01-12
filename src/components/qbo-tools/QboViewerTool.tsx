@@ -4,6 +4,7 @@ import { useState, useCallback, useRef, useEffect } from "react";
 import { FileUp, X, FileSpreadsheet, Plus, Eye, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PrivacyBadge } from "@/components/ui/PrivacyBadge";
+import { Breadcrumb } from "@/components/ui/Breadcrumb";
 
 interface Transaction {
     date: string;
@@ -203,6 +204,12 @@ export function QboViewerTool() {
         <div className="max-w-5xl mx-auto">
             {/* Header */}
             <div className="text-center mb-6">
+                <Breadcrumb
+                    items={[
+                        { label: "Converter Tools", href: "/convert" },
+                        { label: "QBO Viewer" }
+                    ]}
+                />
                 <h1 className="text-3xl md:text-4xl font-bold text-[hsl(var(--foreground))] mb-3">
                     QBO File Viewer Online
                 </h1>

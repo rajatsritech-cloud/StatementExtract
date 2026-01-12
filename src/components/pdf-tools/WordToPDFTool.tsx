@@ -3,6 +3,7 @@
 import { useState, useCallback, useRef } from "react";
 import { Download, Loader2, FileText, Trash2, CheckCircle, Upload, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { PrivacyBadge } from "@/components/ui/PrivacyBadge";
 
 export const WordToPDFTool = () => {
@@ -96,6 +97,12 @@ export const WordToPDFTool = () => {
         <div className="max-w-2xl mx-auto">
             {/* Header */}
             <div className="text-center mb-8">
+                <Breadcrumb
+                    items={[
+                        { label: "All Converters", href: "/convert" },
+                        { label: "Word to PDF" }
+                    ]}
+                />
                 <h1 className="text-3xl md:text-4xl font-bold text-[hsl(var(--foreground))] mb-3">
                     Word to PDF Converter
                 </h1>

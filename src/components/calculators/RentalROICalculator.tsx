@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import { DollarSign, Percent, Home, Building, Calculator, TrendingUp } from "lucide-react";
 import { PrivacyBadge } from "@/components/ui/PrivacyBadge";
+import { Breadcrumb } from "@/components/ui/Breadcrumb";
 
 interface RentalMetrics {
     monthlyMortgage: number;
@@ -87,6 +88,20 @@ export const RentalROICalculator = () => {
 
     return (
         <div className="w-full max-w-6xl mx-auto space-y-8">
+            <div className="text-center mb-4">
+                <Breadcrumb
+                    items={[
+                        { label: "Business Tools", href: "/tools" },
+                        { label: "Rental ROI Calculator" }
+                    ]}
+                />
+                <h1 className="text-3xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[hsl(var(--primary))] to-blue-600 mb-4">
+                    Rental ROI Calculator
+                </h1>
+                <h2 className="text-base md:text-lg text-[hsl(var(--muted-foreground))] max-w-xl mx-auto font-normal">
+                    Calculate cash flow, cap rate, and cash on cash return for your rental property investments. Analyze deals before you invest.
+                </h2>
+            </div>
             <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
                 {/* Inputs Columns */}
                 <div className="xl:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">

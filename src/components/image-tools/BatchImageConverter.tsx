@@ -3,6 +3,7 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { Upload, Download, Image as ImageIcon, Loader2, CheckCircle2, Trash2, ArrowRight, X, FileImage } from "lucide-react";
 import { PrivacyBadge } from "@/components/ui/PrivacyBadge";
+import { Breadcrumb } from "@/components/ui/Breadcrumb";
 
 interface ConvertedFile {
     original: File;
@@ -15,11 +16,12 @@ interface BatchImageConverterProps {
     targetFormat: "png" | "jpg";
     title: string;
     description: string;
+    breadcrumbLabel?: string;
 }
 
 const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20MB limit
 
-export const BatchImageConverter = ({ targetFormat, title, description }: BatchImageConverterProps) => {
+export const BatchImageConverter = ({ targetFormat, title, description, breadcrumbLabel }: BatchImageConverterProps) => {
     const [files, setFiles] = useState<File[]>([]);
     const [convertedFiles, setConvertedFiles] = useState<ConvertedFile[]>([]);
     const [isConverting, setIsConverting] = useState(false);
@@ -28,6 +30,8 @@ export const BatchImageConverter = ({ targetFormat, title, description }: BatchI
     const inputRef = useRef<HTMLInputElement>(null);
     const listRef = useRef<HTMLDivElement>(null);
     const prevCount = useRef(0);
+
+    // ... (rest of the component logic remains unchanged, skipping to return)
 
     useEffect(() => {
         if (files.length > prevCount.current) {
@@ -237,12 +241,18 @@ export const BatchImageConverter = ({ targetFormat, title, description }: BatchI
         <div className="w-full max-w-3xl mx-auto">
             {/* Header */}
             <div className="text-center mb-8">
+                <Breadcrumb
+                    items={[
+                        { label: "All Converters", href: "/convert" },
+                        { label: breadcrumbLabel || title }
+                    ]}
+                />
                 <h1 className="text-3xl md:text-4xl font-bold text-[hsl(var(--foreground))] mb-3">
                     {title}
                 </h1>
-                <p className="text-[hsl(var(--muted-foreground))] text-lg">
+                <h2 className="text-base md:text-lg text-[hsl(var(--muted-foreground))] max-w-xl mx-auto font-normal">
                     {description}
-                </p>
+                </h2>
             </div>
 
             {/* Upload Area with Modern SVG Background */}

@@ -3,6 +3,7 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { FileUp, X, Download, Loader2, FileText, Plus, Trash2, Settings2, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { PrivacyBadge } from "@/components/ui/PrivacyBadge";
 
 
@@ -350,6 +351,12 @@ NEWFILEUID:NONE
         <div className="max-w-4xl mx-auto">
             {!hideHeader && (
                 <div className="text-center mb-4">
+                    <Breadcrumb
+                        items={[
+                            { label: "All Converters", href: "/convert" },
+                            { label: "OFX to QBO" }
+                        ]}
+                    />
                     <h1 className="text-2xl md:text-3xl font-bold text-[hsl(var(--foreground))] mb-2">
                         OFX to QBO Converter Online Free
                     </h1>

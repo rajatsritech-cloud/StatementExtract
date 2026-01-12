@@ -574,6 +574,12 @@ NEWFILEUID:NONE
                 <>
                     {/* Header */}
                     <div className="text-center mb-4">
+                        <Breadcrumb 
+                            items={[
+                                { label: "Converter Tools", href: "/convert" },
+                                { label: "QIF to QBO" }
+                            ]} 
+                        />
                         <h1 className="text-2xl md:text-3xl font-bold text-[hsl(var(--foreground))] mb-2">
                             Convert QIF to QBO Online
                         </h1>

@@ -3,6 +3,7 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { FileImage, Copy, Download, RefreshCw, CheckCircle, Upload, Code2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { PrivacyBadge } from "@/components/ui/PrivacyBadge";
 
 type OutputFormat = "datauri" | "raw" | "css" | "html" | "markdown";
@@ -129,6 +130,12 @@ export function ImageToBase64Tool() {
         <div className="max-w-4xl mx-auto">
             {/* Header */}
             <div className="text-center mb-4">
+                <Breadcrumb
+                    items={[
+                        { label: "Developer Tools", href: "/convert" },
+                        { label: "Image to Base64" }
+                    ]}
+                />
                 <h1 className="text-2xl md:text-3xl font-bold text-[hsl(var(--foreground))] mb-2">
                     Image to Base64 Converter
                 </h1>

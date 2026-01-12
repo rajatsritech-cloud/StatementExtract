@@ -17,6 +17,7 @@ import {
     Layout
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Breadcrumb } from "@/components/ui/Breadcrumb";
 
 // Types
 interface LineItem {

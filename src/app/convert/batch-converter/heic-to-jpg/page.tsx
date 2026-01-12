@@ -58,6 +58,7 @@ export default function HeicToJpgPage() {
                     targetFormat="jpg"
                     title="HEIC to JPG Batch Converter"
                     description="Convert iPhone HEIC photos to JPG for smaller file sizes and universal compatibility."
+                    breadcrumbLabel="HEIC to JPG"
                 />
 
                 {/* Format Toggle */}

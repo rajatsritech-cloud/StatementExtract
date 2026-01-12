@@ -18,6 +18,7 @@ import {
     FileText
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { PrivacyBadge } from "@/components/ui/PrivacyBadge";
 import * as XLSX from "xlsx";
 
@@ -927,6 +928,12 @@ NEWFILEUID:NONE
             {/* Header - hidden when hideHeader prop is true */}
             {!hideHeader && (
                 <div className="text-center mb-4">
+                    <Breadcrumb
+                        items={[
+                            { label: "All Converters", href: "/convert" },
+                            { label: "CSV to QBO" }
+                        ]}
+                    />
                     <h1 className="text-2xl md:text-3xl font-bold text-[hsl(var(--foreground))] mb-2">
                         Convert CSV to QBO Online
                     </h1>

@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { CheckCircle, XCircle, Search, Building2, ShieldCheck, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Breadcrumb } from "@/components/ui/Breadcrumb";
 
 export function RoutingValidatorTool() {
     const [routingNum, setRoutingNum] = useState("");
@@ -51,6 +52,12 @@ export function RoutingValidatorTool() {
                     <div className="inline-flex items-center justify-center p-3 rounded-2xl bg-[hsl(var(--primary))]/10 mb-5">
                         <ShieldCheck className="w-10 h-10 text-[hsl(var(--primary))]" />
                     </div>
+                    <Breadcrumb
+                        items={[
+                            { label: "Utility Tools", href: "/tools" },
+                            { label: "Routing Validator" }
+                        ]}
+                    />
                     <h1 className="text-3xl md:text-4xl font-bold text-[hsl(var(--foreground))] mb-3">
                         Routing Number Validator
                     </h1>

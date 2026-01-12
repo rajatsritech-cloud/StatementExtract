@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import { TrendingUp, DollarSign, Calendar, Target, Info, RefreshCw } from "lucide-react";
 import { PrivacyBadge } from "@/components/ui/PrivacyBadge";
+import { Breadcrumb } from "@/components/ui/Breadcrumb";
 
 interface ProjectionYear {
     age: number;
@@ -77,6 +78,20 @@ export const FIRECalculator = () => {
 
     return (
         <div className="w-full max-w-5xl mx-auto space-y-8">
+            <div className="text-center mb-4">
+                <Breadcrumb
+                    items={[
+                        { label: "Business Tools", href: "/tools" },
+                        { label: "FIRE Calculator" }
+                    ]}
+                />
+                <h1 className="text-3xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[hsl(var(--primary))] to-blue-600 mb-4">
+                    FIRE Calculator
+                </h1>
+                <h2 className="text-base md:text-lg text-[hsl(var(--muted-foreground))] max-w-xl mx-auto font-normal">
+                    Calculate when you can reach Financial Independence, Retire Early. Project your savings and net worth growth over time.
+                </h2>
+            </div>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Inputs */}
                 <div className="lg:col-span-1 space-y-6">

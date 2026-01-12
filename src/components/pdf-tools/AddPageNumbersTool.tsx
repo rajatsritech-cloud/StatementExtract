@@ -3,6 +3,7 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { Download, Loader2, FileText, Trash2, CheckCircle, AlertCircle, Hash } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { PrivacyBadge } from "@/components/ui/PrivacyBadge";
 import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 
@@ -211,6 +212,12 @@ export function AddPageNumbersTool() {
         <div className="max-w-3xl mx-auto">
             {/* Header */}
             <div className="text-center mb-4">
+                <Breadcrumb
+                    items={[
+                        { label: "All Converters", href: "/convert" },
+                        { label: "Add Page Numbers" }
+                    ]}
+                />
                 <h1 className="text-2xl md:text-3xl font-bold text-[hsl(var(--foreground))] mb-2">
                     Add Page Numbers to PDF Online Free
                 </h1>

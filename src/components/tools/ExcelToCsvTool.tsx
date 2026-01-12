@@ -5,6 +5,7 @@ import * as XLSX from "xlsx";
 import { PrivacyBadge } from "@/components/ui/PrivacyBadge";
 import { FileSpreadsheet, Upload, Download, AlertCircle, CheckCircle, FileText, Table, Loader2, CheckCircle2, Info, X, Layers } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Breadcrumb } from "@/components/ui/Breadcrumb";
 
 export const ExcelToCsvTool = () => {
     const [file, setFile] = useState<File | null>(null);
@@ -147,6 +148,12 @@ export const ExcelToCsvTool = () => {
                 <>
                     {/* Header */}
                     <div className="text-center mb-4">
+                        <Breadcrumb
+                            items={[
+                                { label: "All Converters", href: "/convert" },
+                                { label: "Excel to CSV" }
+                            ]}
+                        />
                         <h1 className="text-2xl md:text-3xl font-bold text-[hsl(var(--foreground))] mb-2">
                             Convert Excel to CSV Online
                         </h1>

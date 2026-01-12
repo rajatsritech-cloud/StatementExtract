@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { Calculator, DollarSign, Briefcase, TrendingDown, HelpCircle, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Breadcrumb } from "@/components/ui/Breadcrumb";
 
 // US Federal Tax Brackets 2024
 const FEDERAL_TAX_BRACKETS_SINGLE_2024 = [
@@ -161,16 +162,22 @@ export const PaycheckCalculator = () => {
         <div className="max-w-4xl mx-auto">
             {/* Header */}
             <div className="text-center mb-8">
-                <div className="inline-flex items-center gap-2 mb-4 px-4 py-1.5 rounded-full bg-[hsl(var(--primary))]/10 border border-[hsl(var(--primary))]/30">
+                <Breadcrumb
+                    items={[
+                        { label: "Business Tools", href: "/tools" },
+                        { label: "Paycheck Calculator" }
+                    ]}
+                />
+                <div className="inline-flex items-center gap-2 mb-4 mt-4 px-4 py-1.5 rounded-full bg-[hsl(var(--primary))]/10 border border-[hsl(var(--primary))]/30">
                     <Calculator className="w-4 h-4 text-[hsl(var(--primary))]" />
                     <span className="text-sm font-medium text-[hsl(var(--primary))]">2024 Tax Rates</span>
                 </div>
                 <h1 className="text-3xl md:text-4xl font-bold text-[hsl(var(--foreground))] mb-3">
                     Paycheck Calculator
                 </h1>
-                <p className="text-lg text-[hsl(var(--muted-foreground))]">
+                <h2 className="text-base md:text-lg text-[hsl(var(--muted-foreground))] max-w-xl mx-auto font-normal">
                     Calculate your take-home pay after federal and state taxes
-                </p>
+                </h2>
             </div>
 
             <div className="grid lg:grid-cols-2 gap-8">

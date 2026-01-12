@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
+import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import {
     Calculator,
     DollarSign,
@@ -245,6 +246,12 @@ export function SelfEmployedTaxCalculator() {
         <div className="max-w-4xl mx-auto">
             {/* Header */}
             <div className="text-center mb-6">
+                <Breadcrumb
+                    items={[
+                        { label: "Business Tools", href: "/tools" },
+                        { label: "Self-Employed Tax Calculator" }
+                    ]}
+                />
                 <h1 className="text-3xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[hsl(var(--primary))] to-blue-600 mb-4">
                     Self-Employed Tax Calculator
                 </h1>

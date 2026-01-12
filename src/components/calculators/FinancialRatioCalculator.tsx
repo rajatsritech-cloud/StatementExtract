@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { Calculator, TrendingUp, AlertTriangle, CheckCircle, Info } from "lucide-react";
+import { Breadcrumb } from "@/components/ui/Breadcrumb";
 
 interface FinancialData {
     // Balance Sheet Items
@@ -201,7 +202,13 @@ export function FinancialRatioCalculator() {
         <div className="max-w-6xl mx-auto">
             {/* Header */}
             <div className="text-center mb-8">
-                <div className="flex justify-center mb-4">
+                <Breadcrumb
+                    items={[
+                        { label: "Business Tools", href: "/tools" },
+                        { label: "Financial Ratio Calculator" }
+                    ]}
+                />
+                <div className="flex justify-center mb-4 mt-4">
                     <div className="p-4 rounded-2xl bg-[hsl(var(--primary))]/10">
                         <Calculator className="w-10 h-10 text-[hsl(var(--primary))]" />
                     </div>
@@ -209,9 +216,9 @@ export function FinancialRatioCalculator() {
                 <h1 className="text-3xl md:text-4xl font-bold text-[hsl(var(--foreground))] mb-3">
                     Financial Ratio Calculator
                 </h1>
-                <p className="text-[hsl(var(--muted-foreground))] max-w-2xl mx-auto">
+                <h2 className="text-base md:text-lg text-[hsl(var(--muted-foreground))] max-w-2xl mx-auto font-normal">
                     Analyze your company's financial health with 20+ key ratios. Enter your financial data below to calculate liquidity, profitability, efficiency, leverage, and valuation ratios.
-                </p>
+                </h2>
             </div>
 
             <div className="grid lg:grid-cols-2 gap-8">

@@ -3,6 +3,7 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { FileUp, X, FileSpreadsheet, Plus, Eye, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { PrivacyBadge } from "@/components/ui/PrivacyBadge";
 
 interface Transaction {
@@ -203,6 +204,12 @@ export function OfxViewerTool() {
     return (
         <div className="max-w-5xl mx-auto">
             <div className="text-center mb-6">
+                <Breadcrumb
+                    items={[
+                        { label: "Utility Tools", href: "/tools" },
+                        { label: "OFX Viewer" }
+                    ]}
+                />
                 <h1 className="text-3xl md:text-4xl font-bold text-[hsl(var(--foreground))] mb-3">
                     OFX File Viewer Online
                 </h1>
