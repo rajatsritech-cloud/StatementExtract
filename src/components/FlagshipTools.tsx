@@ -70,34 +70,35 @@ export function FlagshipTools() {
                 </div>
 
                 {/* Tools Grid */}
-                <div className="grid md:grid-cols-3 gap-6 animate-slide-up">
+                <div className="grid md:grid-cols-3 gap-6 lg:gap-8 animate-slide-up mb-24">
                     {FLAGSHIP_TOOLS.map((tool, i) => (
-                        <Link
-                            key={tool.href + i}
-                            href={tool.href}
-                            className="group relative p-6 rounded-2xl border border-violet-500/20 bg-[hsl(var(--card))] hover:border-violet-500/50 hover:shadow-xl hover:shadow-violet-500/10 hover:-translate-y-1 transition-all duration-300"
-                        >
-                            {/* Hover Glow */}
-                            <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-violet-500/0 to-fuchsia-500/0 group-hover:from-violet-500/5 group-hover:to-fuchsia-500/5 transition-all duration-300" />
+                        <div key={tool.href + i} className="relative group">
+                            <Link
+                                href={tool.href}
+                                className="relative flex flex-col items-center text-center h-full p-8 rounded-3xl border border-white/10 bg-gradient-to-b from-white/10 to-transparent backdrop-blur-md shadow-xl hover:bg-violet-500/5 hover:border-violet-500/60 transition-all duration-300 overflow-hidden"
+                            >
+                                {/* Glass Highlight */}
+                                <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-50" />
 
-                            <div className="relative">
-                                <div className="inline-flex p-3 rounded-xl bg-violet-500/10 text-violet-500 mb-4 group-hover:scale-110 transition-transform duration-300">
-                                    <tool.icon className="h-6 w-6" />
+                                <div className="relative z-10 flex flex-col items-center h-full w-full">
+                                    <div className="inline-flex p-4 rounded-2xl bg-gradient-to-br from-violet-500/10 to-fuchsia-500/10 border border-violet-500/10 text-violet-400 mb-6 group-hover:scale-105 transition-transform duration-300 shadow-lg shadow-violet-500/5">
+                                        <tool.icon className="h-7 w-7" />
+                                    </div>
+
+                                    <h3 className="text-xl font-bold text-[hsl(var(--foreground))] mb-3 group-hover:text-violet-400 transition-colors duration-300">
+                                        {tool.name}
+                                    </h3>
+                                    <p className="text-[hsl(var(--muted-foreground))] mb-6 leading-relaxed max-w-sm flex-grow">
+                                        {tool.description}
+                                    </p>
+
+                                    <div className="flex items-center gap-2 text-sm font-semibold text-violet-400/70 group-hover:text-violet-300 transition-colors mt-auto group-hover:underline decoration-violet-500/30 underline-offset-4">
+                                        Try Converter
+                                        <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                                    </div>
                                 </div>
-
-                                <h3 className="font-semibold text-[hsl(var(--foreground))] group-hover:text-violet-500 transition-colors mb-2">
-                                    {tool.name}
-                                </h3>
-                                <p className="text-sm text-[hsl(var(--muted-foreground))] mb-4">
-                                    {tool.description}
-                                </p>
-
-                                <div className="flex items-center gap-1 text-sm font-medium text-violet-500 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    Try now
-                                    <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                                </div>
-                            </div>
-                        </Link>
+                            </Link>
+                        </div>
                     ))}
                 </div>
 
@@ -115,34 +116,36 @@ export function FlagshipTools() {
                 </div>
 
                 {/* Invoice Tools Grid */}
-                <div className="grid md:grid-cols-2 gap-6 animate-slide-up max-w-2xl mx-auto">
+                <div className="grid md:grid-cols-2 gap-6 lg:gap-8 animate-slide-up max-w-4xl mx-auto">
                     {INVOICE_TOOLS.map((tool, i) => (
-                        <Link
-                            key={tool.href + i}
-                            href={tool.href}
-                            className="group relative p-6 rounded-2xl border border-emerald-500/20 bg-[hsl(var(--card))] hover:border-emerald-500/50 hover:shadow-xl hover:shadow-emerald-500/10 hover:-translate-y-1 transition-all duration-300"
-                        >
-                            {/* Hover Glow */}
-                            <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-emerald-500/0 to-teal-500/0 group-hover:from-emerald-500/5 group-hover:to-teal-500/5 transition-all duration-300" />
+                        <div key={tool.href + i} className="relative group">
 
-                            <div className="relative">
-                                <div className="inline-flex p-3 rounded-xl bg-emerald-500/10 text-emerald-500 mb-4 group-hover:scale-110 transition-transform duration-300">
-                                    <tool.icon className="h-6 w-6" />
+                            <Link
+                                href={tool.href}
+                                className="relative flex flex-col items-center text-center h-full p-8 rounded-3xl border border-white/10 bg-gradient-to-b from-white/10 to-transparent backdrop-blur-md shadow-xl hover:bg-emerald-500/5 hover:border-emerald-500/60 transition-all duration-300 overflow-hidden"
+                            >
+                                {/* Glass Highlight */}
+                                <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-50" />
+
+                                <div className="relative z-10 flex flex-col items-center h-full w-full">
+                                    <div className="inline-flex p-4 rounded-2xl bg-gradient-to-br from-emerald-500/10 to-teal-500/10 border border-emerald-500/10 text-emerald-400 mb-6 group-hover:scale-105 transition-transform duration-300 shadow-lg shadow-emerald-500/5">
+                                        <tool.icon className="h-7 w-7" />
+                                    </div>
+
+                                    <h3 className="text-xl font-bold text-[hsl(var(--foreground))] mb-3 group-hover:text-emerald-400 transition-colors duration-300">
+                                        {tool.name}
+                                    </h3>
+                                    <p className="text-[hsl(var(--muted-foreground))] mb-6 leading-relaxed max-w-sm flex-grow">
+                                        {tool.description}
+                                    </p>
+
+                                    <div className="flex items-center gap-2 text-sm font-semibold text-emerald-400/70 group-hover:text-emerald-300 transition-colors mt-auto group-hover:underline decoration-emerald-500/30 underline-offset-4">
+                                        Try Converter
+                                        <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                                    </div>
                                 </div>
-
-                                <h3 className="font-semibold text-[hsl(var(--foreground))] group-hover:text-emerald-500 transition-colors mb-2">
-                                    {tool.name}
-                                </h3>
-                                <p className="text-sm text-[hsl(var(--muted-foreground))] mb-4">
-                                    {tool.description}
-                                </p>
-
-                                <div className="flex items-center gap-1 text-sm font-medium text-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    Try now
-                                    <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                                </div>
-                            </div>
-                        </Link>
+                            </Link>
+                        </div>
                     ))}
                 </div>
             </div>
