@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import Link from "next/link";
 import { QboToCsvTool } from "@/components/qbo-tools/QboToCsvTool";
 import { ToolPageFooter } from "@/components/tools/ToolPageFooter";
 import { PageMeta } from "@/components/PageMeta";
@@ -9,7 +10,10 @@ import {
     FileText,
     CheckCircle,
     Database,
-    Lock
+    Lock,
+    ArrowUpDown,
+    HelpCircle,
+    AlertTriangle
 } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -31,7 +35,7 @@ const schemaData = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     "name": "QBO to CSV Converter",
-    "description": "Convert QuickBooks QBO files to portable CSV and Excel formats online for free.",
+    "description": "Convert QuickBooks QBO files to portable CSV and Excel formats online for free. Export your QuickBooks Web Connect bank feeds to editable spreadsheets.",
     "applicationCategory": "FinanceApplication",
     "operatingSystem": "Any",
     "offers": {
@@ -43,6 +47,13 @@ const schemaData = {
         "@type": "AggregateRating",
         "ratingValue": "4.8",
         "ratingCount": "1250"
+    },
+    "datePublished": "2025-06-01",
+    "dateModified": "2026-01-13",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Statement Extract",
+        "url": "https://statementextract.com"
     }
 };
 
@@ -62,18 +73,26 @@ const faqSchema = {
     "mainEntity": [
         {
             "@type": "Question",
-            "name": "How do I convert a QBO file to CSV?",
+            "name": "What is a QBO file?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Simply drag and drop your .qbo file into the converter. It will instantly parse the file in your browser and provide a CSV download."
+                "text": "A QBO file (QuickBooks Web Connect) is a financial data format used by QuickBooks to import bank transactions. It uses OFX XML standards and contains transaction dates, amounts, payee names, and reference numbers. Banks provide QBO downloads for importing into QuickBooks Online and Desktop."
             }
         },
         {
             "@type": "Question",
-            "name": "Is my data secure?",
+            "name": "How do I convert a QBO file to CSV?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes, completely. This tool runs 100% in your browser. Your financial data never leaves your computer and is never uploaded to any server."
+                "text": "Simply drag and drop your .qbo file into our converter above. It will instantly parse the file in your browser and provide a CSV download. No upload needed - everything runs locally on your computer for maximum privacy."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Is my data secure when using this QBO converter?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, completely. This tool runs 100% in your browser using JavaScript. Your financial data never leaves your computer and is never uploaded to any server. This makes it the most secure QBO to CSV converter available."
             }
         },
         {
@@ -81,15 +100,39 @@ const faqSchema = {
             "name": "Is this QBO to CSV converter free?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes, it is 100% free with no limits. You can convert as many files as you want without signing up."
+                "text": "Yes, it is 100% free with no limits. You can convert as many QBO files as you want without signing up or paying anything. There are no hidden fees or premium tiers."
             }
         },
         {
             "@type": "Question",
-            "name": "Can I open QBO files in Excel?",
+            "name": "Can I open QBO files in Excel directly?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Excel cannot open .qbo files directly. Use our converter to turn them into CSV files, which open perfectly in Excel, Google Sheets, or Numbers."
+                "text": "No, Excel cannot open .qbo files directly because they use OFX XML format. Use our free converter to turn QBO files into CSV format, which opens perfectly in Microsoft Excel, Google Sheets, or Apple Numbers."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Which banks support QBO file downloads?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Most major US banks support QBO downloads including Chase, Bank of America, Wells Fargo, Citi, Capital One, US Bank, PNC, and thousands of credit unions. Look for 'Download for QuickBooks' or 'Web Connect' options in your online banking."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "What is the difference between QBO, OFX, and QFX files?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "QBO (QuickBooks Web Connect) is for QuickBooks, QFX (Quicken Financial Exchange) is for Quicken personal finance software, and OFX (Open Financial Exchange) is the generic standard used by Microsoft Money and other software. All three use similar XML-based formats."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Can I use the CSV output to import into other accounting software?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes! The CSV file we generate is universally compatible. You can import it into Xero, Sage, FreshBooks, Wave, Zoho Books, or any accounting software that accepts CSV bank statement imports."
             }
         }
     ]
@@ -131,6 +174,21 @@ export default function QboToCsvPage() {
             {/* Tool Section - Visible Above the Fold */}
             <section className="py-6 md:py-10 px-6 border-b border-[hsl(var(--border))]">
                 <QboToCsvTool />
+            </section>
+
+            {/* Hub Link - Cross-promote Related Tools */}
+            <section className="bg-gradient-to-r from-[hsl(var(--primary))]/10 to-transparent border-b border-[hsl(var(--border))] py-3 px-6">
+                <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+                    <div className="flex items-center gap-3">
+                        <FileText className="w-5 h-5 text-[hsl(var(--primary))]" />
+                        <span className="text-sm font-medium text-[hsl(var(--foreground))]">
+                            Need the <strong>reverse conversion</strong>? Convert CSV files to QBO format.
+                        </span>
+                    </div>
+                    <Link href="/convert/csv-to-qbo" className="text-sm font-bold text-[hsl(var(--primary))] hover:underline flex items-center gap-1">
+                        Use our Free CSV to QBO Converter <ArrowUpDown className="w-3 h-3 rotate-90" />
+                    </Link>
+                </div>
             </section>
 
             {/* Features Section */}
@@ -268,6 +326,146 @@ export default function QboToCsvPage() {
                 </div>
             </section>
 
+            {/* What is a QBO File - Educational Section */}
+            <section className="py-12 md:py-16 px-6 bg-[hsl(var(--muted))]/20 border-y border-[hsl(var(--border))]">
+                <div className="max-w-4xl mx-auto">
+                    <div className="flex items-center gap-3 mb-6">
+                        <HelpCircle className="w-8 h-8 text-[hsl(var(--primary))]" />
+                        <h2 className="text-2xl md:text-3xl font-bold text-[hsl(var(--foreground))]">
+                            What is a QBO File? (Complete Guide)
+                        </h2>
+                    </div>
+
+                    <div className="prose prose-lg dark:prose-invert max-w-none">
+                        <p className="text-[hsl(var(--muted-foreground))] mb-4">
+                            A <strong>.QBO file</strong> (QuickBooks Web Connect file) is a specialized financial data format created by Intuit for importing bank transactions directly into QuickBooks. Unlike generic spreadsheets, QBO files use <strong>OFX (Open Financial Exchange)</strong> XML standards, making them machine-readable but difficult for humans to interpret.
+                        </p>
+
+                        <div className="grid md:grid-cols-2 gap-6 my-8 not-prose">
+                            <div className="bg-[hsl(var(--card))] p-6 rounded-2xl border border-[hsl(var(--border))]">
+                                <h4 className="font-bold text-[hsl(var(--foreground))] mb-3">📁 QBO File Contains:</h4>
+                                <ul className="text-sm space-y-2 text-[hsl(var(--muted-foreground))]">
+                                    <li>• <strong>Transaction Date</strong> (DTPOSTED)</li>
+                                    <li>• <strong>Amount</strong> (TRNAMT - positive or negative)</li>
+                                    <li>• <strong>Transaction ID</strong> (FITID - unique identifier)</li>
+                                    <li>• <strong>Payee Name</strong> (NAME)</li>
+                                    <li>• <strong>Memo/Description</strong> (MEMO)</li>
+                                    <li>• <strong>Transaction Type</strong> (TRNTYPE - DEBIT/CREDIT)</li>
+                                </ul>
+                            </div>
+                            <div className="bg-[hsl(var(--card))] p-6 rounded-2xl border border-[hsl(var(--border))]">
+                                <h4 className="font-bold text-[hsl(var(--foreground))] mb-3">🔧 Common QBO Sources:</h4>
+                                <ul className="text-sm space-y-2 text-[hsl(var(--muted-foreground))]">
+                                    <li>• <strong>Bank Websites</strong> (Chase, Bank of America, Wells Fargo)</li>
+                                    <li>• <strong>Credit Unions</strong> (NCUA member institutions)</li>
+                                    <li>• <strong>Credit Card Companies</strong> (Amex, Discover, Capital One)</li>
+                                    <li>• <strong>Third-Party Tools</strong> (MoneyThumb, Bank2QBO)</li>
+                                    <li>• <strong>Our CSV to QBO Converter</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <h3 className="text-xl font-semibold text-[hsl(var(--foreground))] mb-4 mt-8">
+                            QBO vs OFX vs QFX - What&apos;s the Difference?
+                        </h3>
+                        <div className="overflow-x-auto not-prose">
+                            <table className="w-full border-collapse text-sm">
+                                <thead>
+                                    <tr className="bg-[hsl(var(--primary))]/10">
+                                        <th className="text-left p-3 font-semibold">Format</th>
+                                        <th className="text-left p-3 font-semibold">Full Name</th>
+                                        <th className="text-left p-3 font-semibold">Used By</th>
+                                        <th className="text-left p-3 font-semibold">Compatibility</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr className="border-b border-[hsl(var(--border))]">
+                                        <td className="p-3 font-bold text-[hsl(var(--primary))]">.QBO</td>
+                                        <td className="p-3 text-[hsl(var(--muted-foreground))]">QuickBooks Web Connect</td>
+                                        <td className="p-3 text-[hsl(var(--muted-foreground))]">Intuit QuickBooks</td>
+                                        <td className="p-3 text-[hsl(var(--muted-foreground))]">QuickBooks Online &amp; Desktop</td>
+                                    </tr>
+                                    <tr className="border-b border-[hsl(var(--border))]">
+                                        <td className="p-3 font-bold">.OFX</td>
+                                        <td className="p-3 text-[hsl(var(--muted-foreground))]">Open Financial Exchange</td>
+                                        <td className="p-3 text-[hsl(var(--muted-foreground))]">Banks, Financial Software</td>
+                                        <td className="p-3 text-[hsl(var(--muted-foreground))]">Microsoft Money, Quicken, GnuCash</td>
+                                    </tr>
+                                    <tr className="border-b border-[hsl(var(--border))]">
+                                        <td className="p-3 font-bold">.QFX</td>
+                                        <td className="p-3 text-[hsl(var(--muted-foreground))]">Quicken Financial Exchange</td>
+                                        <td className="p-3 text-[hsl(var(--muted-foreground))]">Intuit Quicken</td>
+                                        <td className="p-3 text-[hsl(var(--muted-foreground))]">Quicken (Personal Finance)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Troubleshooting Section */}
+            <section className="py-12 md:py-16 px-6">
+                <div className="max-w-4xl mx-auto">
+                    <div className="flex items-center gap-3 mb-8">
+                        <AlertTriangle className="w-8 h-8 text-amber-500" />
+                        <h2 className="text-2xl md:text-3xl font-bold text-[hsl(var(--foreground))]">
+                            Troubleshooting QBO File Issues
+                        </h2>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-6">
+                        <div className="bg-[hsl(var(--card))] p-6 rounded-2xl border border-[hsl(var(--border))]">
+                            <h3 className="font-bold text-red-600 dark:text-red-400 mb-3">
+                                ❌ &quot;File format not recognized&quot;
+                            </h3>
+                            <p className="text-sm text-[hsl(var(--muted-foreground))] mb-3">
+                                <strong>Cause:</strong> The file may be corrupted or saved with the wrong extension.
+                            </p>
+                            <p className="text-sm text-[hsl(var(--muted-foreground))]">
+                                <strong>Solution:</strong> Open the file in a text editor and verify it starts with <code>&lt;OFX&gt;</code> or <code>&lt;?OFX</code>. Re-download from your bank if corrupted.
+                            </p>
+                        </div>
+
+                        <div className="bg-[hsl(var(--card))] p-6 rounded-2xl border border-[hsl(var(--border))]">
+                            <h3 className="font-bold text-red-600 dark:text-red-400 mb-3">
+                                ❌ &quot;No transactions found&quot;
+                            </h3>
+                            <p className="text-sm text-[hsl(var(--muted-foreground))] mb-3">
+                                <strong>Cause:</strong> The date range in the QBO file may be empty or have already been imported.
+                            </p>
+                            <p className="text-sm text-[hsl(var(--muted-foreground))]">
+                                <strong>Solution:</strong> Download a new QBO file from your bank with a wider date range that includes transactions.
+                            </p>
+                        </div>
+
+                        <div className="bg-[hsl(var(--card))] p-6 rounded-2xl border border-[hsl(var(--border))]">
+                            <h3 className="font-bold text-amber-600 dark:text-amber-400 mb-3">
+                                ⚠️ Dates appear incorrect in Excel
+                            </h3>
+                            <p className="text-sm text-[hsl(var(--muted-foreground))] mb-3">
+                                <strong>Cause:</strong> Excel may interpret date formats differently based on your locale.
+                            </p>
+                            <p className="text-sm text-[hsl(var(--muted-foreground))]">
+                                <strong>Solution:</strong> Select the date column, right-click → Format Cells → Date → choose your preferred format.
+                            </p>
+                        </div>
+
+                        <div className="bg-[hsl(var(--card))] p-6 rounded-2xl border border-[hsl(var(--border))]">
+                            <h3 className="font-bold text-amber-600 dark:text-amber-400 mb-3">
+                                ⚠️ Special characters display incorrectly
+                            </h3>
+                            <p className="text-sm text-[hsl(var(--muted-foreground))] mb-3">
+                                <strong>Cause:</strong> Character encoding mismatch (UTF-8 vs ANSI).
+                            </p>
+                            <p className="text-sm text-[hsl(var(--muted-foreground))]">
+                                <strong>Solution:</strong> When opening in Excel, use Import Wizard and select UTF-8 encoding specifically.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             {/* FAQ Section */}
             <section className="py-12 md:py-16 px-6 bg-[hsl(var(--muted))]/30">
                 <div className="max-w-3xl mx-auto">
@@ -276,10 +474,14 @@ export default function QboToCsvPage() {
                     </h2>
                     <div className="space-y-6">
                         {[
-                            { q: "How does the client-side conversion work?", a: "We use modern JavaScript to read the .qbo file directly in your browser's memory. The parsing code runs locally on your device, not on our servers." },
-                            { q: "Is this QBO to CSV converter free?", a: "Yes, standard conversions are completely free. We support the community with free professional tools." },
-                            { q: "Can I convert QBO to Excel?", a: "Yes. The CSV file we generate is formatted specifically to open correctly in Microsoft Excel." },
-                            { q: "Do you store my data?", a: "No. Since the file is never uploaded to a server, it's physically impossible for us to store your data. It stays on your machine." },
+                            { q: "What is a QBO file?", a: "A QBO file (QuickBooks Web Connect) is a financial data format used by QuickBooks to import bank transactions. It uses OFX XML standards and contains transaction dates, amounts, payee names, and reference numbers." },
+                            { q: "How does the client-side conversion work?", a: "We use modern JavaScript to read the .qbo file directly in your browser's memory. The parsing code runs locally on your device, not on our servers - your data never leaves your computer." },
+                            { q: "Is this QBO to CSV converter free?", a: "Yes, it's 100% free with no limits. Convert as many files as you want without signing up or paying anything. No hidden fees or premium tiers." },
+                            { q: "Can I convert QBO to Excel?", a: "Yes. The CSV file we generate is formatted specifically to open correctly in Microsoft Excel, Google Sheets, or Apple Numbers." },
+                            { q: "Which banks support QBO downloads?", a: "Most major US banks including Chase, Bank of America, Wells Fargo, Citi, Capital One, US Bank, PNC, and thousands of credit unions support QBO file downloads." },
+                            { q: "What's the difference between QBO, OFX, and QFX?", a: "QBO is for QuickBooks, QFX is for Quicken personal finance, and OFX is the generic Open Financial Exchange standard. All use similar XML-based formats." },
+                            { q: "Can I import the CSV into other accounting software?", a: "Yes! The CSV is universally compatible with Xero, Sage, FreshBooks, Wave, Zoho Books, and any software that accepts CSV bank statement imports." },
+                            { q: "Do you store my data?", a: "No. Since the file is never uploaded to a server, it's physically impossible for us to store your data. Everything stays on your machine." },
                         ].map((faq, i) => (
                             <div key={i} className="p-6 rounded-2xl bg-[hsl(var(--card))] border border-[hsl(var(--border))]">
                                 <h3 className="font-semibold text-[hsl(var(--foreground))] mb-2">{faq.q}</h3>
