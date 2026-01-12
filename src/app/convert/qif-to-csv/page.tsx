@@ -12,8 +12,12 @@ import {
     Users,
     Building2,
     BarChart3,
-    Briefcase
+    Briefcase,
+    FileText,
+    ArrowUpDown
 } from "lucide-react";
+import Link from "next/link";
+
 
 export const metadata: Metadata = {
     title: "QIF to CSV Converter Free Online | Quicken to Excel Export | Statement Extract",
@@ -148,6 +152,37 @@ export default function QifToCsvPage() {
 
             <section className="py-6 md:py-10 px-6 border-b border-[hsl(var(--border))]">
                 <QifToCsvTool />
+            </section>
+
+            {/* Hub Link - Upsell Flagship Tools */}
+            <section className="bg-gradient-to-r from-[hsl(var(--primary))]/5 to-transparent border-b border-[hsl(var(--border))] py-4 px-6 md:px-12">
+                <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12">
+                    <Link href="/convert-bank-statement-to-csv-excel" className="group flex items-center gap-3 text-[hsl(var(--foreground))] hover:text-[hsl(var(--primary))] transition-colors">
+                        <div className="p-2 rounded-lg bg-[hsl(var(--background))] border border-[hsl(var(--border))] group-hover:border-[hsl(var(--primary))] shadow-sm">
+                            <FileSpreadsheet className="w-5 h-5 text-green-600" />
+                        </div>
+                        <div className="text-left">
+                            <p className="text-xs font-medium text-[hsl(var(--muted-foreground))]">Flagship Tool</p>
+                            <p className="text-sm font-bold flex items-center gap-1">
+                                PDF Bank Statement to Excel <ArrowUpDown className="w-3 h-3 rotate-90" />
+                            </p>
+                        </div>
+                    </Link>
+
+                    <div className="hidden md:block w-px h-8 bg-[hsl(var(--border))]" />
+
+                    <Link href="/convert-invoice-to-excel-csv" className="group flex items-center gap-3 text-[hsl(var(--foreground))] hover:text-[hsl(var(--primary))] transition-colors">
+                        <div className="p-2 rounded-lg bg-[hsl(var(--background))] border border-[hsl(var(--border))] group-hover:border-[hsl(var(--primary))] shadow-sm">
+                            <FileText className="w-5 h-5 text-blue-600" />
+                        </div>
+                        <div className="text-left">
+                            <p className="text-xs font-medium text-[hsl(var(--muted-foreground))]">New Tool</p>
+                            <p className="text-sm font-bold flex items-center gap-1">
+                                PDF Invoice to Excel <ArrowUpDown className="w-3 h-3 rotate-90" />
+                            </p>
+                        </div>
+                    </Link>
+                </div>
             </section>
 
             <section className="py-12 md:py-16 px-6 bg-[hsl(var(--muted))]/30">

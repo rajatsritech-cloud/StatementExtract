@@ -141,6 +141,21 @@ export default function CsvToQboPage() {
                 <CsvToQboTool />
             </section>
 
+            {/* Hub Link - Upsell PDF Converter */}
+            <section className="bg-gradient-to-r from-[hsl(var(--primary))]/10 to-transparent border-b border-[hsl(var(--border))] py-3 px-6">
+                <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+                    <div className="flex items-center gap-3">
+                        <FileText className="w-5 h-5 text-[hsl(var(--primary))]" />
+                        <span className="text-sm font-medium text-[hsl(var(--foreground))]">
+                            Need to convert <strong>PDF Bank Statements</strong> instead?
+                        </span>
+                    </div>
+                    <Link href="/convert-bank-statement-to-csv-excel" className="text-sm font-bold text-[hsl(var(--primary))] hover:underline flex items-center gap-1">
+                        Use our Free PDF to Excel Tool <ArrowUpDown className="w-3 h-3 rotate-90" />
+                    </Link>
+                </div>
+            </section>
+
             {/* Features Section */}
             <section className="py-12 md:py-16 px-6 bg-[hsl(var(--muted))]/30">
                 <div className="max-w-5xl mx-auto">

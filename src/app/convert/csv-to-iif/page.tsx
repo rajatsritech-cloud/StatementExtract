@@ -151,6 +151,21 @@ export default function CsvToIifPage() {
                 <CsvToIifTool />
             </section>
 
+            {/* Hub Link - Upsell PDF Converter */}
+            <section className="bg-gradient-to-r from-[hsl(var(--primary))]/10 to-transparent border-b border-[hsl(var(--border))] py-3 px-6">
+                <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+                    <div className="flex items-center gap-3">
+                        <FileText className="w-5 h-5 text-[hsl(var(--primary))]" />
+                        <span className="text-sm font-medium text-[hsl(var(--foreground))]">
+                            Starting with a PDF? Convert <strong>PDF Bank Statements</strong> to Excel first.
+                        </span>
+                    </div>
+                    <a href="/convert-bank-statement-to-csv-excel" className="text-sm font-bold text-[hsl(var(--primary))] hover:underline flex items-center gap-1">
+                        Free PDF to Excel Converter <FileSpreadsheet className="w-3 h-3" />
+                    </a>
+                </div>
+            </section>
+
             <section className="py-12 md:py-16 px-6 bg-[hsl(var(--muted))]/30">
                 <div className="max-w-5xl mx-auto">
                     <h2 className="text-2xl md:text-3xl font-bold text-center text-[hsl(var(--foreground))] mb-10">
@@ -326,6 +341,6 @@ export default function CsvToIifPage() {
                 currentTool="CSV to IIF"
                 relatedTools={relatedTools}
             />
-        </main>
+        </main >
     );
 }
