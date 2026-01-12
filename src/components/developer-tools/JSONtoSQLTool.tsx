@@ -233,9 +233,9 @@ export function JSONtoSQLTool() {
                 <h1 className="text-2xl md:text-3xl font-bold text-[hsl(var(--foreground))] mb-2">
                     JSON to SQL Converter
                 </h1>
-                <p className="text-[hsl(var(--muted-foreground))] max-w-xl mx-auto">
+                <h2 className="text-base md:text-lg text-[hsl(var(--muted-foreground))] max-w-xl mx-auto font-normal">
                     Convert JSON data to SQL INSERT statements and CREATE TABLE schemas. Supports MySQL, PostgreSQL, SQLite, and SQL Server.
-                </p>
+                </h2>
             </div>
 
             {/* Options Bar */}

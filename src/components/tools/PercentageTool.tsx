@@ -67,9 +67,9 @@ export function PercentageTool() {
                     <h1 className="text-3xl md:text-3xl font-bold text-[hsl(var(--foreground))] mb-2">
                         Percentage Calculator
                     </h1>
-                    <p className="text-[hsl(var(--muted-foreground))]">
+                    <h2 className="text-base md:text-lg text-[hsl(var(--muted-foreground))] max-w-xl mx-auto font-normal">
                         Calculate increases, discounts, and proportions instantly.
-                    </p>
+                    </h2>
                 </div>
 
                 {/* Mode Selector */}
@@ -83,8 +83,8 @@ export function PercentageTool() {
                             key={m.id}
                             onClick={() => { setMode(m.id as Mode); reset(); }}
                             className={`flex-1 min-w-[150px] p-4 text-sm font-semibold transition-colors ${mode === m.id
-                                    ? "bg-[hsl(var(--primary))]/5 text-[hsl(var(--primary))]"
-                                    : "text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))]/50"
+                                ? "bg-[hsl(var(--primary))]/5 text-[hsl(var(--primary))]"
+                                : "text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))]/50"
                                 }`}
                         >
                             {m.label}

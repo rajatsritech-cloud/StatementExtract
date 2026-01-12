@@ -214,9 +214,9 @@ export function AddPageNumbersTool() {
                 <h1 className="text-2xl md:text-3xl font-bold text-[hsl(var(--foreground))] mb-2">
                     Add Page Numbers to PDF Online Free
                 </h1>
-                <p className="text-[hsl(var(--muted-foreground))] max-w-xl mx-auto">
+                <h2 className="text-base md:text-lg text-[hsl(var(--muted-foreground))] max-w-xl mx-auto font-normal">
                     Insert page numbers to your PDF documents. Choose position, format, and starting page. 100% free and private.
-                </p>
+                </h2>
             </div>
 
             {!resultUrl ? (

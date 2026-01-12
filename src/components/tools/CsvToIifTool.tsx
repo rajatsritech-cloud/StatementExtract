@@ -560,7 +560,7 @@ export function CsvToIifTool({ hideHeader = false }: { hideHeader?: boolean } = 
             {!hideHeader && (
                 <div className="text-center mb-4">
                     <h1 className="text-2xl md:text-3xl font-bold mb-2 text-[hsl(var(--foreground))]">Convert CSV to IIF</h1>
-                    <p className="text-[hsl(var(--muted-foreground))]">Import transactions into QuickBooks Desktop (IIF).</p>
+                    <h2 className="text-base md:text-lg text-[hsl(var(--muted-foreground))] max-w-xl mx-auto font-normal">Import transactions into QuickBooks Desktop (IIF).</h2>
                 </div>
             )}
 

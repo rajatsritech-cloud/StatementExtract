@@ -353,11 +353,11 @@ NEWFILEUID:NONE
                     <h1 className="text-2xl md:text-3xl font-bold text-[hsl(var(--foreground))] mb-2">
                         OFX to QBO Converter Online Free
                     </h1>
-                    <p className="text-[hsl(var(--muted-foreground))] max-w-xl mx-auto">
+                    <h2 className="text-base md:text-lg text-[hsl(var(--muted-foreground))] max-w-xl mx-auto font-normal">
                         Convert OFX bank files to QuickBooks QBO format instantly.
                         <br />
                         <span className="text-sm">100% Client-side processing. Your data never leaves your device.</span>
-                    </p>
+                    </h2>
                 </div>
             )}
 

@@ -141,9 +141,9 @@ export function CompressPDFTool() {
                 <h1 className="text-2xl md:text-3xl font-bold text-[hsl(var(--foreground))] mb-2">
                     Compress PDF to Any Size
                 </h1>
-                <p className="text-[hsl(var(--muted-foreground))] max-w-xl mx-auto">
+                <h2 className="text-base md:text-lg text-[hsl(var(--muted-foreground))] max-w-xl mx-auto font-normal">
                     Reduce PDF to 100KB, 500KB, 1MB, or any target size. Perfect for email. 100% private.
-                </p>
+                </h2>
             </div>
 
             {!result ? (

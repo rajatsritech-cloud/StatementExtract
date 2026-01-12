@@ -237,10 +237,10 @@ export function Mt940ToExcelTool() {
                 <h1 className="text-3xl md:text-4xl font-bold text-[hsl(var(--foreground))] mb-3">
                     MT940 to Excel Converter Online
                 </h1>
-                <p className="text-[hsl(var(--muted-foreground))] max-w-2xl mx-auto">
+                <h2 className="text-base md:text-lg text-[hsl(var(--muted-foreground))] max-w-2xl mx-auto font-normal">
                     Convert SWIFT MT940 bank statement files to Excel spreadsheets. Perfect for SAP, Oracle, and Sage users.
                     100% private - files never leave your device.
-                </p>
+                </h2>
             </div>
 
             <div className="flex justify-center mb-6">

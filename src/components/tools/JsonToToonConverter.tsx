@@ -218,9 +218,9 @@ export const JsonToToonConverter = () => {
                 <h1 className="text-3xl md:text-4xl font-bold text-[hsl(var(--foreground))] mb-3">
                     JSON to TOON Converter
                 </h1>
-                <p className="text-[hsl(var(--muted-foreground))] text-lg max-w-2xl mx-auto">
+                <h2 className="text-base md:text-lg text-[hsl(var(--muted-foreground))] max-w-2xl mx-auto font-normal">
                     Convert JSON to Token-Oriented Object Notation (TOON) for up to 60% fewer LLM tokens
-                </p>
+                </h2>
             </div>
 
             {/* Token Savings Banner */}

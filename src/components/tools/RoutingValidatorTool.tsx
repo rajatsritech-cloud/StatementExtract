@@ -54,9 +54,9 @@ export function RoutingValidatorTool() {
                     <h1 className="text-3xl md:text-4xl font-bold text-[hsl(var(--foreground))] mb-3">
                         Routing Number Validator
                     </h1>
-                    <p className="text-[hsl(var(--muted-foreground))] text-lg max-w-2xl mx-auto">
+                    <h2 className="text-base md:text-lg text-[hsl(var(--muted-foreground))] max-w-2xl mx-auto font-normal">
                         Instantly verify typical US Bank Routing Numbers (ABA) using the official checksum algorithm.
-                    </p>
+                    </h2>
                 </div>
 
                 <div className="p-8 md:p-12">
@@ -77,10 +77,10 @@ export function RoutingValidatorTool() {
                                         setTouched(false);
                                     }}
                                     className={`w-full pl-14 pr-4 py-4 text-2xl font-mono tracking-widest bg-[hsl(var(--background))] border rounded-xl outline-none transition-all shadow-sm ${isValid === false && touched
-                                            ? "border-red-500 focus:ring-2 focus:ring-red-200"
-                                            : isValid === true
-                                                ? "border-green-500 focus:ring-2 focus:ring-green-200"
-                                                : "border-[hsl(var(--input))] focus:border-[hsl(var(--primary))] focus:ring-4 focus:ring-[hsl(var(--primary))]/10"
+                                        ? "border-red-500 focus:ring-2 focus:ring-red-200"
+                                        : isValid === true
+                                            ? "border-green-500 focus:ring-2 focus:ring-green-200"
+                                            : "border-[hsl(var(--input))] focus:border-[hsl(var(--primary))] focus:ring-4 focus:ring-[hsl(var(--primary))]/10"
                                         }`}
                                     placeholder="000000000"
                                 />
@@ -103,8 +103,8 @@ export function RoutingValidatorTool() {
                         {/* Result Display */}
                         {touched && isValid !== null && (
                             <div className={`rounded-2xl p-6 border animate-in fade-in zoom-in duration-300 ${isValid
-                                    ? "bg-green-500/5 border-green-500/20"
-                                    : "bg-red-500/5 border-red-500/20"
+                                ? "bg-green-500/5 border-green-500/20"
+                                : "bg-red-500/5 border-red-500/20"
                                 }`}>
                                 <div className="flex items-start gap-4">
                                     {isValid ? (

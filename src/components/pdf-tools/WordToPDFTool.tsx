@@ -99,9 +99,9 @@ export const WordToPDFTool = () => {
                 <h1 className="text-3xl md:text-4xl font-bold text-[hsl(var(--foreground))] mb-3">
                     Word to PDF Converter
                 </h1>
-                <p className="text-lg text-[hsl(var(--muted-foreground))]">
+                <h2 className="text-lg text-[hsl(var(--muted-foreground))] font-normal">
                     Convert Microsoft Word documents to PDF format instantly
-                </p>
+                </h2>
                 <div className="mt-4">
                     <PrivacyBadge />
                 </div>

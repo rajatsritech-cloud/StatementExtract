@@ -165,9 +165,9 @@ export function UnlockPdfTool() {
                 <h1 className="text-2xl md:text-3xl font-bold text-[hsl(var(--foreground))] mb-2">
                     Unlock PDF Online Free
                 </h1>
-                <p className="text-[hsl(var(--muted-foreground))] max-w-xl mx-auto">
+                <h2 className="text-base md:text-lg text-[hsl(var(--muted-foreground))] max-w-xl mx-auto font-normal">
                     Remove restrictions from PDF files. Unlock copy, print, and edit permissions. 100% free and private.
-                </p>
+                </h2>
             </div>
 
             {!resultUrl ? (

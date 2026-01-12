@@ -193,9 +193,9 @@ export const VcfToCsvTool = () => {
                         <h1 className="text-2xl md:text-3xl font-bold text-[hsl(var(--foreground))] mb-2">
                             Convert VCF to Excel / CSV Online
                         </h1>
-                        <p className="text-[hsl(var(--muted-foreground))] max-w-xl mx-auto">
+                        <h2 className="text-base md:text-lg text-[hsl(var(--muted-foreground))] max-w-xl mx-auto font-normal">
                             Extract contacts from iPhone, Android, or Outlook VCF files into clean Excel spreadsheets. 100% private.
-                        </p>
+                        </h2>
                     </div>
 
                     <div

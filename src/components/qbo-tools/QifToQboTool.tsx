@@ -577,9 +577,9 @@ NEWFILEUID:NONE
                         <h1 className="text-2xl md:text-3xl font-bold text-[hsl(var(--foreground))] mb-2">
                             Convert QIF to QBO Online
                         </h1>
-                        <p className="text-[hsl(var(--muted-foreground))] max-w-xl mx-auto">
+                        <h2 className="text-base md:text-lg text-[hsl(var(--muted-foreground))] max-w-xl mx-auto font-normal">
                             Import your Quicken transactions into QuickBooks. Parse QIF, preview, and export to .qbo format.
-                        </p>
+                        </h2>
                     </div>
 
                     {/* Upload Zone */}

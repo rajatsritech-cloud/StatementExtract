@@ -248,10 +248,10 @@ export function SelfEmployedTaxCalculator() {
                 <h1 className="text-3xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[hsl(var(--primary))] to-blue-600 mb-4">
                     Self-Employed Tax Calculator
                 </h1>
-                <p className="text-[hsl(var(--muted-foreground))] max-w-2xl mx-auto">
+                <h2 className="text-base md:text-lg text-[hsl(var(--muted-foreground))] max-w-2xl mx-auto font-normal">
                     Calculate your federal income tax, self-employment tax, and quarterly estimated payments.
                     Includes QBI deduction and {taxYear} tax brackets.
-                </p>
+                </h2>
             </div>
 
             <div className="grid lg:grid-cols-2 gap-6">

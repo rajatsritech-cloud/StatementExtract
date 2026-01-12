@@ -132,9 +132,9 @@ export function ImageToBase64Tool() {
                 <h1 className="text-2xl md:text-3xl font-bold text-[hsl(var(--foreground))] mb-2">
                     Image to Base64 Converter
                 </h1>
-                <p className="text-[hsl(var(--muted-foreground))] max-w-xl mx-auto">
+                <h2 className="text-base md:text-lg text-[hsl(var(--muted-foreground))] max-w-xl mx-auto font-normal">
                     Convert images to Base64 strings instantly. Embed images directly in HTML, CSS, or Markdown. Zero server upload.
-                </p>
+                </h2>
             </div>
 
             {/* Upload Area */}

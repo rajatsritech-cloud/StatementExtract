@@ -77,9 +77,9 @@ export function HourlyToSalaryTool() {
                     <h1 className="text-3xl md:text-4xl font-bold text-[hsl(var(--foreground))] mb-2">
                         Hourly to Salary Calculator
                     </h1>
-                    <p className="text-[hsl(var(--muted-foreground))]">
+                    <h2 className="text-base md:text-lg text-[hsl(var(--muted-foreground))] max-w-xl mx-auto font-normal">
                         Instantly convert your hourly wage to weekly, monthly, and annual income.
-                    </p>
+                    </h2>
                 </div>
 
                 <div className="grid md:grid-cols-12 divide-y md:divide-y-0 md:divide-x divide-[hsl(var(--border))]">
@@ -97,8 +97,8 @@ export function HourlyToSalaryTool() {
                                         key={c.code}
                                         onClick={() => setCurrency(c.code)}
                                         className={`px-2 py-2 text-sm font-semibold rounded-lg border transition-all ${currency === c.code
-                                                ? "bg-[hsl(var(--primary))] text-white border-[hsl(var(--primary))]"
-                                                : "bg-[hsl(var(--background))] border-[hsl(var(--border))] text-[hsl(var(--foreground))] hover:border-[hsl(var(--primary))]"
+                                            ? "bg-[hsl(var(--primary))] text-white border-[hsl(var(--primary))]"
+                                            : "bg-[hsl(var(--background))] border-[hsl(var(--border))] text-[hsl(var(--foreground))] hover:border-[hsl(var(--primary))]"
                                             }`}
                                     >
                                         {c.code}
