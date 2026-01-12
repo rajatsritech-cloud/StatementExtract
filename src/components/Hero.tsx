@@ -37,8 +37,8 @@ export const Hero = () => {
 
           {/* Headline */}
           <h1 id="hero-heading" className="mb-8 text-4xl font-bold tracking-tight text-[hsl(var(--foreground))] sm:text-5xl md:text-6xl lg:text-7xl leading-[1.1] animate-slide-up">
-            Transform Bank Statements <br className="hidden md:block" />
-            <span className="bg-gradient-primary bg-clip-text text-transparent">Into Actionable Data</span>
+            Intelligent Document Processing <br className="hidden md:block" />
+            <span className="bg-gradient-primary bg-clip-text text-transparent">Reimagined for Scale</span>
           </h1>
 
           {/* Subheadline */}
