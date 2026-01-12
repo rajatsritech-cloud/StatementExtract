@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useRef, useMemo } from "react";
 import { Button } from "@/components/ui/button";
+import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { PrivacyBadge } from "@/components/ui/PrivacyBadge";
 import {
     Upload,
@@ -574,11 +575,11 @@ NEWFILEUID:NONE
                 <>
                     {/* Header */}
                     <div className="text-center mb-4">
-                        <Breadcrumb 
+                        <Breadcrumb
                             items={[
                                 { label: "Converter Tools", href: "/convert" },
                                 { label: "QIF to QBO" }
-                            ]} 
+                            ]}
                         />
                         <h1 className="text-2xl md:text-3xl font-bold text-[hsl(var(--foreground))] mb-2">
                             Convert QIF to QBO Online
