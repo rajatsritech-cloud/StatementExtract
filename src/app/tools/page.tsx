@@ -83,7 +83,7 @@ const toolSections = [
         tools: [
             {
                 title: "Paycheck Calculator",
-                description: "Calculate take-home pay after federal, state, Social Security, and Medicare taxes. 2024 tax brackets.",
+                description: "Calculate take-home pay after federal, state, Social Security, and Medicare taxes. 2026 tax brackets.",
                 href: "/tools/paycheck-calculator",
                 icon: "DollarSign",
                 badge: "New",

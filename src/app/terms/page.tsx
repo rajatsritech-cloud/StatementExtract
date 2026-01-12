@@ -11,7 +11,7 @@ export default function TermsPage() {
         <h1 className="text-3xl md:text-4xl font-semibold tracking-tight text-[hsl(var(--foreground))]">
           Terms of Service
         </h1>
-        <p className="text-xs text-[hsl(var(--muted-foreground))]">Last updated: December 26, 2025</p>
+        <p className="text-xs text-[hsl(var(--muted-foreground))]">Last updated: January 13, 2026</p>
       </section>
 
       <section className="space-y-3">

@@ -93,7 +93,7 @@ const softwareApplicationSchema = {
         "worstRating": "1"
     },
     "softwareVersion": "1.0",
-    "datePublished": "2024-01-01",
+    "datePublished": "2026-01-01",
     "inLanguage": "en-US"
 };
 

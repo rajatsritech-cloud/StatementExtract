@@ -136,7 +136,7 @@ const softwareApplicationSchema = {
   ],
   "screenshot": "https://statementextract.com/assets/StatementExtract_Workflow_img.png",
   "softwareVersion": "2.0",
-  "datePublished": "2024-01-01",
+  "datePublished": "2026-01-01",
   "inLanguage": "en-US"
 };
 

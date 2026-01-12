@@ -114,7 +114,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         '/blogs/automated-bank-reconciliation-software-guide/',
         '/blogs/bank-statement-organization-tax-preparation-guide/',
         '/blogs/how-to-read-bank-statement-guide/',
-        '/blogs/paperless-financial-document-management-2025/',
+        '/blogs/paperless-financial-document-management-2026/',
         '/blogs/bank-statement-for-visa-application-guide/',
     ]
 

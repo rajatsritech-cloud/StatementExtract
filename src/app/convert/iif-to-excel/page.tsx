@@ -61,7 +61,7 @@ const schemaData = {
     ],
     "screenshot": "https://statementextract.com/assets/StatementExtract_Workflow_img.png",
     "softwareVersion": "1.0",
-    "datePublished": "2024-01-15"
+    "datePublished": "2026-01-01"
 };
 
 const faqSchema = {

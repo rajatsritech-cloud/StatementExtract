@@ -114,7 +114,7 @@ export const Footer = () => {
 
         {/* Bottom - Copyright */}
         <div className="mt-10 pt-8 border-t border-[hsl(var(--border))] flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-[hsl(var(--muted-foreground))]">
-          <p>© 2025 Statement Extract. All rights reserved.</p>
+          <p>© 2026 Statement Extract. All rights reserved.</p>
           <div className="flex gap-6">
             <Link href="/sitemap.xml" className="hover:text-[hsl(var(--foreground))] transition-colors">Sitemap</Link>
           </div>

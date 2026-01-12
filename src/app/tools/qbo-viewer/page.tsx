@@ -356,7 +356,7 @@ export default function QboViewerPage() {
             {/* Author Attribution */}
             <section className="py-8 px-6">
                 <div className="max-w-4xl mx-auto">
-                    <PageMeta lastUpdated="December 2024" />
+                    <PageMeta lastUpdated="January 2026" />
                 </div>
             </section>
 

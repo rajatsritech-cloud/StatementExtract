@@ -66,7 +66,7 @@ const schemaData = {
     ],
     "screenshot": "https://statementextract.com/assets/StatementExtract_Workflow_img.png",
     "softwareVersion": "1.0",
-    "datePublished": "2024-01-15"
+    "datePublished": "2026-01-01"
 };
 
 const faqSchema = {
@@ -412,7 +412,7 @@ export default function OfxToExcelPage() {
 
             <section className="py-8 px-6">
                 <div className="max-w-4xl mx-auto">
-                    <PageMeta lastUpdated="December 2024" />
+                    <PageMeta lastUpdated="January 2026" />
                 </div>
             </section>
 

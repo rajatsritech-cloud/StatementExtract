@@ -5,19 +5,19 @@ import { Calculator, DollarSign, Shield, Zap, CheckCircle } from "lucide-react";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-    title: "Free Paycheck Calculator 2024 | Take-Home Pay After Taxes | Statement Extract",
-    description: "Free paycheck calculator for 2024. Calculate your take-home pay after federal taxes, Social Security, Medicare, and state taxes. Updated 2024 tax brackets. No signup required.",
-    keywords: "paycheck calculator, salary calculator, take home pay calculator, paycheck after taxes, net pay calculator, gross to net calculator, tax calculator, federal tax calculator, 2024 tax brackets, biweekly paycheck calculator, hourly to salary calculator",
+    title: "Free Paycheck Calculator 2026 | Take-Home Pay After Taxes | Statement Extract",
+    description: "Free paycheck calculator for 2026. Calculate your take-home pay after federal taxes, Social Security, Medicare, and state taxes. Updated 2026 tax brackets. No signup required.",
+    keywords: "paycheck calculator, salary calculator, take home pay calculator, paycheck after taxes, net pay calculator, gross to net calculator, tax calculator, federal tax calculator, 2026 tax brackets, biweekly paycheck calculator, hourly to salary calculator",
     openGraph: {
-        title: "Free Paycheck Calculator 2024 - Calculate Take-Home Pay",
-        description: "Calculate your net pay after federal, state, Social Security, and Medicare taxes. Updated for 2024 tax brackets.",
+        title: "Free Paycheck Calculator 2026 - Calculate Take-Home Pay",
+        description: "Calculate your net pay after federal, state, Social Security, and Medicare taxes. Updated for 2026 tax brackets.",
         type: "website",
         url: "https://statementextract.com/tools/paycheck-calculator",
         locale: "en_US",
     },
     twitter: {
         card: "summary_large_image",
-        title: "Paycheck Calculator 2024 - Free Take-Home Pay Calculator",
+        title: "Paycheck Calculator 2026 - Free Take-Home Pay Calculator",
         description: "Calculate your net pay after all deductions. Free, no signup.",
     },
     alternates: {
@@ -40,7 +40,7 @@ const softwareSchema = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     "name": "Paycheck Calculator",
-    "description": "Free online paycheck calculator with 2024 federal tax brackets. Calculate take-home pay after federal, state, Social Security, and Medicare taxes.",
+    "description": "Free online paycheck calculator with 2026 federal tax brackets. Calculate take-home pay after federal, state, Social Security, and Medicare taxes.",
     "applicationCategory": "FinanceApplication",
     "operatingSystem": "Any",
     "offers": {
@@ -79,10 +79,10 @@ const faqSchema = {
         },
         {
             "@type": "Question",
-            "name": "How much is Social Security tax in 2024?",
+            "name": "How much is Social Security tax in 2026?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Social Security tax is 6.2% of your gross wages up to the wage base limit of $168,600 in 2024. Wages above this limit are not subject to Social Security tax."
+                "text": "Social Security tax is 6.2% of your gross wages up to the wage base limit of $176,100 in 2026. Wages above this limit are not subject to Social Security tax."
             }
         },
         {
@@ -159,7 +159,7 @@ export default function PaycheckCalculatorPage() {
                     </h2>
                     <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                         {[
-                            { icon: Calculator, title: "2024 Tax Brackets", desc: "Updated with the latest IRS federal tax rates and Social Security limits." },
+                            { icon: Calculator, title: "2026 Tax Brackets", desc: "Updated with the latest IRS federal tax rates and Social Security limits." },
                             { icon: Shield, title: "100% Private", desc: "All calculations happen in your browser. No data is sent anywhere." },
                             { icon: Zap, title: "Instant Results", desc: "See your take-home pay update in real-time as you adjust inputs." },
                             { icon: DollarSign, title: "Free Forever", desc: "No signup, no limits, no ads. Calculate as many paychecks as you need." },
@@ -178,7 +178,7 @@ export default function PaycheckCalculatorPage() {
             <section className="py-12 md:py-16 px-6">
                 <div className="max-w-4xl mx-auto">
                     <h2 className="text-2xl md:text-3xl font-bold text-center text-[hsl(var(--foreground))] mb-10">
-                        2024 Federal Tax Brackets
+                        2026 Federal Tax Brackets
                     </h2>
                     <div className="overflow-x-auto">
                         <table className="w-full border-collapse">
@@ -248,7 +248,7 @@ export default function PaycheckCalculatorPage() {
                     </h3>
                     <ul className="list-disc pl-6 text-[hsl(var(--muted-foreground))] mb-6 space-y-2">
                         <li><strong>Federal Income Tax:</strong> Based on your taxable income and filing status (10% to 37%)</li>
-                        <li><strong>Social Security Tax:</strong> 6.2% of wages up to $168,600 (2024 limit)</li>
+                        <li><strong>Social Security Tax:</strong> 6.2% of wages up to $176,100 (2026 limit)</li>
                         <li><strong>Medicare Tax:</strong> 1.45% of all wages (plus 0.9% additional tax for high earners)</li>
                         <li><strong>State Income Tax:</strong> Varies by state (0% to 13.3%)</li>
                     </ul>
@@ -287,7 +287,7 @@ export default function PaycheckCalculatorPage() {
                         {[
                             { q: "How do I calculate my take-home pay?", a: "Enter your gross annual salary, select your pay frequency, choose your filing status, and enter your state tax rate. The calculator shows your net pay after federal taxes, Social Security, Medicare, and state taxes." },
                             { q: "What percentage of my paycheck goes to taxes?", a: "It depends on your income and location. Federal income tax ranges from 10-37%, Social Security is 6.2%, Medicare is 1.45%, and state taxes vary from 0% to 13.3%." },
-                            { q: "How much is Social Security tax in 2024?", a: "Social Security tax is 6.2% of wages up to the wage base limit of $168,600 in 2024. Income above this limit is not subject to Social Security tax." },
+                            { q: "How much is Social Security tax in 2026?", a: "Social Security tax is 6.2% of wages up to the wage base limit of $176,100 in 2026. Income above this limit is not subject to Social Security tax." },
                             { q: "Which states have no income tax?", a: "Nine states have no income tax: Alaska, Florida, Nevada, New Hampshire, South Dakota, Tennessee, Texas, Washington, and Wyoming." },
                             { q: "How can I increase my take-home pay?", a: "Contribute to pre-tax retirement accounts (401k), use HSA or FSA accounts, and claim all eligible deductions on your W-4 form." },
                         ].map((faq, i) => (

@@ -12,7 +12,7 @@ interface PageMetaProps {
  * PageMeta component for E-E-A-T compliance
  * Shows author/company attribution and last updated date
  */
-export const PageMeta = ({ lastUpdated = "December 2024", className = "" }: PageMetaProps) => {
+export const PageMeta = ({ lastUpdated = "January 2026", className = "" }: PageMetaProps) => {
     return (
         <div className={`flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-[hsl(var(--muted-foreground))] ${className}`}>
             <div className="flex items-center gap-1.5">
