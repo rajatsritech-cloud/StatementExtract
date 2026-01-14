@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect, useCallback, useRef } from "react";
-import { X, Download, Copy, Eye, EyeOff, TrendingUp, TrendingDown, DollarSign, User, Mail, Building, CreditCard, Calendar, Wallet, ArrowUpCircle, ArrowDownCircle, FileText, Search, ArrowUpDown, Sparkles, CheckCircle2, Lock, Crown, ChevronDown, Trash2, Settings, RotateCcw } from "lucide-react";
+import { X, Download, Copy, Eye, EyeOff, TrendingUp, TrendingDown, DollarSign, User, Mail, Building, CreditCard, Calendar, Wallet, ArrowUpCircle, ArrowDownCircle, FileText, Search, ArrowUpDown, Sparkles, CheckCircle2, Lock, Crown, ChevronDown, Trash2, Settings, RotateCcw, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 // Assuming ExportService and ExtractedData are correctly defined elsewhere
@@ -1706,7 +1706,66 @@ export const ResultsModal = ({ data, file, isProcessing = false, progress = 0, d
                     />
                   )}
 
-
+                  {/* LIMIT EXCEEDED / FAILED STATE - Show when no transactions */}
+                  {(!data.transactions || data.transactions.length === 0) && (
+                    <div className="flex-1 flex flex-col items-center justify-center gap-6 p-8">
+                      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-amber-500/10">
+                        <AlertTriangle className="h-8 w-8 text-amber-500" />
+                      </div>
+                      <div className="text-center max-w-sm">
+                        <h3 className="text-xl font-bold text-[hsl(var(--foreground))] mb-2">
+                          {data.validation_summary?.status === "FAILED"
+                            ? (isSignedIn ? "Daily Limit Reached" : "Free Tier Limit Reached")
+                            : "No Transactions Found"}
+                        </h3>
+                        <p className="text-sm text-[hsl(var(--muted-foreground))] mb-2">
+                          {data.validation_summary?.issues?.join(". ") ||
+                            (isSignedIn
+                              ? "You've used all your daily pages. Upgrade your plan or wait until tomorrow."
+                              : "Sign in to get more free pages, or upgrade to Pro for unlimited processing.")}
+                        </p>
+                        <div className="space-y-3 mt-6">
+                          {!isSignedIn ? (
+                            <SignInButton mode="modal" forceRedirectUrl="/dashboard">
+                              <Button className="w-full gap-2 shadow-lg hover:shadow-xl transition-all">
+                                <Sparkles className="h-4 w-4" />
+                                Sign In for More Pages
+                              </Button>
+                            </SignInButton>
+                          ) : (
+                            <Button
+                              className="w-full gap-2 bg-blue-600 hover:bg-blue-700 text-white shadow-lg"
+                              onClick={() => window.location.href = '/pricing'}
+                            >
+                              <Sparkles className="h-4 w-4" />
+                              Upgrade to Pro
+                            </Button>
+                          )}
+                          <Button
+                            variant="outline"
+                            onClick={onTryAnother}
+                            className="w-full"
+                          >
+                            Try Another File
+                          </Button>
+                        </div>
+                      </div>
+                      {/* Usage Info */}
+                      {usage && (
+                        <div className="mt-4 px-4 py-3 rounded-lg bg-[hsl(var(--muted))]/50 border border-[hsl(var(--border))] text-center">
+                          <p className="text-xs text-[hsl(var(--muted-foreground))]">
+                            <span className="font-medium text-[hsl(var(--foreground))]">{usage.usage || 0}</span> of{" "}
+                            <span className="font-medium text-[hsl(var(--foreground))]">{usage.limit || 0}</span> pages used today
+                          </p>
+                          {usage.tier && (
+                            <p className="text-[10px] text-[hsl(var(--muted-foreground))] mt-1">
+                              Current plan: <span className="capitalize font-medium">{usage.tier}</span>
+                            </p>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  )}
 
                   {/* Single Unified Table (Smart Reconciled) */}
                   {data.transactions && data.transactions.length > 0 && (
@@ -1772,7 +1831,63 @@ export const ResultsModal = ({ data, file, isProcessing = false, progress = 0, d
                   {/* Privacy Notice */}
 
                 </>
-              ) : null}
+              ) : (
+                // ===== EMPTY STATE - Limit Exceeded / Error =====
+                <div className="flex-1 flex flex-col items-center justify-center gap-6 p-8">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-amber-500/10">
+                    <AlertTriangle className="h-8 w-8 text-amber-500" />
+                  </div>
+                  <div className="text-center max-w-sm">
+                    <h3 className="text-xl font-bold text-[hsl(var(--foreground))] mb-2">
+                      {isSignedIn ? "Daily Limit Reached" : "Free Tier Limit Reached"}
+                    </h3>
+                    <p className="text-sm text-[hsl(var(--muted-foreground))] mb-6">
+                      {isSignedIn
+                        ? "You've used all your daily pages. Upgrade your plan or wait until tomorrow to process more documents."
+                        : "Sign in to get more free pages, or upgrade to Pro for unlimited processing."}
+                    </p>
+                    <div className="space-y-3">
+                      {!isSignedIn ? (
+                        <SignInButton mode="modal" forceRedirectUrl="/dashboard">
+                          <Button className="w-full gap-2 shadow-lg hover:shadow-xl transition-all">
+                            <Sparkles className="h-4 w-4" />
+                            Sign In for More Pages
+                          </Button>
+                        </SignInButton>
+                      ) : (
+                        <Button
+                          className="w-full gap-2 bg-blue-600 hover:bg-blue-700 text-white shadow-lg"
+                          onClick={() => window.location.href = '/pricing'}
+                        >
+                          <Sparkles className="h-4 w-4" />
+                          Upgrade to Pro
+                        </Button>
+                      )}
+                      <Button
+                        variant="outline"
+                        onClick={onTryAnother}
+                        className="w-full"
+                      >
+                        Try Another File
+                      </Button>
+                    </div>
+                  </div>
+                  {/* Usage Info */}
+                  {usage && (
+                    <div className="mt-4 px-4 py-3 rounded-lg bg-[hsl(var(--muted))]/50 border border-[hsl(var(--border))] text-center">
+                      <p className="text-xs text-[hsl(var(--muted-foreground))]">
+                        <span className="font-medium text-[hsl(var(--foreground))]">{usage.usage || 0}</span> of{" "}
+                        <span className="font-medium text-[hsl(var(--foreground))]">{usage.limit || 0}</span> pages used today
+                      </p>
+                      {usage.tier && (
+                        <p className="text-[10px] text-[hsl(var(--muted-foreground))] mt-1">
+                          Current plan: <span className="capitalize font-medium">{usage.tier}</span>
+                        </p>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
 
             {/* Inline Login Prompt Overlay */}
