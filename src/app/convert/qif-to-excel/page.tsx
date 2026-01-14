@@ -24,11 +24,11 @@ export const metadata: Metadata = {
         description: "Convert old QIF files to modern Excel spreadsheets instantly.",
         type: "website",
         url: "https://statementextract.com/convert/qif-to-excel",
-        images: ["https://statementextract.com/assets/StatementExtract_Workflow_img.png"],
+        images: ["https://statementextract.com/assets/StatementExtract_Workflow_img.png"]
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/qif-to-excel/",
-    },
+        canonical: "https://statementextract.com/convert/qif-to-excel/"
+    }
 };
 
 const schemaData = {
@@ -45,13 +45,6 @@ const schemaData = {
         "priceCurrency": "USD",
         "priceValidUntil": "2026-12-31",
         "availability": "https://schema.org/InStock"
-    },
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.8",
-        "ratingCount": "950",
-        "bestRating": "5",
-        "worstRating": "1"
     },
     "featureList": [
         "QIF to Excel conversion",

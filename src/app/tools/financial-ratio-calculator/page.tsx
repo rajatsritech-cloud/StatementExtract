@@ -14,15 +14,15 @@ export const metadata: Metadata = {
         type: "website",
         url: "https://statementextract.com/tools/financial-ratio-calculator",
         locale: "en_US",
-        alternateLocale: ["en_GB", "en_CA", "en_AU"],
+        alternateLocale: ["en_GB", "en_CA", "en_AU"]
     },
     twitter: {
         card: "summary_large_image",
         title: "Free Financial Ratio Calculator",
-        description: "Calculate 20+ key financial ratios instantly. Free for finance professionals.",
+        description: "Calculate 20+ key financial ratios instantly. Free for finance professionals."
     },
     alternates: {
-        canonical: "https://statementextract.com/tools/financial-ratio-calculator/",
+        canonical: "https://statementextract.com/tools/financial-ratio-calculator/"
     },
     robots: {
         index: true,
@@ -32,9 +32,9 @@ export const metadata: Metadata = {
             follow: true,
             "max-video-preview": -1,
             "max-image-preview": "large",
-            "max-snippet": -1,
-        },
-    },
+            "max-snippet": -1
+        }
+    }
 };
 
 // Schema.org structured data for rich snippets
@@ -49,13 +49,6 @@ const schemaData = {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
-    },
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.9",
-        "ratingCount": "12547",
-        "bestRating": "5",
-        "worstRating": "1"
     }
 };
 

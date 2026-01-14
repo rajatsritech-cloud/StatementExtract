@@ -30,10 +30,10 @@ export const metadata: Metadata = {
         title: "Free Compound Interest Calculator with Monthly Contributions",
         description: "Calculate how your investments grow with compound interest. Add monthly contributions, choose compounding frequency, download results.",
         type: "website",
-        url: "https://statementextract.com/tools/compound-interest-calculator/",
+        url: "https://statementextract.com/tools/compound-interest-calculator/"
     },
     alternates: {
-        canonical: "https://statementextract.com/tools/compound-interest-calculator/",
+        canonical: "https://statementextract.com/tools/compound-interest-calculator/"
     },
     robots: {
         index: true,
@@ -43,9 +43,9 @@ export const metadata: Metadata = {
             follow: true,
             "max-video-preview": -1,
             "max-image-preview": "large",
-            "max-snippet": -1,
-        },
-    },
+            "max-snippet": -1
+        }
+    }
 };
 
 const schemaData = {
@@ -60,13 +60,6 @@ const schemaData = {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
-    },
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.9",
-        "ratingCount": "18742",
-        "bestRating": "5",
-        "worstRating": "1"
     }
 };
 

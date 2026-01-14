@@ -11,11 +11,11 @@ export const metadata: Metadata = {
         title: "Split PDF Online Free | Extract Pages from PDF",
         description: "Extract specific pages or split PDF into separate files. Free, private, no upload required.",
         type: "website",
-        url: "https://statementextract.com/convert/split-pdf",
+        url: "https://statementextract.com/convert/split-pdf"
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/split-pdf/",
-    },
+        canonical: "https://statementextract.com/convert/split-pdf/"
+    }
 };
 
 const schemaData = {
@@ -29,11 +29,6 @@ const schemaData = {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
-    },
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.9",
-        "ratingCount": "3892"
     }
 };
 

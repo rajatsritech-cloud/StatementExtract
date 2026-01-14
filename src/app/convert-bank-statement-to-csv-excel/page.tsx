@@ -4,35 +4,35 @@ import { BankStatementConverter } from "@/components/BankStatementConverter";
 
 // Dynamic imports for below-fold components
 const BankStatementFeatures = dynamic(() => import("@/components/bank-statement/BankStatementContent").then(mod => ({ default: mod.BankStatementFeatures })), {
-  loading: () => <div className="min-h-[400px] bg-[hsl(var(--background))]" />,
+  loading: () => <div className="min-h-[400px] bg-[hsl(var(--background))]" />
 });
 
 const SupportedBanks = dynamic(() => import("@/components/bank-statement/BankStatementContent").then(mod => ({ default: mod.SupportedBanks })), {
-  loading: () => <div className="min-h-[300px] bg-[hsl(var(--background))]" />,
+  loading: () => <div className="min-h-[300px] bg-[hsl(var(--background))]" />
 });
 
 const BankStatementFAQ = dynamic(() => import("@/components/bank-statement/BankStatementContent").then(mod => ({ default: mod.BankStatementFAQ })), {
-  loading: () => <div className="min-h-[400px] bg-[hsl(var(--background))]" />,
+  loading: () => <div className="min-h-[400px] bg-[hsl(var(--background))]" />
 });
 
 const BankStatementSEOContent = dynamic(() => import("@/components/bank-statement/BankStatementContent").then(mod => ({ default: mod.BankStatementSEOContent })), {
-  loading: () => <div className="min-h-[300px] bg-[hsl(var(--background))]" />,
+  loading: () => <div className="min-h-[300px] bg-[hsl(var(--background))]" />
 });
 
 const HowItWorks = dynamic(() => import("@/components/HowItWorks").then(mod => ({ default: mod.HowItWorks })), {
-  loading: () => <div className="min-h-[400px] bg-[hsl(var(--background))]" />,
+  loading: () => <div className="min-h-[400px] bg-[hsl(var(--background))]" />
 });
 
 const CTA = dynamic(() => import("@/components/CTA").then(mod => ({ default: mod.CTA })), {
-  loading: () => <div className="min-h-[200px] bg-[hsl(var(--background))]" />,
+  loading: () => <div className="min-h-[200px] bg-[hsl(var(--background))]" />
 });
 
 const RecentBlogs = dynamic(() => import("@/components/RecentBlogs").then(mod => ({ default: mod.RecentBlogs })), {
-  loading: () => <div className="min-h-[400px] bg-[hsl(var(--background))]" />,
+  loading: () => <div className="min-h-[400px] bg-[hsl(var(--background))]" />
 });
 
 const RedirectIfAuthenticated = dynamic(() => import("@/components/RedirectIfAuthenticated").then(mod => ({ default: mod.RedirectIfAuthenticated })), {
-  loading: () => null,
+  loading: () => null
 });
 
 export const metadata: Metadata = {
@@ -80,21 +80,21 @@ export const metadata: Metadata = {
         url: "/assets/StatementExtract_Workflow_img.png",
         width: 1200,
         height: 630,
-        alt: "Bank Statement Converter - PDF to Excel/CSV",
+        alt: "Bank Statement Converter - PDF to Excel/CSV"
       },
-    ],
+    ]
   },
   twitter: {
     card: "summary_large_image",
     title: "Bank Statement Converter - PDF to Excel/CSV",
-    description: "Convert any bank statement PDF to Excel or CSV. Works with Chase, Wells Fargo, Bank of America & more. Free to try.",
+    description: "Convert any bank statement PDF to Excel or CSV. Works with Chase, Wells Fargo, Bank of America & more. Free to try."
   },
   alternates: {
     canonical: "/convert-bank-statement-to-csv-excel/",
     languages: {
-      "en-US": "https://statementextract.com/convert-bank-statement-to-csv-excel",
-    },
-  },
+      "en-US": "https://statementextract.com/convert-bank-statement-to-csv-excel"
+    }
+  }
 };
 
 // Enhanced Schema.org data for better rich snippets
@@ -112,13 +112,6 @@ const softwareApplicationSchema = {
     "priceCurrency": "USD",
     "priceValidUntil": "2026-12-31",
     "availability": "https://schema.org/InStock"
-  },
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "4.9",
-    "ratingCount": "2847",
-    "bestRating": "5",
-    "worstRating": "1"
   },
   "featureList": [
     "PDF to Excel conversion",

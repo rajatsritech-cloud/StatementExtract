@@ -26,17 +26,17 @@ export const metadata: Metadata = {
         description: "Convert QFX, OFX, and QBO files to clean, printable PDF transaction reports. Free, instant, no signup required.",
         type: "website",
         url: "https://statementextract.com/convert/qfx-to-pdf",
-        images: ["https://statementextract.com/assets/StatementExtract_Workflow_img.png"],
+        images: ["https://statementextract.com/assets/StatementExtract_Workflow_img.png"]
     },
     twitter: {
         card: "summary_large_image",
         title: "QFX to PDF Converter - Free Online Tool",
         description: "Convert Quicken QFX files to PDF reports instantly. Free, privacy-first.",
-        images: ["https://statementextract.com/assets/StatementExtract_Workflow_img.png"],
+        images: ["https://statementextract.com/assets/StatementExtract_Workflow_img.png"]
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/qfx-to-pdf/",
-    },
+        canonical: "https://statementextract.com/convert/qfx-to-pdf/"
+    }
 };
 
 const schemaData = {
@@ -50,11 +50,6 @@ const schemaData = {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
-    },
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.8",
-        "ratingCount": "523"
     }
 };
 

@@ -12,15 +12,15 @@ export const metadata: Metadata = {
         description: "Convert images to Base64 instantly. Embed in HTML, CSS, Markdown. Zero server upload.",
         type: "website",
         url: "https://statementextract.com/convert/image-to-base64",
-        locale: "en_US",
+        locale: "en_US"
     },
     twitter: {
         card: "summary_large_image",
         title: "Image to Base64 - Fastest Online Converter",
-        description: "Convert images to Base64 in milliseconds. 100% client-side, private.",
+        description: "Convert images to Base64 in milliseconds. 100% client-side, private."
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/image-to-base64/",
+        canonical: "https://statementextract.com/convert/image-to-base64/"
     },
     robots: {
         index: true,
@@ -30,9 +30,9 @@ export const metadata: Metadata = {
             follow: true,
             "max-video-preview": -1,
             "max-image-preview": "large",
-            "max-snippet": -1,
-        },
-    },
+            "max-snippet": -1
+        }
+    }
 };
 
 const schemaData = {
@@ -46,13 +46,6 @@ const schemaData = {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
-    },
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.9",
-        "ratingCount": "15623",
-        "bestRating": "5",
-        "worstRating": "1"
     }
 };
 

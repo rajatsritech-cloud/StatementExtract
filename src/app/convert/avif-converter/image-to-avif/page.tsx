@@ -11,11 +11,11 @@ export const metadata: Metadata = {
         title: "Free Image to AVIF Converter",
         description: "Convert images to AVIF for up to 50% smaller files. Free, fast, and private.",
         type: "website",
-        url: "https://statementextract.com/convert/avif-converter/image-to-avif",
+        url: "https://statementextract.com/convert/avif-converter/image-to-avif"
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/avif-converter/image-to-avif/",
-    },
+        canonical: "https://statementextract.com/convert/avif-converter/image-to-avif/"
+    }
 };
 
 const schemaData = {
@@ -28,11 +28,6 @@ const schemaData = {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
-    },
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.8",
-        "ratingCount": "1560"
     }
 };
 

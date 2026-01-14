@@ -13,15 +13,15 @@ export const metadata: Metadata = {
         description: "Convert JPG, PNG, images to PDF instantly. Combine multiple photos. 100% free, no signup required.",
         type: "website",
         url: "https://statementextract.com/convert/jpg-to-pdf",
-        locale: "en_US",
+        locale: "en_US"
     },
     twitter: {
         card: "summary_large_image",
         title: "JPG to PDF Converter - Free Online",
-        description: "Convert images to PDF instantly. No watermark, no signup.",
+        description: "Convert images to PDF instantly. No watermark, no signup."
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/jpg-to-pdf/",
+        canonical: "https://statementextract.com/convert/jpg-to-pdf/"
     },
     robots: {
         index: true,
@@ -31,9 +31,9 @@ export const metadata: Metadata = {
             follow: true,
             "max-video-preview": -1,
             "max-image-preview": "large",
-            "max-snippet": -1,
-        },
-    },
+            "max-snippet": -1
+        }
+    }
 };
 
 // Schema.org structured data for rich snippets
@@ -48,13 +48,6 @@ const schemaData = {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
-    },
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.9",
-        "ratingCount": "24851",
-        "bestRating": "5",
-        "worstRating": "1"
     }
 };
 

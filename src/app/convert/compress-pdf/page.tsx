@@ -11,11 +11,11 @@ export const metadata: Metadata = {
         title: "Compress PDF Online Free | Reduce PDF to 100KB, 500KB, 1MB",
         description: "Reduce PDF file size to exact targets. Free, private, no upload required.",
         type: "website",
-        url: "https://statementextract.com/convert/compress-pdf",
+        url: "https://statementextract.com/convert/compress-pdf"
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/compress-pdf/",
-    },
+        canonical: "https://statementextract.com/convert/compress-pdf/"
+    }
 };
 
 const schemaData = {
@@ -29,11 +29,6 @@ const schemaData = {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
-    },
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.8",
-        "ratingCount": "4521"
     }
 };
 

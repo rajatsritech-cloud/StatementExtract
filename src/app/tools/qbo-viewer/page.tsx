@@ -25,17 +25,17 @@ export const metadata: Metadata = {
         description: "View QBO, OFX, and QFX files online. See transactions instantly without QuickBooks. Free, private, no signup.",
         type: "website",
         url: "https://statementextract.com/tools/qbo-viewer",
-        images: ["https://statementextract.com/assets/StatementExtract_Workflow_img.png"],
+        images: ["https://statementextract.com/assets/StatementExtract_Workflow_img.png"]
     },
     twitter: {
         card: "summary_large_image",
         title: "QBO File Viewer - Free Online Tool",
         description: "Open QuickBooks QBO files online. View transactions instantly. 100% private.",
-        images: ["https://statementextract.com/assets/StatementExtract_Workflow_img.png"],
+        images: ["https://statementextract.com/assets/StatementExtract_Workflow_img.png"]
     },
     alternates: {
-        canonical: "https://statementextract.com/tools/qbo-viewer/",
-    },
+        canonical: "https://statementextract.com/tools/qbo-viewer/"
+    }
 };
 
 const schemaData = {
@@ -49,11 +49,6 @@ const schemaData = {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
-    },
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.9",
-        "ratingCount": "1247"
     }
 };
 

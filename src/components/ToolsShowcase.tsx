@@ -5,7 +5,7 @@ import {
     Calculator, FileSpreadsheet, FileText, Wallet,
     Receipt, PiggyBank, TrendingUp, Building2, Percent,
     ArrowRightLeft, Eye, Minimize2, Split,
-    Layers, FileImage, Code, CreditCard, ArrowRight
+    Layers, FileImage, Code, CreditCard, ArrowRight, CheckCircle2
 } from "lucide-react";
 
 const TOOL_CATEGORIES = [
@@ -57,6 +57,7 @@ const TOOL_CATEGORIES = [
             { name: "QFX to CSV", href: "/convert/qfx-to-csv", icon: FileSpreadsheet, description: "Web Connect export" },
             { name: "OFX to Excel", href: "/convert/ofx-to-excel", icon: FileSpreadsheet, description: "OFX to spreadsheet" },
             { name: "MT940 to Excel", href: "/convert/mt940-to-excel", icon: FileSpreadsheet, description: "SWIFT to spreadsheet" },
+            { name: "QBO Validator", href: "/tools/quickbooks-import-validator", icon: CheckCircle2, description: "Check CSV for errors" },
         ]
     },
     {

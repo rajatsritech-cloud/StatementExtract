@@ -6,19 +6,19 @@ import { InvoiceFeatures, SupportedInvoiceFormats, InvoiceFAQ, InvoiceSEOContent
 
 // Use the same components for now, they are generic enough or we can reuse them
 const InvoiceHowItWorks = dynamic(() => import("@/components/InvoiceHowItWorks").then(mod => ({ default: mod.InvoiceHowItWorks })), {
-    loading: () => <div className="min-h-[400px] bg-[hsl(var(--background))]" />,
+    loading: () => <div className="min-h-[400px] bg-[hsl(var(--background))]" />
 });
 
 const CTA = dynamic(() => import("@/components/CTA").then(mod => ({ default: mod.CTA })), {
-    loading: () => <div className="min-h-[200px] bg-[hsl(var(--background))]" />,
+    loading: () => <div className="min-h-[200px] bg-[hsl(var(--background))]" />
 });
 
 const RecentBlogs = dynamic(() => import("@/components/RecentBlogs").then(mod => ({ default: mod.RecentBlogs })), {
-    loading: () => <div className="min-h-[400px] bg-[hsl(var(--background))]" />,
+    loading: () => <div className="min-h-[400px] bg-[hsl(var(--background))]" />
 });
 
 const RedirectIfAuthenticated = dynamic(() => import("@/components/RedirectIfAuthenticated").then(mod => ({ default: mod.RedirectIfAuthenticated })), {
-    loading: () => null,
+    loading: () => null
 });
 
 export const metadata: Metadata = {
@@ -46,21 +46,21 @@ export const metadata: Metadata = {
                 url: "/assets/StatementExtract_Workflow_img.png",
                 width: 1200,
                 height: 630,
-                alt: "AI Invoice Converter",
+                alt: "AI Invoice Converter"
             },
-        ],
+        ]
     },
     twitter: {
         card: "summary_large_image",
         title: "Invoice to Excel Converter",
-        description: "Convert PDF Invoices to Excel instantly with AI. Free online tool.",
+        description: "Convert PDF Invoices to Excel instantly with AI. Free online tool."
     },
     alternates: {
         canonical: "/convert-invoice-to-excel-csv/",
         languages: {
-            "en-US": "https://statementextract.com/convert-invoice-to-excel-csv",
-        },
-    },
+            "en-US": "https://statementextract.com/convert-invoice-to-excel-csv"
+        }
+    }
 };
 
 const softwareApplicationSchema = {
@@ -85,13 +85,6 @@ const softwareApplicationSchema = {
         "Multi-Currency Support",
         "Geo AI Layout Analysis"
     ],
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.8",
-        "ratingCount": "1520",
-        "bestRating": "5",
-        "worstRating": "1"
-    },
     "softwareVersion": "1.0",
     "datePublished": "2026-01-01",
     "inLanguage": "en-US"

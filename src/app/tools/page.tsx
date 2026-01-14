@@ -51,6 +51,13 @@ const toolSections = [
                 icon: "Calculator",
                 badge: null,
             },
+            {
+                title: "QuickBooks Import Validator",
+                description: "Validate CSV entries for QuickBooks Online. Prevent import errors before they happen.",
+                href: "/tools/quickbooks-import-validator",
+                icon: "CheckCircle2",
+                badge: "New",
+            },
         ],
     },
     {

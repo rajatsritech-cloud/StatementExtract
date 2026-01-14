@@ -12,15 +12,15 @@ export const metadata: Metadata = {
         description: "Calculate loan payments and generate full amortization schedules. See interest savings from extra payments.",
         type: "website",
         url: "https://statementextract.com/tools/amortization-calculator",
-        locale: "en_US",
+        locale: "en_US"
     },
     twitter: {
         card: "summary_large_image",
         title: "Amortization Calculator - Free Loan Payment Schedule",
-        description: "Calculate mortgage and loan payments. See savings from extra payments.",
+        description: "Calculate mortgage and loan payments. See savings from extra payments."
     },
     alternates: {
-        canonical: "https://statementextract.com/tools/amortization-calculator/",
+        canonical: "https://statementextract.com/tools/amortization-calculator/"
     },
     robots: {
         index: true,
@@ -30,9 +30,9 @@ export const metadata: Metadata = {
             follow: true,
             "max-video-preview": -1,
             "max-image-preview": "large",
-            "max-snippet": -1,
-        },
-    },
+            "max-snippet": -1
+        }
+    }
 };
 
 const schemaData = {
@@ -46,13 +46,6 @@ const schemaData = {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
-    },
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.9",
-        "ratingCount": "32156",
-        "bestRating": "5",
-        "worstRating": "1"
     }
 };
 

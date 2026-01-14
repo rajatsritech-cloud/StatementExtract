@@ -16,16 +16,16 @@ export const metadata: Metadata = {
         url: "https://statementextract.com/tools/profit-margin-calculator",
         locale: "en_US",
         alternateLocale: ["en_GB", "en_CA", "en_AU"],
-        images: ["https://statementextract.com/assets/StatementExtract_Workflow_img.png"],
+        images: ["https://statementextract.com/assets/StatementExtract_Workflow_img.png"]
     },
     twitter: {
         card: "summary_large_image",
         title: "Free Profit Margin Calculator",
         description: "Calculate profit margins and markup instantly. Free for business owners.",
-        images: ["https://statementextract.com/assets/StatementExtract_Workflow_img.png"],
+        images: ["https://statementextract.com/assets/StatementExtract_Workflow_img.png"]
     },
     alternates: {
-        canonical: "https://statementextract.com/tools/profit-margin-calculator/",
+        canonical: "https://statementextract.com/tools/profit-margin-calculator/"
     },
     robots: {
         index: true,
@@ -35,9 +35,9 @@ export const metadata: Metadata = {
             follow: true,
             "max-video-preview": -1,
             "max-image-preview": "large",
-            "max-snippet": -1,
-        },
-    },
+            "max-snippet": -1
+        }
+    }
 };
 
 // Schema.org structured data for rich snippets
@@ -52,13 +52,6 @@ const schemaData = {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
-    },
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.9",
-        "ratingCount": "8247",
-        "bestRating": "5",
-        "worstRating": "1"
     }
 };
 

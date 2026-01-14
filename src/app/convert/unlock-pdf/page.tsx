@@ -37,15 +37,15 @@ export const metadata: Metadata = {
         title: "Unlock PDF Free Online - Remove Password & Restrictions",
         description: "Remove PDF password protection and restrictions. Enable copy, print, and edit. 100% free and private.",
         type: "website",
-        url: "https://statementextract.com/convert/unlock-pdf",
+        url: "https://statementextract.com/convert/unlock-pdf"
     },
     twitter: {
         card: "summary_large_image",
         title: "Unlock PDF Free Online - Remove Restrictions",
-        description: "Unlock protected PDFs instantly. Enable copy, print, edit. Works on mobile.",
+        description: "Unlock protected PDFs instantly. Enable copy, print, edit. Works on mobile."
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/unlock-pdf/",
+        canonical: "https://statementextract.com/convert/unlock-pdf/"
     },
     robots: {
         index: true,
@@ -55,9 +55,9 @@ export const metadata: Metadata = {
             follow: true,
             "max-video-preview": -1,
             "max-image-preview": "large",
-            "max-snippet": -1,
-        },
-    },
+            "max-snippet": -1
+        }
+    }
 };
 
 const schemaData = {
@@ -72,13 +72,6 @@ const schemaData = {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
-    },
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.7",
-        "ratingCount": "15238",
-        "bestRating": "5",
-        "worstRating": "1"
     }
 };
 

@@ -11,11 +11,11 @@ export const metadata: Metadata = {
         title: "Free AVIF to WebP Converter Online",
         description: "Convert AVIF images to WebP format instantly. 100% free, no signup required.",
         type: "website",
-        url: "https://statementextract.com/convert/avif-converter/avif-to-webp",
+        url: "https://statementextract.com/convert/avif-converter/avif-to-webp"
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/avif-converter/avif-to-webp/",
-    },
+        canonical: "https://statementextract.com/convert/avif-converter/avif-to-webp/"
+    }
 };
 
 const schemaData = {
@@ -28,11 +28,6 @@ const schemaData = {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
-    },
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.7",
-        "ratingCount": "980"
     }
 };
 

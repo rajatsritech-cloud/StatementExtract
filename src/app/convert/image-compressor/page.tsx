@@ -11,11 +11,11 @@ export const metadata: Metadata = {
         title: "Free Image Compressor - Compress PNG to 100KB, 50KB, 20KB",
         description: "Compress images to exact target sizes. Free, fast, and 100% private.",
         type: "website",
-        url: "https://statementextract.com/convert/image-compressor",
+        url: "https://statementextract.com/convert/image-compressor"
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/image-compressor/",
-    },
+        canonical: "https://statementextract.com/convert/image-compressor/"
+    }
 };
 
 const schemaData = {
@@ -28,11 +28,6 @@ const schemaData = {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
-    },
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.9",
-        "ratingCount": "3150"
     }
 };
 

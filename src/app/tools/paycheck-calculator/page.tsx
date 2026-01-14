@@ -13,15 +13,15 @@ export const metadata: Metadata = {
         description: "Calculate your net pay after federal, state, Social Security, and Medicare taxes. Updated for 2026 tax brackets.",
         type: "website",
         url: "https://statementextract.com/tools/paycheck-calculator",
-        locale: "en_US",
+        locale: "en_US"
     },
     twitter: {
         card: "summary_large_image",
         title: "Paycheck Calculator 2026 - Free Take-Home Pay Calculator",
-        description: "Calculate your net pay after all deductions. Free, no signup.",
+        description: "Calculate your net pay after all deductions. Free, no signup."
     },
     alternates: {
-        canonical: "https://statementextract.com/tools/paycheck-calculator/",
+        canonical: "https://statementextract.com/tools/paycheck-calculator/"
     },
     robots: {
         index: true,
@@ -31,9 +31,9 @@ export const metadata: Metadata = {
             follow: true,
             "max-video-preview": -1,
             "max-image-preview": "large",
-            "max-snippet": -1,
-        },
-    },
+            "max-snippet": -1
+        }
+    }
 };
 
 const softwareSchema = {
@@ -47,13 +47,6 @@ const softwareSchema = {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
-    },
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.9",
-        "ratingCount": "18542",
-        "bestRating": "5",
-        "worstRating": "1"
     }
 };
 

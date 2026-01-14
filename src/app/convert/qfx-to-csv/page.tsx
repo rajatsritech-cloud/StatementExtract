@@ -24,17 +24,17 @@ export const metadata: Metadata = {
         description: "Convert QFX, OFX, QBO files to CSV spreadsheets. Free, instant, 100% private processing.",
         type: "website",
         url: "https://statementextract.com/convert/qfx-to-csv",
-        images: ["https://statementextract.com/assets/StatementExtract_Workflow_img.png"],
+        images: ["https://statementextract.com/assets/StatementExtract_Workflow_img.png"]
     },
     twitter: {
         card: "summary_large_image",
         title: "QFX to CSV Converter - Free Online Tool",
         description: "Convert Quicken QFX files to CSV spreadsheets. Free, instant, private.",
-        images: ["https://statementextract.com/assets/StatementExtract_Workflow_img.png"],
+        images: ["https://statementextract.com/assets/StatementExtract_Workflow_img.png"]
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/qfx-to-csv/",
-    },
+        canonical: "https://statementextract.com/convert/qfx-to-csv/"
+    }
 };
 
 const schemaData = {
@@ -48,11 +48,6 @@ const schemaData = {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
-    },
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.9",
-        "ratingCount": "1456"
     }
 };
 

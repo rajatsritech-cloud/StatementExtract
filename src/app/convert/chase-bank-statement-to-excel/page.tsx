@@ -13,16 +13,16 @@ export const metadata: Metadata = {
         description: "Convert your Chase Bank PDF statements to Excel or CSV format instantly. Works with checking, savings, and credit card statements.",
         type: "website",
         url: "https://statementextract.com/convert/chase-bank-statement-to-excel",
-        locale: "en_US",
+        locale: "en_US"
     },
     twitter: {
         card: "summary_large_image",
         title: "Chase Bank Statement to Excel - Free Converter",
-        description: "Convert Chase PDF statements to Excel instantly. No signup required.",
+        description: "Convert Chase PDF statements to Excel instantly. No signup required."
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/chase-bank-statement-to-excel/",
-    },
+        canonical: "https://statementextract.com/convert/chase-bank-statement-to-excel/"
+    }
 };
 
 const softwareSchema = {
@@ -36,13 +36,6 @@ const softwareSchema = {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
-    },
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.9",
-        "ratingCount": "12847",
-        "bestRating": "5",
-        "worstRating": "1"
     }
 };
 

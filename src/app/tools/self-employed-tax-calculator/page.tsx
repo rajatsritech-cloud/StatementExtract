@@ -20,11 +20,11 @@ export const metadata: Metadata = {
         title: "Self-Employed Tax Calculator 2026 | Free 1099 Tax Estimator",
         description: "Calculate your 2026 self-employment tax, federal income tax, and quarterly payments. Free 100% private calculator.",
         type: "website",
-        url: "https://statementextract.com/tools/self-employed-tax-calculator",
+        url: "https://statementextract.com/tools/self-employed-tax-calculator"
     },
     alternates: {
-        canonical: "https://statementextract.com/tools/self-employed-tax-calculator/",
-    },
+        canonical: "https://statementextract.com/tools/self-employed-tax-calculator/"
+    }
 };
 
 const schemaData = {
@@ -38,11 +38,6 @@ const schemaData = {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
-    },
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.9",
-        "ratingCount": "1842"
     }
 };
 

@@ -21,11 +21,11 @@ export const metadata: Metadata = {
         title: "QIF to QBO Converter Free Online | Quicken to QuickBooks",
         description: "Convert Quicken QIF files to QuickBooks QBO format online. Free, instant, 100% private - no data upload required.",
         type: "website",
-        url: "https://statementextract.com/convert/qif-to-qbo",
+        url: "https://statementextract.com/convert/qif-to-qbo"
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/qif-to-qbo/",
-    },
+        canonical: "https://statementextract.com/convert/qif-to-qbo/"
+    }
 };
 
 const schemaData = {
@@ -39,11 +39,6 @@ const schemaData = {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
-    },
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.9",
-        "ratingCount": "423"
     }
 };
 

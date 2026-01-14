@@ -24,11 +24,11 @@ export const metadata: Metadata = {
         title: "CSV to OFX Converter Free Online | Import to QuickBooks & Xero",
         description: "Convert any bank CSV to OFX, QBO, or QFX format. Import into QuickBooks, Xero, Sage & more. 100% free, secure, browser-based.",
         type: "website",
-        url: "https://statementextract.com/convert/csv-to-ofx",
+        url: "https://statementextract.com/convert/csv-to-ofx"
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/csv-to-ofx/",
-    },
+        canonical: "https://statementextract.com/convert/csv-to-ofx/"
+    }
 };
 
 const schemaData = {
@@ -42,11 +42,6 @@ const schemaData = {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
-    },
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.9",
-        "ratingCount": "1250"
     }
 };
 

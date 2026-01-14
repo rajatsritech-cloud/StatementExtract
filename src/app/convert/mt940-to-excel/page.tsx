@@ -24,17 +24,17 @@ export const metadata: Metadata = {
         description: "Convert MT940 SWIFT bank files to Excel spreadsheets. Free, instant, private.",
         type: "website",
         url: "https://statementextract.com/convert/mt940-to-excel",
-        images: ["https://statementextract.com/assets/StatementExtract_Workflow_img.png"],
+        images: ["https://statementextract.com/assets/StatementExtract_Workflow_img.png"]
     },
     twitter: {
         card: "summary_large_image",
         title: "MT940 to Excel Converter - Free Online Tool",
         description: "Convert SWIFT MT940 files to Excel. Free, instant, private.",
-        images: ["https://statementextract.com/assets/StatementExtract_Workflow_img.png"],
+        images: ["https://statementextract.com/assets/StatementExtract_Workflow_img.png"]
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/mt940-to-excel/",
-    },
+        canonical: "https://statementextract.com/convert/mt940-to-excel/"
+    }
 };
 
 const schemaData = {
@@ -48,11 +48,6 @@ const schemaData = {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
-    },
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.7",
-        "ratingCount": "678"
     }
 };
 

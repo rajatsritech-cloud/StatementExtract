@@ -15,16 +15,16 @@ export const metadata: Metadata = {
         type: "website",
         url: "https://statementextract.com/tools/markup-calculator",
         locale: "en_US",
-        images: ["https://statementextract.com/assets/StatementExtract_Workflow_img.png"],
+        images: ["https://statementextract.com/assets/StatementExtract_Workflow_img.png"]
     },
     twitter: {
         card: "summary_large_image",
         title: "Markup Calculator - Free Online Tool",
         description: "Calculate markup and selling price instantly. Free, no signup required.",
-        images: ["https://statementextract.com/assets/StatementExtract_Workflow_img.png"],
+        images: ["https://statementextract.com/assets/StatementExtract_Workflow_img.png"]
     },
     alternates: {
-        canonical: "https://statementextract.com/tools/markup-calculator/",
+        canonical: "https://statementextract.com/tools/markup-calculator/"
     },
     robots: {
         index: true,
@@ -34,9 +34,9 @@ export const metadata: Metadata = {
             follow: true,
             "max-video-preview": -1,
             "max-image-preview": "large",
-            "max-snippet": -1,
-        },
-    },
+            "max-snippet": -1
+        }
+    }
 };
 
 // Schema.org structured data
@@ -51,13 +51,6 @@ const schemaData = {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
-    },
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.9",
-        "ratingCount": "18742",
-        "bestRating": "5",
-        "worstRating": "1"
     }
 };
 

@@ -11,11 +11,11 @@ export const metadata: Metadata = {
         title: "Free AVIF to PNG Converter Online",
         description: "Convert AVIF images to PNG format instantly. 100% free, no signup required.",
         type: "website",
-        url: "https://statementextract.com/convert/avif-converter/avif-to-png",
+        url: "https://statementextract.com/convert/avif-converter/avif-to-png"
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/avif-converter/avif-to-png/",
-    },
+        canonical: "https://statementextract.com/convert/avif-converter/avif-to-png/"
+    }
 };
 
 const schemaData = {
@@ -28,11 +28,6 @@ const schemaData = {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
-    },
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.8",
-        "ratingCount": "1250"
     }
 };
 

@@ -58,13 +58,6 @@ export default function BankStatementXeroPage() {
             "High Accuracy OCR for Scanned Docs",
             "Secure & Private Processing"
         ],
-        "aggregateRating": {
-            "@type": "AggregateRating",
-            "ratingValue": "4.9",
-            "ratingCount": "1847",
-            "bestRating": "5",
-            "worstRating": "1"
-        },
         "author": {
             "@type": "Organization",
             "name": "Statement Extract",

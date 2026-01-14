@@ -22,11 +22,11 @@ export const metadata: Metadata = {
         title: "PayPal to QuickBooks Converter Free | Import PayPal Transactions",
         description: "Convert PayPal transaction exports to QuickBooks QBO format instantly. Free, private, no signup required.",
         type: "website",
-        url: "https://statementextract.com/convert/paypal-to-qbo",
+        url: "https://statementextract.com/convert/paypal-to-qbo"
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/paypal-to-qbo/",
-    },
+        canonical: "https://statementextract.com/convert/paypal-to-qbo/"
+    }
 };
 
 const schemaData = {
@@ -40,11 +40,6 @@ const schemaData = {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
-    },
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.8",
-        "ratingCount": "428"
     }
 };
 

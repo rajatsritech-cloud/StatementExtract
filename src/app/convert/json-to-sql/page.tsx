@@ -12,15 +12,15 @@ export const metadata: Metadata = {
         description: "Convert JSON arrays and objects to SQL INSERT statements and table schemas. PostgreSQL, MySQL, SQLite, SQL Server.",
         type: "website",
         url: "https://statementextract.com/convert/json-to-sql",
-        locale: "en_US",
+        locale: "en_US"
     },
     twitter: {
         card: "summary_large_image",
         title: "JSON to SQL Converter - Free Online Tool",
-        description: "Convert JSON to SQL INSERT statements instantly. Multi-dialect support.",
+        description: "Convert JSON to SQL INSERT statements instantly. Multi-dialect support."
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/json-to-sql/",
+        canonical: "https://statementextract.com/convert/json-to-sql/"
     },
     robots: {
         index: true,
@@ -30,9 +30,9 @@ export const metadata: Metadata = {
             follow: true,
             "max-video-preview": -1,
             "max-image-preview": "large",
-            "max-snippet": -1,
-        },
-    },
+            "max-snippet": -1
+        }
+    }
 };
 
 const schemaData = {
@@ -46,13 +46,6 @@ const schemaData = {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
-    },
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.9",
-        "ratingCount": "8421",
-        "bestRating": "5",
-        "worstRating": "1"
     }
 };
 

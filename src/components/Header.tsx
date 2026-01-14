@@ -29,6 +29,7 @@ import {
   TrendingUp,
   Flame,
   LayoutDashboard,
+  CheckCircle2,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
@@ -467,6 +468,7 @@ export const Header = () => {
                                 <p className="text-[11px] text-[hsl(var(--muted-foreground))] group-hover:text-[hsl(var(--muted-foreground))]/80">QuickBooks format</p>
                               </div>
                             </Link>
+
                           </div>
                         </div>
 
@@ -667,7 +669,7 @@ export const Header = () => {
 
                         {/* TAX TOOLS - Amber/Gold Theme */}
                         <div className="col-span-1 p-6">
-                          <p className="text-xs font-bold tracking-[0.2em] text-[hsl(var(--muted-foreground))] mb-4">TAX TOOLS</p>
+                          <p className="text-xs font-bold tracking-[0.2em] text-[hsl(var(--muted-foreground))] mb-4">BUSINESS & TAX</p>
                           <div className="space-y-2">
                             <Link
                               href="/tools/gst-vat-calculator"
@@ -706,6 +708,19 @@ export const Header = () => {
                               <div>
                                 <p className="text-sm font-bold text-[hsl(var(--foreground))] group-hover:text-amber-500 transition-colors">Financial Ratios</p>
                                 <p className="text-[11px] text-[hsl(var(--muted-foreground))] group-hover:text-[hsl(var(--muted-foreground))]/80">Key business metrics</p>
+                              </div>
+                            </Link>
+                            <Link
+                              href="/tools/quickbooks-import-validator"
+                              className="group flex items-start gap-3 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] px-3 py-2.5 cursor-pointer transition-all duration-200 hover:border-amber-500/50 hover:bg-amber-500/5"
+                              onClick={closeToolsDropdown}
+                            >
+                              <div className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/10 text-amber-500 group-hover:bg-amber-500 group-hover:text-white transition-colors">
+                                <CheckCircle2 className="h-4 w-4" />
+                              </div>
+                              <div>
+                                <p className="text-sm font-bold text-[hsl(var(--foreground))] group-hover:text-amber-500 transition-colors">QBO Validator</p>
+                                <p className="text-[11px] text-[hsl(var(--muted-foreground))] group-hover:text-[hsl(var(--muted-foreground))]/80">Validate CSV files</p>
                               </div>
                             </Link>
                           </div>

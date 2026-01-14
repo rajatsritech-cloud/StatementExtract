@@ -28,11 +28,11 @@ export const metadata: Metadata = {
         description: "Convert QFX Quicken files to Excel spreadsheets instantly and securely.",
         type: "website",
         url: "https://statementextract.com/convert/qfx-to-excel",
-        images: ["https://statementextract.com/assets/StatementExtract_Workflow_img.png"],
+        images: ["https://statementextract.com/assets/StatementExtract_Workflow_img.png"]
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/qfx-to-excel/",
-    },
+        canonical: "https://statementextract.com/convert/qfx-to-excel/"
+    }
 };
 
 const schemaData = {
@@ -49,13 +49,6 @@ const schemaData = {
         "priceCurrency": "USD",
         "priceValidUntil": "2026-12-31",
         "availability": "https://schema.org/InStock"
-    },
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.8",
-        "ratingCount": "1250",
-        "bestRating": "5",
-        "worstRating": "1"
     },
     "featureList": [
         "QFX to Excel conversion",

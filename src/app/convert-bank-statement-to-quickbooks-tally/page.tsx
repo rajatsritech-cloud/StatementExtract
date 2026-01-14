@@ -58,13 +58,6 @@ export default function BankStatementQBOPage() {
             "100% Tally Prime Compatible",
             "Secure & Private"
         ],
-        "aggregateRating": {
-            "@type": "AggregateRating",
-            "ratingValue": "4.8",
-            "ratingCount": "1250",
-            "bestRating": "5",
-            "worstRating": "1"
-        },
         "author": {
             "@type": "Organization",
             "name": "Statement Extract",

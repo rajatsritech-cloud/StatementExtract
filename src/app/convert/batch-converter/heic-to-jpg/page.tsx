@@ -12,11 +12,11 @@ export const metadata: Metadata = {
         title: "Free HEIC to JPG Batch Converter",
         description: "Convert iPhone HEIC photos to JPG. 100% free, fast, and private.",
         type: "website",
-        url: "https://statementextract.com/convert/batch-converter/heic-to-jpg",
+        url: "https://statementextract.com/convert/batch-converter/heic-to-jpg"
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/batch-converter/heic-to-jpg",
-    },
+        canonical: "https://statementextract.com/convert/batch-converter/heic-to-jpg"
+    }
 };
 
 const schemaData = {
@@ -29,11 +29,6 @@ const schemaData = {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
-    },
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.8",
-        "ratingCount": "2340"
     }
 };
 

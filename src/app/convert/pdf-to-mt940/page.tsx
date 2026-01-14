@@ -4,35 +4,35 @@ import { BankStatementConverter } from "@/components/BankStatementConverter";
 
 // Dynamic imports for below-fold components
 const BankStatementFeatures = dynamic(() => import("@/components/bank-statement/BankStatementContent").then(mod => ({ default: mod.BankStatementFeatures })), {
-    loading: () => <div className="min-h-[400px] bg-[hsl(var(--background))]" />,
+    loading: () => <div className="min-h-[400px] bg-[hsl(var(--background))]" />
 });
 
 const SupportedBanks = dynamic(() => import("@/components/bank-statement/BankStatementContent").then(mod => ({ default: mod.SupportedBanks })), {
-    loading: () => <div className="min-h-[300px] bg-[hsl(var(--background))]" />,
+    loading: () => <div className="min-h-[300px] bg-[hsl(var(--background))]" />
 });
 
 const BankStatementFAQ = dynamic(() => import("@/components/bank-statement/BankStatementContent").then(mod => ({ default: mod.BankStatementFAQ })), {
-    loading: () => <div className="min-h-[400px] bg-[hsl(var(--background))]" />,
+    loading: () => <div className="min-h-[400px] bg-[hsl(var(--background))]" />
 });
 
 const BankStatementSEOContent = dynamic(() => import("@/components/bank-statement/BankStatementContent").then(mod => ({ default: mod.BankStatementSEOContent })), {
-    loading: () => <div className="min-h-[300px] bg-[hsl(var(--background))]" />,
+    loading: () => <div className="min-h-[300px] bg-[hsl(var(--background))]" />
 });
 
 const HowItWorks = dynamic(() => import("@/components/HowItWorks").then(mod => ({ default: mod.HowItWorks })), {
-    loading: () => <div className="min-h-[400px] bg-[hsl(var(--background))]" />,
+    loading: () => <div className="min-h-[400px] bg-[hsl(var(--background))]" />
 });
 
 const CTA = dynamic(() => import("@/components/CTA").then(mod => ({ default: mod.CTA })), {
-    loading: () => <div className="min-h-[200px] bg-[hsl(var(--background))]" />,
+    loading: () => <div className="min-h-[200px] bg-[hsl(var(--background))]" />
 });
 
 const RecentBlogs = dynamic(() => import("@/components/RecentBlogs").then(mod => ({ default: mod.RecentBlogs })), {
-    loading: () => <div className="min-h-[400px] bg-[hsl(var(--background))]" />,
+    loading: () => <div className="min-h-[400px] bg-[hsl(var(--background))]" />
 });
 
 const RedirectIfAuthenticated = dynamic(() => import("@/components/RedirectIfAuthenticated").then(mod => ({ default: mod.RedirectIfAuthenticated })), {
-    loading: () => null,
+    loading: () => null
 });
 
 export const metadata: Metadata = {
@@ -61,13 +61,13 @@ export const metadata: Metadata = {
                 url: "/assets/StatementExtract_Workflow_img.png",
                 width: 1200,
                 height: 630,
-                alt: "PDF to MT940 Converter",
+                alt: "PDF to MT940 Converter"
             },
-        ],
+        ]
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/pdf-to-mt940/",
-    },
+        canonical: "https://statementextract.com/convert/pdf-to-mt940/"
+    }
 };
 
 const schemaData = {
@@ -82,11 +82,6 @@ const schemaData = {
         "price": "0",
         "priceCurrency": "USD",
         "availability": "https://schema.org/InStock"
-    },
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.8",
-        "ratingCount": "950"
     }
 };
 

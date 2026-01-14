@@ -23,11 +23,11 @@ export const metadata: Metadata = {
         description: "Convert IIF Intuit files to Excel spreadsheets instantly and securely.",
         type: "website",
         url: "https://statementextract.com/convert-iif-to-excel",
-        images: ["https://statementextract.com/assets/StatementExtract_Workflow_img.png"],
+        images: ["https://statementextract.com/assets/StatementExtract_Workflow_img.png"]
     },
     alternates: {
-        canonical: "https://statementextract.com/convert-iif-to-excel/",
-    },
+        canonical: "https://statementextract.com/convert-iif-to-excel/"
+    }
 };
 
 const schemaData = {
@@ -44,13 +44,6 @@ const schemaData = {
         "priceCurrency": "USD",
         "priceValidUntil": "2026-12-31",
         "availability": "https://schema.org/InStock"
-    },
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.7",
-        "ratingCount": "840",
-        "bestRating": "5",
-        "worstRating": "1"
     },
     "featureList": [
         "IIF to Excel conversion",

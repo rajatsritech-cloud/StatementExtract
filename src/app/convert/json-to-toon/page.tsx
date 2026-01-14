@@ -11,11 +11,11 @@ export const metadata: Metadata = {
         title: "JSON to TOON Converter - Save 60% on LLM Tokens",
         description: "Convert JSON to Token-Oriented Object Notation. Free, fast, no signup.",
         type: "website",
-        url: "https://statementextract.com/convert/json-to-toon",
+        url: "https://statementextract.com/convert/json-to-toon"
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/json-to-toon/",
-    },
+        canonical: "https://statementextract.com/convert/json-to-toon/"
+    }
 };
 
 const schemaData = {
@@ -28,11 +28,6 @@ const schemaData = {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
-    },
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.9",
-        "ratingCount": "1245"
     }
 };
 

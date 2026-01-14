@@ -24,11 +24,11 @@ export const metadata: Metadata = {
         description: "Convert CSV/Excel files to QuickBooks IIF format instantly and securely.",
         type: "website",
         url: "https://statementextract.com/convert/csv-to-iif",
-        images: ["https://statementextract.com/assets/StatementExtract_Workflow_img.png"],
+        images: ["https://statementextract.com/assets/StatementExtract_Workflow_img.png"]
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/csv-to-iif/",
-    },
+        canonical: "https://statementextract.com/convert/csv-to-iif/"
+    }
 };
 
 const schemaData = {
@@ -42,11 +42,6 @@ const schemaData = {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
-    },
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.8",
-        "ratingCount": "1140"
     },
     "featureList": [
         "CSV to IIF conversion",

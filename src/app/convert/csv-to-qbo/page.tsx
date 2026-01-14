@@ -22,11 +22,11 @@ export const metadata: Metadata = {
         title: "CSV to QBO Converter Free Online | Import to QuickBooks",
         description: "Convert any CSV bank export to QuickBooks .qbo format. Map columns, edit transactions, and download QBO file instantly.",
         type: "website",
-        url: "https://statementextract.com/convert/csv-to-qbo",
+        url: "https://statementextract.com/convert/csv-to-qbo"
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/csv-to-qbo/",
-    },
+        canonical: "https://statementextract.com/convert/csv-to-qbo/"
+    }
 };
 
 const schemaData = {
@@ -40,11 +40,6 @@ const schemaData = {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
-    },
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.9",
-        "ratingCount": "847"
     }
 };
 

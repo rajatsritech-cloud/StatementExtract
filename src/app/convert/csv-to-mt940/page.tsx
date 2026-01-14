@@ -22,11 +22,11 @@ export const metadata: Metadata = {
         title: "CSV to MT940 Converter Free Online | Create SWIFT Files",
         description: "Convert any bank CSV to MT940 SWIFT format. Import into Sage, SAP, Oracle & more. 100% free, secure, browser-based.",
         type: "website",
-        url: "https://statementextract.com/convert/csv-to-mt940",
+        url: "https://statementextract.com/convert/csv-to-mt940"
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/csv-to-mt940/",
-    },
+        canonical: "https://statementextract.com/convert/csv-to-mt940/"
+    }
 };
 
 const schemaData = {
@@ -40,11 +40,6 @@ const schemaData = {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
-    },
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.8",
-        "ratingCount": "850"
     }
 };
 

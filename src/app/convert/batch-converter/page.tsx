@@ -12,11 +12,11 @@ export const metadata: Metadata = {
         title: "Free HEIC & AVIF Batch Converter Online",
         description: "Batch convert iPhone HEIC photos and AVIF images to PNG or JPG. 100% free and private.",
         type: "website",
-        url: "https://statementextract.com/convert/batch-converter",
+        url: "https://statementextract.com/convert/batch-converter"
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/batch-converter/",
-    },
+        canonical: "https://statementextract.com/convert/batch-converter/"
+    }
 };
 
 const schemaData = {
@@ -29,11 +29,6 @@ const schemaData = {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
-    },
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.9",
-        "ratingCount": "1890"
     }
 };
 

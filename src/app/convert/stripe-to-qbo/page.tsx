@@ -22,11 +22,11 @@ export const metadata: Metadata = {
         title: "Stripe to QuickBooks Converter Free | Import Stripe Transactions",
         description: "Convert Stripe payment exports to QuickBooks QBO format instantly. Free, private, no signup required.",
         type: "website",
-        url: "https://statementextract.com/convert/stripe-to-qbo",
+        url: "https://statementextract.com/convert/stripe-to-qbo"
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/stripe-to-qbo/",
-    },
+        canonical: "https://statementextract.com/convert/stripe-to-qbo/"
+    }
 };
 
 const schemaData = {
@@ -40,11 +40,6 @@ const schemaData = {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
-    },
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.9",
-        "ratingCount": "312"
     }
 };
 

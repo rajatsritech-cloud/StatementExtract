@@ -11,11 +11,11 @@ export const metadata: Metadata = {
         title: "Merge PDF Files Online Free | Combine PDF Documents",
         description: "Combine multiple PDF files into one document instantly. Free, private, no upload required.",
         type: "website",
-        url: "https://statementextract.com/convert/merge-pdf",
+        url: "https://statementextract.com/convert/merge-pdf"
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/merge-pdf/",
-    },
+        canonical: "https://statementextract.com/convert/merge-pdf/"
+    }
 };
 
 const schemaData = {
@@ -29,11 +29,6 @@ const schemaData = {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
-    },
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.9",
-        "ratingCount": "2847"
     }
 };
 

@@ -55,10 +55,10 @@ export const metadata: Metadata = {
     twitter: {
         card: "summary_large_image",
         title: "Rotate PDF Pages Online Free - Fix Upside Down PDFs",
-        description: "Rotate PDF pages 90°, 180°, 270°. Fix scanned documents. Works on mobile. 100% free and private.",
+        description: "Rotate PDF pages 90°, 180°, 270°. Fix scanned documents. Works on mobile. 100% free and private."
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/rotate-pdf/",
+        canonical: "https://statementextract.com/convert/rotate-pdf/"
     },
     robots: {
         index: true,
@@ -68,9 +68,9 @@ export const metadata: Metadata = {
             follow: true,
             "max-video-preview": -1,
             "max-image-preview": "large",
-            "max-snippet": -1,
-        },
-    },
+            "max-snippet": -1
+        }
+    }
 };
 
 // Schema.org SoftwareApplication
@@ -86,13 +86,6 @@ const schemaData = {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
-    },
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.9",
-        "ratingCount": "18472",
-        "bestRating": "5",
-        "worstRating": "1"
     },
     "author": {
         "@type": "Organization",

@@ -24,11 +24,11 @@ export const metadata: Metadata = {
         title: "QBO to CSV Converter Online Free | QuickBooks Data Export",
         description: "Convert QuickBooks (.qbo) files to CSV/Excel instantly. Free, private tool for accountants and bookkeepers.",
         type: "website",
-        url: "https://statementextract.com/convert/qbo-to-csv",
+        url: "https://statementextract.com/convert/qbo-to-csv"
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/qbo-to-csv/",
-    },
+        canonical: "https://statementextract.com/convert/qbo-to-csv/"
+    }
 };
 
 const schemaData = {
@@ -42,11 +42,6 @@ const schemaData = {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
-    },
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.8",
-        "ratingCount": "1250"
     },
     "datePublished": "2025-06-01",
     "dateModified": "2026-01-13",

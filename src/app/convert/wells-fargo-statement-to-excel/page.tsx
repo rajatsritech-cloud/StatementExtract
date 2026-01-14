@@ -13,11 +13,11 @@ export const metadata: Metadata = {
         description: "Convert your Wells Fargo PDF statements to Excel or CSV format instantly. Works with checking, savings, and credit card statements.",
         type: "website",
         url: "https://statementextract.com/convert/wells-fargo-statement-to-excel",
-        locale: "en_US",
+        locale: "en_US"
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/wells-fargo-statement-to-excel/",
-    },
+        canonical: "https://statementextract.com/convert/wells-fargo-statement-to-excel/"
+    }
 };
 
 const softwareSchema = {
@@ -27,8 +27,7 @@ const softwareSchema = {
     "description": "Free online tool to convert Wells Fargo PDF statements to Excel or CSV format",
     "applicationCategory": "BusinessApplication",
     "operatingSystem": "Any",
-    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-    "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "ratingCount": "9841", "bestRating": "5", "worstRating": "1" }
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
 };
 
 const faqSchema = {

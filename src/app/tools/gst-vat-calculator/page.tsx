@@ -15,15 +15,15 @@ export const metadata: Metadata = {
         type: "website",
         url: "https://statementextract.com/tools/gst-vat-calculator",
         locale: "en_US",
-        alternateLocale: ["en_GB", "en_CA", "en_AU", "en_IN"],
+        alternateLocale: ["en_GB", "en_CA", "en_AU", "en_IN"]
     },
     twitter: {
         card: "summary_large_image",
         title: "Free GST/VAT Calculator",
-        description: "Calculate GST, VAT, and sales tax for any country. Free for business owners.",
+        description: "Calculate GST, VAT, and sales tax for any country. Free for business owners."
     },
     alternates: {
-        canonical: "https://statementextract.com/tools/gst-vat-calculator/",
+        canonical: "https://statementextract.com/tools/gst-vat-calculator/"
     },
     robots: {
         index: true,
@@ -33,9 +33,9 @@ export const metadata: Metadata = {
             follow: true,
             "max-video-preview": -1,
             "max-image-preview": "large",
-            "max-snippet": -1,
-        },
-    },
+            "max-snippet": -1
+        }
+    }
 };
 
 // Schema.org structured data
@@ -50,13 +50,6 @@ const schemaData = {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
-    },
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.9",
-        "ratingCount": "6847",
-        "bestRating": "5",
-        "worstRating": "1"
     }
 };
 

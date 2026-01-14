@@ -40,15 +40,15 @@ export const metadata: Metadata = {
         title: "Add Page Numbers to PDF Free Online - No Signup Required",
         description: "Insert page numbers anywhere on your PDF. Choose position, format, and starting page. 100% free and private.",
         type: "website",
-        url: "https://statementextract.com/convert/add-page-numbers-pdf",
+        url: "https://statementextract.com/convert/add-page-numbers-pdf"
     },
     twitter: {
         card: "summary_large_image",
         title: "Add Page Numbers to PDF Free Online",
-        description: "Insert page numbers to PDF. Choose position and format. Works on mobile. 100% free.",
+        description: "Insert page numbers to PDF. Choose position and format. Works on mobile. 100% free."
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/add-page-numbers-pdf/",
+        canonical: "https://statementextract.com/convert/add-page-numbers-pdf/"
     },
     robots: {
         index: true,
@@ -58,9 +58,9 @@ export const metadata: Metadata = {
             follow: true,
             "max-video-preview": -1,
             "max-image-preview": "large",
-            "max-snippet": -1,
-        },
-    },
+            "max-snippet": -1
+        }
+    }
 };
 
 const schemaData = {
@@ -75,13 +75,6 @@ const schemaData = {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
-    },
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.8",
-        "ratingCount": "9847",
-        "bestRating": "5",
-        "worstRating": "1"
     }
 };
 

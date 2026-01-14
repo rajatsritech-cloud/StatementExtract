@@ -26,17 +26,17 @@ export const metadata: Metadata = {
         description: "Convert OFX bank files to QuickBooks QBO format. Free, instant, no signup required.",
         type: "website",
         url: "https://statementextract.com/convert/ofx-to-qbo",
-        images: ["https://statementextract.com/assets/StatementExtract_Workflow_img.png"],
+        images: ["https://statementextract.com/assets/StatementExtract_Workflow_img.png"]
     },
     twitter: {
         card: "summary_large_image",
         title: "OFX to QBO Converter - Free Online Tool",
         description: "Convert OFX files to QuickBooks QBO format instantly. Free, privacy-first.",
-        images: ["https://statementextract.com/assets/StatementExtract_Workflow_img.png"],
+        images: ["https://statementextract.com/assets/StatementExtract_Workflow_img.png"]
     },
     alternates: {
-        canonical: "https://statementextract.com/convert/ofx-to-qbo/",
-    },
+        canonical: "https://statementextract.com/convert/ofx-to-qbo/"
+    }
 };
 
 const schemaData = {
@@ -50,11 +50,6 @@ const schemaData = {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "USD"
-    },
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.9",
-        "ratingCount": "312"
     }
 };
 
