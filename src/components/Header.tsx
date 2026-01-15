@@ -953,7 +953,7 @@ export const Header = () => {
       </header >
 
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 top-[5.25rem] z-50 bg-[hsl(var(--background))] lg:hidden animate-in slide-in-from-top-8 duration-300">
+        <div className="fixed inset-0 top-[5.25rem] z-50 bg-[hsl(var(--background))] lg:hidden animate-in slide-in-from-top-8 duration-300 overflow-x-hidden">
           <nav className="flex flex-col h-full overflow-y-auto">
             <div className="flex flex-col py-4">
               <SignedIn>
