@@ -81,6 +81,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         '/convert/qif-to-excel/',
         '/convert/iif-to-excel/',
         '/convert/csv-to-iif/',
+        '/convert/csv-to-excel/',
+        '/convert/excel-to-csv/',
+        '/convert/csv-to-mt940/',
     ]
 
     // 4. Static Info Pages - Low priority, rarely change. Priority 0.5, Monthly/Yearly.
@@ -180,24 +183,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
                 priority: 0.7,
             }))
         ),
-        {
-            url: 'https://statementextract.com/convert/csv-to-excel',
-            lastModified: currentDate,
-            changeFrequency: 'weekly' as const,
-            priority: 0.8,
-        },
-        {
-            url: 'https://statementextract.com/convert/excel-to-csv',
-            lastModified: currentDate,
-            changeFrequency: 'weekly' as const,
-            priority: 0.8,
-        },
-        {
-            url: 'https://statementextract.com/convert/csv-to-mk940',
-            lastModified: currentDate,
-            changeFrequency: 'monthly' as const,
-            priority: 0.6,
-        },
+
         // Info (0.5)
         ...infoPages.map((route) => ({
             url: `${baseUrl}${route}`,
