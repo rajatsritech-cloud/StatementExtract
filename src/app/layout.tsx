@@ -145,6 +145,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* Google AdSense Verification Meta Tag */}
+        <meta name="google-adsense-account" content="ca-pub-6246360771157819" />
         {/* Organization Schema for E-E-A-T */}
         <script
           type="application/ld+json"
@@ -168,12 +170,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             })
           }}
         />
-        {/* Google AdSense Verification Script */}
+        {/* Google AdSense Script - Using beforeInteractive for crawler visibility */}
         <Script
-          async
+          id="google-adsense"
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6246360771157819"
           crossOrigin="anonymous"
-          strategy="afterInteractive"
+          strategy="beforeInteractive"
         />
       </head>
       <body className="antialiased overflow-x-hidden w-full max-w-[100vw]">
@@ -193,7 +195,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               </main>
               <Footer />
             </div>
-            {/* <CookieConsent /> */}
+            <CookieConsent />
             <TopLoader />
             <ScrollToTop />
             <Toaster

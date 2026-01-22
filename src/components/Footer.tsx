@@ -91,6 +91,7 @@ export const Footer = () => {
               <li><Link href="/blogs" className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors">Blog</Link></li>
               <li><Link href="/privacy-policy" className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors">Privacy Policy</Link></li>
               <li><Link href="/terms" className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors">Terms of Service</Link></li>
+              <li><Link href="/cookie-policy" className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors">Cookie Policy</Link></li>
             </ul>
           </div>
         </div>

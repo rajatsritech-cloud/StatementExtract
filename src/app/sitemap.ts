@@ -97,6 +97,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         '/privacy-policy/',
         '/terms/',
         '/contact/',
+        '/cookie-policy/',
     ]
 
     // 5. Dynamic Blogs - Fetch from source

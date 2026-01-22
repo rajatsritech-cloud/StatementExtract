@@ -108,7 +108,7 @@ export function CookieConsent() {
                     </div>
                     <p className="text-xs text-[hsl(var(--muted-foreground))] leading-relaxed">
                         We use cookies to analyze traffic and improve your experience.
-                        Review our <Link href="/privacy-policy" className="text-[hsl(var(--primary))] hover:underline underline-offset-2">Privacy Policy</Link>.
+                        Review our <Link href="/privacy-policy" className="text-[hsl(var(--primary))] hover:underline underline-offset-2">Privacy Policy</Link> and <Link href="/cookie-policy" className="text-[hsl(var(--primary))] hover:underline underline-offset-2">Cookie Policy</Link>.
                     </p>
                     <div className="flex flex-col gap-2 pt-2 sm:flex-row">
                         <Button
