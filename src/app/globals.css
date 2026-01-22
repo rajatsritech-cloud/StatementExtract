@@ -190,11 +190,18 @@ All colors MUST be HSL.
     max-width: 100%;
   }
 
-  /* NOTE: overflow-x: hidden on html may affect sticky positioning but is needed for mobile */
+  /* overflow-x: hidden on html for mobile, removed on desktop to enable sticky positioning */
   html {
     max-width: 100%;
     overflow-x: hidden;
     scroll-behavior: smooth;
+  }
+
+  /* Desktop: Remove overflow-x: hidden from html to enable sticky positioning */
+  @media (min-width: 1024px) {
+    html {
+      overflow-x: visible;
+    }
   }
 
   h1,
