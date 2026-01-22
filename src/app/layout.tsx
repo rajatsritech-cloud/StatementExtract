@@ -168,6 +168,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             })
           }}
         />
+        {/* Google AdSense Verification Script */}
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6246360771157819"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
       </head>
       <body className="antialiased overflow-x-hidden w-full max-w-[100vw]">
         {isProduction && (
