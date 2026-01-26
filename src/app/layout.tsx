@@ -33,7 +33,7 @@ const isProduction = process.env.NODE_ENV === "production";
 export const metadata: Metadata = {
   metadataBase: new URL("https://statementextract.com"),
   title: {
-    default: "Statement Extract – AI Document Processing Made Easy",
+    default: "Statement Extract – Free Bank Statement Converter (PDF to Excel/CSV)",
     template: "%s | Statement Extract",
   },
   description:

@@ -7,7 +7,8 @@ export const LandingPageSchema = () => {
         "@graph": [
             {
                 "@type": "SoftwareApplication",
-                "name": "Statement Extract",
+                "name": "Bank Statement Converter",
+                "alternateName": "Statement Extract",
                 "applicationCategory": "BusinessApplication",
                 "operatingSystem": "Web",
                 "offers": {
@@ -15,12 +16,7 @@ export const LandingPageSchema = () => {
                     "price": "0",
                     "priceCurrency": "USD"
                 },
-                "description": "AI-powered document processing tool (2026) to convert bank statements and invoices to Excel, CSV, QuickBooks, and Xero formats. Extract data from PDFs with 98%+ accuracy—supports 1000+ banks and all major accounting software.",
-                "aggregateRating": {
-                    "@type": "AggregateRating",
-                    "ratingValue": "4.8",
-                    "ratingCount": "1250"
-                }
+                "description": "Free Bank Statement Converter. Automatically convert PDF bank statements to Excel, CSV, QuickBooks, and Xero formats with 99% accuracy.",
             },
             {
                 "@type": "WebSite",

@@ -43,7 +43,7 @@ export const Hero = () => {
 
           {/* Subheadline */}
           <p className="mb-10 max-w-2xl text-lg text-[hsl(var(--muted-foreground))] md:text-xl animate-fade-in delay-100">
-            The most accurate <strong>Bank Statement & Invoice Converter</strong> in 2026. Automatically convert bank statements to Excel, CSV, QuickBooks, and Xero. AI-powered PDF extraction—compatible with 1000+ banks and all major accounting software.
+            The most accurate <strong>Bank Statement to Excel or CSV Converter</strong>. Automatically extract transactions from PDF bank statements to Excel, CSV, QuickBooks, and Xero. Compatible with 1000+ banks worldwide.
           </p>
 
           {/* Buttons */}
