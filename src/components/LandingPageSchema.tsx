@@ -15,7 +15,7 @@ export const LandingPageSchema = () => {
                     "price": "0",
                     "priceCurrency": "USD"
                 },
-                "description": "AI-powered tool to convert PDF bank statements to Excel, CSV, QuickBooks, and Xero formats with high accuracy.",
+                "description": "AI-powered document processing tool (2026) to convert bank statements and invoices to Excel, CSV, QuickBooks, and Xero formats. Extract data from PDFs with 98%+ accuracy—supports 1000+ banks and all major accounting software.",
                 "aggregateRating": {
                     "@type": "AggregateRating",
                     "ratingValue": "4.8",

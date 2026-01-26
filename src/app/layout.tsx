@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     template: "%s | Statement Extract",
   },
   description:
-    "Extract data from bank statements, invoices & documents instantly. AI-powered processing—no templates, no training required. Free to try.",
+    "Convert bank statements to Excel, CSV, QuickBooks & Xero instantly with AI-powered document processing (2026). Extract data from invoices, PDFs & financial documents—no templates required. Free converter tool.",
   keywords: [
     // Primary high-volume terms
     "bank statement converter",
@@ -147,8 +147,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         {/* Google AdSense Verification Meta Tag */}
         <meta name="google-adsense-account" content="ca-pub-6246360771157819" />
-        {/* Organization Schema for E-E-A-T */}
-        <script
+      </head>
+      <body className="antialiased overflow-x-hidden w-full max-w-[100vw]">
+        {/* Organization Schema for E-E-A-T - Moved to body to prevent hydration mismatch */}
+        <Script
+          id="organization-schema"
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
@@ -177,8 +180,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           crossOrigin="anonymous"
           strategy="beforeInteractive"
         />
-      </head>
-      <body className="antialiased overflow-x-hidden w-full max-w-[100vw]">
         {isProduction && (
           <>
             <Analytics />

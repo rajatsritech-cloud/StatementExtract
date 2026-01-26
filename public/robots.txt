@@ -1,0 +1,46 @@
+User-Agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /api/
+
+User-Agent: Mediapartners-Google
+Allow: /
+
+User-Agent: AdsBot-Google
+Allow: /
+
+User-Agent: AdsBot-Google-Mobile
+Allow: /
+
+User-Agent: Googlebot
+Allow: /
+
+User-Agent: Googlebot-Image
+Allow: /
+
+User-Agent: Amazonbot
+Disallow: /
+
+User-Agent: Applebot-Extended
+Disallow: /
+
+User-Agent: Bytespider
+Disallow: /
+
+User-Agent: CCBot
+Disallow: /
+
+User-Agent: ClaudeBot
+Disallow: /
+
+User-Agent: Google-Extended
+Disallow: /
+
+User-Agent: GPTBot
+Disallow: /
+
+User-Agent: meta-externalagent
+Disallow: /
+
+Sitemap: https://statementextract.com/sitemap.xml
