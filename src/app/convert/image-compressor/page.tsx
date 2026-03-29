@@ -5,11 +5,11 @@ import { Zap, Shield, Globe, FileImage, CheckCircle } from "lucide-react";
 
 export const metadata: Metadata = {
     title: "Free Image Compressor Online | Compress PNG to Any Size - 7KB, 10KB, 50KB, 100KB | Statement Extract",
-    description: "Compress PNG, JPG, WebP images to ANY exact size - 7KB, 10KB, 15KB, 20KB, 25KB, 50KB, 100KB, 200KB. Free online compressor, no upload limits, 100% private.",
+    description: "Compress PNG, JPG, WebP images to ANY exact size - 7KB, 10KB, 15KB, 20KB, 25KB, 50KB, 100KB, 200KB. Free online compressor, no upload limits, Private & Secure.",
     keywords: "compress png to 100kb, compress png to 7kb, compress image to 50kb, compress png to 15kb, compress png to 25kb, compress image to 20kb, compress png to 10kb, compress png to 200kb, compress png to 500kb, compress png to 300kb, compress png to 30kb, compress png to 40kb, compress image to any size, reduce image size online free, image compressor kb",
     openGraph: {
         title: "Free Image Compressor - Compress PNG to 100KB, 50KB, 20KB",
-        description: "Compress images to exact target sizes. Free, fast, and 100% private.",
+        description: "Compress images to exact target sizes. Free, fast, and Private & Secure.",
         type: "website",
         url: "https://statementextract.com/convert/image-compressor"
     },
@@ -65,7 +65,7 @@ export default function ImageCompressorPage() {
             <section className="py-12 md:py-20 px-6 border-b border-[hsl(var(--border))]">
                 <ImageCompressor
                     title="Free Image Compressor"
-                    description="Compress PNG, JPG, or any image to your exact target size. Fast, free, and 100% private."
+                    description="Compress PNG, JPG, or any image to your exact target size. Fast, free, and Private & Secure."
                 />
             </section>
 
@@ -78,7 +78,7 @@ export default function ImageCompressorPage() {
                     <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                         {[
                             { icon: Zap, title: "Precise Control", desc: "Choose exact target size: 10KB, 20KB, 50KB, 100KB, or custom." },
-                            { icon: Shield, title: "100% Private", desc: "All compression happens in your browser. Files never uploaded." },
+                            { icon: Shield, title: "Private & Secure", desc: "All compression happens in your browser. Files never uploaded." },
                             { icon: Globe, title: "Works Everywhere", desc: "Chrome, Firefox, Safari, Edge — any modern browser." },
                             { icon: FileImage, title: "All Formats", desc: "Compress PNG, JPG, WebP, AVIF, GIF, and more." },
                         ].map((feature, i) => (
@@ -347,7 +347,7 @@ export default function ImageCompressorPage() {
                         {[
                             { q: "How do I compress PNG to 100KB?", a: "Select 100KB as your target size, upload your PNG image, and click compress. Our tool automatically adjusts quality to hit exactly 100KB." },
                             { q: "Can I compress PNG to 50KB without losing quality?", a: "Yes! Our smart compression algorithm preserves visual quality while reducing file size. For 50KB targets, images still look great at typical web sizes." },
-                            { q: "Is this PNG compressor really free?", a: "100% free with no limits. No signup, no email, no subscription. We make money from our bank statement tools, not image compression." },
+                            { q: "Is this PNG compressor really free?", a: "Free Online Tool with no limits. No signup, no email, no subscription. We make money from our bank statement tools, not image compression." },
                             { q: "What image formats can I compress?", a: "PNG, JPG, JPEG, WebP, AVIF, GIF, and most other image formats. We output optimized WebP for best compression." },
                             { q: "Are my images uploaded to a server?", a: "No! All compression happens locally in your browser. Your images never leave your device — complete privacy guaranteed." },
                             { q: "Can I compress multiple images at once?", a: "Use our Batch Converter for bulk compression. This compressor handles one image at a time for precise size targeting." },

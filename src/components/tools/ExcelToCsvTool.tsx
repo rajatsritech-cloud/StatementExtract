@@ -218,7 +218,7 @@ export const ExcelToCsvTool = () => {
                     <div className="mt-6 flex flex-wrap gap-4 justify-center">
                         <div className="flex items-center gap-2 text-sm text-[hsl(var(--muted-foreground))]">
                             <CheckCircle2 className="w-4 h-4 text-green-500" />
-                            <span>100% Client-Side</span>
+                            <span>Fully Client-Side</span>
                         </div>
                         <div className="flex items-center gap-2 text-sm text-[hsl(var(--muted-foreground))]">
                             <CheckCircle2 className="w-4 h-4 text-green-500" />

@@ -20,7 +20,7 @@ import {
 
 export const metadata: Metadata = {
     title: "Free Excel to CSV Converter | Convert XLXS to CSV | Statement Extract",
-    description: "Convert Excel (XLSX, XLS) to CSV online. Creates clean, UTF-8 formatted CSV files ready for import into QuickBooks, Xero, or databases. 100% free.",
+    description: "Convert Excel (XLSX, XLS) to CSV online. Creates clean, UTF-8 formatted CSV files ready for import into QuickBooks, Xero, or databases. Free Online Tool.",
     keywords: "convert excel to csv, xlsx to csv, xls to csv, excel converter, convert spreadsheet to csv, excel to comma separated values, online excel converter",
     openGraph: {
         title: "Excel to CSV Converter - Clean Data Export",
@@ -70,7 +70,7 @@ const faqSchema = {
         {
             "@type": "Question",
             "name": "Does it convert all sheets in my Excel file?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Currently, the converter processes the first active sheet in your workbook. This handles 99% of use cases for data imports." }
+            "acceptedAnswer": { "@type": "Answer", "text": "Currently, the converter processes the first active sheet in your workbook. This handles the majority of use cases for data imports." }
         },
         {
             "@type": "Question",
@@ -275,7 +275,7 @@ export default function ExcelToCsvPage() {
                                     { feature: "Preview", us: "Instant Data Check", competitors: "Blind Save" },
                                     { feature: "Platform", us: "Mac / Windows / Mobile", competitors: "Device Dependent" },
                                     { feature: "Speed", us: "Instant", competitors: "Slow software launch" },
-                                    { feature: "Privacy", us: "100% Client-Side", competitors: "Local App" },
+                                    { feature: "Privacy", us: "Fully Client-Side", competitors: "Local App" },
                                 ].map((row, i) => (
                                     <tr key={i} className="border-b border-[hsl(var(--border))]">
                                         <td className="p-4 text-[hsl(var(--foreground))]">{row.feature}</td>

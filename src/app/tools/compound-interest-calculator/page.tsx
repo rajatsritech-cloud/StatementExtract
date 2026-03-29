@@ -137,7 +137,7 @@ const features = [
     { icon: TrendingUp, title: "Monthly Contributions", desc: "See how regular deposits accelerate growth" },
     { icon: Calendar, title: "Year-by-Year Breakdown", desc: "Track your investment growth every year" },
     { icon: Download, title: "Download Results", desc: "Export your breakdown to CSV" },
-    { icon: Shield, title: "100% Private", desc: "All calculations run in your browser" },
+    { icon: Shield, title: "Private & Secure", desc: "All calculations run in your browser" },
     { icon: Zap, title: "Instant Results", desc: "See projections update in real-time" },
 ];
 

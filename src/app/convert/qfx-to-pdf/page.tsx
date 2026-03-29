@@ -19,7 +19,7 @@ import {
 // SEO metadata targeting competitor keywords
 export const metadata: Metadata = {
     title: "QFX to PDF Converter Free Online | Convert Quicken Files to PDF | Statement Extract",
-    description: "Free QFX to PDF converter online. Convert Quicken QFX files to printable PDF transaction reports instantly. No signup required. Works with QFX, OFX, QBO files. 100% private browser processing.",
+    description: "Free QFX to PDF converter online. Convert Quicken QFX files to printable PDF transaction reports instantly. No signup required. Works with QFX, OFX, QBO files. Private & Secure browser processing.",
     keywords: "qfx to pdf converter, convert qfx to pdf online, qfx to pdf converter free, qfx file to pdf, open qfx file and convert to pdf, quicken qfx to pdf, qfx transaction report pdf, export qfx as pdf, ofx to pdf converter, qbo to pdf",
     openGraph: {
         title: "QFX to PDF Converter Free Online | Quicken to PDF",
@@ -88,7 +88,7 @@ const faqSchema = {
             "name": "Is my QFX data kept private?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes, completely. This tool runs 100% in your browser. Your financial data never leaves your computer and is never uploaded to any server."
+                "text": "Yes, completely. This tool runs entirely in your browser. Your financial data never leaves your computer and is never uploaded to any server."
             }
         },
         {
@@ -168,7 +168,7 @@ export default function QfxToPdfPage() {
                     </h2>
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {[
-                            { icon: Lock, title: "100% Private", desc: "Files never leave your device. All processing happens in your browser." },
+                            { icon: Lock, title: "Private & Secure", desc: "Files never leave your device. All processing happens in your browser." },
                             { icon: Printer, title: "Print-Ready PDFs", desc: "Clean, professional reports formatted for printing or sharing." },
                             { icon: Zap, title: "Instant Conversion", desc: "No uploads, no waiting. Convert files instantly in your browser." },
                             { icon: Shield, title: "No Signup Required", desc: "No email, no account needed. Just drop your file and convert." },
@@ -298,7 +298,7 @@ export default function QfxToPdfPage() {
                         The Best Free QFX to PDF Converter Online
                     </h2>
                     <p className="text-[hsl(var(--muted-foreground))] mb-4">
-                        Need to convert your Quicken QFX files into printable PDF reports? Our <strong>free QFX to PDF converter</strong> transforms any QFX, OFX, or QBO file into a clean, professional transaction report in seconds. Unlike other tools that require uploads to external servers, our converter runs <strong>100% in your browser</strong>—your financial data never leaves your device.
+                        Need to convert your Quicken QFX files into printable PDF reports? Our <strong>free QFX to PDF converter</strong> transforms any QFX, OFX, or QBO file into a clean, professional transaction report in seconds. Unlike other tools that require uploads to external servers, our converter runs <strong>entirely in your browser</strong>—your financial data never leaves your device.
                     </p>
                     <p className="text-[hsl(var(--muted-foreground))] mb-4">
                         Whether you're an accountant preparing client documentation, a business owner archiving transaction records, or an auditor creating compliance reports, this <strong>QFX to PDF converter</strong> makes it easy. Simply drag and drop your file, and get an instant PDF with transaction summaries, running totals, and formatted details.
@@ -435,7 +435,7 @@ export default function QfxToPdfPage() {
                     <div className="space-y-6">
                         {[
                             { q: "What's the best QFX to PDF converter in 2026?", a: "Statement Extract offers the best free QFX to PDF converter. It's instant, private, and creates professional reports with transaction summaries." },
-                            { q: "Is my financial data secure?", a: "Yes, completely. The tool runs 100% in your browser. Your QFX file is never uploaded to any server—we physically cannot access your data." },
+                            { q: "Is my financial data secure?", a: "Yes, completely. The tool runs entirely in your browser. Your QFX file is never uploaded to any server—we physically cannot access your data." },
                             { q: "Do I need to install anything?", a: "No. Everything runs in your web browser. Just drag and drop your QFX file and click convert." },
                             { q: "Can I convert large QFX files?", a: "Yes. Even files with thousands of transactions convert quickly since everything processes locally in your browser." },
                             { q: "Does it work with OFX and QBO files too?", a: "Yes! The converter supports QFX, OFX, and QBO formats. All are converted to clean PDF reports." },

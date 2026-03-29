@@ -52,7 +52,7 @@ export const metadata: Metadata = {
     ],
     openGraph: {
         title: "PDF to MT940 Converter - Bank Statements to SWIFT Format",
-        description: "Convert PDF bank statements to clean MT940 files for easy import into Sage, Xero, and ERP systems. 100% secure.",
+        description: "Convert PDF bank statements to clean MT940 files for easy import into Sage, Xero, and ERP systems. Secure & Private.",
         type: "website",
         locale: "en_US",
         url: "https://statementextract.com/convert/pdf-to-mt940",
@@ -97,7 +97,7 @@ export default function PdfToMt940Page() {
             />
             <BankStatementConverter
                 titleSuffix={<span className="bg-gradient-primary bg-clip-text text-transparent"> MT940 Format</span>}
-                description="Convert PDF bank statements directly to MT940 SWIFT format. Compatible with Sage, Xero, SAP, and major ERP systems. AI-powered extraction ensures 99%+ accuracy."
+                description="Convert PDF bank statements directly to MT940 SWIFT format. Compatible with Sage, Xero, SAP, and major ERP systems. AI-powered extraction ensures High Accuracy."
             />
             <SupportedBanks />
             <HowItWorks />

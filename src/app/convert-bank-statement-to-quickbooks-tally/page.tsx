@@ -11,7 +11,7 @@ import { RecentBlogs } from "@/components/RecentBlogs";
 
 export const metadata: Metadata = {
     title: "Convert Bank Statement PDF to Tally (XML) & QuickBooks (QBO)",
-    description: "The #1 Bank Statement Converter for Tally Prime & QuickBooks. Convert PDF to Tally XML and QBO automatically. 100% compliant with Tally Import.",
+    description: "The #1 Bank Statement Converter for Tally Prime & QuickBooks. Convert PDF to Tally XML and QBO automatically. fully compliant with Tally Import.",
     keywords: [
         "Convert PDF to Tally XML",
         "Bank Statement to Tally Prime",
@@ -55,7 +55,7 @@ export default function BankStatementQBOPage() {
             "PDF to Tally XML (Voucher) Conversion",
             "PDF to QBO Conversion",
             "Automatic Ledger Mapping",
-            "100% Tally Prime Compatible",
+            "Fully Tally Prime Compatible",
             "Secure & Private"
         ],
         "author": {

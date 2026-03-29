@@ -202,7 +202,7 @@ export function QfxToCsvTool() {
                 </h1>
                 <h2 className="text-base md:text-lg text-[hsl(var(--muted-foreground))] max-w-2xl mx-auto font-normal">
                     Convert Quicken QFX files to Excel-ready CSV spreadsheets. Also works with OFX and QBO files.
-                    100% private - files never leave your device.
+                    Private & Secure - files never leave your device.
                 </h2>
             </div>
 

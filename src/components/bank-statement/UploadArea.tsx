@@ -22,9 +22,10 @@ interface UploadAreaProps {
   minimal?: boolean;
   showPrivacyNotice?: boolean;
   showLoginPrompt?: boolean;
+  onTrySample?: () => void;
 }
 
-export const UploadArea = ({ onFileUpload, isProcessing, hideFeatures = false, manualTrigger = false, minimal = false, showPrivacyNotice = true, showLoginPrompt = false }: UploadAreaProps) => {
+export const UploadArea = ({ onFileUpload, isProcessing, hideFeatures = false, manualTrigger = false, minimal = false, showPrivacyNotice = true, showLoginPrompt = false, onTrySample }: UploadAreaProps) => {
   const [isDragOver, setIsDragOver] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploadStatus, setUploadStatus] = useState<'idle' | 'uploading' | 'ready'>('idle');
@@ -528,16 +529,29 @@ export const UploadArea = ({ onFileUpload, isProcessing, hideFeatures = false, m
 
         {/* Upload Button */}
         {!isProcessing && !selectedFile && (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              document.getElementById('file-input')?.click();
-            }}
-            className={`${hideFeatures ? 'mt-4 px-4 py-2 text-sm' : 'mt-8 px-6 py-3'} inline-flex items-center gap-2 rounded-lg bg-gradient-button bg-200% text-[hsl(var(--primary-foreground))] font-medium shadow-glow hover:animate-gradient-shift transition-all duration-300`}
-          >
-            <Upload className="h-4 w-4" />
-            Choose File
-          </button>
+          <div className="flex flex-col items-center gap-3">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                document.getElementById('file-input')?.click();
+              }}
+              className={`${hideFeatures ? 'mt-4 px-4 py-2 text-sm' : 'mt-8 px-6 py-3'} inline-flex items-center gap-2 rounded-lg bg-gradient-button bg-200% text-[hsl(var(--primary-foreground))] font-medium shadow-glow hover:animate-gradient-shift transition-all duration-300`}
+            >
+              <Upload className="h-4 w-4" />
+              Choose File
+            </button>
+            {onTrySample && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onTrySample();
+                }}
+                className="text-xs font-medium text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--primary))] transition-colors"
+              >
+                No statement? <span className="underline underline-offset-4">Try our sample data</span>
+              </button>
+            )}
+          </div>
         )}
 
         {/* Size Limit Notice */}

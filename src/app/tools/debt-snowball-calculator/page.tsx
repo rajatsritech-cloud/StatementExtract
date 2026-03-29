@@ -5,7 +5,7 @@ import { TrendingDown, Shield, Calendar, PiggyBank, Target, Zap, CheckCircle, Ca
 
 export const metadata: Metadata = {
     title: 'Free Debt Snowball Calculator | Visualize Your Debt-Free Date',
-    description: 'Use our free Debt Snowball Calculator to create a customized payoff plan. Add multiple debts, set extra payments, and see exactly when you will be debt-free. 100% client-side privacy.',
+    description: 'Use our free Debt Snowball Calculator to create a customized payoff plan. Add multiple debts, set extra payments, and see exactly when you will be debt-free. Fully Client-Side privacy.',
     keywords: 'debt snowball calculator, debt payoff calculator, credit card payoff calculator, dave ramsey calculator, debt reduction planner, financial freedom',
     authors: [{ name: 'Statement Extract' }],
     openGraph: {
@@ -114,7 +114,7 @@ export default function DebtSnowballPage() {
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {[
                             { icon: TrendingDown, title: "Visualize Freedom", desc: "See your debt balances drop over time with our interactive timeline chart." },
-                            { icon: Shield, title: "100% Private", desc: "Your financial data never leaves your browser. We don't store your debt info." },
+                            { icon: Shield, title: "Private & Secure", desc: "Your financial data never leaves your browser. We don't store your debt info." },
                             { icon: Target, title: "Snowball vs Avalanche", desc: "Focus on psychological wins (Snowball) to keep your momentum high." },
                             { icon: Calendar, title: "Exact Payoff Date", desc: "Know the specific month and year you will become completely debt-free." },
                             { icon: PiggyBank, title: "Extra Payment Power", desc: "See how adding just $50 or $100 extra per month slashes years off your debt." },

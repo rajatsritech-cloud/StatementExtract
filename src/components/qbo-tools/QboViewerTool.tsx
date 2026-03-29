@@ -215,7 +215,7 @@ export function QboViewerTool() {
                 </h1>
                 <h2 className="text-base md:text-lg text-[hsl(var(--muted-foreground))] max-w-2xl mx-auto font-normal">
                     Open and view QuickBooks Web Connect (.qbo), OFX, and QFX files in your browser.
-                    See transactions instantly. 100% private - files never leave your device.
+                    See transactions instantly. Private & Secure - files never leave your device.
                 </h2>
             </div>
 

@@ -19,7 +19,7 @@ import {
 // SEO metadata targeting competitor keywords
 export const metadata: Metadata = {
     title: "OFX to QBO Converter Free Online | Convert OFX to QuickBooks | Statement Extract",
-    description: "Free OFX to QBO converter online. Convert Open Financial Exchange files to QuickBooks Web Connect format instantly. No signup required. 100% private browser processing.",
+    description: "Free OFX to QBO converter online. Convert Open Financial Exchange files to QuickBooks Web Connect format instantly. No signup required. Private & Secure browser processing.",
     keywords: "ofx to qbo converter, convert ofx to qbo online, ofx to qbo converter free, ofx file to qbo, convert ofx to quickbooks, bank ofx to qbo, qfx to qbo converter, ofx to quickbooks import",
     openGraph: {
         title: "OFX to QBO Converter Free Online | OFX to QuickBooks",
@@ -88,7 +88,7 @@ const faqSchema = {
             "name": "Is my OFX data kept private?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes, completely. This tool runs 100% in your browser. Your financial data never leaves your computer and is never uploaded to any server."
+                "text": "Yes, completely. This tool runs entirely in your browser. Your financial data never leaves your computer and is never uploaded to any server."
             }
         },
         {
@@ -170,7 +170,7 @@ export default function OfxToQboPage() {
                     </h2>
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {[
-                            { icon: Lock, title: "100% Private", desc: "Files never leave your device. All processing happens in your browser." },
+                            { icon: Lock, title: "Private & Secure", desc: "Files never leave your device. All processing happens in your browser." },
                             { icon: RefreshCcw, title: "Lossless Conversion", desc: "All transaction data preserved: dates, amounts, payees, memos, and IDs." },
                             { icon: Zap, title: "Instant Conversion", desc: "No uploads, no waiting. Convert files instantly in your browser." },
                             { icon: Shield, title: "No Signup Required", desc: "No email, no account needed. Just drop your file and convert." },
@@ -276,7 +276,7 @@ export default function OfxToQboPage() {
                                 {[
                                     { feature: "Price", us: "Free forever", competitors: "$20-50/year" },
                                     { feature: "File Upload", us: "None (browser only)", competitors: "Uploads to servers" },
-                                    { feature: "Data Preserved", us: "100% lossless", competitors: "Some data lost" },
+                                    { feature: "Data Preserved", us: "lossless", competitors: "Some data lost" },
                                     { feature: "Account Settings", us: "Auto-detected", competitors: "Manual entry" },
                                     { feature: "Multi-Currency", us: "All currencies", competitors: "Limited" },
                                     { feature: "File Limits", us: "Unlimited", competitors: "Per-file charges" },
@@ -300,7 +300,7 @@ export default function OfxToQboPage() {
                         The Best Free OFX to QBO Converter Online
                     </h2>
                     <p className="text-[hsl(var(--muted-foreground))] mb-4">
-                        Need to import OFX bank files into QuickBooks? Our <strong>free OFX to QBO converter</strong> transforms any OFX or QFX file into a QuickBooks-compatible QBO file in seconds. Unlike other tools that require uploads to external servers, our converter runs <strong>100% in your browser</strong>—your financial data never leaves your device.
+                        Need to import OFX bank files into QuickBooks? Our <strong>free OFX to QBO converter</strong> transforms any OFX or QFX file into a QuickBooks-compatible QBO file in seconds. Unlike other tools that require uploads to external servers, our converter runs <strong>entirely in your browser</strong>—your financial data never leaves your device.
                     </p>
                     <p className="text-[hsl(var(--muted-foreground))] mb-4">
                         Whether you're an accountant managing client accounts, a business owner importing bank transactions, or a bookkeeper standardizing different bank formats, this <strong>OFX to QBO converter free</strong> tool handles it all. Simply drag and drop your file, and get an instant QBO file ready for QuickBooks import.
@@ -354,8 +354,8 @@ export default function OfxToQboPage() {
                     </h2>
                     <div className="space-y-6">
                         {[
-                            { q: "What's the best OFX to QBO converter in 2026?", a: "Statement Extract offers the best free OFX to QBO converter. It's instant, private, and preserves all transaction data with 100% accuracy." },
-                            { q: "Is my financial data secure?", a: "Yes, completely. The tool runs 100% in your browser. Your OFX file is never uploaded to any server—we physically cannot access your data." },
+                            { q: "What's the best OFX to QBO converter in 2026?", a: "Statement Extract offers the best free OFX to QBO converter. It's instant, private, and preserves all transaction data with high-precision accuracy." },
+                            { q: "Is my financial data secure?", a: "Yes, completely. The tool runs entirely in your browser. Your OFX file is never uploaded to any server—we physically cannot access your data." },
                             { q: "Do I need to install anything?", a: "No. Everything runs in your web browser. Just drag and drop your OFX file and click convert." },
                             { q: "Will QuickBooks accept the converted QBO file?", a: "Yes! The converter produces fully compatible QBO files that work with QuickBooks Online and all Desktop versions." },
                             { q: "Does it work with QFX files too?", a: "Yes! The converter accepts both OFX and QFX files and converts them to QBO format." },

@@ -206,7 +206,7 @@ export function QboToCsvTool() {
                     QBO to CSV Converter
                 </h1>
                 <h2 className="text-base md:text-lg text-[hsl(var(--muted-foreground))] max-w-xl mx-auto font-normal">
-                    Convert <strong>.qbo to csv</strong> online. Extract transactions from QuickBooks files to Excel. 100% free and private.
+                    Convert <strong>.qbo to csv</strong> online. Extract transactions from QuickBooks files to Excel. Free and private online tool.
                 </h2>
             </div>
 

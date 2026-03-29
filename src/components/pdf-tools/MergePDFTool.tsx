@@ -181,7 +181,7 @@ export function MergePDFTool() {
                     Merge PDF Files Online
                 </h1>
                 <h2 className="text-base md:text-lg text-[hsl(var(--muted-foreground))] max-w-xl mx-auto font-normal">
-                    Combine multiple PDFs into one. Drag to reorder. 100% free and private.
+                    Combine multiple PDFs into one. Drag to reorder. Free and private online tool.
                 </h2>
             </div>
 

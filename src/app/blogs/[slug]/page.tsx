@@ -477,15 +477,17 @@ export default async function BlogPostPage({ params }: PageParams) {
             {(date || tags.length > 0) && (
               <div className="flex flex-col items-start gap-4 mt-2">
                 {date && (
-                  <div className="flex items-center gap-2 text-sm text-[hsl(var(--muted-foreground))]">
-                    <div className="flex items-center gap-2">
-                      <div className="flex h-5 w-5 items-center justify-center rounded-full bg-[hsl(var(--primary))]/10">
-                        <svg className="h-3 w-3 text-[hsl(var(--primary))]" viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                        </svg>
-                      </div>
-                      <span className="font-medium text-[hsl(var(--foreground))]">Statement Team</span>
-                    </div>
+                    <div className="flex items-center gap-2 text-sm text-[hsl(var(--muted-foreground))]">
+                      <Link href="/about" className="flex items-center gap-2 group">
+                        <Image
+                          src="/assets/Rajat Srivastava.png"
+                          alt="Rajat Srivastava"
+                          width={28}
+                          height={28}
+                          className="rounded-full object-cover"
+                        />
+                        <span className="font-medium text-[hsl(var(--foreground))] group-hover:text-[hsl(var(--primary))] transition-colors">Rajat Srivastava</span>
+                      </Link>
                     <span className="text-[hsl(var(--border))]">•</span>
                     <time dateTime={date}>
                       {new Date(date).toLocaleDateString("en-US", {
@@ -576,7 +578,7 @@ export default async function BlogPostPage({ params }: PageParams) {
                   >
                     <path fillRule="evenodd" d="M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0ZM9 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM6.75 8a.75.75 0 0 0 0 1.5h.75v1.75a.75.75 0 0 0 1.5 0v-2.5A.75.75 0 0 0 8.25 8h-1.5Z" clipRule="evenodd" />
                   </svg>
-                  <span>Image generated with AI</span>
+                  <span>Illustration by Statement Extract</span>
                 </div>
               </div>
             )}
@@ -646,7 +648,7 @@ export default async function BlogPostPage({ params }: PageParams) {
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="h-2.5 w-2.5" aria-hidden="true">
                               <path fillRule="evenodd" d="M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0ZM9 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM6.75 8a.75.75 0 0 0 0 1.5h.75v1.75a.75.75 0 0 0 1.5 0v-2.5A.75.75 0 0 0 8.25 8h-1.5Z" clipRule="evenodd" />
                             </svg>
-                            <span>By Statement Extract</span>
+                            <span>Illustration by Statement Extract</span>
                           </div>
                         </>
                       ) : (

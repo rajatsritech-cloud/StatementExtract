@@ -5,7 +5,7 @@ import { Zap, Shield, Globe, FileText, Lock, Minimize2, Mail, HardDrive, CheckCi
 
 export const metadata: Metadata = {
     title: "Compress PDF Online Free | Reduce PDF to 100KB, 500KB, 1MB, 2MB | Statement Extract",
-    description: "Free PDF compressor. Reduce PDF size to 100KB, 200KB, 500KB, 1MB, 2MB, 5MB. Perfect for email attachments. 100% client-side, no upload. Works on all devices.",
+    description: "Free PDF compressor. Reduce PDF size to 100KB, 200KB, 500KB, 1MB, 2MB, 5MB. Perfect for email attachments. Fully Client-Side, no upload. Works on all devices.",
     keywords: "compress pdf to 100kb, compress pdf to 500kb, compress pdf to 1mb, compress pdf to 2mb, compress pdf to 5mb, reduce pdf size, pdf compressor online free, shrink pdf for email, compress pdf to 200kb, compress pdf to 300kb, compress pdf without losing quality, make pdf smaller",
     openGraph: {
         title: "Compress PDF Online Free | Reduce PDF to 100KB, 500KB, 1MB",
@@ -49,7 +49,7 @@ const faqSchema = {
             "name": "Can I compress PDF to under 1MB for email?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes! Select medium or high compression to reduce your PDF to under 1MB. Most PDFs can be compressed by 30-70% depending on their content."
+                "text": "Yes! Select medium or high compression to reduce your PDF to under 1MB. Most PDFs can be compressed by a significant amount depending on their content."
             }
         },
         {
@@ -57,7 +57,7 @@ const faqSchema = {
             "name": "Is it safe to compress PDFs online?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Our PDF compressor processes files entirely in your browser. Your PDFs never leave your device or get uploaded to any server, making it 100% private and secure."
+                "text": "Our PDF compressor processes files entirely in your browser. Your PDFs never leave your device or get uploaded to any server, making it Private & Secure and secure."
             }
         }
     ]
@@ -111,7 +111,7 @@ export default function CompressPDFPage() {
                     <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                         {[
                             { icon: Minimize2, title: "Target Any Size", desc: "Compress PDF to 100KB, 500KB, 1MB, or any target size." },
-                            { icon: Shield, title: "100% Private", desc: "All compression happens in your browser. Files never uploaded." },
+                            { icon: Shield, title: "Private & Secure", desc: "All compression happens in your browser. Files never uploaded." },
                             { icon: Globe, title: "Works Everywhere", desc: "Chrome, Firefox, Safari, Edge — any modern browser." },
                             { icon: Mail, title: "Perfect for Email", desc: "Get PDFs under email limits without losing quality." },
                         ].map((feature, i) => (
@@ -369,7 +369,7 @@ export default function CompressPDFPage() {
                             How Much Can You Compress a PDF?
                         </h3>
                         <p className="text-[hsl(var(--muted-foreground))]">
-                            Compression results vary based on PDF content. <strong>Text-heavy PDFs</strong> (like bank statements) can often be reduced by 20-40%. <strong>Image-heavy PDFs</strong> (like scanned documents) may see 50-70% reduction. Documents already optimized will see smaller reductions.
+                            Compression results vary based on PDF content. <strong>Text-heavy PDFs</strong> (like bank statements) can often be reduced by a significant amount. <strong>Image-heavy PDFs</strong> (like scanned documents) may see a significant amount reduction. Documents already optimized will see smaller reductions.
                         </p>
 
                         <h3 className="text-xl font-semibold text-[hsl(var(--foreground))] mt-8 mb-4">
@@ -395,9 +395,9 @@ export default function CompressPDFPage() {
                             { q: "How do I compress PDF to 1MB?", a: "Upload your document, choose medium or high compression, and download. Most documents can easily fit under 1MB with our optimization." },
                             { q: "Will compressing PDF reduce quality?", a: "Our compressor uses lossless techniques for text. Images may be slightly optimized but remain clear. Text stays perfectly sharp and readable." },
                             { q: "Is it safe to compress bank statements online?", a: "Yes! Our tool processes everything in your browser. Your bank statements never leave your device or get uploaded to any server." },
-                            { q: "How much can I reduce PDF file size?", a: "Typically 20-70% depending on content. Text PDFs see 20-40% reduction, while image-heavy documents can be reduced by 50-70%." },
+                            { q: "How much can I reduce PDF file size?", a: "Typically a significant amount depending on content. Text PDFs see a significant amount reduction, while image-heavy documents can be reduced by a significant amount." },
                             { q: "Can I compress password-protected PDFs?", a: "The tool can handle some encrypted PDFs, but heavily password-protected files may not be compatible. Remove protection before compressing." },
-                            { q: "Is this PDF compressor really free?", a: "100% free with no limits, no watermarks, and no signup. We monetize through our premium bank statement extraction services." },
+                            { q: "Is this PDF compressor really free?", a: "Free Online Tool with no limits, no watermarks, and no signup. We monetize through our premium bank statement extraction services." },
                             { q: "What's the maximum file size I can compress?", a: "Since processing happens in your browser, you can compress PDFs up to 100MB or more. The only limit is your device's available memory." },
                             { q: "Can I compress multiple PDFs at once?", a: "Currently, we process one PDF at a time for optimal results. Use our Merge PDF tool first if you want to combine files, then compress." },
                         ].map((faq, i) => (

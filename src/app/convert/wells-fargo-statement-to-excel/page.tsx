@@ -57,7 +57,7 @@ const faqSchema = {
         {
             "@type": "Question",
             "name": "How accurate is Wells Fargo statement conversion?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Our AI achieves 99.9% accuracy on Wells Fargo statements using intelligent document processing." }
+            "acceptedAnswer": { "@type": "Answer", "text": "Our AI achieves High accuracy on Wells Fargo statements using intelligent document processing." }
         }
     ]
 };
@@ -216,7 +216,7 @@ export default function WellsFargoStatementPage() {
                     <div className="space-y-6">
                         {[
                             { q: "How do I download my Wells Fargo statement as a PDF?", a: "Log into wellsfargo.com, go to Statements & Documents, select your account, choose the date range, and download as PDF." },
-                            { q: "Does this work with scanned Wells Fargo statements?", a: "Yes! Our AI-powered OCR can extract data from scanned PDFs and images with 99%+ accuracy." },
+                            { q: "Does this work with scanned Wells Fargo statements?", a: "Yes! Our AI-powered OCR can extract data from scanned PDFs and images with high-precision accuracy." },
                             { q: "Can I convert multiple Wells Fargo statements at once?", a: "Yes, upload multiple PDF files and convert them all in one batch." },
                             { q: "Is my Wells Fargo data secure?", a: "Absolutely. We use bank-level 256-bit encryption and never store your data permanently." },
                             { q: "What format will my converted statement be in?", a: "Choose Excel (.xlsx) or CSV with clean columns: Date, Description, Amount, Balance." },

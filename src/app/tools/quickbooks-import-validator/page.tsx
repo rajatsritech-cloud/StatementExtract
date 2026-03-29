@@ -22,7 +22,7 @@ import {
 
 export const metadata: Metadata = {
     title: "Free QuickBooks Import Validator & CSV Error Checker | Fix QBO Errors | Statement Extract",
-    description: "Validate your CSV and Excel files before importing to QuickBooks Online. Instantly detect date format errors, missing columns, duplicate transactions, and invalid amounts. 100% free, no signup required.",
+    description: "Validate your CSV and Excel files before importing to QuickBooks Online. Instantly detect date format errors, missing columns, duplicate transactions, and invalid amounts. Free online tool, no signup required.",
     keywords: "QuickBooks Online import error, QBO import validator, validate CSV for QuickBooks, QuickBooks date format error, fix QuickBooks CSV import, qbo error 350, quickbooks csv format, quickbooks import failed, csv to qbo validator",
     openGraph: {
         title: "Free QuickBooks Import Validator & CSV Error Checker",
@@ -77,7 +77,7 @@ const faqSchema = {
             "name": "Is my data safe using this tool?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes. This tool runs 100% in your browser using client-side JavaScript. Your file data never leaves your device and is never uploaded to any server."
+                "text": "Yes. This tool runs entirely in your browser using client-side JavaScript. Your file data never leaves your device and is never uploaded to any server."
             }
         },
         {
@@ -125,7 +125,7 @@ const faqSchema = {
             "name": "Is this tool really free?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes, 100% free with no limits. No watermark, no signup, no credit card required. It's provided as a companion tool to our CSV to QBO converter."
+                "text": "Yes, free with no limits. No watermark, no signup, no credit card required. It's provided as a companion tool to our CSV to QBO converter."
             }
         }
     ]
@@ -183,7 +183,7 @@ export default function QuickBooksValidatorPage() {
                     </p>
                     <div className="flex flex-wrap justify-center gap-6 text-sm font-semibold text-[hsl(var(--muted-foreground))]">
                         <span className="flex items-center gap-2 bg-[hsl(var(--card))] px-4 py-2 rounded-full border shadow-sm"><CheckCircle className="w-4 h-4 text-green-500" /> No Sign Up</span>
-                        <span className="flex items-center gap-2 bg-[hsl(var(--card))] px-4 py-2 rounded-full border shadow-sm"><CheckCircle className="w-4 h-4 text-green-500" /> 100% Free</span>
+                        <span className="flex items-center gap-2 bg-[hsl(var(--card))] px-4 py-2 rounded-full border shadow-sm"><CheckCircle className="w-4 h-4 text-green-500" /> Free Online Tool</span>
                         <span className="flex items-center gap-2 bg-[hsl(var(--card))] px-4 py-2 rounded-full border shadow-sm"><CheckCircle className="w-4 h-4 text-green-500" /> Secure (Client-Side)</span>
                     </div>
                 </div>
@@ -240,7 +240,7 @@ export default function QuickBooksValidatorPage() {
                         </div>
                         <div className="p-6 rounded-2xl bg-[hsl(var(--card))] border border-[hsl(var(--border))]">
                             <Shield className="w-8 h-8 text-[hsl(var(--primary))] mb-4" />
-                            <h3 className="font-semibold text-[hsl(var(--foreground))] mb-2">100% Private</h3>
+                            <h3 className="font-semibold text-[hsl(var(--foreground))] mb-2">Private & Secure</h3>
                             <p className="text-sm text-[hsl(var(--muted-foreground))]">All processing happens in your browser. Your financial data never leaves your device.</p>
                         </div>
                         <div className="p-6 rounded-2xl bg-[hsl(var(--card))] border border-[hsl(var(--border))]">
@@ -340,7 +340,7 @@ export default function QuickBooksValidatorPage() {
                                 <tr>
                                     <td className="p-4 font-medium text-[hsl(var(--muted-foreground))]">Privacy</td>
                                     <td className="p-4 text-[hsl(var(--foreground))]">Local</td>
-                                    <td className="p-4 text-green-600 font-medium bg-[hsl(var(--primary))]/5">100% Client-Side (Local)</td>
+                                    <td className="p-4 text-green-600 font-medium bg-[hsl(var(--primary))]/5">Fully Client-Side (Local)</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -479,7 +479,7 @@ export default function QuickBooksValidatorPage() {
                             { q: "Why does QuickBooks reject my CSV?", a: "QuickBooks is strict about formatting. It rejects files with missing headers, invalid date formats, or currency symbols in number fields. Our validator detects all these issues before you import." },
                             { q: "What is the correct date format for QuickBooks?", a: "Use MM/DD/YYYY (e.g., 12/31/2024) for QuickBooks Online US. YYYY-MM-DD also works. Avoid using text months (Dec 31) or dot separators (12.31.24)." },
                             { q: "What is QBO Error 350?", a: "Error 350 typically means 'invalid format' in the amount field. Remove currency symbols, commas, and ensure all amounts are plain numbers like '1500.00'." },
-                            { q: "Is this tool free?", a: "Yes, 100% free with no limits. No watermark, no signup, no credit card required." },
+                            { q: "Is this tool free?", a: "Yes, Free Online Tool with no limits. No watermark, no signup, no credit card required." },
                             { q: "Does this store my financial data?", a: "No. All validation happens locally in your web browser using JavaScript. Your file is never uploaded to any server." },
                             { q: "Can I validate Excel files or only CSV?", a: "You can validate both! Simply drag and drop any .csv or .xlsx file and the tool will parse it automatically." },
                             { q: "How do I avoid duplicate transactions?", a: "Enable 'Strict Mode' which flags duplicate rows (same date, amount, and description) in yellow so you can review them before export." },

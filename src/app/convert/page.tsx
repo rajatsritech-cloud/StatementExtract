@@ -35,7 +35,7 @@ const toolSections = [
         tools: [
             {
                 title: "Merge PDF",
-                description: "Combine multiple PDF files into one document. Drag to reorder. 100% private.",
+                description: "Combine multiple PDF files into one document. Drag to reorder. Private & Secure.",
                 href: "/convert/merge-pdf",
                 icon: "Layers",
                 badge: "Popular",
@@ -414,7 +414,7 @@ export default function ConvertHubPage() {
                         <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[hsl(var(--primary))]/30 bg-[hsl(var(--primary))]/10 px-4 py-1.5">
                             <Zap className="h-4 w-4 text-[hsl(var(--primary))]" />
                             <span className="text-sm font-medium text-[hsl(var(--primary))]">
-                                All Converters 100% Free and Private
+                                All Converters Free Online Tool and Private
                             </span>
                         </div>
                         <h1 className="text-4xl md:text-5xl font-bold text-[hsl(var(--foreground))] mb-4">
@@ -441,7 +441,7 @@ export default function ConvertHubPage() {
                     <div className="grid md:grid-cols-3 gap-8">
                         {[
                             { icon: Zap, title: "Lightning Fast", desc: "AI-powered processing delivers results in seconds, not minutes." },
-                            { icon: Shield, title: "100% Private & Secure", desc: "Your files never leave your device. Bank-level encryption for all data." },
+                            { icon: Shield, title: "Private & Secure & Secure", desc: "Your files never leave your device. Bank-level encryption for all data." },
                             { icon: Globe, title: "Works Anywhere", desc: "Use on any device with a modern browser. No installation required." },
                         ].map((feature, i) => (
                             <div key={i} className="text-center">

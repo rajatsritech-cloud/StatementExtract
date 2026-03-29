@@ -10,7 +10,7 @@ import { RedirectIfAuthenticated } from "@/components/RedirectIfAuthenticated";
 import { RecentBlogs } from "@/components/RecentBlogs";
 
 export const metadata: Metadata = {
-    title: "Convert Bank Statement PDF to QuickBooks & Xero (CSV/QBO) | 99% Accuracy",
+    title: "Convert Bank Statement PDF to QuickBooks & Xero (CSV/QBO) | High-Precision Accuracy",
     description: "Instantly convert PDF bank statements to QuickBooks Online (.QBO) and Xero CSV. No manual entry. Trusted by accountants for high-volume reconciliation.",
     keywords: [
         "Convert PDF to QuickBooks Online",
@@ -40,7 +40,7 @@ export default function BankStatementXeroPage() {
         "@context": "https://schema.org",
         "@type": "SoftwareApplication",
         "name": "Bank Statement to QuickBooks/Xero Converter",
-        "description": "AI-powered tool to convert PDF bank statements into QuickBooks (.QBO) and Xero (.CSV) formats with 99.9% accuracy.",
+        "description": "AI-powered tool to convert PDF bank statements into QuickBooks (.QBO) and Xero (.CSV) formats with High accuracy.",
         "url": "https://statementextract.com/convert-bank-statement-to-quickbooks-xero",
         "applicationCategory": "BusinessApplication",
         "operatingSystem": "Web Browser, Windows, macOS, iOS, Android",

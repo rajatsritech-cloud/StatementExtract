@@ -5,7 +5,7 @@ import { Zap, Shield, Code2, FileImage, Copy, Globe } from "lucide-react";
 
 export const metadata: Metadata = {
     title: "Image to Base64 Converter Online | Free Instant Encoder | Statement Extract",
-    description: "Free image to Base64 converter. Convert PNG, JPG, GIF, WebP, SVG to Base64 strings instantly. Get Data URI, CSS, HTML, or Markdown output. Zero upload - 100% client-side.",
+    description: "Free image to Base64 converter. Convert PNG, JPG, GIF, WebP, SVG to Base64 strings instantly. Get Data URI, CSS, HTML, or Markdown output. Zero upload - Fully Client-Side.",
     keywords: "image to base64, base64 encoder, convert image to base64, png to base64, jpg to base64, image base64 string, data uri generator, base64 image encoder, embed image in html, css background image base64, image to data uri, base64 converter online, free base64 encoder, svg to base64",
     openGraph: {
         title: "Image to Base64 Converter - Instant, Free, Private",
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     twitter: {
         card: "summary_large_image",
         title: "Image to Base64 - Fastest Online Converter",
-        description: "Convert images to Base64 in milliseconds. 100% client-side, private."
+        description: "Convert images to Base64 in milliseconds. Fully Client-Side, private."
     },
     alternates: {
         canonical: "https://statementextract.com/convert/image-to-base64/"
@@ -74,7 +74,7 @@ const faqSchema = {
             "name": "Is my image uploaded to a server?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "No! This converter runs 100% in your browser. Your image never leaves your device. The conversion happens instantly using JavaScript's FileReader API."
+                "text": "No! This converter runs entirely in your browser. Your image never leaves your device. The conversion happens instantly using JavaScript's FileReader API."
             }
         },
         {
@@ -127,7 +127,7 @@ export default function ImageToBase64Page() {
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {[
                             { icon: Zap, title: "Reduce HTTP Requests", desc: "Embed small images directly in HTML/CSS to eliminate extra network requests." },
-                            { icon: Shield, title: "100% Private", desc: "All conversion happens in your browser. Your images never touch any server." },
+                            { icon: Shield, title: "Private & Secure", desc: "All conversion happens in your browser. Your images never touch any server." },
                             { icon: Code2, title: "Multiple Formats", desc: "Get output as Data URI, raw Base64, CSS, HTML <img>, or Markdown." },
                             { icon: FileImage, title: "All Image Types", desc: "Works with PNG, JPG, GIF, WebP, SVG, BMP, and more." },
                             { icon: Copy, title: "One-Click Copy", desc: "Instantly copy the encoded string to your clipboard." },
@@ -227,7 +227,7 @@ export default function ImageToBase64Page() {
                     <div className="space-y-4">
                         {[
                             { q: "What is Base64 encoding?", a: "Base64 is a way to encode binary data (like images) as ASCII text. This allows images to be embedded directly in HTML, CSS, or JSON without separate files." },
-                            { q: "Is my image uploaded to a server?", a: "No! Conversion happens 100% in your browser using JavaScript. Your image never leaves your device." },
+                            { q: "Is my image uploaded to a server?", a: "No! Conversion happens entirely in your browser using JavaScript. Your image never leaves your device." },
                             { q: "What's the size increase with Base64?", a: "Base64 increases file size by approximately 33%. A 10KB image becomes ~13.3KB as Base64." },
                             { q: "When should I use Base64?", a: "Best for small images (under 10KB) like icons, logos, and sprites. Reduces HTTP requests but increases HTML/CSS size." },
                             { q: "What image formats are supported?", a: "All common formats: PNG, JPG, GIF, WebP, SVG, BMP, ICO. The MIME type is preserved in the Data URI." },

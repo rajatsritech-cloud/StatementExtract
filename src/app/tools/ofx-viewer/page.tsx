@@ -17,7 +17,7 @@ import {
 
 export const metadata: Metadata = {
     title: "OFX File Viewer Online Free | Open Bank Statement Files | Statement Extract",
-    description: "Free OFX file viewer online. Open and view OFX, QFX, and QBO bank statement files in your browser. See transactions instantly. No software required. 100% private.",
+    description: "Free OFX file viewer online. Open and view OFX, QFX, and QBO bank statement files in your browser. See transactions instantly. No software required. Private & Secure.",
     keywords: "ofx file viewer, ofx viewer online, open ofx file, ofx file reader, view ofx file, ofx file opener, qfx viewer, bank statement viewer, open financial exchange viewer",
     openGraph: {
         title: "OFX File Viewer Online Free | Open Bank Statement Files",
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     twitter: {
         card: "summary_large_image",
         title: "OFX File Viewer - Free Online Tool",
-        description: "Open OFX bank statement files online. View transactions instantly. 100% private.",
+        description: "Open OFX bank statement files online. View transactions instantly. Private & Secure.",
         images: ["https://statementextract.com/assets/StatementExtract_Workflow_img.png"]
     },
     alternates: {
@@ -152,7 +152,7 @@ export default function OfxViewerPage() {
                     </h2>
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {[
-                            { icon: Lock, title: "100% Private", desc: "Files never leave your device. All processing happens in your browser." },
+                            { icon: Lock, title: "Private & Secure", desc: "Files never leave your device. All processing happens in your browser." },
                             { icon: Eye, title: "Instant Preview", desc: "See all transactions immediately without installing any software." },
                             { icon: Zap, title: "No Signup Required", desc: "No email, no account needed. Just drop your file and view." },
                             { icon: Shield, title: "Multiple Formats", desc: "Supports OFX, QFX, and QBO file formats from any bank." },
@@ -240,7 +240,7 @@ export default function OfxViewerPage() {
                         The Best Free OFX File Viewer in 2026
                     </h2>
                     <p className="text-[hsl(var(--muted-foreground))] mb-4">
-                        Need to <strong>open an OFX file</strong> but don't have financial software? Our free <strong>online OFX viewer</strong> lets you see the contents of bank statement files instantly in your browser. No downloads, no registration, and <strong>100% private processing</strong>.
+                        Need to <strong>open an OFX file</strong> but don't have financial software? Our free <strong>online OFX viewer</strong> lets you see the contents of bank statement files instantly in your browser. No downloads, no registration, and <strong>Private & Secure processing</strong>.
                     </p>
 
                     <h3 className="text-xl font-semibold text-[hsl(var(--foreground))] mb-4 mt-8">
@@ -324,7 +324,7 @@ export default function OfxViewerPage() {
                     <div className="space-y-6">
                         {[
                             { q: "How do I open an OFX file without software?", a: "Use our free online viewer. Just drag and drop your OFX file and view all transactions instantly in your browser." },
-                            { q: "Is this viewer really free?", a: "Yes! It's 100% free with no limits on files or transactions. No signup required." },
+                            { q: "Is this viewer really free?", a: "Yes! It's Free Online Tool with no limits on files or transactions. No signup required." },
                             { q: "Can I view files from any bank?", a: "Yes, the viewer supports standard OFX files from any bank worldwide." },
                             { q: "What's the difference between OFX and QFX?", a: "OFX is the open standard. QFX is Quicken's proprietary variant with extra headers. Both work with our viewer." },
                             { q: "Can I edit the transactions?", a: "This viewer is read-only. To edit, export to CSV and modify in Excel or Google Sheets." },

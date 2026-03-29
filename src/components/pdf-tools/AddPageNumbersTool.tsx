@@ -222,7 +222,7 @@ export function AddPageNumbersTool() {
                     Add Page Numbers to PDF Online Free
                 </h1>
                 <h2 className="text-base md:text-lg text-[hsl(var(--muted-foreground))] max-w-xl mx-auto font-normal">
-                    Insert page numbers to your PDF documents. Choose position, format, and starting page. 100% free and private.
+                    Insert page numbers to your PDF documents. Choose position, format, and starting page. Free and private online tool.
                 </h2>
             </div>
 

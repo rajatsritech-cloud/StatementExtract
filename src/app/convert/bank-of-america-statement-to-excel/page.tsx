@@ -57,7 +57,7 @@ const faqSchema = {
         {
             "@type": "Question",
             "name": "How accurate is the BoA statement conversion?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Our AI achieves 99.9% accuracy on Bank of America statements using intelligent document processing." }
+            "acceptedAnswer": { "@type": "Answer", "text": "Our AI achieves High accuracy on Bank of America statements using intelligent document processing." }
         }
     ]
 };
@@ -216,7 +216,7 @@ export default function BankOfAmericaStatementPage() {
                     <div className="space-y-6">
                         {[
                             { q: "How do I download my BoA statement as a PDF?", a: "Log into bankofamerica.com, go to Statements & Documents, select your account, and download as PDF." },
-                            { q: "Does this work with scanned BoA statements?", a: "Yes! Our AI-powered OCR can extract data from scanned PDFs with 99%+ accuracy." },
+                            { q: "Does this work with scanned BoA statements?", a: "Yes! Our AI-powered OCR can extract data from scanned PDFs with high-precision accuracy." },
                             { q: "Can I convert multiple BoA statements at once?", a: "Yes, upload multiple PDF files and convert them all in one batch." },
                             { q: "Is my Bank of America data secure?", a: "Absolutely. We use bank-level 256-bit encryption and never store your data." },
                             { q: "What format will my converted statement be in?", a: "Choose Excel (.xlsx) or CSV with clean columns: Date, Description, Amount, Balance." },

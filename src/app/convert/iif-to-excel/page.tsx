@@ -135,7 +135,7 @@ export default function IifToExcelPage() {
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {[
                             { icon: FileSpreadsheet, title: "Clean Format", desc: "Converts crazy IIF text blocks into simple rows: Date, Name, Amount, Memo." },
-                            { icon: Lock, title: "100% Private", desc: "Browser-based processing. No data upload, no cloud storage." },
+                            { icon: Lock, title: "Private & Secure", desc: "Browser-based processing. No data upload, no cloud storage." },
                             { icon: Zap, title: "Instant View", desc: "See what's inside a QuickBooks IIF file without opening QuickBooks." },
                             { icon: CheckCircle, title: "Accuracy First", desc: "Correctly maps TRNS and SPL lines to transactions." },
                             { icon: Globe, title: "Cross-Platform", desc: "Works on Mac, Windows, and Linux. No plugins needed." },
@@ -239,7 +239,7 @@ export default function IifToExcelPage() {
                                     { feature: "Data Parsing", us: "Intelligent (TRNS mapping)", competitors: "Dumb (Tabs only)" },
                                     { feature: "Transaction Logic", us: "Validates Dates & Amounts", competitors: "None" },
                                     { feature: "Formatting", us: "Clean XLSX Headers", competitors: "Raw Text" },
-                                    { feature: "Privacy", us: "100% Local", competitors: "N/A (Local App)" },
+                                    { feature: "Privacy", us: "completely local", competitors: "N/A (Local App)" },
                                 ].map((row, i) => (
                                     <tr key={i} className="border-b border-[hsl(var(--border))]">
                                         <td className="p-4 text-[hsl(var(--foreground))]">{row.feature}</td>

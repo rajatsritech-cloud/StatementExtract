@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     keywords: "self employed tax calculator 2026, 1099 tax calculator 2026, freelancer tax calculator, quarterly tax calculator 2026, uber driver tax calculator, independent contractor tax estimator, gig economy tax calculator, side hustle tax calculator",
     openGraph: {
         title: "Self-Employed Tax Calculator 2026 | Free 1099 Tax Estimator",
-        description: "Calculate your 2026 self-employment tax, federal income tax, and quarterly payments. Free 100% private calculator.",
+        description: "Calculate your 2026 self-employment tax, federal income tax, and quarterly payments. Free Private & Secure calculator.",
         type: "website",
         url: "https://statementextract.com/tools/self-employed-tax-calculator"
     },
@@ -131,7 +131,7 @@ export default function SelfEmployedTaxCalculatorPage() {
                         {[
                             { icon: Calculator, title: "2025 & 2026 Tax Years", desc: "Calculate taxes for your 2025 return or plan ahead for 2026 income." },
                             { icon: Zap, title: "QBI Deduction Included", desc: "Automatically calculates the 20% Qualified Business Income deduction." },
-                            { icon: Shield, title: "100% Private & Free", desc: "No signup required. Data never leaves your browser." },
+                            { icon: Shield, title: "Private & Secure & Free", desc: "No signup required. Data never leaves your browser." },
                         ].map((feature, i) => (
                             <div key={i} className="p-6 rounded-2xl bg-[hsl(var(--card))] border border-[hsl(var(--border))]">
                                 <feature.icon className="w-8 h-8 text-[hsl(var(--primary))] mb-4" />

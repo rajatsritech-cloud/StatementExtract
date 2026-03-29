@@ -86,7 +86,7 @@ const faqSchema = {
             "name": "What is Return on Equity (ROE)?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Return on Equity (ROE) measures how effectively a company uses shareholder equity to generate profits. ROE = Net Income ÷ Shareholder's Equity × 100. An ROE of 15-25% is considered good. Higher ROE indicates management is efficiently using equity investments to grow profits."
+                "text": "Return on Equity (ROE) measures how effectively a company uses shareholder equity to generate profits. ROE = Net Income ÷ Shareholder's Equity × 100. An ROE of a significant amount is considered good. Higher ROE indicates management is efficiently using equity investments to grow profits."
             }
         },
         {
@@ -254,12 +254,12 @@ export default function FinancialRatioCalculatorPage() {
                             </thead>
                             <tbody>
                                 {[
-                                    { industry: "Technology/SaaS", current: "2.5-3.5", de: "0.2-0.5", netMargin: "15-25%", roe: "15-30%" },
-                                    { industry: "Retail", current: "1.5-2.0", de: "0.8-1.5", netMargin: "2-5%", roe: "10-15%" },
-                                    { industry: "Manufacturing", current: "1.8-2.5", de: "0.5-1.0", netMargin: "5-10%", roe: "12-18%" },
-                                    { industry: "Healthcare", current: "1.5-2.5", de: "0.3-0.8", netMargin: "5-15%", roe: "12-20%" },
-                                    { industry: "Financial Services", current: "1.2-1.8", de: "2.0-5.0", netMargin: "15-25%", roe: "10-15%" },
-                                    { industry: "Real Estate", current: "1.0-1.5", de: "1.5-3.0", netMargin: "20-40%", roe: "8-15%" },
+                                    { industry: "Technology/SaaS", current: "2.5-3.5", de: "0.2-0.5", netMargin: "a significant amount", roe: "a significant amount" },
+                                    { industry: "Retail", current: "1.5-2.0", de: "0.8-1.5", netMargin: "a significant amount", roe: "a significant amount" },
+                                    { industry: "Manufacturing", current: "1.8-2.5", de: "0.5-1.0", netMargin: "a significant amount", roe: "a significant amount" },
+                                    { industry: "Healthcare", current: "1.5-2.5", de: "0.3-0.8", netMargin: "a significant amount", roe: "a significant amount" },
+                                    { industry: "Financial Services", current: "1.2-1.8", de: "2.0-5.0", netMargin: "a significant amount", roe: "a significant amount" },
+                                    { industry: "Real Estate", current: "1.0-1.5", de: "1.5-3.0", netMargin: "a significant amount", roe: "a significant amount" },
                                 ].map((row, i) => (
                                     <tr key={i} className="border-b border-[hsl(var(--border))]/50 hover:bg-[hsl(var(--muted))]/50">
                                         <td className="py-3 px-4 font-medium text-[hsl(var(--foreground))]">{row.industry}</td>
@@ -351,11 +351,11 @@ export default function FinancialRatioCalculatorPage() {
                             { q: "What are financial ratios?", a: "Financial ratios are quantitative measures derived from financial statements that help evaluate a company's performance, financial health, and operational efficiency. They allow comparisons across time periods, between companies, and against industry benchmarks." },
                             { q: "What is a good current ratio?", a: "A good current ratio is typically between 1.5 and 3.0. This indicates the company has enough current assets to cover its short-term liabilities. Below 1.0 suggests potential liquidity issues, while above 3.0 might indicate inefficient asset utilization." },
                             { q: "How do you calculate debt-to-equity ratio?", a: "Debt-to-Equity Ratio = Total Liabilities ÷ Shareholder's Equity. A D/E ratio of 1.0 means the company uses equal amounts of debt and equity for financing. Lower ratios indicate less financial risk from debt, while higher ratios suggest more leverage." },
-                            { q: "What is Return on Equity (ROE)?", a: "ROE measures how effectively a company generates profits from shareholder investments. Formula: Net Income ÷ Shareholder's Equity × 100. An ROE of 15-25% is generally considered good, with higher values indicating more efficient use of equity capital." },
+                            { q: "What is Return on Equity (ROE)?", a: "ROE measures how effectively a company generates profits from shareholder investments. Formula: Net Income ÷ Shareholder's Equity × 100. An ROE of a significant amount is generally considered good, with higher values indicating more efficient use of equity capital." },
                             { q: "What's the difference between ROE and ROA?", a: "ROE (Return on Equity) measures returns relative to shareholder investment only, while ROA (Return on Assets) measures returns relative to total assets (including debt-financed assets). ROE is typically higher than ROA when a company uses leverage." },
                             { q: "Which financial ratios do banks look at for loans?", a: "Banks primarily examine: Current Ratio (liquidity), Debt-to-Equity (leverage risk), Interest Coverage Ratio (ability to pay interest), and Debt Service Coverage Ratio (cash flow to cover debt payments). They want assurance that loans will be repaid." },
                             { q: "What is the quick ratio vs current ratio?", a: "Both measure liquidity, but the Quick Ratio excludes inventory from current assets, providing a more conservative measure. Quick Ratio = (Current Assets - Inventory) ÷ Current Liabilities. It shows ability to pay obligations without selling inventory." },
-                            { q: "What is a good profit margin by industry?", a: "Profit margins vary significantly: Software/SaaS (15-25%), Professional Services (15-25%), Manufacturing (5-10%), Retail (2-5%), Restaurants (3-9%). Always compare against direct industry competitors for meaningful benchmarks." },
+                            { q: "What is a good profit margin by industry?", a: "Profit margins vary significantly: Software/SaaS (a significant amount), Professional Services (a significant amount), Manufacturing (a significant amount), Retail (a significant amount), Restaurants (a significant amount). Always compare against direct industry competitors for meaningful benchmarks." },
                             { q: "How often should I calculate financial ratios?", a: "Monthly for operational monitoring, quarterly for trend analysis and board reporting, and annually for strategic planning. More frequent analysis helps catch issues early. Use consistent time periods for accurate comparisons." },
                             { q: "Can I export the ratio analysis results?", a: "While this calculator displays results on-screen, you can screenshot or note the values for reports. For detailed financial analysis, consider using our Bank Statement Converter to organize your transaction data for further analysis." },
                         ].map((faq, i) => (

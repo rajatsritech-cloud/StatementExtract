@@ -15,11 +15,11 @@ import {
 
 export const metadata: Metadata = {
     title: "QIF to QBO Converter Free Online | Quicken to QuickBooks | Statement Extract",
-    description: "Free QIF to QBO converter online. Convert Quicken Interchange Format (.qif) files to QuickBooks Web Connect (.qbo) format instantly. 100% private, no upload required.",
+    description: "Free QIF to QBO converter online. Convert Quicken Interchange Format (.qif) files to QuickBooks Web Connect (.qbo) format instantly. Private & Secure, no upload required.",
     keywords: "qif to qbo converter, qif to qbo converter free, convert qif to qbo online, quicken to quickbooks converter, import qif into quickbooks, qif file converter, quicken qif to qbo",
     openGraph: {
         title: "QIF to QBO Converter Free Online | Quicken to QuickBooks",
-        description: "Convert Quicken QIF files to QuickBooks QBO format online. Free, instant, 100% private - no data upload required.",
+        description: "Convert Quicken QIF files to QuickBooks QBO format online. Free, instant, Private & Secure - no data upload required.",
         type: "website",
         url: "https://statementextract.com/convert/qif-to-qbo"
     },
@@ -67,7 +67,7 @@ const faqSchema = {
             "name": "Is my financial data secure?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes, completely. This tool runs 100% in your browser. Your QIF file is never uploaded to any server - all processing happens locally on your device."
+                "text": "Yes, completely. This tool runs entirely in your browser. Your QIF file is never uploaded to any server - all processing happens locally on your device."
             }
         },
         {
@@ -128,7 +128,7 @@ export default function QifToQboPage() {
                     </h2>
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {[
-                            { icon: Lock, title: "100% Private", desc: "Files never leave your device. All processing happens locally in your browser." },
+                            { icon: Lock, title: "Private & Secure", desc: "Files never leave your device. All processing happens locally in your browser." },
                             { icon: FileCode, title: "Full QIF Support", desc: "Parses all QIF fields: dates, amounts, payees, memos, check numbers." },
                             { icon: Zap, title: "Instant Conversion", desc: "No uploads, no waiting. Convert QIF to QBO in seconds." },
                             { icon: Shield, title: "No Signup Required", desc: "No email, no account needed. Just drop your file and convert." },
@@ -238,7 +238,7 @@ export default function QifToQboPage() {
                         The Best Free QIF to QBO Converter Online
                     </h2>
                     <p className="text-[hsl(var(--muted-foreground))] mb-4">
-                        Switching from Quicken to QuickBooks? Our <strong>free QIF to QBO converter</strong> makes the transition seamless. Just upload your Quicken QIF file, review the parsed transactions, and download a QuickBooks-ready QBO file in seconds. Unlike other tools, our converter runs <strong>100% in your browser</strong>—your financial data never leaves your device.
+                        Switching from Quicken to QuickBooks? Our <strong>free QIF to QBO converter</strong> makes the transition seamless. Just upload your Quicken QIF file, review the parsed transactions, and download a QuickBooks-ready QBO file in seconds. Unlike other tools, our converter runs <strong>entirely in your browser</strong>—your financial data never leaves your device.
                     </p>
                     <p className="text-[hsl(var(--muted-foreground))] mb-4">
                         Whether you're migrating years of financial history, importing legacy data, or simply need to move transactions between Quicken and QuickBooks, this <strong>QIF to QBO converter free</strong> tool handles it all. Our parser supports all standard QIF fields including dates, amounts, payees, memos, and check numbers.

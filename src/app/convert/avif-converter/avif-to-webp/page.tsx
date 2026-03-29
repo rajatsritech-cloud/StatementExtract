@@ -5,11 +5,11 @@ import { Zap, Shield, Globe, FileImage } from "lucide-react";
 
 export const metadata: Metadata = {
     title: "Free AVIF to WebP Converter Online | No Upload | Statement Extract",
-    description: "Convert AVIF images to WebP format instantly. 100% free, client-side conversion with no file size limits. No signup, runs in your browser.",
+    description: "Convert AVIF images to WebP format instantly. Free Online Tool, client-side conversion with no file size limits. No signup, runs in your browser.",
     keywords: "AVIF to WebP, convert AVIF to WebP, AVIF converter, WebP converter, free image converter, online AVIF converter",
     openGraph: {
         title: "Free AVIF to WebP Converter Online",
-        description: "Convert AVIF images to WebP format instantly. 100% free, no signup required.",
+        description: "Convert AVIF images to WebP format instantly. Free Online Tool, no signup required.",
         type: "website",
         url: "https://statementextract.com/convert/avif-converter/avif-to-webp"
     },
@@ -51,7 +51,7 @@ export default function AvifToWebpPage() {
                 <ImageConverter
                     targetFormat="webp"
                     title="Free AVIF to WebP Converter"
-                    description="Convert your AVIF images to WebP format instantly. 100% free, runs in your browser."
+                    description="Convert your AVIF images to WebP format instantly. Free Online Tool, runs in your browser."
                 />
             </section>
 
@@ -64,7 +64,7 @@ export default function AvifToWebpPage() {
                     <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                         {[
                             { icon: Zap, title: "Instant Conversion", desc: "No waiting. Convert images in milliseconds using your browser." },
-                            { icon: Shield, title: "100% Private", desc: "Files never leave your device. All processing happens locally." },
+                            { icon: Shield, title: "Private & Secure", desc: "Files never leave your device. All processing happens locally." },
                             { icon: Globe, title: "Wide Support", desc: "WebP is supported by all modern browsers and platforms." },
                             { icon: FileImage, title: "No Limits", desc: "Convert as many images as you want. No daily limits, no signup." },
                         ].map((feature, i) => (
@@ -121,7 +121,7 @@ export default function AvifToWebpPage() {
                         Benefits of WebP Format
                     </h3>
                     <ul className="list-disc pl-6 text-[hsl(var(--muted-foreground))] space-y-2">
-                        <li><strong>25-34% smaller</strong> than comparable JPEG images</li>
+                        <li><strong>a significant amount smaller</strong> than comparable JPEG images</li>
                         <li><strong>Supports transparency</strong> (like PNG) without large file sizes</li>
                         <li><strong>Lossy and lossless</strong> compression options</li>
                         <li><strong>Animation support</strong> (like GIF but smaller)</li>

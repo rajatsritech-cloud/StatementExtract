@@ -147,8 +147,8 @@ const countryTaxRates = [
     { country: "United Kingdom", type: "VAT", rate: "20%", currency: "GBP" },
     { country: "Germany", type: "VAT", rate: "19%", currency: "EUR" },
     { country: "France", type: "VAT", rate: "20%", currency: "EUR" },
-    { country: "Canada", type: "GST/HST", rate: "5-15%", currency: "CAD" },
-    { country: "India", type: "GST", rate: "5-28%", currency: "INR" },
+    { country: "Canada", type: "GST/HST", rate: "a significant amount", currency: "CAD" },
+    { country: "India", type: "GST", rate: "a significant amount", currency: "INR" },
     { country: "Singapore", type: "GST", rate: "9%", currency: "SGD" },
     { country: "New Zealand", type: "GST", rate: "15%", currency: "NZD" },
     { country: "Japan", type: "Consumption Tax", rate: "10%", currency: "JPY" },
@@ -363,7 +363,7 @@ export default function GSTVATCalculatorPage() {
                             { q: "What is GST-inclusive vs GST-exclusive?", a: "GST-inclusive means the price already includes tax (gross). GST-exclusive means the price is before tax (net). Use our calculator to convert between them." },
                             { q: "What is the GST rate in India?", a: "India has multiple GST rates: 0%, 5%, 12%, 18%, and 28% depending on the goods or services. Essential items have lower rates, luxury goods have higher rates." },
                             { q: "How do I calculate VAT in the UK?", a: "UK standard VAT is 20%. To add VAT: multiply by 1.20. To remove VAT: divide by 1.20. Some items have 5% reduced VAT or 0% exempt rate." },
-                            { q: "Is this calculator free to use?", a: "Yes, 100% free with no limits. No signup required. Use it as many times as you need for personal or business calculations." },
+                            { q: "Is this calculator free to use?", a: "Yes, Free Online Tool with no limits. No signup required. Use it as many times as you need for personal or business calculations." },
                             { q: "Does this work for all countries?", a: "We support 16+ countries including Australia, UK, EU, Germany, France, Canada, India, Singapore, Japan, UAE, and more. You can also enter custom rates." },
                         ].map((faq, i) => (
                             <div key={i} className="p-6 rounded-2xl bg-[hsl(var(--card))] border border-[hsl(var(--border))]">

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -174,10 +174,10 @@ export const Header = () => {
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
               >
-                <button className="flex items-center gap-1 text-sm font-medium text-[hsl(var(--foreground))] hover:text-[hsl(var(--primary))] transition-colors">
+                <Link href="/convert-bank-statement-to-csv-excel" className="flex items-center gap-1 text-sm font-medium text-[hsl(var(--foreground))] hover:text-[hsl(var(--primary))] transition-colors">
                   Solutions
                   <ChevronDown className="h-4 w-4" />
-                </button>
+                </Link>
 
                 {/* Solutions Dropdown */}
                 {isSolutionsHovered && (
@@ -339,10 +339,10 @@ export const Header = () => {
                 onMouseEnter={handleConvertersMouseEnter}
                 onMouseLeave={handleConvertersMouseLeave}
               >
-                <button className="flex items-center gap-1 text-sm font-medium text-[hsl(var(--foreground))] hover:text-[hsl(var(--primary))] transition-colors">
+                <Link href="/convert" className="flex items-center gap-1 text-sm font-medium text-[hsl(var(--foreground))] hover:text-[hsl(var(--primary))] transition-colors">
                   Converters
                   <ChevronDown className="h-4 w-4" />
-                </button>
+                </Link>
 
                 {isConvertersHovered && (
                   <div
@@ -595,10 +595,10 @@ export const Header = () => {
                 onMouseEnter={handleToolsMouseEnter}
                 onMouseLeave={handleToolsMouseLeave}
               >
-                <button className="flex items-center gap-1 text-sm font-medium text-[hsl(var(--foreground))] hover:text-[hsl(var(--primary))] transition-colors">
+                <Link href="/tools" className="flex items-center gap-1 text-sm font-medium text-[hsl(var(--foreground))] hover:text-[hsl(var(--primary))] transition-colors">
                   Tools
                   <ChevronDown className="h-4 w-4" />
-                </button>
+                </Link>
 
                 {isToolsHovered && (
                   <div

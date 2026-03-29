@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     ],
     openGraph: {
         title: "Rotate PDF Pages Online Free - No Signup, No Watermark",
-        description: "Rotate all pages or individual pages in your PDF. Fix upside-down scanned documents instantly. 100% free, works on mobile, no upload required.",
+        description: "Rotate all pages or individual pages in your PDF. Fix upside-down scanned documents instantly. Free Online Tool, works on mobile, no upload required.",
         type: "website",
         url: "https://statementextract.com/convert/rotate-pdf",
         images: [
@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     twitter: {
         card: "summary_large_image",
         title: "Rotate PDF Pages Online Free - Fix Upside Down PDFs",
-        description: "Rotate PDF pages 90°, 180°, 270°. Fix scanned documents. Works on mobile. 100% free and private."
+        description: "Rotate PDF pages 90°, 180°, 270°. Fix scanned documents. Works on mobile. Free Online Tool and private."
     },
     alternates: {
         canonical: "https://statementextract.com/convert/rotate-pdf/"
@@ -166,7 +166,7 @@ const faqSchema = {
             "name": "Is this PDF rotation tool really free?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes, this tool is 100% free with no hidden costs, no watermarks, and no signup required. Unlike other 'free' tools that add watermarks or limit usage, ours is genuinely free with unlimited rotations. Your PDF is processed entirely in your browser - it never leaves your device."
+                "text": "Yes, this tool is Free Online Tool with no hidden costs, no watermarks, and no signup required. Unlike other 'free' tools that add watermarks or limit usage, ours is genuinely free with unlimited rotations. Your PDF is processed entirely in your browser - it never leaves your device."
             }
         },
         {
@@ -561,7 +561,7 @@ export default function RotatePDFPage() {
                         <p className="text-[hsl(var(--muted-foreground))]">
                             Adobe Acrobat Pro costs <strong className="text-[hsl(var(--foreground))]">$239/year</strong> just to permanently rotate PDF pages.
                             Paid tools like Smallpdf and iLovePDF charge monthly fees or add watermarks.
-                            Our tool is <strong className="text-[hsl(var(--primary))]">100% free, forever</strong> — no limitations, no watermarks, no signup required.
+                            Our tool is <strong className="text-[hsl(var(--primary))]">Free Online Tool, forever</strong> — no limitations, no watermarks, no signup required.
                         </p>
                     </div>
                 </div>

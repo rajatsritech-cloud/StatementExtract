@@ -158,7 +158,7 @@ export const InvoiceSEOContent = () => {
                 <p className="text-[hsl(var(--muted-foreground))] mb-6">
                     Streamline your accounts payable workflow with our <strong>AI-powered Invoice Converter</strong>.
                     Stop manually typing data from PDF invoices into spreadsheets. Our tool uses next-generation <strong>Geo AI</strong> and
-                    Financial OCR to automatically extract key data points like <strong className="text-[hsl(var(--foreground))]">Invoice Number, Date, Total Amount, and Line Items</strong> with 100% accuracy.
+                    Financial OCR to automatically extract key data points like <strong className="text-[hsl(var(--foreground))]">Invoice Number, Date, Total Amount, and Line Items</strong> with industry-leading accuracy.
                 </p>
 
                 <h3 className="text-2xl font-semibold text-[hsl(var(--foreground))] mb-4">

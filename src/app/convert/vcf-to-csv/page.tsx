@@ -17,7 +17,7 @@ import {
 
 export const metadata: Metadata = {
     title: "Free VCF to CSV Converter | Export iPhone Contacts to Excel",
-    description: "Convert VCF (vCard) files to CSV/Excel online. Extract contacts from iPhone, Android, or Outlook to a clean spreadsheet. 100% private & client-side.",
+    description: "Convert VCF (vCard) files to CSV/Excel online. Extract contacts from iPhone, Android, or Outlook to a clean spreadsheet. Private & Secure & client-side.",
     keywords: "convert vcf to csv, vcard to excel, export iphone contacts to csv, vcf converter, vcf to excel online, vcard to csv converter, extract vcf contacts",
     openGraph: {
         title: "VCF to CSV Converter - Export Contacts to Excel",
@@ -67,7 +67,7 @@ const faqSchema = {
         {
             "@type": "Question",
             "name": "Is my contact data private?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Yes, absolutely. This tool runs 100% in your browser. Your contacts are never uploaded to our servers, ensuring total privacy." }
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes, absolutely. This tool runs entirely in your browser. Your contacts are never uploaded to our servers, ensuring total privacy." }
         },
         {
             "@type": "Question",
@@ -130,7 +130,7 @@ export default function VcfToCsvPage() {
                         {[
                             {
                                 icon: Shield,
-                                title: "100% Private",
+                                title: "Private & Secure",
                                 desc: "Your contacts are personal. We process everything locally in your browser so no data ever leaves your device."
                             },
                             {
@@ -236,7 +236,7 @@ export default function VcfToCsvPage() {
                             </thead>
                             <tbody>
                                 {[
-                                    { feature: "Privacy", us: "100% Client-Side", competitors: "Uploads to Server (Risky)" },
+                                    { feature: "Privacy", us: "Fully Client-Side", competitors: "Uploads to Server (Risky)" },
                                     { feature: "Speed", us: "Instant", competitors: "Queue / Slow" },
                                     { feature: "Cost", us: "Free Forever", competitors: "Freemium / Paywall" },
                                     { feature: "Bulk Support", us: "Unlimited Contacts", competitors: "Often limited to 10-50" },

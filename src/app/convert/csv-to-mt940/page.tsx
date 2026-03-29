@@ -16,11 +16,11 @@ import {
 
 export const metadata: Metadata = {
     title: "CSV / Excel to MT940 Converter Free Online | SWIFT Format for Sage, Xero | Statement Extract",
-    description: "Free CSV and Excel to MT940 converter. Convert bank files (CSV, XLS, XLSX) to MT940 SWIFT format. Compatible with Sage, Xero, SAP, ERPs, and more. 100% private.",
+    description: "Free CSV and Excel to MT940 converter. Convert bank files (CSV, XLS, XLSX) to MT940 SWIFT format. Compatible with Sage, Xero, SAP, ERPs, and more. Private & Secure.",
     keywords: "csv to mt940, csv to swift mt940, convert csv to mt940 online, mt940 generator, bank statement to mt940, mt940 format converter, swift mt940 export",
     openGraph: {
         title: "CSV to MT940 Converter Free Online | Create SWIFT Files",
-        description: "Convert any bank CSV to MT940 SWIFT format. Import into Sage, SAP, Oracle & more. 100% free, secure, browser-based.",
+        description: "Convert any bank CSV to MT940 SWIFT format. Import into Sage, SAP, Oracle & more. Free Online Tool, secure, browser-based.",
         type: "website",
         url: "https://statementextract.com/convert/csv-to-mt940"
     },
@@ -76,7 +76,7 @@ const faqSchema = {
             "name": "Is my data secure?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes. All processing happens locally in your web browser. Your financial data is never uploaded to our servers, ensuring 100% privacy."
+                "text": "Yes. All processing happens locally in your web browser. Your financial data is never uploaded to our servers, ensuring Privacy & Security."
             }
         },
         {
@@ -132,7 +132,7 @@ export default function CsvToMt940Page() {
                     </h2>
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {[
-                            { icon: Lock, title: "100% Private", desc: "Files never leave your device. All processing happens securely in your browser." },
+                            { icon: Lock, title: "Private & Secure", desc: "Files never leave your device. All processing happens securely in your browser." },
                             { icon: FileCode, title: "SWIFT Compliant", desc: "Generates standard MT940 structure with correct tags (:61:, :86:)." },
                             { icon: Zap, title: "Instant Conversion", desc: "Convert huge CSV files to MT940 instantly without waiting." },
                             { icon: Shield, title: "No Signup Required", desc: "No email, no account needed. Just drop your file and convert." },
@@ -287,7 +287,7 @@ export default function CsvToMt940Page() {
                             { q: "What columns do I need in my CSV?", a: "You need at least Date, Description, and Amount columns. You can also map separate Credit/Debit columns or a Reference ID column if available." },
                             { q: "Does it support opening/closing balances?", a: "Yes, the tool automatically calculates intermediate running balances based on the transaction order to generate valid :60F: and :62F: balance tags." },
                             { q: "Is the generated file compatible with SAP?", a: "Yes, we follow the standard SWIFT MT940 structure that is compatible with SAP's electronic bank statement interface." },
-                            { q: "Is this tool free for commercial use?", a: "Yes, our CSV to MT940 converter is 100% free for unlimited files for both personal and commercial use." },
+                            { q: "Is this tool free for commercial use?", a: "Yes, our CSV to MT940 converter is Free Online Tool for unlimited files for both personal and commercial use." },
                             { q: "Do you save my bank data?", a: "No. The conversion happens entirely in your web browser using JavaScript. Your data is not sent to our servers." },
                         ].map((faq, i) => (
                             <div key={i} className="p-6 rounded-2xl bg-[hsl(var(--card))] border border-[hsl(var(--border))]">

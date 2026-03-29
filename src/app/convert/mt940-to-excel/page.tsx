@@ -17,7 +17,7 @@ import {
 
 export const metadata: Metadata = {
     title: "MT940 to Excel Converter Free Online | SWIFT to CSV | Statement Extract",
-    description: "Free MT940 to Excel converter online. Convert SWIFT bank statement files to Excel spreadsheets. Perfect for SAP, Oracle, Sage users. 100% private browser processing.",
+    description: "Free MT940 to Excel converter online. Convert SWIFT bank statement files to Excel spreadsheets. Perfect for SAP, Oracle, Sage users. Private & Secure browser processing.",
     keywords: "mt940 to excel converter, mt940 to csv online, convert mt940 to excel, swift to excel, mt940 file to csv, bank statement to excel, mt940 viewer, swift bank statement converter",
     openGraph: {
         title: "MT940 to Excel Converter Free Online | SWIFT to CSV",
@@ -144,7 +144,7 @@ export default function Mt940ToExcelPage() {
                     </h2>
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {[
-                            { icon: Lock, title: "100% Private", desc: "Files never leave your device. Browser-based processing." },
+                            { icon: Lock, title: "Private & Secure", desc: "Files never leave your device. Browser-based processing." },
                             { icon: FileSpreadsheet, title: "Excel Compatible", desc: "Output opens in Excel, Google Sheets, or LibreOffice." },
                             { icon: Zap, title: "Instant Conversion", desc: "No uploads required. Convert files in milliseconds." },
                             { icon: Shield, title: "No Signup", desc: "No email or account needed. Free forever." },

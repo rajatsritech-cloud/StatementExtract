@@ -5,7 +5,7 @@ import { Zap, Shield, Globe, FileText, Lock, Scissors, FileOutput, CheckCircle }
 
 export const metadata: Metadata = {
     title: "Split PDF Online Free | Extract Pages from PDF | Statement Extract",
-    description: "Free PDF splitter. Extract specific pages, split page ranges, or separate all pages. Perfect for bank statements. 100% client-side, no upload required.",
+    description: "Free PDF splitter. Extract specific pages, split page ranges, or separate all pages. Perfect for bank statements. Fully Client-Side, no upload required.",
     keywords: "split pdf, extract pages from pdf, pdf splitter, separate pdf pages, split pdf online free, extract pdf pages, pdf page extractor, split pdf into multiple files, remove pages from pdf, split bank statement pdf",
     openGraph: {
         title: "Split PDF Online Free | Extract Pages from PDF",
@@ -57,7 +57,7 @@ const faqSchema = {
             "name": "Is it safe to split PDFs online?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes! Our PDF splitter processes files entirely in your browser. Your PDFs never leave your device or get uploaded to any server, making it 100% private and secure."
+                "text": "Yes! Our PDF splitter processes files entirely in your browser. Your PDFs never leave your device or get uploaded to any server, making it Private & Secure and secure."
             }
         }
     ]
@@ -107,7 +107,7 @@ export default function SplitPDFPage() {
                     <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                         {[
                             { icon: Scissors, title: "Multiple Split Modes", desc: "Extract specific pages, ranges, or split all pages at once." },
-                            { icon: Shield, title: "100% Private", desc: "All splitting happens in your browser. Files never uploaded." },
+                            { icon: Shield, title: "Private & Secure", desc: "All splitting happens in your browser. Files never uploaded." },
                             { icon: Globe, title: "Works Everywhere", desc: "Chrome, Firefox, Safari, Edge — any modern browser." },
                             { icon: FileOutput, title: "Instant Download", desc: "Download individual files or all at once with one click." },
                         ].map((feature, i) => (
@@ -253,7 +253,7 @@ export default function SplitPDFPage() {
                             { q: "Can I split password-protected PDFs?", a: "The tool can handle some encrypted PDFs, but heavily password-protected files may not be compatible. Remove protection before splitting." },
                             { q: "Is there a limit on PDF size?", a: "Since processing happens in your browser, you can split large PDFs. The only limit is your device's available memory." },
                             { q: "Can I split bank statement PDFs?", a: "Absolutely! This is one of the most common use cases. Extract specific months or pages from combined bank statements for accounting purposes." },
-                            { q: "Is this PDF splitter really free?", a: "100% free with no limits, no watermarks, and no signup required. We monetize through our premium bank statement extraction services." },
+                            { q: "Is this PDF splitter really free?", a: "Free Online Tool with no limits, no watermarks, and no signup required. We monetize through our premium bank statement extraction services." },
                         ].map((faq, i) => (
                             <div key={i} className="p-6 rounded-2xl bg-[hsl(var(--card))] border border-[hsl(var(--border))]">
                                 <h3 className="font-semibold text-[hsl(var(--foreground))] mb-2">{faq.q}</h3>

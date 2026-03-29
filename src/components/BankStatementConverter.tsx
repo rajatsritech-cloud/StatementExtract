@@ -10,6 +10,7 @@ import { toast } from "react-hot-toast";
 import { ExtractedData } from "@/lib/pdfProcessor";
 import { ExportService } from "@/lib/exportService";
 import { useAuth } from "@clerk/clerk-react";
+import { SAMPLE_STATEMENT_DATA } from "@/lib/sampleData";
 
 interface BankStatementConverterProps {
   titleSuffix?: React.ReactNode;
@@ -22,7 +23,7 @@ interface BankStatementConverterProps {
 
 export const BankStatementConverter = ({
   titleSuffix = <span className="bg-gradient-primary bg-clip-text text-transparent"> Excel or CSV</span>,
-  description = "World's most trusted Intelligent Document Processing bank statement converter, working with thousands of banks globally. Automatically extract transactions, balances, and references into clean Excel or CSV files with industry-leading accuracy.",
+  description = "A leading choice for Intelligent Document Processing, working with thousands of banks globally. Automatically extract transactions, balances, and references into clean Excel or CSV files with high-precision accuracy.",
   title,
   subtitle,
   endpoint,
@@ -227,6 +228,12 @@ export const BankStatementConverter = ({
     }
   }, [isSignedIn, isLoaded, getToken]);
 
+  const handleViewSample = useCallback(() => {
+    setExtractedData(SAMPLE_STATEMENT_DATA);
+    setShowResults(true);
+    toast.success("Loaded sample data for demonstration");
+  }, []);
+
   const handleTryAnother = () => {
     setShowResults(false);
     setExtractedData(null);
@@ -298,11 +305,30 @@ export const BankStatementConverter = ({
                   👤 Free Account
                 </span>
               </div>
+
+              {/* View Sample Button */}
+              <div className="mt-8 animate-fade-in">
+                <button
+                  onClick={handleViewSample}
+                  className="inline-flex items-center gap-2 rounded-lg border border-[hsl(var(--primary))] px-6 py-3 text-sm font-semibold text-[hsl(var(--primary))] hover:bg-[hsl(var(--primary))]/5 transition-all duration-300 shadow-sm"
+                >
+                  <FileText className="h-4 w-4" />
+                  View Sample Result
+                </button>
+              </div>
             </div>
 
             {/* Right Column - Upload Area */}
             <div className="w-full">
-              <UploadArea key={uploadKey} onFileUpload={handleFileUpload} isProcessing={isProcessing} showPrivacyNotice={false} showLoginPrompt={true} hideFeatures={true} />
+              <UploadArea
+                key={uploadKey}
+                onFileUpload={handleFileUpload}
+                isProcessing={isProcessing}
+                showPrivacyNotice={false}
+                showLoginPrompt={true}
+                hideFeatures={true}
+                onTrySample={handleViewSample}
+              />
             </div>
           </div>
 

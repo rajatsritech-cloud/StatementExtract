@@ -5,7 +5,7 @@ import { TrendingUp, Shield, Calendar, Target, Zap, DollarSign, Activity, Lock }
 
 export const metadata: Metadata = {
     title: 'FIRE Calculator | Financial Independence Retire Early Planner',
-    description: 'Plan your early retirement with our free FIRE Calculator. Based on the 4% rule and your savings rate, find out exactly when you will be debt-free. 100% client-side data privacy.',
+    description: 'Plan your early retirement with our free FIRE Calculator. Based on the 4% rule and your savings rate, find out exactly when you will be debt-free. Fully Client-Side data privacy.',
     keywords: 'fire calculator, financial independence retire early, early retirement calculator, 4% rule calculator, savings rate calculator, retirement projection, fire movement, retire early calculator',
     authors: [{ name: 'Statement Extract' }],
     openGraph: {

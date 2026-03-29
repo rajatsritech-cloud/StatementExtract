@@ -16,7 +16,7 @@ import {
 
 export const metadata: Metadata = {
     title: "Stripe to QuickBooks Converter Free | Import Stripe CSV to QBO | Statement Extract",
-    description: "Free Stripe to QuickBooks converter. Convert Stripe transaction CSV exports to QBO format for easy QuickBooks import. 100% browser-based, private, no signup required.",
+    description: "Free Stripe to QuickBooks converter. Convert Stripe transaction CSV exports to QBO format for easy QuickBooks import. Entirely browser-based, private, no signup required.",
     keywords: "stripe to quickbooks, stripe csv to qbo, import stripe to quickbooks, stripe transactions to quickbooks, stripe export to qbo, stripe quickbooks integration free, convert stripe csv",
     openGraph: {
         title: "Stripe to QuickBooks Converter Free | Import Stripe Transactions",
@@ -86,7 +86,7 @@ const faqSchema = {
             "name": "Is my Stripe data secure?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes. This tool runs 100% in your browser. Your Stripe data never leaves your computer and is never uploaded to any server."
+                "text": "Yes. This tool runs entirely in your browser. Your Stripe data never leaves your computer and is never uploaded to any server."
             }
         },
         {
@@ -141,7 +141,7 @@ export default function StripeToQboPage() {
                         Convert Stripe to QuickBooks (QBO) Free
                     </h1>
                     <p className="text-lg text-[hsl(var(--muted-foreground))]">
-                        Export your Stripe transactions as CSV, upload here, and download a QuickBooks-ready QBO file. No signup, 100% private.
+                        Export your Stripe transactions as CSV, upload here, and download a QuickBooks-ready QBO file. No signup, Private & Secure.
                     </p>
                 </div>
             </section>
@@ -159,7 +159,7 @@ export default function StripeToQboPage() {
                     </h2>
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {[
-                            { icon: Lock, title: "100% Private", desc: "Your Stripe data never leaves your device. All processing happens locally in your browser." },
+                            { icon: Lock, title: "Private & Secure", desc: "Your Stripe data never leaves your device. All processing happens locally in your browser." },
                             { icon: ArrowUpDown, title: "Smart Column Mapping", desc: "Auto-detects Stripe's created, amount, and description columns." },
                             { icon: Zap, title: "Instant Conversion", desc: "No uploads, no waiting. Convert your Stripe export instantly." },
                             { icon: Shield, title: "No Signup Required", desc: "No email, no account, no subscription. Just drop your file and convert." },
@@ -246,7 +246,7 @@ export default function StripeToQboPage() {
                                 {[
                                     { feature: "Price", us: "Free forever", competitors: "$20-50/month" },
                                     { feature: "File Upload", us: "None (browser only)", competitors: "Syncs via cloud" },
-                                    { feature: "Data Privacy", us: "100% local", competitors: "Stored on servers" },
+                                    { feature: "Data Privacy", us: "Entirely local", competitors: "Stored on servers" },
                                     { feature: "Edit Before Import", us: "Yes", competitors: "Limited" },
                                     { feature: "All Export Types", us: "Payments, Payouts, Balance", competitors: "Usually payments only" },
                                     { feature: "Transaction Limit", us: "Unlimited", competitors: "Often capped" },
@@ -270,7 +270,7 @@ export default function StripeToQboPage() {
                         The Best Free Stripe to QuickBooks Converter
                     </h2>
                     <p className="text-[hsl(var(--muted-foreground))] mb-4">
-                        Need to get your <strong>Stripe transactions into QuickBooks</strong> without paying for expensive integrations? Our free Stripe to QBO converter transforms any Stripe CSV export into QuickBooks Web Connect format instantly. Unlike subscription-based sync apps that cost $20-50/month, this tool is <strong>100% free</strong> with no limits.
+                        Need to get your <strong>Stripe transactions into QuickBooks</strong> without paying for expensive integrations? Our free Stripe to QBO converter transforms any Stripe CSV export into QuickBooks Web Connect format instantly. Unlike subscription-based sync apps that cost $20-50/month, this tool is <strong>Free Online Tool</strong> with no limits.
                     </p>
                     <p className="text-[hsl(var(--muted-foreground))] mb-4">
                         Whether you're an e-commerce store owner using Stripe with Shopify or WooCommerce, a SaaS business tracking subscription payments, or a freelancer accepting online payments, this tool makes <strong>Stripe to QuickBooks import</strong> simple and secure.

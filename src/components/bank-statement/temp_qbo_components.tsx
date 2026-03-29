@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { FileSpreadsheet, ShieldCheck, Globe, Zap, ChevronDown } from "lucide-react";
 import { Card } from "@/components/ui/card";
+import Link from "next/link";
 
 export const BankStatementFeaturesQBO = () => {
     const features = [
@@ -13,7 +14,7 @@ export const BankStatementFeaturesQBO = () => {
         },
         {
             icon: ShieldCheck,
-            title: "100% Accuracy Guarantee",
+            title: "High-Precision Commitment",
             description: "Our AI ensures every debit and credit is captured correctly, preventing reconciliation headaches during month-end closes."
         },
         {
@@ -147,8 +148,7 @@ export const BankStatementSEOContentQBO = () => {
                     Automate Your Month-End Close
                 </h3>
                 <p className="text-[hsl(var(--muted-foreground))]">
-                    Trusted by CPAs and Bookkeepers, our automated extraction ensures 100% accuracy even with scanned or low-quality PDF statements.
-                    Just upload, convert, and import.
+                    Trusted by CPAs, our automated extraction helps ensure high accuracy even with scanned or low-quality PDF statements, identifying <Link href="/blogs/idp-vs-ocr-document-processing" className="text-primary hover:underline">duplicates</Link> and categorizing expenses automatically.
                 </p>
             </div>
         </section>

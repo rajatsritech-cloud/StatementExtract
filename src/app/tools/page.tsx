@@ -212,7 +212,7 @@ export default function ToolsHubPage() {
                             Premium <span className="bg-gradient-primary bg-clip-text text-transparent">Financial Tools</span> for Your Business
                         </h1>
                         <p className="text-lg text-[hsl(var(--muted-foreground))] max-w-3xl mx-auto">
-                            Generate professional invoices, calculate margins, and analyze investments instantly. No signup, no fees, 100% private.
+                            Generate professional invoices, calculate margins, and analyze investments instantly. No signup, no fees, Private & Secure.
                         </p>
                     </div>
                 </section>

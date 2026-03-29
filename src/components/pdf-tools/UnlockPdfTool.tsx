@@ -173,7 +173,7 @@ export function UnlockPdfTool() {
                     Unlock PDF Online Free
                 </h1>
                 <h2 className="text-base md:text-lg text-[hsl(var(--muted-foreground))] max-w-xl mx-auto font-normal">
-                    Remove restrictions from PDF files. Unlock copy, print, and edit permissions. 100% free and private.
+                    Remove restrictions from PDF files. Unlock copy, print, and edit permissions. Free and private online tool.
                 </h2>
             </div>
 

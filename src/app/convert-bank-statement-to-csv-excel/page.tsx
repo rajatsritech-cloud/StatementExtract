@@ -37,7 +37,7 @@ const RedirectIfAuthenticated = dynamic(() => import("@/components/RedirectIfAut
 
 export const metadata: Metadata = {
   title: "Bank Statement Converter - Convert PDF Bank Statements to CSV/Excel | Free Online Tool",
-  description: "Automatically convert any PDF bank statement into clean Excel or CSV files with AI-powered extraction. Works with Chase, Wells Fargo, Bank of America, Citibank & 1000s more. Fast, secure, 99%+ accuracy.",
+  description: "Automatically convert any PDF bank statement into clean Excel or CSV files with AI-powered extraction. Works with Chase, Wells Fargo, Bank of America, Citibank and more. Fast, secure, and accurate.",
   keywords: [
     // High-CPC US-targeted keywords
     "bank statement converter",
@@ -71,7 +71,7 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: "Bank Statement Converter - Convert PDF to CSV/Excel Instantly",
-    description: "The most trusted AI-powered bank statement converter. Works with 1000s of US banks including Chase, Wells Fargo, Bank of America. Free to try, 99%+ accuracy.",
+    description: "The most trusted AI-powered bank statement converter. Works with major US banks including Chase, Wells Fargo, Bank of America. Free to try with high accuracy.",
     type: "website",
     locale: "en_US",
     url: "https://statementextract.com/convert-bank-statement-to-csv-excel",
@@ -102,7 +102,7 @@ const softwareApplicationSchema = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
   "name": "Bank Statement Converter by Statement Extract",
-  "description": "Automatically convert any PDF bank statement into clean Excel or CSV files with AI-powered Intelligent Document Processing. Works with Chase, Wells Fargo, Bank of America, and 1000s of banks worldwide.",
+  "description": "Automatically convert any PDF bank statement into clean Excel or CSV files with AI-powered Intelligent Document Processing. Works with Chase, Wells Fargo, Bank of America, and many banks worldwide.",
   "url": "https://statementextract.com/convert-bank-statement-to-csv-excel",
   "applicationCategory": "BusinessApplication",
   "operatingSystem": "Web Browser",
@@ -124,7 +124,7 @@ const softwareApplicationSchema = {
     "Xero compatible export",
     "Multi-currency support",
     "Secure encryption",
-    "99%+ accuracy",
+    "high-precision accuracy",
     "Scanned document support"
   ],
   "screenshot": "https://statementextract.com/assets/StatementExtract_Workflow_img.png",

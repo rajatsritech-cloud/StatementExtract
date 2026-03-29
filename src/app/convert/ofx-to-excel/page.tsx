@@ -189,7 +189,7 @@ export default function OfxToExcelPage() {
                         Your Financial Data Stays Private
                     </h2>
                     <p className="text-[hsl(var(--muted-foreground))] max-w-2xl mx-auto mb-6">
-                        Unlike other converters that upload your confidential banking files to a server, <strong>Statement Extract processes everything locally in your browser</strong>. Your OFX files never leave your computer, ensuring 100% data security.
+                        Unlike other converters that upload your confidential banking files to a server, <strong>Statement Extract processes everything locally in your browser</strong>. Your OFX files never leave your computer, ensuring high-grade data security.
                     </p>
                 </div>
             </section>
@@ -201,7 +201,7 @@ export default function OfxToExcelPage() {
                     </h2>
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {[
-                            { icon: Lock, title: "100% Private", desc: "Files never leave your device. All processing happens in your browser." },
+                            { icon: Lock, title: "Private & Secure", desc: "Files never leave your device. All processing happens in your browser." },
                             { icon: FileSpreadsheet, title: "Excel Compatible", desc: "Output opens directly in Microsoft Excel, Google Sheets, or LibreOffice." },
                             { icon: Zap, title: "Instant Conversion", desc: "No uploads, no waiting. Convert files in milliseconds." },
                             { icon: Shield, title: "No Signup Required", desc: "No email, no account. Just drop your file and convert." },

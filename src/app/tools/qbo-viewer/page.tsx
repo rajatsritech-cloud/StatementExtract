@@ -18,7 +18,7 @@ import {
 
 export const metadata: Metadata = {
     title: "QBO File Viewer Online Free | Open QuickBooks Files | Statement Extract",
-    description: "Free QBO file viewer online. Open and view QuickBooks Web Connect (.qbo), OFX, and QFX files in your browser. See transactions instantly. No software needed. 100% private.",
+    description: "Free QBO file viewer online. Open and view QuickBooks Web Connect (.qbo), OFX, and QFX files in your browser. See transactions instantly. No software needed. Private & Secure.",
     keywords: "qbo file viewer, qbo viewer online, open qbo file, qbo file reader, view qbo file, quickbooks file viewer, ofx viewer, qfx viewer, open quickbooks file online",
     openGraph: {
         title: "QBO File Viewer Online Free | Open QuickBooks Files",
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     twitter: {
         card: "summary_large_image",
         title: "QBO File Viewer - Free Online Tool",
-        description: "Open QuickBooks QBO files online. View transactions instantly. 100% private.",
+        description: "Open QuickBooks QBO files online. View transactions instantly. Private & Secure.",
         images: ["https://statementextract.com/assets/StatementExtract_Workflow_img.png"]
     },
     alternates: {
@@ -87,7 +87,7 @@ const faqSchema = {
             "name": "Is my data secure when viewing QBO files online?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes, completely. Our viewer runs 100% in your browser. Your financial data never leaves your device and is never uploaded to any server."
+                "text": "Yes, completely. Our viewer runs entirely in your browser. Your financial data never leaves your device and is never uploaded to any server."
             }
         },
         {
@@ -163,7 +163,7 @@ export default function QboViewerPage() {
                     </h2>
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {[
-                            { icon: Lock, title: "100% Private", desc: "Files never leave your device. All processing happens in your browser." },
+                            { icon: Lock, title: "Private & Secure", desc: "Files never leave your device. All processing happens in your browser." },
                             { icon: Eye, title: "Instant Preview", desc: "See all transactions immediately without installing any software." },
                             { icon: Zap, title: "No Signup Required", desc: "No email, no account needed. Just drop your file and view." },
                             { icon: Shield, title: "Multiple Formats", desc: "Supports QBO, OFX, and QFX file formats from any bank." },
@@ -254,7 +254,7 @@ export default function QboViewerPage() {
                         The Best Free QBO File Viewer in 2026
                     </h2>
                     <p className="text-[hsl(var(--muted-foreground))] mb-4">
-                        Need to <strong>open a QBO file</strong> but don't have QuickBooks installed? Our free online QBO viewer lets you see the contents of QuickBooks Web Connect files instantly in your browser. No software downloads, no account registration, and <strong>100% private processing</strong>.
+                        Need to <strong>open a QBO file</strong> but don't have QuickBooks installed? Our free online QBO viewer lets you see the contents of QuickBooks Web Connect files instantly in your browser. No software downloads, no account registration, and <strong>private & secure processing</strong>.
                     </p>
 
                     <h3 className="text-xl font-semibold text-[hsl(var(--foreground))] mb-4 mt-8">

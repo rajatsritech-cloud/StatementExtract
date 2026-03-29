@@ -153,7 +153,7 @@ export default function PaycheckCalculatorPage() {
                     <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                         {[
                             { icon: Calculator, title: "2026 Tax Brackets", desc: "Updated with the latest IRS federal tax rates and Social Security limits." },
-                            { icon: Shield, title: "100% Private", desc: "All calculations happen in your browser. No data is sent anywhere." },
+                            { icon: Shield, title: "Private & Secure", desc: "All calculations happen in your browser. No data is sent anywhere." },
                             { icon: Zap, title: "Instant Results", desc: "See your take-home pay update in real-time as you adjust inputs." },
                             { icon: DollarSign, title: "Free Forever", desc: "No signup, no limits, no ads. Calculate as many paychecks as you need." },
                         ].map((feature, i) => (
@@ -279,7 +279,7 @@ export default function PaycheckCalculatorPage() {
                     <div className="space-y-6">
                         {[
                             { q: "How do I calculate my take-home pay?", a: "Enter your gross annual salary, select your pay frequency, choose your filing status, and enter your state tax rate. The calculator shows your net pay after federal taxes, Social Security, Medicare, and state taxes." },
-                            { q: "What percentage of my paycheck goes to taxes?", a: "It depends on your income and location. Federal income tax ranges from 10-37%, Social Security is 6.2%, Medicare is 1.45%, and state taxes vary from 0% to 13.3%." },
+                            { q: "What percentage of my paycheck goes to taxes?", a: "It depends on your income and location. Federal income tax ranges from a significant amount, Social Security is 6.2%, Medicare is 1.45%, and state taxes vary from 0% to 13.3%." },
                             { q: "How much is Social Security tax in 2026?", a: "Social Security tax is 6.2% of wages up to the wage base limit of $176,100 in 2026. Income above this limit is not subject to Social Security tax." },
                             { q: "Which states have no income tax?", a: "Nine states have no income tax: Alaska, Florida, Nevada, New Hampshire, South Dakota, Tennessee, Texas, Washington, and Wyoming." },
                             { q: "How can I increase my take-home pay?", a: "Contribute to pre-tax retirement accounts (401k), use HSA or FSA accounts, and claim all eligible deductions on your W-4 form." },

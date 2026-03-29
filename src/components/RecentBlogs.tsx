@@ -61,7 +61,7 @@ export async function RecentBlogs() {
                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="h-2.5 w-2.5" aria-hidden="true">
                                                     <path fillRule="evenodd" d="M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0ZM9 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM6.75 8a.75.75 0 0 0 0 1.5h.75v1.75a.75.75 0 0 0 1.5 0v-2.5A.75.75 0 0 0 8.25 8h-1.5Z" clipRule="evenodd" />
                                                 </svg>
-                                                <span>By Statement Extract</span>
+                                                <span>Illustration by Statement Extract</span>
                                             </div>
                                         </>
                                     ) : (
@@ -90,6 +90,22 @@ export async function RecentBlogs() {
                                     <p className="mt-5 line-clamp-3 text-sm leading-6 text-[hsl(var(--muted-foreground))]">
                                         {post.summary}
                                     </p>
+                                </div>
+                                <div className="mt-6 flex items-center gap-x-3 border-t border-[hsl(var(--border))]/50 pt-6 w-full">
+                                    <div className="relative h-8 w-8 rounded-full overflow-hidden border border-[hsl(var(--primary))]/20">
+                                        <Image
+                                            src="/assets/Rajat Srivastava.png"
+                                            alt="Rajat Srivastava"
+                                            fill
+                                            className="object-cover"
+                                        />
+                                    </div>
+                                    <div className="text-sm leading-6">
+                                        <p className="font-semibold text-[hsl(var(--foreground))]">
+                                            Rajat Srivastava
+                                        </p>
+                                        <p className="text-[hsl(var(--muted-foreground))]">Founder & Creator</p>
+                                    </div>
                                 </div>
                             </div>
                         </Link>

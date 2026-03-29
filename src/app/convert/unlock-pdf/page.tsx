@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     ],
     openGraph: {
         title: "Unlock PDF Free Online - Remove Password & Restrictions",
-        description: "Remove PDF password protection and restrictions. Enable copy, print, and edit. 100% free and private.",
+        description: "Remove PDF password protection and restrictions. Enable copy, print, and edit. Free Online Tool and private.",
         type: "website",
         url: "https://statementextract.com/convert/unlock-pdf"
     },
@@ -155,7 +155,7 @@ const faqSchema = {
             "name": "Is this PDF unlocker really free?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes, this tool is 100% free with no hidden costs, no watermarks, and no signup required. Your PDF is processed entirely in your browser - it never leaves your device, ensuring complete privacy."
+                "text": "Yes, this tool is Free Online Tool with no hidden costs, no watermarks, and no signup required. Your PDF is processed entirely in your browser - it never leaves your device, ensuring complete privacy."
             }
         },
         {
@@ -209,7 +209,7 @@ const comparisonData = [
     { feature: "Price", us: "Free forever", competitors: "$8-20/month" },
     { feature: "Watermarks", us: "Never", competitors: "Often on free tier" },
     { feature: "File Upload", us: "None (local)", competitors: "Uploads to server" },
-    { feature: "Privacy", us: "100% browser-based", competitors: "Stored on servers" },
+    { feature: "Privacy", us: "entirely browser-based", competitors: "Stored on servers" },
     { feature: "Signup Required", us: "No", competitors: "Usually yes" },
     { feature: "Mobile Support", us: "Full features", competitors: "Limited" },
 ];
@@ -251,7 +251,7 @@ export default function UnlockPdfPage() {
                         <p className="text-sm text-[hsl(var(--muted-foreground))]">PDFs Unlocked Daily</p>
                     </div>
                     <div>
-                        <p className="text-2xl font-bold text-[hsl(var(--primary))]">100%</p>
+                        <p className="text-2xl font-bold text-[hsl(var(--primary))]">Private</p>
                         <p className="text-sm text-[hsl(var(--muted-foreground))]">Free, No Watermarks</p>
                     </div>
                     <div>

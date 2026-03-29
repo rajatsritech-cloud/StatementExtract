@@ -5,7 +5,7 @@ import { Database, Zap, Shield, Code2, CheckCircle, Server } from "lucide-react"
 
 export const metadata: Metadata = {
     title: "JSON to SQL Converter Online | Generate INSERT & CREATE TABLE | Statement Extract",
-    description: "Free JSON to SQL converter. Convert JSON to SQL INSERT statements and CREATE TABLE schemas. Supports PostgreSQL, MySQL, SQLite, SQL Server. Auto type detection, nested JSON support. 100% client-side.",
+    description: "Free JSON to SQL converter. Convert JSON to SQL INSERT statements and CREATE TABLE schemas. Supports PostgreSQL, MySQL, SQLite, SQL Server. Auto type detection, nested JSON support. Fully Client-Side.",
     keywords: "json to sql, json to sql converter, convert json to sql insert, json to postgresql, json to mysql, json to sql table, json to insert statement, json to sql schema, online json to sql, json array to sql, json to database, json to sql generator, json data to sql, bulk json to sql insert",
     openGraph: {
         title: "JSON to SQL Converter - Generate INSERT & CREATE TABLE",
@@ -82,7 +82,7 @@ const faqSchema = {
             "name": "Is my data secure?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes, 100% secure. All processing happens in your browser. Your JSON data never leaves your device or gets uploaded to any server."
+                "text": "Yes, secure & private. All processing happens in your browser. Your JSON data never leaves your device or gets uploaded to any server."
             }
         },
         {
@@ -128,7 +128,7 @@ export default function JSONtoSQLPage() {
                         {[
                             { icon: Database, title: "Multi-Dialect Support", desc: "PostgreSQL, MySQL, SQLite, and SQL Server with correct syntax for each." },
                             { icon: Zap, title: "Auto Type Detection", desc: "Automatically infers INT, VARCHAR, DATE, BOOLEAN, and JSON types from your data." },
-                            { icon: Shield, title: "100% Private", desc: "All processing happens in your browser. Your data never leaves your device." },
+                            { icon: Shield, title: "Private & Secure", desc: "All processing happens in your browser. Your data never leaves your device." },
                             { icon: Code2, title: "Proper Escaping", desc: "Handles special characters, quotes, and SQL injection-safe string escaping." },
                             { icon: Server, title: "Bulk INSERT", desc: "Convert entire JSON arrays to multi-row INSERT statements efficiently." },
                             { icon: CheckCircle, title: "CREATE + INSERT", desc: "Generate both table schema and data inserts in one click." },
@@ -216,7 +216,7 @@ export default function JSONtoSQLPage() {
                             { q: "What SQL databases are supported?", a: "PostgreSQL, MySQL, SQLite, and Microsoft SQL Server. Each uses the correct quoting style and data types." },
                             { q: "Can I generate CREATE TABLE statements?", a: "Yes! Select 'CREATE + INSERT' or 'CREATE TABLE only' in the output options. Column types are automatically inferred from your data." },
                             { q: "How does it handle nested objects?", a: "Nested objects and arrays are serialized to JSON strings and stored in JSON/JSONB columns, preserving their structure." },
-                            { q: "Is my data secure?", a: "100% secure. All processing happens in your browser. Your JSON data never leaves your device." },
+                            { q: "Is my data secure?", a: "Secure & private. All processing happens in your browser. Your JSON data never leaves your device." },
                             { q: "Can I convert a single JSON object?", a: "Yes! Single objects are automatically treated as a one-row array for INSERT generation." },
                         ].map((faq, i) => (
                             <div key={i} className="p-6 rounded-2xl bg-[hsl(var(--card))] border border-[hsl(var(--border))]">

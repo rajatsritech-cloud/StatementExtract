@@ -284,7 +284,7 @@ export default function QfxToExcelPage() {
                         Your Financial Data Stays Private
                     </h2>
                     <p className="text-[hsl(var(--muted-foreground))] max-w-2xl mx-auto mb-6">
-                        Unlike other converters that upload your files to a server, <strong>Statement Extract processes everything locally in your browser</strong>. Your QFX files never leave your computer, ensuring 100% data security.
+                        Unlike other converters that upload your files to a server, <strong>Statement Extract processes everything locally in your browser</strong>. Your QFX files never leave your computer, ensuring high-grade data security.
                     </p>
                 </div>
             </section>
@@ -309,7 +309,7 @@ export default function QfxToExcelPage() {
                             </thead>
                             <tbody>
                                 {[
-                                    { feature: "Security", us: "100% Browser-Based", competitors: "Server Upload (Risky)" },
+                                    { feature: "Security", us: "entirely browser-based", competitors: "Server Upload (Risky)" },
                                     { feature: "Cost", us: "Free Forever", competitors: "Paid / Freemium" },
                                     { feature: "Quicken Required?", us: "No", competitors: "Often Yes" },
                                     { feature: "Excel Output", us: "Structured .XLSX", competitors: "Basic CSV" },

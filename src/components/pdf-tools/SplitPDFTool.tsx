@@ -246,7 +246,7 @@ export function SplitPDFTool() {
                     Split PDF Online Free
                 </h1>
                 <h2 className="text-base md:text-lg text-[hsl(var(--muted-foreground))] max-w-xl mx-auto font-normal">
-                    Extract specific pages or split PDF into multiple files. 100% free and private.
+                    Extract specific pages or split PDF into multiple files. Free and private online tool.
                 </h2>
             </div>
 

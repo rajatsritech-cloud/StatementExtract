@@ -70,7 +70,7 @@ const faqSchema = {
             "name": "Is it completely free?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes, 100% free with no limits. No watermark, no signup, no credit card required."
+                "text": "Yes, Free Online Tool with no limits. No watermark, no signup, no credit card required."
             }
         },
         {
@@ -119,7 +119,7 @@ export default function InvoiceGeneratorPage() {
                     </p>
                     <div className="flex flex-wrap justify-center gap-6 text-sm font-semibold text-[hsl(var(--muted-foreground))]">
                         <span className="flex items-center gap-2 bg-[hsl(var(--card))] px-4 py-2 rounded-full border shadow-sm"><CheckCircle className="w-4 h-4 text-green-500" /> No Sign Up</span>
-                        <span className="flex items-center gap-2 bg-[hsl(var(--card))] px-4 py-2 rounded-full border shadow-sm"><CheckCircle className="w-4 h-4 text-green-500" /> 100% Free</span>
+                        <span className="flex items-center gap-2 bg-[hsl(var(--card))] px-4 py-2 rounded-full border shadow-sm"><CheckCircle className="w-4 h-4 text-green-500" /> Free Online Tool</span>
                         <span className="flex items-center gap-2 bg-[hsl(var(--card))] px-4 py-2 rounded-full border shadow-sm"><CheckCircle className="w-4 h-4 text-green-500" /> Secure (Client-Side)</span>
                     </div>
                 </div>
@@ -165,7 +165,7 @@ export default function InvoiceGeneratorPage() {
                         </div>
                         <div className="p-6 rounded-2xl bg-[hsl(var(--card))] border border-[hsl(var(--border))]">
                             <Shield className="w-8 h-8 text-[hsl(var(--primary))] mb-4" />
-                            <h3 className="font-semibold text-[hsl(var(--foreground))] mb-2">100% Client-Side Secure</h3>
+                            <h3 className="font-semibold text-[hsl(var(--foreground))] mb-2">Fully Client-Side Secure</h3>
                             <p className="text-sm text-[hsl(var(--muted-foreground))]">Your data never leaves your browser. Private and secure by design.</p>
                         </div>
                         <div className="p-6 rounded-2xl bg-[hsl(var(--card))] border border-[hsl(var(--border))]">
@@ -308,7 +308,7 @@ export default function InvoiceGeneratorPage() {
 
                     <h3 className="text-xl font-bold mt-10 mb-4">Best Practices for Global Record Keeping</h3>
                     <p>
-                        While our tool is 100% client-side and does not store your private data, we recommend downloading and organizing your invoices by year and client. This makes tax preparation seamless, whether you are filing 1099s in the US, Self-Assessment in the UK, or BAS in Australia. A consistent file naming convention like `YYYY-MM-DD_Client_InvoiceID.pdf` is highly recommended.
+                        While our tool is Fully Client-Side and does not store your private data, we recommend downloading and organizing your invoices by year and client. This makes tax preparation seamless, whether you are filing 1099s in the US, Self-Assessment in the UK, or BAS in Australia. A consistent file naming convention like `YYYY-MM-DD_Client_InvoiceID.pdf` is highly recommended.
                     </p>
                 </div>
             </section>

@@ -18,7 +18,7 @@ import {
 
 export const metadata: Metadata = {
     title: "Free CSV to Excel Converter | Preserve Leading Zeros | Statement Extract",
-    description: "Convert CSV to Excel (XLSX) online. Smart formatting preserves leading zeros, dates, and special characters. No file limits, 100% free and secure.",
+    description: "Convert CSV to Excel (XLSX) online. Smart formatting preserves leading zeros, dates, and special characters. No file limits, Free Online Tool and secure.",
     keywords: "convert csv to excel, text to columns, csv to xlsx, import csv to excel, preserve leading zeros csv, csv converter, excel converter, csv to excel leading zeros",
     openGraph: {
         title: "CSV to Excel Converter - Preserve Leading Zeros",
@@ -242,7 +242,7 @@ export default function CsvToExcelPage() {
                                     { feature: "Date Formats", us: "Smart Detection", competitors: "Often breaks YYYY-MM-DD" },
                                     { feature: "Ease of Use", us: "1-Click", competitors: "Multi-step Wizard" },
                                     { feature: "Accessibility", us: "Any Browser / Device", competitors: "Desktop Only" },
-                                    { feature: "Privacy", us: "100% Client-Side", competitors: "Local App" },
+                                    { feature: "Privacy", us: "Fully Client-Side", competitors: "Local App" },
                                 ].map((row, i) => (
                                     <tr key={i} className="border-b border-[hsl(var(--border))]">
                                         <td className="p-4 text-[hsl(var(--foreground))]">{row.feature}</td>

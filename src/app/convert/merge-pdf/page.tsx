@@ -5,7 +5,7 @@ import { Zap, Shield, Globe, FileText, Lock, Layers, ArrowDownUp, CheckCircle } 
 
 export const metadata: Metadata = {
     title: "Merge PDF Files Online Free | Combine PDF Documents | Statement Extract",
-    description: "Free online PDF merger. Combine multiple PDF files into one document. Drag to reorder pages. 100% client-side, no upload required. Works on all devices.",
+    description: "Free online PDF merger. Combine multiple PDF files into one document. Drag to reorder pages. Fully Client-Side, no upload required. Works on all devices.",
     keywords: "merge pdf, combine pdf, join pdf files, pdf merger online free, merge pdf files into one, combine multiple pdfs, pdf joiner, unite pdf documents, merge pdf without upload, merge pdf browser",
     openGraph: {
         title: "Merge PDF Files Online Free | Combine PDF Documents",
@@ -49,7 +49,7 @@ const faqSchema = {
             "name": "Is it safe to merge PDFs online?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes! Our PDF merger processes files entirely in your browser using JavaScript. Your PDFs never leave your device or get uploaded to any server, making it 100% private and secure."
+                "text": "Yes! Our PDF merger processes files entirely in your browser using JavaScript. Your PDFs never leave your device or get uploaded to any server, making it Private & Secure and secure."
             }
         },
         {
@@ -96,7 +96,7 @@ export default function MergePDFPage() {
                     </h2>
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {[
-                            { icon: Lock, title: "100% Private & Secure", desc: "Files never leave your device. All merging happens in your browser." },
+                            { icon: Lock, title: "Private & Secure & Secure", desc: "Files never leave your device. All merging happens in your browser." },
                             { icon: Zap, title: "Lightning Fast", desc: "Merge PDFs instantly. No waiting for uploads or server processing." },
                             { icon: ArrowDownUp, title: "Drag to Reorder", desc: "Easily rearrange document order before merging with drag and drop." },
                             { icon: Layers, title: "Unlimited Files", desc: "Combine any number of PDFs. No file count or size restrictions." },
@@ -211,7 +211,7 @@ export default function MergePDFPage() {
                         Free PDF Merger — Combine PDFs Without Upload
                     </h2>
                     <p className="text-[hsl(var(--muted-foreground))] mb-4">
-                        Need to <strong>merge PDF files</strong> into a single document? Our <strong>free online PDF merger</strong> makes it easy to combine multiple PDF documents without uploading them to any server. All processing happens directly in your browser using JavaScript, ensuring your files remain <strong>100% private and secure</strong>.
+                        Need to <strong>merge PDF files</strong> into a single document? Our <strong>free online PDF merger</strong> makes it easy to combine multiple PDF documents without uploading them to any server. All processing happens directly in your browser using JavaScript, ensuring your files remain <strong>Private & Secure and secure</strong>.
                     </p>
                     <p className="text-[hsl(var(--muted-foreground))] mb-4">
                         Whether you're an <strong>accountant merging bank statements</strong>, a <strong>bookkeeper combining invoices</strong>, or anyone who needs to <strong>join PDF files</strong>, our tool handles it instantly. Unlike other PDF combiners that upload your sensitive documents to cloud servers, we process everything locally on your device.
@@ -251,7 +251,7 @@ export default function MergePDFPage() {
                     <div className="space-y-6">
                         {[
                             { q: "How do I merge PDF files online for free?", a: "Simply drag and drop your PDF files into our merger, arrange them in your preferred order, and click 'Merge & Download'. The combined PDF will download instantly. No signup or payment required." },
-                            { q: "Is it safe to merge PDFs online?", a: "Yes! Our PDF merger processes files entirely in your browser using JavaScript. Your PDFs never leave your device or get uploaded to any server, making it 100% private and secure." },
+                            { q: "Is it safe to merge PDFs online?", a: "Yes! Our PDF merger processes files entirely in your browser using JavaScript. Your PDFs never leave your device or get uploaded to any server, making it Private & Secure and secure." },
                             { q: "Can I merge large PDF files?", a: "Yes, you can merge PDFs of any size. Since processing happens in your browser, the only limit is your device's memory. For very large files, we recommend using a desktop browser." },
                             { q: "How many PDF files can I merge at once?", a: "There's no limit on the number of files. You can merge dozens of PDFs into a single document. The tool shows page counts for each file so you know exactly what you're combining." },
                             { q: "Can I reorder the PDF pages before merging?", a: "Yes! Simply drag and drop files in the list to rearrange their order. The merged PDF will follow the sequence you set, from top to bottom." },

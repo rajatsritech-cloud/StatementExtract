@@ -148,7 +148,7 @@ export default function AmortizationCalculatorPage() {
                             { icon: PiggyBank, title: "Interest Savings", desc: "Calculate total interest savings from making extra payments toward principal." },
                             { icon: Download, title: "Export to CSV", desc: "Download your complete amortization schedule for Excel or Google Sheets." },
                             { icon: Calculator, title: "Multiple Loan Types", desc: "Pre-configured for mortgages, auto loans, student loans, and personal loans." },
-                            { icon: CheckCircle, title: "100% Accurate", desc: "Bank-grade calculations you can trust for financial planning." },
+                            { icon: CheckCircle, title: "High-Precision", desc: "Bank-grade calculations you can trust for financial planning." },
                         ].map((feature, i) => (
                             <div key={i} className="p-6 rounded-2xl bg-[hsl(var(--card))] border border-[hsl(var(--border))]">
                                 <feature.icon className="w-8 h-8 text-[hsl(var(--primary))] mb-4" />

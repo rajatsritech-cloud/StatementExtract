@@ -21,11 +21,11 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
     title: "QIF to CSV Converter Free Online | Quicken to Excel Export | Statement Extract",
-    description: "Free QIF to CSV converter online. Convert Quicken QIF files to Excel-ready CSV spreadsheets. Works with all Quicken versions. 100% private browser processing.",
+    description: "Free QIF to CSV converter online. Convert Quicken QIF files to Excel-ready CSV spreadsheets. Works with all Quicken versions. Private & Secure browser processing.",
     keywords: "qif to csv converter, qif to csv online, convert qif to csv, qif to excel, quicken to csv, qif file to csv, export quicken to excel, qif file converter",
     openGraph: {
         title: "QIF to CSV Converter Free Online | Quicken to Excel",
-        description: "Convert Quicken QIF files to CSV spreadsheets. Free, instant, 100% private.",
+        description: "Convert Quicken QIF files to CSV spreadsheets. Free, instant, Private & Secure.",
         type: "website",
         url: "https://statementextract.com/convert/qif-to-csv",
         images: ["https://statementextract.com/assets/StatementExtract_Workflow_img.png"]
@@ -82,7 +82,7 @@ const faqSchema = {
             "name": "Is this QIF to CSV converter free?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes, it's 100% free with no limits on files or transactions. No signup required."
+                "text": "Yes, it's Free Online Tool with no limits on files or transactions. No signup required."
             }
         },
         {
@@ -187,7 +187,7 @@ export default function QifToCsvPage() {
                     </h2>
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {[
-                            { icon: Lock, title: "100% Private", desc: "Files never leave your device. Browser-based processing." },
+                            { icon: Lock, title: "Private & Secure", desc: "Files never leave your device. Browser-based processing." },
                             { icon: FileSpreadsheet, title: "Excel Ready", desc: "CSV opens in Excel, Google Sheets, or any spreadsheet." },
                             { icon: Zap, title: "Instant Conversion", desc: "No uploads required. Convert files in milliseconds." },
                             { icon: Shield, title: "No Signup", desc: "No email or account needed. Completely free." },
@@ -314,7 +314,7 @@ export default function QifToCsvPage() {
                         The Best Free QIF to CSV Converter in 2026
                     </h2>
                     <p className="text-[hsl(var(--muted-foreground))] mb-4">
-                        Need to <strong>convert QIF to CSV</strong> for Excel or Google Sheets? Our free <strong>online QIF to CSV converter</strong> transforms Quicken QIF files into standard CSV spreadsheets in seconds. Unlike other tools, it runs <strong>100% in your browser</strong> - your financial data never leaves your device.
+                        Need to <strong>convert QIF to CSV</strong> for Excel or Google Sheets? Our free <strong>online QIF to CSV converter</strong> transforms Quicken QIF files into standard CSV spreadsheets in seconds. Unlike other tools, it runs <strong>entirely in your browser</strong> - your financial data never leaves your device.
                     </p>
 
                     <h3 className="text-xl font-semibold text-[hsl(var(--foreground))] mb-4 mt-8">

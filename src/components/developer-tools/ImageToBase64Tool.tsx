@@ -194,7 +194,7 @@ export function ImageToBase64Tool() {
                             <span className="px-2 py-1 rounded-full bg-[hsl(var(--muted))]">SVG</span>
                         </div>
                         <p className="text-xs text-[hsl(var(--muted-foreground))]">
-                            Your image never leaves your browser - 100% private
+                            Your image never leaves your browser - Private & Secure
                         </p>
                     </div>
                 </div>
@@ -303,7 +303,7 @@ export function ImageToBase64Tool() {
             <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
                 {[
                     { label: "Instant Convert", desc: "No upload, no waiting" },
-                    { label: "100% Private", desc: "Runs in your browser" },
+                    { label: "Private & Secure", desc: "Runs in your browser" },
                     { label: "Multiple Formats", desc: "Data URI, CSS, HTML" },
                     { label: "All Images", desc: "PNG, JPG, GIF, WebP, SVG" },
                 ].map((feature, i) => (

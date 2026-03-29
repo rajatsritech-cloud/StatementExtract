@@ -363,7 +363,7 @@ NEWFILEUID:NONE
                     <h2 className="text-base md:text-lg text-[hsl(var(--muted-foreground))] max-w-xl mx-auto font-normal">
                         Convert OFX bank files to QuickBooks QBO format instantly.
                         <br />
-                        <span className="text-sm">100% Client-side processing. Your data never leaves your device.</span>
+                        <span className="text-sm">Fully Client-Side processing. Your data never leaves your device.</span>
                     </h2>
                 </div>
             )}

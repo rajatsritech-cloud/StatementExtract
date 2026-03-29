@@ -16,7 +16,7 @@ import {
 
 export const metadata: Metadata = {
     title: "PayPal to QuickBooks Converter Free | Import PayPal CSV to QBO | Statement Extract",
-    description: "Free PayPal to QuickBooks converter. Convert PayPal transaction history CSV to QBO format for easy QuickBooks import. 100% browser-based, private, no signup required.",
+    description: "Free PayPal to QuickBooks converter. Convert PayPal transaction history CSV to QBO format for easy QuickBooks import. entirely browser-based, private, no signup required.",
     keywords: "paypal to quickbooks, paypal csv to qbo, import paypal to quickbooks, paypal transactions to quickbooks, paypal export to qbo, paypal quickbooks integration free, convert paypal csv",
     openGraph: {
         title: "PayPal to QuickBooks Converter Free | Import PayPal Transactions",
@@ -86,7 +86,7 @@ const faqSchema = {
             "name": "Is my PayPal data secure?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes. This tool runs 100% in your browser. Your PayPal data never leaves your computer and is never uploaded to any server."
+                "text": "Yes. This tool runs entirely in your browser. Your PayPal data never leaves your computer and is never uploaded to any server."
             }
         },
         {
@@ -141,7 +141,7 @@ export default function PaypalToQboPage() {
                         Convert PayPal to QuickBooks (QBO) Free
                     </h1>
                     <p className="text-lg text-[hsl(var(--muted-foreground))]">
-                        Export your PayPal transaction history as CSV, upload here, and download a QuickBooks-ready QBO file. No signup, 100% private.
+                        Export your PayPal transaction history as CSV, upload here, and download a QuickBooks-ready QBO file. No signup, Private & Secure.
                     </p>
                 </div>
             </section>
@@ -159,7 +159,7 @@ export default function PaypalToQboPage() {
                     </h2>
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {[
-                            { icon: Lock, title: "100% Private", desc: "Your PayPal data never leaves your device. All processing happens locally in your browser." },
+                            { icon: Lock, title: "Private & Secure", desc: "Your PayPal data never leaves your device. All processing happens locally in your browser." },
                             { icon: ArrowUpDown, title: "Smart Column Mapping", desc: "Auto-detects PayPal's Date, Gross, Name, and Description columns." },
                             { icon: Zap, title: "Instant Conversion", desc: "No uploads, no waiting. Convert your PayPal export instantly." },
                             { icon: Shield, title: "No Signup Required", desc: "No email, no account, no subscription. Just drop your file and convert." },
@@ -246,7 +246,7 @@ export default function PaypalToQboPage() {
                                 {[
                                     { feature: "Price", us: "Free forever", competitors: "$15-30/month" },
                                     { feature: "File Upload", us: "None (browser only)", competitors: "Syncs via cloud" },
-                                    { feature: "Data Privacy", us: "100% local", competitors: "Stored on servers" },
+                                    { feature: "Data Privacy", us: "completely local", competitors: "Stored on servers" },
                                     { feature: "Edit Before Import", us: "Yes", competitors: "Limited" },
                                     { feature: "Fee Handling", us: "Gross or Net amounts", competitors: "Varies" },
                                     { feature: "Transaction Limit", us: "Unlimited", competitors: "Often capped" },
@@ -270,7 +270,7 @@ export default function PaypalToQboPage() {
                         The Best Free PayPal to QuickBooks Converter
                     </h2>
                     <p className="text-[hsl(var(--muted-foreground))] mb-4">
-                        Need to get your <strong>PayPal transactions into QuickBooks</strong> without paying for expensive integrations? Our free PayPal to QBO converter transforms any PayPal CSV export into QuickBooks Web Connect format instantly. Unlike subscription-based sync apps, this tool is <strong>100% free</strong> with no limits.
+                        Need to get your <strong>PayPal transactions into QuickBooks</strong> without paying for expensive integrations? Our free PayPal to QBO converter transforms any PayPal CSV export into QuickBooks Web Connect format instantly. Unlike subscription-based sync apps, this tool is <strong>Free Online Tool</strong> with no limits.
                     </p>
                     <p className="text-[hsl(var(--muted-foreground))] mb-4">
                         Whether you're selling on eBay, Etsy, or your own website, receiving payments from clients, or managing a small business, this tool makes <strong>PayPal to QuickBooks import</strong> simple and secure.

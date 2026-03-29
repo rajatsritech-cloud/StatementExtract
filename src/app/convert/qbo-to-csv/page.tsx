@@ -18,7 +18,7 @@ import {
 
 export const metadata: Metadata = {
     title: "QBO to CSV Converter Online Free | QuickBooks Export | Statement Extract",
-    description: "Free online QBO to CSV converter. Convert QuickBooks Web Connect (.qbo) files to Excel or CSV. 100% client-side, secure, & free.",
+    description: "Free online QBO to CSV converter. Convert QuickBooks Web Connect (.qbo) files to Excel or CSV. Fully Client-Side, secure, & free.",
     keywords: "qbo to csv converter, .qbo to csv, qbo to csv converter online, qbo to csv converter free, qbo converter, bank feed to csv, convert qbo file to excel, quickbooks file converter, qbo to csv",
     openGraph: {
         title: "QBO to CSV Converter Online Free | QuickBooks Data Export",
@@ -87,7 +87,7 @@ const faqSchema = {
             "name": "Is my data secure when using this QBO converter?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes, completely. This tool runs 100% in your browser using JavaScript. Your financial data never leaves your computer and is never uploaded to any server. This makes it the most secure QBO to CSV converter available."
+                "text": "Yes, completely. This tool runs entirely in your browser using JavaScript. Your financial data never leaves your computer and is never uploaded to any server. This makes it the most secure QBO to CSV converter available."
             }
         },
         {
@@ -95,7 +95,7 @@ const faqSchema = {
             "name": "Is this QBO to CSV converter free?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes, it is 100% free with no limits. You can convert as many QBO files as you want without signing up or paying anything. There are no hidden fees or premium tiers."
+                "text": "Yes, it is Free Online Tool with no limits. You can convert as many QBO files as you want without signing up or paying anything. There are no hidden fees or premium tiers."
             }
         },
         {
@@ -194,7 +194,7 @@ export default function QboToCsvPage() {
                     </h2>
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {[
-                            { icon: Lock, title: "100% Private", desc: "Files never leave your device. All processing happens in your browser." },
+                            { icon: Lock, title: "Private & Secure", desc: "Files never leave your device. All processing happens in your browser." },
                             { icon: Zap, title: "Instant Conversion", desc: "Zero wait time. Convert files instantly without uploading." },
                             { icon: Database, title: "Universal CSV", desc: "Generate clean CSV files compatible with Excel and all accounting software." },
                             { icon: Shield, title: "No Signup Required", desc: "No email, no account needed. Just drop your file and convert." },
@@ -303,7 +303,7 @@ export default function QboToCsvPage() {
                         The Best Client-Side QBO to CSV Converter
                     </h2>
                     <p className="text-[hsl(var(--muted-foreground))] mb-4">
-                        Most <strong>QBO to CSV converters</strong> require you to upload your sensitive financial data to a server. Our tool is different. We built a <strong>client-side converter</strong> that processes your file directly in your web browser. This means your data never leaves your computer, ensuring 100% privacy and security.
+                        Most <strong>QBO to CSV converters</strong> require you to upload your sensitive financial data to a server. Our tool is different. We built a <strong>client-side converter</strong> that processes your file directly in your web browser. This means your data never leaves your computer, ensuring Privacy & Security and security.
                     </p>
                     <p className="text-[hsl(var(--muted-foreground))] mb-4">
                         Whether you need a reliable <strong>qbo to csv converter</strong> or simply want to convert <strong>.qbo to csv</strong> quickly, our free tool is the safest solution. Turn confusing QuickBooks Web Connect files into clean, editable Excel spreadsheets in seconds.
@@ -471,7 +471,7 @@ export default function QboToCsvPage() {
                         {[
                             { q: "What is a QBO file?", a: "A QBO file (QuickBooks Web Connect) is a financial data format used by QuickBooks to import bank transactions. It uses OFX XML standards and contains transaction dates, amounts, payee names, and reference numbers." },
                             { q: "How does the client-side conversion work?", a: "We use modern JavaScript to read the .qbo file directly in your browser's memory. The parsing code runs locally on your device, not on our servers - your data never leaves your computer." },
-                            { q: "Is this QBO to CSV converter free?", a: "Yes, it's 100% free with no limits. Convert as many files as you want without signing up or paying anything. No hidden fees or premium tiers." },
+                            { q: "Is this QBO to CSV converter free?", a: "Yes, it's Free Online Tool with no limits. Convert as many files as you want without signing up or paying anything. No hidden fees or premium tiers." },
                             { q: "Can I convert QBO to Excel?", a: "Yes. The CSV file we generate is formatted specifically to open correctly in Microsoft Excel, Google Sheets, or Apple Numbers." },
                             { q: "Which banks support QBO downloads?", a: "Most major US banks including Chase, Bank of America, Wells Fargo, Citi, Capital One, US Bank, PNC, and thousands of credit unions support QBO file downloads." },
                             { q: "What's the difference between QBO, OFX, and QFX?", a: "QBO is for QuickBooks, QFX is for Quicken personal finance, and OFX is the generic Open Financial Exchange standard. All use similar XML-based formats." },

@@ -18,11 +18,11 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
     title: "CSV / Excel to OFX Converter Free Online | QuickBooks, Xero, Sage Import | Statement Extract",
-    description: "Free CSV and Excel to OFX converter online. Convert bank files (CSV, XLS, XLSX) to OFX, QBO, or QFX format for QuickBooks, Xero, Sage, Wave import. Map columns, preview, export. 100% private.",
+    description: "Free CSV and Excel to OFX converter online. Convert bank files (CSV, XLS, XLSX) to OFX, QBO, or QFX format for QuickBooks, Xero, Sage, Wave import. Map columns, preview, export. Private & Secure.",
     keywords: "csv to ofx converter, csv to ofx free, csv to qbo converter, csv to ofx online, convert csv to quickbooks, bank csv to ofx, csv to ofx for xero, import csv to accounting software, ofx file converter",
     openGraph: {
         title: "CSV to OFX Converter Free Online | Import to QuickBooks & Xero",
-        description: "Convert any bank CSV to OFX, QBO, or QFX format. Import into QuickBooks, Xero, Sage & more. 100% free, secure, browser-based.",
+        description: "Convert any bank CSV to OFX, QBO, or QFX format. Import into QuickBooks, Xero, Sage & more. Free Online Tool, secure, browser-based.",
         type: "website",
         url: "https://statementextract.com/convert/csv-to-ofx"
     },
@@ -80,7 +80,7 @@ const faqSchema = {
             "name": "Is this CSV to OFX converter free?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes, 100% free with no limits. Convert unlimited CSV files to OFX, QBO, or QFX format without signing up or paying anything."
+                "text": "Yes, Free Online Tool with no limits. Convert unlimited CSV files to OFX, QBO, or QFX format without signing up or paying anything."
             }
         },
         {
@@ -88,7 +88,7 @@ const faqSchema = {
             "name": "Is my data secure?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Absolutely. This tool runs 100% in your browser. Your financial data never leaves your computer and is never uploaded to any server."
+                "text": "Absolutely. This tool runs entirely in your browser. Your financial data never leaves your computer and is never uploaded to any server."
             }
         },
         {
@@ -176,7 +176,7 @@ export default function CsvToOfxPage() {
                     </h2>
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {[
-                            { icon: Lock, title: "100% Private", desc: "Files never leave your device. All processing happens in your browser." },
+                            { icon: Lock, title: "Private & Secure", desc: "Files never leave your device. All processing happens in your browser." },
                             { icon: ArrowUpDown, title: "Smart Column Mapping", desc: "Auto-detects Date, Amount, and Description columns. Map any custom format." },
                             { icon: Zap, title: "Instant Conversion", desc: "No uploads, no waiting. Convert files instantly in your browser." },
                             { icon: Shield, title: "No Signup Required", desc: "No email, no account needed. Just drop your file and convert." },
@@ -287,7 +287,7 @@ export default function CsvToOfxPage() {
                         The Best Free CSV/Excel to OFX Converter Online
                     </h2>
                     <p className="text-[hsl(var(--muted-foreground))] mb-4">
-                        Need to import bank transactions into accounting software but only have a CSV or Excel file? Our <strong>free CSV/Excel to OFX converter</strong> transforms any bank export into OFX, QBO, or QFX format in seconds. Unlike other tools that require subscriptions or uploads to external servers, our converter runs <strong>100% in your browser</strong>—your financial data never leaves your device.
+                        Need to import bank transactions into accounting software but only have a CSV or Excel file? Our <strong>free CSV/Excel to OFX converter</strong> transforms any bank export into OFX, QBO, or QFX format in seconds. Unlike other tools that require subscriptions or uploads to external servers, our converter runs <strong>entirely in your browser</strong>—your financial data never leaves your device.
                     </p>
                     <p className="text-[hsl(var(--muted-foreground))] mb-4">
                         Whether you're an accountant importing client data into QuickBooks, a bookkeeper migrating to Xero, or a business owner setting up Wave or Sage, this <strong>CSV to OFX converter free</strong> tool handles it all. Smart column detection automatically identifies Date, Amount, and Description fields from virtually any bank's CSV format.

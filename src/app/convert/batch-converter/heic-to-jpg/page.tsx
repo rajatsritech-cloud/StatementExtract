@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     keywords: "heic to jpg, convert heic to jpeg, heic to jpg batch converter, iphone photos to jpg, heif to jpeg online, free heic converter",
     openGraph: {
         title: "Free HEIC to JPG Batch Converter",
-        description: "Convert iPhone HEIC photos to JPG. 100% free, fast, and private.",
+        description: "Convert iPhone HEIC photos to JPG. Free Online Tool, fast, and private.",
         type: "website",
         url: "https://statementextract.com/convert/batch-converter/heic-to-jpg"
     },
@@ -78,7 +78,7 @@ export default function HeicToJpgPage() {
                         {[
                             { icon: Images, title: "Smaller Files", desc: "JPG files are typically smaller than PNG, perfect for web and email." },
                             { icon: Smartphone, title: "Universal Support", desc: "JPG works on every device, platform, and browser ever made." },
-                            { icon: Lock, title: "100% Private", desc: "No upload to any server. All processing happens in your browser." },
+                            { icon: Lock, title: "Private & Secure", desc: "No upload to any server. All processing happens in your browser." },
                             { icon: Zap, title: "Batch Processing", desc: "Convert dozens of iPhone photos at once. No limits." },
                             { icon: Shield, title: "High Quality", desc: "92% quality setting preserves details while reducing size." },
                             { icon: Globe, title: "Social Media Ready", desc: "Perfect for Instagram, Facebook, Twitter, and LinkedIn." },

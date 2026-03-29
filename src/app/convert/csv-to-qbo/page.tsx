@@ -16,7 +16,7 @@ import {
 
 export const metadata: Metadata = {
     title: "CSV / Excel to QBO Converter Free Online | QuickBooks Import | Statement Extract",
-    description: "Free CSV and Excel to QBO converter online. Convert bank files (CSV, XLS, XLSX) to QuickBooks Web Connect (.qbo) format. Map columns, preview, and export. 100% private.",
+    description: "Free CSV and Excel to QBO converter online. Convert bank files (CSV, XLS, XLSX) to QuickBooks Web Connect (.qbo) format. Map columns, preview, and export. Private & Secure.",
     keywords: "csv to qbo converter, csv to qbo converter free, convert csv to qbo online, csv to quickbooks format, bank csv to qbo, import csv to quickbooks, qbo file converter",
     openGraph: {
         title: "CSV to QBO Converter Free Online | Import to QuickBooks",
@@ -70,7 +70,7 @@ const faqSchema = {
             "name": "Is this CSV to QBO converter free?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes, it is 100% free with no limits. Convert unlimited CSV files to QBO format without signing up or paying anything."
+                "text": "Yes, it is Free Online Tool with no limits. Convert unlimited CSV files to QBO format without signing up or paying anything."
             }
         },
         {
@@ -86,7 +86,7 @@ const faqSchema = {
             "name": "Is my data secure when using this tool?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes, completely. This tool runs 100% in your browser. Your financial data never leaves your computer and is never uploaded to any server."
+                "text": "Yes, completely. This tool runs entirely in your browser. Your financial data never leaves your computer and is never uploaded to any server."
             }
         },
         {
@@ -159,7 +159,7 @@ export default function CsvToQboPage() {
                     </h2>
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {[
-                            { icon: Lock, title: "100% Private", desc: "Files never leave your device. All processing happens in your browser." },
+                            { icon: Lock, title: "Private & Secure", desc: "Files never leave your device. All processing happens in your browser." },
                             { icon: ArrowUpDown, title: "Smart Column Mapping", desc: "Auto-detects common column names. Manually map any custom format." },
                             { icon: Zap, title: "Instant Conversion", desc: "No uploads, no waiting. Convert files instantly in your browser." },
                             { icon: Shield, title: "No Signup Required", desc: "No email, no account needed. Just drop your file and convert." },

@@ -5,7 +5,7 @@ import { Zap, Shield, Globe, Minimize2 } from "lucide-react";
 
 export const metadata: Metadata = {
     title: "Free Image to AVIF Converter Online | PNG JPG WebP to AVIF | Statement Extract",
-    description: "Convert PNG, JPG, WebP images to AVIF format for smaller file sizes. Free online tool with quality control. No upload, 100% private.",
+    description: "Convert PNG, JPG, WebP images to AVIF format for smaller file sizes. Free online tool with quality control. No upload, Private & Secure.",
     keywords: "png to avif, jpg to avif, webp to avif, convert to avif, avif converter, image to avif online, free avif encoder",
     openGraph: {
         title: "Free Image to AVIF Converter",
@@ -64,7 +64,7 @@ export default function ImageToAvifPage() {
                         {[
                             { icon: Minimize2, title: "50% Smaller", desc: "AVIF offers the best compression ratio of any image format." },
                             { icon: Zap, title: "Fast Loading", desc: "Smaller files mean faster website load times and better SEO." },
-                            { icon: Shield, title: "100% Private", desc: "All conversion happens in your browser. Files never uploaded." },
+                            { icon: Shield, title: "Private & Secure", desc: "All conversion happens in your browser. Files never uploaded." },
                             { icon: Globe, title: "Modern Format", desc: "Supported by Chrome, Firefox, Safari, Edge, and Opera." },
                         ].map((feature, i) => (
                             <div key={i} className="p-6 rounded-2xl bg-[hsl(var(--card))] border border-[hsl(var(--border))]">
@@ -119,7 +119,7 @@ export default function ImageToAvifPage() {
                     <ul className="list-disc pl-6 text-[hsl(var(--muted-foreground))] space-y-2">
                         <li><strong>vs JPEG:</strong> AVIF is 50% smaller at the same quality</li>
                         <li><strong>vs PNG:</strong> AVIF supports transparency AND lossy compression</li>
-                        <li><strong>vs WebP:</strong> AVIF offers 20-30% better compression</li>
+                        <li><strong>vs WebP:</strong> AVIF offers a significant amount better compression</li>
                     </ul>
 
                     <h3 className="text-xl font-semibold text-[hsl(var(--foreground))] mb-4 mt-8">
@@ -139,9 +139,9 @@ export default function ImageToAvifPage() {
                     </h2>
                     <div className="space-y-6">
                         {[
-                            { q: "What quality setting should I use?", a: "For photos, 70-80% offers excellent quality with significant size reduction. For graphics/icons, use 85-90% for sharper edges." },
+                            { q: "What quality setting should I use?", a: "For photos, a significant amount offers excellent quality with significant size reduction. For graphics/icons, use a significant amount for sharper edges." },
                             { q: "Does my browser support AVIF encoding?", a: "Chrome 94+, Firefox 93+, and Edge 121+ support AVIF encoding. If your browser doesn't support it, you'll see a warning." },
-                            { q: "Is AVIF better than WebP?", a: "Yes, AVIF typically achieves 20-30% smaller files than WebP at the same quality, though encoding is slower." },
+                            { q: "Is AVIF better than WebP?", a: "Yes, AVIF typically achieves a significant amount smaller files than WebP at the same quality, though encoding is slower." },
                             { q: "Can I convert back from AVIF?", a: "Yes! Use our AVIF to PNG or AVIF to WebP converters to convert back to universally supported formats." },
                             { q: "Is this tool free?", a: "Yes, completely free with no signup, no limits, and no file uploads. Everything runs in your browser." },
                         ].map((faq, i) => (

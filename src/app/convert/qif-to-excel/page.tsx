@@ -139,7 +139,7 @@ export default function QifToExcelPage() {
                         {[
                             { icon: FileSpreadsheet, title: "Modern Excel Output", desc: "Turn old text-based QIF files into modern, sortable XLSX spreadsheets." },
                             { icon: Zap, title: "Instant Parsing", desc: "Reads thousands of QIF lines in milliseconds right in your browser." },
-                            { icon: Lock, title: "100% Private", desc: "Your financial history never leaves your computer." },
+                            { icon: Lock, title: "Private & Secure", desc: "Your financial history never leaves your computer." },
                             { icon: CheckCircle, title: "Smart Formatting", desc: "Auto-detects transaction fields like Payee, Memo, and Category." },
                             { icon: Users, title: "Universal Support", desc: "Works with QIF files from Quicken, MS Money, and other legacy apps." },
                             { icon: Globe, title: "No Dependencies", desc: "You don't need to buy or install Quicken to access your data." },
@@ -236,7 +236,7 @@ export default function QifToExcelPage() {
                         Your Financial Data Stays Private
                     </h2>
                     <p className="text-[hsl(var(--muted-foreground))] max-w-2xl mx-auto mb-6">
-                        Unlike other converters that upload your files to a server, <strong>Statement Extract processes everything locally in your browser</strong>. Your QIF files never leave your computer, ensuring 100% data security.
+                        Unlike other converters that upload your files to a server, <strong>Statement Extract processes everything locally in your browser</strong>. Your QIF files never leave your computer, ensuring high-grade data security.
                     </p>
                 </div>
             </section>
@@ -261,7 +261,7 @@ export default function QifToExcelPage() {
                             </thead>
                             <tbody>
                                 {[
-                                    { feature: "Security", us: "100% Browser-Based", competitors: "Server Upload (Risky)" },
+                                    { feature: "Security", us: "entirely browser-based", competitors: "Server Upload (Risky)" },
                                     { feature: "Cost", us: "Free Forever", competitors: "Paid / Freemium" },
                                     { feature: "Split Transactions", us: "Flattened Output", competitors: "Often Broken" },
                                     { feature: "Date Parsing", us: "Smart Auto-Detect", competitors: "Often Fails" },

@@ -180,7 +180,7 @@ export function RotatePdfTool() {
                     Rotate PDF Pages Online Free
                 </h1>
                 <h2 className="text-base md:text-lg text-[hsl(var(--muted-foreground))] max-w-xl mx-auto font-normal">
-                    Rotate all pages or individual pages in your PDF. Fix scanned documents, upside-down pages, and landscape/portrait orientation. 100% free and private.
+                    Rotate all pages or individual pages in your PDF. Fix scanned documents, upside-down pages, and landscape/portrait orientation. Free and private online tool.
                 </h2>
             </div>
 

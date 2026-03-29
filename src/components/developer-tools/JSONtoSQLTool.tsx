@@ -377,7 +377,7 @@ export function JSONtoSQLTool() {
                     { label: "Auto Type Detection", desc: "INT, VARCHAR, DATE, BOOLEAN" },
                     { label: "Multi-Dialect", desc: "MySQL, PostgreSQL, SQLite, MSSQL" },
                     { label: "Nested JSON", desc: "Objects stored as JSON/JSONB" },
-                    { label: "100% Client-Side", desc: "Your data never leaves your browser" },
+                    { label: "Fully Client-Side", desc: "Your data never leaves your browser" },
                 ].map((feature, i) => (
                     <div key={i} className="p-3 rounded-lg bg-[hsl(var(--muted))]/30">
                         <p className="font-medium text-[hsl(var(--foreground))] text-sm">{feature.label}</p>

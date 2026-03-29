@@ -10,7 +10,7 @@ export const BankStatementFeatures = () => {
         {
             icon: FileSpreadsheet,
             title: "Excel & CSV Export",
-            description: "Get perfectly formatted spreadsheets with separate columns for dates, descriptions, deposits, withdrawals, and balances."
+            description: "Get accurate spreadsheets with separate columns for dates, descriptions, deposits, withdrawals, and balances."
         },
         {
             icon: ShieldCheck,
@@ -19,7 +19,7 @@ export const BankStatementFeatures = () => {
         },
         {
             icon: Globe,
-            title: "Multi-Currency Support",
+            title: "High-Precision Commitment",
             description: "Process statements from over 50 countries. We handle different date formats (DD/MM vs MM/DD) and currency symbols automatically."
         },
         {
@@ -156,7 +156,7 @@ export const BankStatementSEOContent = () => {
                 <p className="text-[hsl(var(--muted-foreground))] mb-6">
                     Converting <strong>PDF bank statements to Excel</strong> or CSV is a critical task for accountants, lenders, and business owners.
                     Manual data entry is slow, error-prone, and expensive. Our <strong>automated bank statement converter</strong> solves this by using advanced
-                    <strong>Financial OCR</strong> technology to extract every transaction with 100% accuracy.
+                    <strong className="text-[hsl(var(--foreground))]">Financial OCR</strong> technology to extract every transaction with high accuracy.
                 </p>
 
                 {/* Deep Dive: Smart Parsing vs Generic OCR */}
@@ -217,7 +217,7 @@ export const BankStatementSEOContent = () => {
                     Convert Scanned PDFs and Images
                 </h3>
                 <p className="text-[hsl(var(--muted-foreground))] mb-6">
-                    Have paper statements? Our tool supports <strong>scanned PDF bank statements</strong> and image formats (JPG, PNG).
+                    Trusted by CPAs and Bookkeepers, our automated extraction ensures high accuracy even with scanned or low-quality PDF statements and image formats (JPG, PNG).
                     We use Optical Character Recognition (OCR) to digitize scanned documents before running our parsing logic to structure the data.
                 </p>
 
@@ -225,7 +225,7 @@ export const BankStatementSEOContent = () => {
                 <div className="my-8 p-6 bg-blue-500/5 border border-blue-500/10 rounded-xl not-prose">
                     <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400 mb-3">Bank-Specific Conversion Tips</h3>
                     <ul className="space-y-3 text-sm text-[hsl(var(--muted-foreground))]">
-                        <li><strong>Chase Bank:</strong> Supports the new 2024 "Blue Headers" PDF format perfectly.</li>
+                        <li><strong>Chase Bank:</strong> Supports the new 2024 "Blue Headers" PDF format seamlessly.</li>
                         <li><strong>Wells Fargo:</strong> We automatically strip the "Cheque Images" from the bottom of statements to keep the Excel file clean.</li>
                         <li><strong>Bank of America:</strong> Handles the "e-Statement" password protection (if you provide the password).</li>
                     </ul>

@@ -13,7 +13,7 @@ export const BankStatementFeaturesXero = () => {
         },
         {
             icon: ShieldCheck,
-            title: "99%+ Accuracy Guarantee",
+            title: "High-Precision Commitment",
             description: "Our AI ensures every debit and credit is captured correctly, preventing reconciliation headaches during month-end closes."
         },
         {
@@ -145,7 +145,7 @@ export const BankStatementSEOContentXero = () => {
                     Import Bank Statements into Xero
                 </h3>
                 <p className="text-[hsl(var(--muted-foreground))] mb-6">
-                    For businesses using <strong>Xero</strong>, we generate clean CSV files that match Xero's import format perfectly.
+                    For businesses using <strong>Xero</strong>, we generate clean CSV files that match Xero's import format accurately.
                     Simply navigate to <strong>Banking &gt; Bank Statements</strong> and upload the file.
                     Xero will automatically match transactions to your existing records, identifying duplicates and categorizing expenses.
                 </p>
@@ -182,7 +182,7 @@ export const BankStatementSEOContentXero = () => {
                 </h3>
                 <p className="text-[hsl(var(--muted-foreground))] mb-8">
                     We understand that one decimal error can ruin a reconciliation. Our <strong>Triple-Check Validation</strong> engine verifies
-                    open/close balances against transaction totals before letting you download, guaranteeing 99%+ mathematical consistency.
+                    open/close balances against transaction totals before letting you download, including mathematical validation for consistency.
                     Thousands of accountants trust Statement Extract for their daily <Link href="/blogs/best-bank-statement-extraction-software-comparison" className="text-primary hover:underline">bank statement processing</Link> needs.
                 </p>
 

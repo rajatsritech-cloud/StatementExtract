@@ -58,10 +58,10 @@ export default function JsonToToonPage() {
                     </h2>
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {[
-                            { icon: DollarSign, title: "Save Money", desc: "Reduce API costs by 30-60% by using fewer tokens per request." },
+                            { icon: DollarSign, title: "Save Money", desc: "Reduce API costs by a significant amount by using fewer tokens per request." },
                             { icon: Zap, title: "Faster Responses", desc: "Fewer tokens = faster processing time from GPT, Claude, and other LLMs." },
                             { icon: Brain, title: "LLM Optimized", desc: "TOON is designed for machine readability while staying human-friendly." },
-                            { icon: Shield, title: "100% Private", desc: "Conversion happens in your browser. Nothing is sent to any server." },
+                            { icon: Shield, title: "Private & Secure", desc: "Conversion happens in your browser. Nothing is sent to any server." },
                             { icon: Clock, title: "Real-time", desc: "See TOON output instantly as you type or paste JSON." },
                             { icon: Code2, title: "Developer Friendly", desc: "Copy with one click. Perfect for prompt engineering workflows." },
                         ].map((feature, i) => (
@@ -166,7 +166,7 @@ export default function JsonToToonPage() {
                     <div className="space-y-6">
                         {[
                             { q: "What is TOON?", a: "TOON (Token-Oriented Object Notation) is a data format designed to minimize token usage when sending structured data to LLMs like GPT-4, Claude, or Gemini." },
-                            { q: "How much can I save?", a: "For flat, tabular data (arrays of objects), you can save 30-60% on tokens. Deeply nested objects may see smaller savings or even slight increases." },
+                            { q: "How much can I save?", a: "For flat, tabular data (arrays of objects), you can save a significant amount on tokens. Deeply nested objects may see smaller savings or even slight increases." },
                             { q: "Can LLMs understand TOON?", a: "Yes! Modern LLMs easily parse TOON format. You can also include a brief format explanation in your system prompt for best results." },
                             { q: "Is my data safe?", a: "Absolutely. All conversion happens in your browser using JavaScript. No data is ever sent to any server." },
                             { q: "When should I NOT use TOON?", a: "Avoid TOON for deeply nested hierarchies. It works best for flat data like user lists, product catalogs, API responses, and tabular datasets." },

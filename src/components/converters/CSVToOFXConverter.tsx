@@ -300,7 +300,7 @@ export function CSVToOFXConverter({
                                 <span className="px-2 py-1 rounded-full bg-[hsl(var(--muted))]">.CSV</span>
                                 <span className="px-2 py-1 rounded-full bg-[hsl(var(--muted))]">.XLSX</span>
                                 <span className="px-2 py-1 rounded-full bg-[hsl(var(--muted))]">.XLS</span>
-                                <span className="px-2 py-1 rounded-full bg-[hsl(var(--muted))]">100% Private</span>
+                                <span className="px-2 py-1 rounded-full bg-[hsl(var(--muted))]">Private & Secure</span>
                             </div>
                         </div>
                     </div>

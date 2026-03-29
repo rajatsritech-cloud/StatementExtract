@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ContactForm } from "@/components/ContactForm";
@@ -110,6 +111,53 @@ export default function AboutPage() {
                 numbers came from.
               </li>
             </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* Meet the Founder */}
+      <section className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-6 md:p-8 shadow-sm">
+        <div className="flex flex-col md:flex-row items-start gap-6">
+          <div className="shrink-0">
+            <Image
+              src="/assets/Rajat Srivastava.png"
+              alt="Rajat Srivastava — Founder of Statement Extract"
+              width={120}
+              height={120}
+              className="rounded-2xl object-cover border border-[hsl(var(--border))]"
+            />
+          </div>
+          <div className="space-y-3">
+            <div>
+              <p className="text-xs font-semibold tracking-[0.2em] text-[hsl(var(--muted-foreground))] mb-1">
+                MEET THE FOUNDER
+              </p>
+              <h2 className="text-xl md:text-2xl font-semibold text-[hsl(var(--foreground))]">
+                Rajat Srivastava
+              </h2>
+              <p className="text-sm text-[hsl(var(--primary))] font-medium">
+                Founder & Developer
+              </p>
+            </div>
+            <p className="text-sm text-[hsl(var(--muted-foreground))] max-w-xl">
+              I built Statement Extract to solve a problem I saw firsthand — accountants and
+              bookkeepers spending hours manually copying data from PDF bank statements into
+              spreadsheets. What started as a single converter has grown into a full suite of
+              financial tools used by professionals in over 50 countries.
+            </p>
+            <p className="text-sm text-[hsl(var(--muted-foreground))] max-w-xl">
+              Every tool on this site, every blog post, and every feature is something I've
+              personally built and reviewed. I'm committed to keeping these tools free, fast,
+              and privacy-first — your financial data never leaves your browser.
+            </p>
+            <div className="flex items-center gap-4 pt-1">
+              <a
+                href="mailto:support@statementextract.com"
+                className="text-sm font-medium text-[hsl(var(--primary))] hover:underline"
+              >
+                support@statementextract.com
+              </a>
+            </div>
           </div>
         </div>
       </section>

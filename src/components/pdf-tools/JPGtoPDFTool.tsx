@@ -230,7 +230,7 @@ export function JPGtoPDFTool() {
                     JPG to PDF Converter
                 </h1>
                 <h2 className="text-base md:text-lg text-[hsl(var(--muted-foreground))] max-w-xl mx-auto font-normal">
-                    Convert JPG, PNG, WebP images to PDF. Combine multiple images into one PDF. 100% free.
+                    Convert JPG, PNG, WebP images to PDF. Combine multiple images into one PDF. Free online tool.
                 </h2>
             </div>
 

@@ -13,7 +13,7 @@ export const BankStatementFeaturesQBO = () => {
         },
         {
             icon: ShieldCheck,
-            title: "100% Accuracy Guarantee",
+            title: "High-Precision Commitment",
             description: "Our AI ensures every debit and credit is captured correctly, preventing reconciliation headaches during month-end closes."
         },
         {
@@ -143,7 +143,7 @@ export const BankStatementSEOContentQBO = () => {
                 <p className="text-[hsl(var(--muted-foreground))] mb-6">
                     For businesses using <strong>Tally</strong>, we generate clean XML Voucher files that match Tally's import format perfectly.
                     Simply use the "Import Data" feature in Tally Prime.
-                    Our tool ensures all ledgers are mapped correctly, identifying <Link href="/blogs/idp-vs-ocr-document-processing" className="text-primary hover:underline">duplicates</Link> and categorizing expenses automatically.
+                    our automated extraction helps ensure high accuracy even with scanned or low-quality PDF statements, identifying <Link href="/blogs/idp-vs-ocr-document-processing" className="text-primary hover:underline">duplicates</Link> and categorizing expenses automatically.
                 </p>
 
                 <h3 className="text-2xl font-semibold text-[hsl(var(--foreground))] mb-4">
@@ -161,7 +161,7 @@ export const BankStatementSEOContentQBO = () => {
                 </h3>
                 <p className="text-[hsl(var(--muted-foreground))] mb-8">
                     We understand that one decimal error can ruin a reconciliation. Our <strong>Triple-Check Validation</strong> engine verifies
-                    open/close balances against transaction totals before letting you download, guaranteeing 100% mathematical consistency.
+                    open/close balances against transaction totals before letting you download, including mathematical validation for consistency.
                     Thousands of accountants trust Statement Extract for their daily <Link href="/blogs/best-bank-statement-extraction-software-comparison" className="text-primary hover:underline">bank statement processing</Link> needs.
                 </p>
 

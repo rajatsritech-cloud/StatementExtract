@@ -152,16 +152,16 @@ const relatedTools = [
 
 // Industry markup rates for SEO content
 const industryMarkups = [
-    { industry: "Grocery/Supermarket", typical: "5-15%", example: "10%" },
-    { industry: "Clothing/Apparel", typical: "50-100%", example: "75%" },
-    { industry: "Jewelry", typical: "100-300%", example: "200%" },
-    { industry: "Electronics", typical: "10-30%", example: "20%" },
-    { industry: "Furniture", typical: "50-100%", example: "80%" },
-    { industry: "Restaurant Food", typical: "200-400%", example: "300%" },
-    { industry: "Pharmaceuticals", typical: "20-50%", example: "35%" },
-    { industry: "Auto Parts", typical: "30-50%", example: "40%" },
-    { industry: "Software/SaaS", typical: "80-400%", example: "200%" },
-    { industry: "Professional Services", typical: "50-150%", example: "100%" },
+    { industry: "Grocery/Supermarket", typical: "a significant amount", example: "10%" },
+    { industry: "Clothing/Apparel", typical: "a significant amount", example: "75%" },
+    { industry: "Jewelry", typical: "a significant amount", example: "200%" },
+    { industry: "Electronics", typical: "a significant amount", example: "20%" },
+    { industry: "Furniture", typical: "a significant amount", example: "80%" },
+    { industry: "Restaurant Food", typical: "a significant amount", example: "300%" },
+    { industry: "Pharmaceuticals", typical: "a significant amount", example: "35%" },
+    { industry: "Auto Parts", typical: "a significant amount", example: "40%" },
+    { industry: "Software/SaaS", typical: "a significant amount", example: "200%" },
+    { industry: "Professional Services", typical: "a significant amount", example: "100%" },
 ];
 
 // Markup to Margin conversion table
@@ -411,7 +411,7 @@ export default function MarkupCalculatorPage() {
                             { q: "What markup do I need for a 20% margin?", a: "To achieve a 20% profit margin, you need a 25% markup on cost." },
                             { q: "How do I reverse calculate cost from selling price?", a: "Cost = Selling Price / (1 + Markup% / 100). With $150 price and 50% markup: $150 / 1.50 = $100 cost." },
                             { q: "Is 100% markup the same as 100% profit?", a: "No. A 100% markup doubles your cost ($100 → $200), but the profit margin is only 50% because profit ($100) is half the selling price ($200)." },
-                            { q: "What is a typical retail markup?", a: "Retail markups vary by industry: Grocery 5-15%, Clothing 50-100%, Jewelry 100-300%, Electronics 10-30%, Restaurants 200-400%." },
+                            { q: "What is a typical retail markup?", a: "Retail markups vary by industry: Grocery a significant amount, Clothing a significant amount, Jewelry a significant amount, Electronics a significant amount, Restaurants a significant amount." },
                         ].map((faq, i) => (
                             <div key={i} className="p-6 rounded-2xl bg-[hsl(var(--card))] border border-[hsl(var(--border))]">
                                 <h3 className="font-semibold text-[hsl(var(--foreground))] mb-2">{faq.q}</h3>

@@ -77,7 +77,7 @@ const faqSchema = {
             "name": "Is this tool free?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes, our CSV to IIF converter is 100% free with no usage limits."
+                "text": "Yes, our CSV to IIF converter is Free Online Tool with no usage limits."
             }
         },
         {
@@ -168,7 +168,7 @@ export default function CsvToIifPage() {
                     </h2>
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {[
-                            { icon: Lock, title: "100% Private", desc: "Files never leave your device. Browser-based processing." },
+                            { icon: Lock, title: "Private & Secure", desc: "Files never leave your device. Browser-based processing." },
                             { icon: FileSpreadsheet, title: "Easy Mapping", desc: "Interactive column mapper. Match 'Date', 'Amount', 'Payee' easily." },
                             { icon: Zap, title: "Instant Conversion", desc: "No uploads required. Generate IIF files in milliseconds." },
                             { icon: CheckCircle, title: "Error Free", desc: "Auto-formats dates and numbers to prevent QuickBooks import errors." },
@@ -253,7 +253,7 @@ export default function CsvToIifPage() {
                             <tbody>
                                 {[
                                     { feature: "Price", us: "Free forever", competitors: "$19/mo or $50+" },
-                                    { feature: "Privacy", us: "100% Browser-Based", competitors: "Cloud Upload (Risky)" },
+                                    { feature: "Privacy", us: "entirely browser-based", competitors: "Cloud Upload (Risky)" },
                                     { feature: "Mapping", us: "Visual Column Mapper", competitors: "Strict Templates Only" },
                                     { feature: "Date Parsing", us: "Auto-Detect Format", competitors: "Must be exact" },
                                     { feature: "Speed", us: "Instant", competitors: "Queue times" },

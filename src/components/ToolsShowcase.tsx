@@ -150,7 +150,7 @@ export function ToolsShowcase() {
                         Privacy-First <span className="bg-gradient-to-r from-teal-500 to-cyan-500 bg-clip-text text-transparent">Financial Tools</span>
                     </h2>
                     <p className="text-xl text-[hsl(var(--muted-foreground))] max-w-3xl mx-auto leading-relaxed">
-                        These tools run 100% in your browser. Your sensitive financial data never leaves your device.
+                        These tools run entirely in your browser. Your sensitive financial data never leaves your device.
                     </p>
                 </div>
 

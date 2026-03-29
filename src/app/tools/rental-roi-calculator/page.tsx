@@ -217,19 +217,19 @@ export default function RentalROIPage() {
                         <div className="bg-[hsl(var(--card))] p-6 rounded-xl border border-[hsl(var(--border))]">
                             <h3 className="font-semibold text-lg mb-2">What is a good Cash-on-Cash Return?</h3>
                             <p className="text-[hsl(var(--muted-foreground))] text-sm">
-                                This varies by investor and market, but many target between 8% and 12%. Some investors accept lower returns (4-6%) in high-appreciation markets, while others demand 15%+ in riskier or lower-growth areas.
+                                This varies by investor and market, but many target between 8% and 12%. Some investors accept lower returns (a significant amount) in high-appreciation markets, while others demand 15%+ in riskier or lower-growth areas.
                             </p>
                         </div>
                         <div className="bg-[hsl(var(--card))] p-6 rounded-xl border border-[hsl(var(--border))]">
                             <h3 className="font-semibold text-lg mb-2">How much should I budget for maintenance?</h3>
                             <p className="text-[hsl(var(--muted-foreground))] text-sm">
-                                A common rule of thumb is 1% of the property value per year, or 5-10% of the gross rent. Older homes generally require higher maintenance budgets than newer ones.
+                                A common rule of thumb is 1% of the property value per year, or a significant amount of the gross rent. Older homes generally require higher maintenance budgets than newer ones.
                             </p>
                         </div>
                         <div className="bg-[hsl(var(--card))] p-6 rounded-xl border border-[hsl(var(--border))]">
                             <h3 className="font-semibold text-lg mb-2">Should I count vacancy if it's rented?</h3>
                             <p className="text-[hsl(var(--muted-foreground))] text-sm">
-                                Yes. Always budget for vacancy (typically 5-8%). Tenants move out, and turnover takes time. Ignoring vacancy is a common mistake that leads to overestimating returns.
+                                Yes. Always budget for vacancy (typically a significant amount). Tenants move out, and turnover takes time. Ignoring vacancy is a common mistake that leads to overestimating returns.
                             </p>
                         </div>
                         <div className="bg-[hsl(var(--card))] p-6 rounded-xl border border-[hsl(var(--border))]">

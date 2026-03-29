@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     keywords: "batch convert heic to jpg client side, free online avif to png no upload, heic to webp converter, convert iphone photos to png online, heic to jpg batch, heif converter, avif batch converter",
     openGraph: {
         title: "Free HEIC & AVIF Batch Converter Online",
-        description: "Batch convert iPhone HEIC photos and AVIF images to PNG or JPG. 100% free and private.",
+        description: "Batch convert iPhone HEIC photos and AVIF images to PNG or JPG. Free Online Tool and private.",
         type: "website",
         url: "https://statementextract.com/convert/batch-converter"
     },
@@ -78,7 +78,7 @@ export default function BatchConverterPage() {
                         {[
                             { icon: Images, title: "Batch Processing", desc: "Convert dozens of files at once. No limits on quantity." },
                             { icon: Smartphone, title: "iPhone Photos Ready", desc: "Convert HEIC/HEIF from any iPhone or iPad instantly." },
-                            { icon: Lock, title: "100% Private", desc: "Files never leave your device. All processing is client-side." },
+                            { icon: Lock, title: "Private & Secure", desc: "Files never leave your device. All processing is client-side." },
                             { icon: Zap, title: "Lightning Fast", desc: "Uses your browser's native image processing for speed." },
                             { icon: Shield, title: "No Signup", desc: "No account needed. No email. Just convert and download." },
                             { icon: Globe, title: "Works Everywhere", desc: "Chrome, Firefox, Safari, Edge — any modern browser." },
@@ -143,7 +143,7 @@ export default function BatchConverterPage() {
                         Privacy & Security
                     </h3>
                     <p className="text-[hsl(var(--muted-foreground))]">
-                        Unlike other converters that upload your photos to remote servers, our tool processes everything <strong>100% client-side</strong> in your browser. Your photos <strong>never leave your device</strong>, making this the most secure way to convert sensitive images.
+                        Unlike other converters that upload your photos to remote servers, our tool processes everything <strong>Fully Client-Side</strong> in your browser. Your photos <strong>never leave your device</strong>, making this the most secure way to convert sensitive images.
                     </p>
                 </div>
             </section>

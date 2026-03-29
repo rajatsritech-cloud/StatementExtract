@@ -16,7 +16,7 @@ export const LandingPageSchema = () => {
                     "price": "0",
                     "priceCurrency": "USD"
                 },
-                "description": "Free Bank Statement Converter. Automatically convert PDF bank statements to Excel, CSV, QuickBooks, and Xero formats with 99% accuracy.",
+                "description": "Convert PDF bank statements to Excel, CSV, or QBO seamlessly. Fast, secure, and private browser-based extraction for accountants and bookkeepers.",
             },
             {
                 "@type": "WebSite",

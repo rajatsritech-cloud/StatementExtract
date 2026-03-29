@@ -6,7 +6,7 @@ import { CheckCircle, Shield, Zap, Building2, FileSpreadsheet } from "lucide-rea
 
 export const metadata: Metadata = {
     title: "Chase Bank Statement to Excel Converter | Free PDF to CSV | Statement Extract",
-    description: "Convert Chase Bank PDF statements to Excel or CSV instantly. Free online tool for Chase checking, savings, and credit card statements. No signup, 100% accurate.",
+    description: "Convert Chase Bank PDF statements to Excel or CSV instantly. Free online tool for Chase checking, savings, and credit card statements. No signup, high-precision accuracy.",
     keywords: "chase bank statement to excel, chase statement converter, chase pdf to excel, chase bank statement csv, convert chase statement, chase bank pdf converter, chase checking statement excel, chase credit card statement excel",
     openGraph: {
         title: "Chase Bank Statement to Excel Converter - Free Online Tool",
@@ -80,7 +80,7 @@ const faqSchema = {
             "name": "How accurate is the Chase statement conversion?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Our AI-powered tool achieves 99.9% accuracy on Chase statements using intelligent document processing specifically trained on bank statement formats."
+                "text": "Our AI-powered tool achieves High accuracy on Chase statements using intelligent document processing specifically trained on bank statement formats."
             }
         },
         {
@@ -189,7 +189,7 @@ export default function ChaseBankStatementPage() {
                         {[
                             { step: 1, title: "Download from Chase.com", desc: "Log into your Chase account, go to Statements, and download your statement as PDF." },
                             { step: 2, title: "Upload to Our Converter", desc: "Drag and drop your Chase PDF or click to browse. Multiple files supported." },
-                            { step: 3, title: "Get Your Excel/CSV", desc: "Our AI extracts all transactions with 99.9% accuracy. Download as Excel or CSV." },
+                            { step: 3, title: "Get Your Excel/CSV", desc: "Our AI extracts all transactions with High accuracy. Download as Excel or CSV." },
                         ].map((item) => (
                             <div key={item.step} className="flex gap-4 items-start">
                                 <div className="w-10 h-10 rounded-full bg-[hsl(var(--primary))] text-white flex items-center justify-center font-bold shrink-0">
@@ -286,12 +286,12 @@ export default function ChaseBankStatementPage() {
                     <div className="space-y-6">
                         {[
                             { q: "How do I download my Chase bank statement as a PDF?", a: "Log into chase.com, go to your account, click 'See statements', select the month you need, and click the download or print icon to save as PDF." },
-                            { q: "Does this work with scanned Chase statements?", a: "Yes! Our AI-powered OCR technology can extract data from scanned PDFs and images with 99%+ accuracy." },
+                            { q: "Does this work with scanned Chase statements?", a: "Yes! Our AI-powered OCR technology can extract data from scanned PDFs and images with high-precision accuracy." },
                             { q: "Can I convert multiple Chase statements at once?", a: "Yes, you can upload multiple PDF files and convert them all in one batch. Each will be processed and available for download." },
                             { q: "Is my Chase financial data secure?", a: "Absolutely. All processing happens securely with bank-level 256-bit encryption. We never store your statement data permanently." },
                             { q: "What format will my converted Chase statement be in?", a: "You can choose Excel (.xlsx) or CSV format. Both include clean columns: Date, Description, Amount, and Balance." },
                             { q: "Will this work with Chase credit card statements?", a: "Yes! We support all Chase statement types including Sapphire, Freedom, Ink Business, and all checking/savings accounts." },
-                            { q: "How accurate is the Chase statement conversion?", a: "Our AI achieves 99.9% accuracy on Chase statements. We use intelligent document processing specifically trained on bank statement formats." },
+                            { q: "How accurate is the Chase statement conversion?", a: "Our AI achieves high accuracy on Chase statements. We use intelligent document processing specifically trained on bank statement formats." },
                             { q: "Can I import the converted data into QuickBooks?", a: "Yes! The CSV output is fully compatible with QuickBooks, Xero, Sage, and other accounting software for easy bank feed import." },
                         ].map((faq, i) => (
                             <div key={i} className="p-6 rounded-2xl bg-[hsl(var(--card))] border border-[hsl(var(--border))]">

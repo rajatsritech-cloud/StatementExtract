@@ -17,11 +17,11 @@ import {
 
 export const metadata: Metadata = {
     title: "QFX to CSV Converter Free Online | Export Quicken to Excel | Statement Extract",
-    description: "Free QFX to CSV converter online. Convert Quicken QFX files to Excel-ready CSV spreadsheets instantly. Also supports OFX and QBO files. 100% private browser processing.",
+    description: "Free QFX to CSV converter online. Convert Quicken QFX files to Excel-ready CSV spreadsheets instantly. Also supports OFX and QBO files. Private & Secure browser processing.",
     keywords: "qfx to csv converter, qfx to csv online, convert qfx to csv, qfx to excel converter, qfx file to csv, quicken to csv, ofx to csv, qbo to csv, export qfx to spreadsheet",
     openGraph: {
         title: "QFX to CSV Converter Free Online | Quicken to Excel",
-        description: "Convert QFX, OFX, QBO files to CSV spreadsheets. Free, instant, 100% private processing.",
+        description: "Convert QFX, OFX, QBO files to CSV spreadsheets. Free, instant, Private & Secure processing.",
         type: "website",
         url: "https://statementextract.com/convert/qfx-to-csv",
         images: ["https://statementextract.com/assets/StatementExtract_Workflow_img.png"]
@@ -78,7 +78,7 @@ const faqSchema = {
             "name": "Is this QFX to CSV converter free?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes, it's 100% free with no limits on file size or number of conversions. No signup required."
+                "text": "Yes, it's Free Online Tool with no limits on file size or number of conversions. No signup required."
             }
         },
         {
@@ -160,7 +160,7 @@ export default function QfxToCsvPage() {
                     </h2>
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {[
-                            { icon: Lock, title: "100% Private", desc: "Files never leave your device. All processing happens in your browser." },
+                            { icon: Lock, title: "Private & Secure", desc: "Files never leave your device. All processing happens in your browser." },
                             { icon: FileSpreadsheet, title: "Excel Ready", desc: "CSV output opens directly in Excel, Google Sheets, or any spreadsheet app." },
                             { icon: Zap, title: "Instant Conversion", desc: "No uploads, no waiting. Convert files in milliseconds." },
                             { icon: Shield, title: "No Signup Required", desc: "No email, no account. Just drop your file and convert." },
@@ -287,7 +287,7 @@ export default function QfxToCsvPage() {
                         The Best Free QFX to CSV Converter in 2026
                     </h2>
                     <p className="text-[hsl(var(--muted-foreground))] mb-4">
-                        Need to <strong>convert QFX to CSV</strong> for use in Excel or Google Sheets? Our free <strong>online QFX to CSV converter</strong> transforms Quicken QFX files into standard CSV spreadsheets in seconds. Unlike other tools, it runs <strong>100% in your browser</strong> - your financial data never leaves your device.
+                        Need to <strong>convert QFX to CSV</strong> for use in Excel or Google Sheets? Our free <strong>online QFX to CSV converter</strong> transforms Quicken QFX files into standard CSV spreadsheets in seconds. Unlike other tools, it runs <strong>entirely in your browser</strong> - your financial data never leaves your device.
                     </p>
 
                     <h3 className="text-xl font-semibold text-[hsl(var(--foreground))] mb-4 mt-8">

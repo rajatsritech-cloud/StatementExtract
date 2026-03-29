@@ -38,14 +38,14 @@ export const metadata: Metadata = {
     ],
     openGraph: {
         title: "Add Page Numbers to PDF Free Online - No Signup Required",
-        description: "Insert page numbers anywhere on your PDF. Choose position, format, and starting page. 100% free and private.",
+        description: "Insert page numbers anywhere on your PDF. Choose position, format, and starting page. Free Online Tool and private.",
         type: "website",
         url: "https://statementextract.com/convert/add-page-numbers-pdf"
     },
     twitter: {
         card: "summary_large_image",
         title: "Add Page Numbers to PDF Free Online",
-        description: "Insert page numbers to PDF. Choose position and format. Works on mobile. 100% free."
+        description: "Insert page numbers to PDF. Choose position and format. Works on mobile. Free Online Tool."
     },
     alternates: {
         canonical: "https://statementextract.com/convert/add-page-numbers-pdf/"
@@ -142,7 +142,7 @@ const faqSchema = {
             "name": "Is this page numbering tool really free?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes, this tool is 100% free with no hidden costs, no watermarks, and no signup required. Your PDF is processed entirely in your browser, so it never leaves your device."
+                "text": "Yes, this tool is Free Online Tool with no hidden costs, no watermarks, and no signup required. Your PDF is processed entirely in your browser, so it never leaves your device."
             }
         },
         {

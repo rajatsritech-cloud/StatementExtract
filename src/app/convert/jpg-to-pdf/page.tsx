@@ -6,11 +6,11 @@ import { FileImage, FileText, Zap, Shield, Smartphone, Settings, Download, Check
 // Maximum SEO metadata targeting high-volume long-tail keywords
 export const metadata: Metadata = {
     title: "JPG to PDF Converter Free Online | Convert Images to PDF | Statement Extract",
-    description: "Free JPG to PDF converter online. Convert JPG, PNG, images to PDF instantly. Combine multiple photos into one PDF. No watermark, no signup, 100% free. Works on iPhone, Android, Windows, Mac.",
+    description: "Free JPG to PDF converter online. Convert JPG, PNG, images to PDF instantly. Combine multiple photos into one PDF. No watermark, no signup, Free Online Tool. Works on iPhone, Android, Windows, Mac.",
     keywords: "jpg to pdf, jpg to pdf converter, convert jpg to pdf, image to pdf, png to pdf, photo to pdf, picture to pdf, jpg to pdf free, jpg to pdf online, convert image to pdf, jpg to pdf converter free, combine images to pdf, multiple jpg to pdf, jpg to pdf no watermark, jpg to pdf iphone, jpg to pdf android, convert picture to pdf, jpeg to pdf, jpg to pdf online free, image to pdf converter",
     openGraph: {
         title: "Free JPG to PDF Converter Online - No Watermark",
-        description: "Convert JPG, PNG, images to PDF instantly. Combine multiple photos. 100% free, no signup required.",
+        description: "Convert JPG, PNG, images to PDF instantly. Combine multiple photos. Free Online Tool, no signup required.",
         type: "website",
         url: "https://statementextract.com/convert/jpg-to-pdf",
         locale: "en_US"
@@ -77,7 +77,7 @@ const faqSchema = {
             "name": "Is this JPG to PDF converter really free?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes, 100% free with no limits, no watermarks, and no signup required. Convert as many images to PDF as you need."
+                "text": "Yes, Free Online Tool with no limits, no watermarks, and no signup required. Convert as many images to PDF as you need."
             }
         },
         {
@@ -169,7 +169,7 @@ export default function JPGtoPDFPage() {
                     <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                         {[
                             { icon: Zap, title: "Instant Conversion", desc: "Convert images to PDF in seconds. No waiting, no processing queues." },
-                            { icon: Shield, title: "100% Private", desc: "Your files never leave your device. All processing happens in your browser." },
+                            { icon: Shield, title: "Private & Secure", desc: "Your files never leave your device. All processing happens in your browser." },
                             { icon: Smartphone, title: "Works Everywhere", desc: "iPhone, Android, Windows, Mac - works on any device with a browser." },
                             { icon: Download, title: "No Watermarks", desc: "Download clean PDFs without any watermarks or branding." },
                         ].map((feature, i) => (
@@ -333,7 +333,7 @@ export default function JPGtoPDFPage() {
                         {[
                             { q: "How do I convert JPG to PDF?", a: "Upload your JPG image(s), arrange them in your preferred order, select page size and orientation, then click Convert to PDF. Download your PDF instantly." },
                             { q: "Can I combine multiple images into one PDF?", a: "Yes! Upload multiple JPG, PNG, or other images. Reorder them as needed, then convert all images into a single PDF document." },
-                            { q: "Is this JPG to PDF converter free?", a: "Yes, 100% free with no limits, no watermarks, and no signup required. Convert unlimited images to PDF." },
+                            { q: "Is this JPG to PDF converter free?", a: "Yes, Free Online Tool with no limits, no watermarks, and no signup required. Convert unlimited images to PDF." },
                             { q: "Does it work on iPhone and Android?", a: "Yes, works on all devices - iPhone, iPad, Android, Windows, Mac, Linux. Just use your browser, no app needed." },
                             { q: "What image formats are supported?", a: "We support JPG/JPEG, PNG, WebP, and GIF. All formats are converted to high-quality PDF." },
                             { q: "Are my images secure?", a: "Yes! All processing happens in your browser. Your images never leave your device or get uploaded to any server." },

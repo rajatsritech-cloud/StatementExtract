@@ -5,11 +5,11 @@ import { Zap, Shield, Globe, FileImage } from "lucide-react";
 
 export const metadata: Metadata = {
     title: "Free AVIF to PNG Converter Online | No Upload Limit | Statement Extract",
-    description: "Convert AVIF images to PNG format instantly. 100% free, client-side conversion with no file size limits. No signup required. Works on all devices.",
+    description: "Convert AVIF images to PNG format instantly. Free Online Tool, client-side conversion with no file size limits. No signup required. Works on all devices.",
     keywords: "AVIF to PNG, convert AVIF to PNG, AVIF converter, free image converter, online AVIF converter, AVIF to PNG online",
     openGraph: {
         title: "Free AVIF to PNG Converter Online",
-        description: "Convert AVIF images to PNG format instantly. 100% free, no signup required.",
+        description: "Convert AVIF images to PNG format instantly. Free Online Tool, no signup required.",
         type: "website",
         url: "https://statementextract.com/convert/avif-converter/avif-to-png"
     },
@@ -52,7 +52,7 @@ export default function AvifToPngPage() {
                 <ImageConverter
                     targetFormat="png"
                     title="Free AVIF to PNG Converter"
-                    description="Convert your AVIF images to PNG format instantly. 100% free, runs in your browser."
+                    description="Convert your AVIF images to PNG format instantly. Free Online Tool, runs in your browser."
                 />
             </section>
 
@@ -65,7 +65,7 @@ export default function AvifToPngPage() {
                     <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                         {[
                             { icon: Zap, title: "Instant Conversion", desc: "No waiting. Convert images in milliseconds using your browser." },
-                            { icon: Shield, title: "100% Private", desc: "Files never leave your device. All processing happens locally." },
+                            { icon: Shield, title: "Private & Secure", desc: "Files never leave your device. All processing happens locally." },
                             { icon: Globe, title: "Works Everywhere", desc: "Chrome, Firefox, Safari, Edge — any modern browser, any device." },
                             { icon: FileImage, title: "No Limits", desc: "Convert as many images as you want. No daily limits, no signup." },
                         ].map((feature, i) => (
@@ -132,7 +132,7 @@ export default function AvifToPngPage() {
                         Is This Converter Free?
                     </h3>
                     <p className="text-[hsl(var(--muted-foreground))]">
-                        Yes! Our AVIF to PNG converter is <strong>completely free</strong> with no hidden fees, no signup required, and no file size limits. Your images are processed entirely in your browser, meaning they never leave your device — ensuring <strong>100% privacy</strong>.
+                        Yes! Our AVIF to PNG converter is <strong>completely free</strong> with no hidden fees, no signup required, and no file size limits. Your images are processed entirely in your browser, meaning they never leave your device — ensuring <strong>Privacy & Security</strong>.
                     </p>
                 </div>
             </section>
@@ -145,7 +145,7 @@ export default function AvifToPngPage() {
                     </h2>
                     <div className="space-y-6">
                         {[
-                            { q: "Is this AVIF to PNG converter free?", a: "Yes, it's 100% free with no limits or signup required." },
+                            { q: "Is this AVIF to PNG converter free?", a: "Yes, it's Free Online Tool with no limits or signup required." },
                             { q: "Are my images uploaded to a server?", a: "No. All conversion happens in your browser. Your files never leave your device." },
                             { q: "What browsers support this tool?", a: "Chrome, Edge, Firefox, and Safari all support our converter." },
                             { q: "Can I convert multiple images at once?", a: "Yes! Use our Batch Converter tool for converting multiple images at once." },

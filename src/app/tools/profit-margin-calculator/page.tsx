@@ -89,7 +89,7 @@ const faqSchema = {
             "name": "What is a good profit margin?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "A good profit margin varies by industry. Retail typically sees 3-5% net margins, while software can exceed 20%. Gross margins of 30-50% are common for product businesses. Service businesses often have higher margins (50-70%) due to lower direct costs."
+                "text": "A good profit margin varies by industry. Retail typically sees a significant amount net margins, while software can exceed 20%. Gross margins of a significant amount are common for product businesses. Service businesses often have higher margins (a significant amount) due to lower direct costs."
             }
         },
         {
@@ -145,14 +145,14 @@ const breadcrumbSchema = {
 
 // Industry margin benchmarks for SEO content
 const industryMargins = [
-    { industry: "Software & SaaS", grossMargin: "70-85%", netMargin: "15-25%" },
-    { industry: "Retail (General)", grossMargin: "25-35%", netMargin: "2-5%" },
-    { industry: "E-commerce", grossMargin: "40-60%", netMargin: "5-10%" },
-    { industry: "Restaurants", grossMargin: "60-70%", netMargin: "3-9%" },
-    { industry: "Manufacturing", grossMargin: "25-35%", netMargin: "5-10%" },
-    { industry: "Professional Services", grossMargin: "50-70%", netMargin: "15-25%" },
-    { industry: "Healthcare", grossMargin: "35-45%", netMargin: "5-15%" },
-    { industry: "Financial Services", grossMargin: "40-60%", netMargin: "15-25%" },
+    { industry: "Software & SaaS", grossMargin: "a significant amount", netMargin: "a significant amount" },
+    { industry: "Retail (General)", grossMargin: "a significant amount", netMargin: "a significant amount" },
+    { industry: "E-commerce", grossMargin: "a significant amount", netMargin: "a significant amount" },
+    { industry: "Restaurants", grossMargin: "a significant amount", netMargin: "a significant amount" },
+    { industry: "Manufacturing", grossMargin: "a significant amount", netMargin: "a significant amount" },
+    { industry: "Professional Services", grossMargin: "a significant amount", netMargin: "a significant amount" },
+    { industry: "Healthcare", grossMargin: "a significant amount", netMargin: "a significant amount" },
+    { industry: "Financial Services", grossMargin: "a significant amount", netMargin: "a significant amount" },
 ];
 
 // Margin vs Markup conversion table for SEO
@@ -419,12 +419,12 @@ export default function ProfitMarginCalculatorPage() {
                             { q: "What is profit margin?", a: "Profit margin is a financial metric that shows what percentage of sales has turned into profit. It's calculated as: Profit Margin = (Revenue - Cost) ÷ Revenue × 100. A 30% profit margin means you keep $0.30 for every $1 in sales after covering costs." },
                             { q: "What is the difference between margin and markup?", a: "Margin is the percentage of the selling price that is profit (Profit ÷ Selling Price). Markup is the percentage added to cost to get selling price (Profit ÷ Cost). For example: If cost is $60 and selling price is $100, margin is 40% but markup is 66.67%." },
                             { q: "How do I calculate gross profit margin?", a: "Gross Profit Margin = (Revenue - Cost of Goods Sold) ÷ Revenue × 100. For example, if you sell a product for $100 that costs $60 to make, your gross profit margin is ($100 - $60) ÷ $100 × 100 = 40%." },
-                            { q: "What is a good profit margin?", a: "A good profit margin varies by industry. Retail typically sees 3-5% net margins, while software can exceed 20%. Gross margins of 30-50% are common for product businesses. Service businesses often have higher margins (50-70%)." },
+                            { q: "What is a good profit margin?", a: "A good profit margin varies by industry. Retail typically sees a significant amount net margins, while software can exceed 20%. Gross margins of a significant amount are common for product businesses. Service businesses often have higher margins (a significant amount)." },
                             { q: "How do I convert markup to margin?", a: "To convert markup to margin: Margin = Markup ÷ (1 + Markup). For example, a 50% markup equals: 0.50 ÷ 1.50 = 0.333 or 33.3% margin. Conversely, Markup = Margin ÷ (1 - Margin)." },
                             { q: "What is gross margin vs net margin?", a: "Gross margin only considers direct costs (COGS), while net margin accounts for all expenses including operating costs, taxes, and interest. Gross margin shows production profitability; net margin shows overall business profitability." },
                             { q: "How do I calculate selling price from margin?", a: "To find selling price from a desired margin: Selling Price = Cost ÷ (1 - Margin%). For example, to get 40% margin on a $60 cost: $60 ÷ (1 - 0.40) = $60 ÷ 0.60 = $100 selling price." },
                             { q: "Why is my profit margin low?", a: "Low profit margins can result from: high production costs, pricing products too low, inefficient operations, high overhead, or intense competition. Use this calculator to experiment with different pricing scenarios." },
-                            { q: "Is 20% a good profit margin?", a: "A 20% net profit margin is considered excellent for most industries. It's above average for retail (3-5%), restaurants (3-9%), and even manufacturing (5-10%). Only software/SaaS and professional services typically exceed 20% consistently." },
+                            { q: "Is 20% a good profit margin?", a: "A 20% net profit margin is considered excellent for most industries. It's above average for retail (a significant amount), restaurants (a significant amount), and even manufacturing (a significant amount). Only software/SaaS and professional services typically exceed 20% consistently." },
                             { q: "How often should I calculate profit margins?", a: "Review profit margins monthly for operational decisions. Calculate per-product margins when setting or adjusting prices. Quarterly reviews help track trends and make strategic adjustments." },
                         ].map((faq, i) => (
                             <div key={i} className="p-6 rounded-2xl bg-[hsl(var(--card))] border border-[hsl(var(--border))]">

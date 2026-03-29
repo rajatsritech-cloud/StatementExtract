@@ -433,7 +433,7 @@ const ExportSettingsModal = ({ settings, format, onSettingsChange, onDownload, o
         </div>
 
         <p className="text-sm text-[hsl(var(--muted-foreground))] mb-6 leading-relaxed bg-[hsl(var(--muted))]/30 p-3 rounded-lg border border-[hsl(var(--border))]">
-          Configure metadata to ensure 100% compatibility with {formatName}. Fields marked <span className="text-[hsl(var(--primary))] font-bold">*</span> are highly recommended for seamless import.
+          Configure metadata to ensure maximum compatibility with {formatName}. Fields marked <span className="text-[hsl(var(--primary))] font-bold">*</span> are highly recommended for seamless import.
         </p>
 
         <div className="space-y-4 max-h-[50vh] overflow-y-auto px-1 pr-2 [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[hsl(var(--border))] [&::-webkit-scrollbar-thumb]:rounded-full">
