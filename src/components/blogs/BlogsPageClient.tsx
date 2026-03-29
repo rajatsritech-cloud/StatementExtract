@@ -102,7 +102,7 @@ export function BlogsPageClient({ posts }: BlogsPageClientProps) {
                         </span>
                     </div>
                     <h1 className="text-4xl md:text-5xl font-bold text-[hsl(var(--foreground))] mb-6 tracking-tight">
-                        News, tutorials, and stories from the <span className="bg-gradient-primary bg-clip-text text-transparent">Statement Extract</span> team
+                        News, tutorials, and stories from <span className="bg-gradient-primary bg-clip-text text-transparent">Rajat Srivastava</span>
                     </h1>
                     <p className="text-lg text-[hsl(var(--muted-foreground))] max-w-2xl mx-auto leading-relaxed">
                         Stay up to date with best practices for document automation, release notes, and deep dives into how we power data extraction for world-class finance teams.
@@ -209,7 +209,7 @@ export function BlogsPageClient({ posts }: BlogsPageClientProps) {
                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="h-2.5 w-2.5" aria-hidden="true">
                                                     <path fillRule="evenodd" d="M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0ZM9 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM6.75 8a.75.75 0 0 0 0 1.5h.75v1.75a.75.75 0 0 0 1.5 0v-2.5A.75.75 0 0 0 8.25 8h-1.5Z" clipRule="evenodd" />
                                                 </svg>
-                                                <span>Illustration by Statement Extract</span>
+                                                <span>Illustration by Rajat Srivastava</span>
                                             </div>
                                         </>
                                     ) : (
