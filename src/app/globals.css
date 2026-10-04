@@ -5,7 +5,7 @@ All colors MUST be HSL.
 */
 
 @layer base {
-  :root { 
+  :root {
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
 
@@ -17,7 +17,7 @@ All colors MUST be HSL.
 
     --primary: 142 76% 36%;
     --primary-foreground: 0 0% 100%;
-    
+
     --primary-light: 142 76% 46%;
     --primary-dark: 142 76% 26%;
 
@@ -38,23 +38,23 @@ All colors MUST be HSL.
     --ring: 142 76% 36%;
 
     --radius: 0.75rem;
-    
+
     /* Font Families */
     --font-family--paragraph: 'Inter', Arial, sans-serif;
-    --font-family--headings: 'Clash Grotesk', sans-serif;
-    
+    --font-family--headings: sans-serif;
+
     /* Gradients */
     --gradient-primary: linear-gradient(135deg, hsl(142 76% 36%), hsl(160 76% 40%));
     --gradient-hero: linear-gradient(180deg, hsl(240 10% 3.9%), hsl(240 10% 6%));
     --gradient-card: linear-gradient(135deg, hsl(240 10% 6%), hsl(240 8% 8%));
     --gradient-button: linear-gradient(90deg, hsl(142 76% 36%), hsl(160 76% 40%), hsl(142 76% 36%));
-    
+
     /* Shadows */
     --shadow-sm: 0 1px 2px 0 hsl(0 0% 0% / 0.3);
     --shadow-md: 0 4px 6px -1px hsl(0 0% 0% / 0.4);
     --shadow-lg: 0 10px 25px -5px hsl(0 0% 0% / 0.5);
     --shadow-glow: 0 0 40px hsl(142 76% 36% / 0.4);
-    
+
     /* Animation */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
@@ -87,7 +87,7 @@ All colors MUST be HSL.
 
     --primary: 142 76% 40%;
     --primary-foreground: 0 0% 100%;
-    
+
     --primary-light: 142 76% 50%;
     --primary-dark: 142 76% 30%;
 
@@ -106,12 +106,12 @@ All colors MUST be HSL.
     --border: 240 5% 18%;
     --input: 240 5% 18%;
     --ring: 142 76% 40%;
-    
+
     --gradient-primary: linear-gradient(135deg, hsl(142 76% 40%), hsl(160 76% 44%));
     --gradient-hero: linear-gradient(180deg, hsl(240 10% 2%), hsl(240 10% 4%));
     --gradient-card: linear-gradient(135deg, hsl(240 10% 4%), hsl(240 8% 6%));
     --gradient-button: linear-gradient(90deg, hsl(142 76% 40%), hsl(160 76% 44%), hsl(142 76% 40%));
-    
+
     --shadow-sm: 0 1px 2px 0 hsl(0 0% 0% / 0.4);
     --shadow-md: 0 4px 6px -1px hsl(0 0% 0% / 0.5);
     --shadow-lg: 0 10px 25px -5px hsl(0 0% 0% / 0.6);
@@ -126,6 +126,55 @@ All colors MUST be HSL.
   button[aria-disabled="true"] {
     cursor: not-allowed;
   }
+
+  /* Color Themes */
+  [data-theme="green"] {
+    --primary: 142 76% 36%;
+    --primary-foreground: 0 0% 100%;
+    --primary-light: 142 76% 46%;
+    --primary-dark: 142 76% 26%;
+    --ring: 142 76% 36%;
+    --accent: 142 76% 36%;
+    --gradient-primary: linear-gradient(135deg, hsl(142 76% 36%), hsl(160 76% 40%));
+    --gradient-button: linear-gradient(90deg, hsl(142 76% 36%), hsl(160 76% 40%), hsl(142 76% 36%));
+    --shadow-glow: 0 0 40px hsl(142 76% 36% / 0.4);
+  }
+
+  [data-theme="blue"] {
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 100%;
+    --primary-light: 217 91% 70%;
+    --primary-dark: 217 91% 50%;
+    --ring: 217 91% 60%;
+    --accent: 217 91% 60%;
+    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%), hsl(200 91% 60%));
+    --gradient-button: linear-gradient(90deg, hsl(217 91% 60%), hsl(200 91% 60%), hsl(217 91% 60%));
+    --shadow-glow: 0 0 40px hsl(217 91% 60% / 0.4);
+  }
+
+  [data-theme="violet"] {
+    --primary: 262 83% 58%;
+    --primary-foreground: 0 0% 100%;
+    --primary-light: 262 83% 68%;
+    --primary-dark: 262 83% 48%;
+    --ring: 262 83% 58%;
+    --accent: 262 83% 58%;
+    --gradient-primary: linear-gradient(135deg, hsl(262 83% 58%), hsl(280 83% 58%));
+    --gradient-button: linear-gradient(90deg, hsl(262 83% 58%), hsl(280 83% 58%), hsl(262 83% 58%));
+    --shadow-glow: 0 0 40px hsl(262 83% 58% / 0.4);
+  }
+
+  [data-theme="orange"] {
+    --primary: 24 95% 53%;
+    --primary-foreground: 0 0% 100%;
+    --primary-light: 24 95% 63%;
+    --primary-dark: 24 95% 43%;
+    --ring: 24 95% 53%;
+    --accent: 24 95% 53%;
+    --gradient-primary: linear-gradient(135deg, hsl(24 95% 53%), hsl(40 95% 53%));
+    --gradient-button: linear-gradient(90deg, hsl(24 95% 53%), hsl(40 95% 53%), hsl(24 95% 53%));
+    --shadow-glow: 0 0 40px hsl(24 95% 53% / 0.4);
+  }
 }
 
 @layer base {
@@ -137,11 +186,33 @@ All colors MUST be HSL.
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
     font-family: var(--font-family--paragraph);
+    overflow-x: hidden;
+    max-width: 100%;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  /* overflow-x: hidden on html for mobile, removed on desktop to enable sticky positioning */
+  html {
+    max-width: 100%;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+  }
+
+  /* Desktop: Remove overflow-x: hidden from html to enable sticky positioning */
+  @media (min-width: 1024px) {
+    html {
+      overflow-x: visible;
+    }
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: var(--font-family--headings);
   }
+
 }
 
 /* Utility Classes */
@@ -172,7 +243,7 @@ All colors MUST be HSL.
 }
 
 .font-clash {
-  font-family: 'Clash Grotesk', sans-serif;
+  font-family: sans-serif;
 }
 
 .bg-gradient-primary {
@@ -196,7 +267,7 @@ All colors MUST be HSL.
   padding: 0;
   margin: -1px;
   overflow: hidden;
-  clip: rect(0,0,0,0);
+  clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border-width: 0;
 }
@@ -223,6 +294,7 @@ All colors MUST be HSL.
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -234,9 +306,12 @@ All colors MUST be HSL.
 }
 
 @keyframes float {
-  0%,to {
+
+  0%,
+  to {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-20px);
   }
@@ -251,6 +326,7 @@ All colors MUST be HSL.
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -261,10 +337,29 @@ All colors MUST be HSL.
   animation: slide-up .5s ease-out;
 }
 
+@keyframes dropdown-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-dropdown-enter {
+  animation: dropdown-enter .18s ease-out;
+}
+
 @keyframes gradient-shift {
-  0%,to {
+
+  0%,
+  to {
     background-position: 0% 50%;
   }
+
   50% {
     background-position: 100% 50%;
   }
@@ -276,19 +371,23 @@ All colors MUST be HSL.
 
 /* Background Patterns */
 .bg-grid-pattern-1 {
-  background-image: linear-gradient(to right,#80808012 1px,transparent 1px),linear-gradient(to bottom,#80808012 1px,transparent 1px);
+  background-image: linear-gradient(to right, hsl(var(--primary) / 0.1) 1px, transparent 1px), linear-gradient(to bottom, hsl(var(--primary) / 0.1) 1px, transparent 1px);
 }
 
 .bg-grid-pattern-2 {
-  background-image: linear-gradient(45deg,#80808008 1px,transparent 1px),linear-gradient(-45deg,#80808008 1px,transparent 1px);
+  background-image: linear-gradient(45deg, hsl(var(--primary) / 0.05) 1px, transparent 1px), linear-gradient(-45deg, hsl(var(--primary) / 0.05) 1px, transparent 1px);
 }
 
 .bg-grid-pattern-3 {
-  background-image: linear-gradient(to right,#80808008 1px,transparent 1px);
+  background-image: linear-gradient(to right, hsl(var(--primary) / 0.05) 1px, transparent 1px);
 }
 
 .bg-grid-pattern-4 {
-  background-image: radial-gradient(#80808010 1px,transparent 1px);
+  background-image: radial-gradient(hsl(var(--primary) / 0.1) 1px, transparent 1px);
+}
+
+.bg-grid-pattern-strong {
+  background-image: linear-gradient(to right, hsl(var(--primary) / 0.25) 1px, transparent 1px), linear-gradient(to bottom, hsl(var(--primary) / 0.25) 1px, transparent 1px);
 }
 
 /* Size Classes */
@@ -312,6 +411,18 @@ All colors MUST be HSL.
   background-size: 20px 20px;
 }
 
+.bg-size-80 {
+  background-size: 80px 80px;
+}
+
+.bg-size-96 {
+  background-size: 96px 96px;
+}
+
+.bg-size-128 {
+  background-size: 128px 128px;
+}
+
 /* Background Size */
 .bg-200\% {
   background-size: 200%;
@@ -321,13 +432,13 @@ All colors MUST be HSL.
 .shadow-glow {
   --tw-shadow: var(--shadow-glow);
   --tw-shadow-colored: var(--shadow-glow);
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),var(--tw-ring-shadow, 0 0 #0000),var(--tw-shadow);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
 .hover\:shadow-glow:hover {
   --tw-shadow: var(--shadow-glow);
   --tw-shadow-colored: var(--shadow-glow);
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),var(--tw-ring-shadow, 0 0 #0000),var(--tw-shadow);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
 /* Gradient Classes */
@@ -340,7 +451,7 @@ All colors MUST be HSL.
 }
 
 .bg-gradient-to-b {
-  background-image: linear-gradient(to bottom,var(--tw-gradient-stops));
+  background-image: linear-gradient(to bottom, var(--tw-gradient-stops));
 }
 
 .from-transparent {
@@ -361,12 +472,12 @@ All colors MUST be HSL.
 /* Transform Classes */
 .hover\:-translate-y-1:hover {
   --tw-translate-y: -.25rem;
-  transform: translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skew(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skew(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
 .group:hover .group-hover\:translate-x-1 {
   --tw-translate-x: .25rem;
-  transform: translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skew(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skew(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
 /* Border Classes */
@@ -517,15 +628,15 @@ All colors MUST be HSL.
 
 /* Grid Classes */
 .grid-cols-2 {
-  grid-template-columns: repeat(2,minmax(0,1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .grid-cols-3 {
-  grid-template-columns: repeat(3,minmax(0,1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .grid-cols-4 {
-  grid-template-columns: repeat(4,minmax(0,1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 /* Flex Classes */
@@ -728,7 +839,7 @@ All colors MUST be HSL.
 .after\:-translate-x-1\/2:after {
   content: var(--tw-content);
   --tw-translate-x: -50%;
-  transform: translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skew(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skew(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
 /* First/Last Child Classes */
@@ -877,7 +988,7 @@ All colors MUST be HSL.
 .data-\[state\=active\]\:shadow-sm[data-state=active] {
   --tw-shadow: var(--shadow-sm);
   --tw-shadow-colored: var(--shadow-sm);
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),var(--tw-ring-shadow, 0 0 #0000),var(--tw-shadow);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
 /* Animation Data Attributes */
@@ -885,6 +996,7 @@ All colors MUST be HSL.
   0% {
     height: var(--radix-accordion-content-height);
   }
+
   to {
     height: 0;
   }
@@ -898,6 +1010,7 @@ All colors MUST be HSL.
   0% {
     height: 0;
   }
+
   to {
     height: var(--radix-accordion-content-height);
   }
@@ -909,26 +1022,26 @@ All colors MUST be HSL.
 
 /* Transition Classes */
 .transition-\[left\,right\,width\] {
-  transition-property: left,right,width;
-  transition-timing-function: cubic-bezier(.4,0,.2,1);
+  transition-property: left, right, width;
+  transition-timing-function: cubic-bezier(.4, 0, .2, 1);
   transition-duration: .15s;
 }
 
 .transition-\[margin\,opa\] {
-  transition-property: margin,opa;
-  transition-timing-function: cubic-bezier(.4,0,.2,1);
+  transition-property: margin, opa;
+  transition-timing-function: cubic-bezier(.4, 0, .2, 1);
   transition-duration: .15s;
 }
 
 .transition-\[width\,height\,padding\] {
-  transition-property: width,height,padding;
-  transition-timing-function: cubic-bezier(.4,0,.2,1);
+  transition-property: width, height, padding;
+  transition-timing-function: cubic-bezier(.4, 0, .2, 1);
   transition-duration: .15s;
 }
 
 .transition-\[width\] {
   transition-property: width;
-  transition-timing-function: cubic-bezier(.4,0,.2,1);
+  transition-timing-function: cubic-bezier(.4, 0, .2, 1);
   transition-duration: .15s;
 }
 
@@ -941,7 +1054,7 @@ All colors MUST be HSL.
 }
 
 .ease-in-out {
-  transition-timing-function: cubic-bezier(.4,0,.2,1);
+  transition-timing-function: cubic-bezier(.4, 0, .2, 1);
 }
 
 .ease-linear {
@@ -952,14 +1065,14 @@ All colors MUST be HSL.
 @keyframes enter {
   0% {
     opacity: var(--tw-enter-opacity, 1);
-    transform: translate3d(var(--tw-enter-translate-x, 0),var(--tw-enter-translate-y, 0),0) scale3d(var(--tw-enter-scale, 1),var(--tw-enter-scale, 1),var(--tw-enter-scale, 1)) rotate(var(--tw-enter-rotate, 0));
+    transform: translate3d(var(--tw-enter-translate-x, 0), var(--tw-enter-translate-y, 0), 0) scale3d(var(--tw-enter-scale, 1), var(--tw-enter-scale, 1), var(--tw-enter-scale, 1)) rotate(var(--tw-enter-rotate, 0));
   }
 }
 
 @keyframes exit {
   to {
     opacity: var(--tw-exit-opacity, 1);
-    transform: translate3d(var(--tw-exit-translate-x, 0),var(--tw-exit-translate-y, 0),0) scale3d(var(--tw-exit-scale, 1),var(--tw-exit-scale, 1),var(--tw-exit-scale, 1)) rotate(var(--tw-exit-rotate, 0));
+    transform: translate3d(var(--tw-exit-translate-x, 0), var(--tw-exit-translate-y, 0), 0) scale3d(var(--tw-exit-scale, 1), var(--tw-exit-scale, 1), var(--tw-exit-scale, 1)) rotate(var(--tw-exit-rotate, 0));
   }
 }
 
@@ -994,65 +1107,65 @@ All colors MUST be HSL.
   .sm\:bottom-0 {
     bottom: 0;
   }
-  
+
   .sm\:right-0 {
     right: 0;
   }
-  
+
   .sm\:top-auto {
     top: auto;
   }
-  
+
   .sm\:mt-0 {
     margin-top: 0;
   }
-  
+
   .sm\:flex {
     display: flex;
   }
-  
+
   .sm\:max-w-sm {
     max-width: 24rem;
   }
-  
+
   .sm\:flex-row {
     flex-direction: row;
   }
-  
+
   .sm\:flex-col {
     flex-direction: column;
   }
-  
+
   .sm\:justify-end {
     justify-content: flex-end;
   }
-  
+
   .sm\:gap-2\.5 {
     gap: .625rem;
   }
-  
+
   .sm\:space-x-2>:not([hidden])~:not([hidden]) {
     --tw-space-x-reverse: 0;
     margin-right: calc(.5rem * var(--tw-space-x-reverse));
     margin-left: calc(.5rem * calc(1 - var(--tw-space-x-reverse)));
   }
-  
+
   .sm\:space-x-4>:not([hidden])~:not([hidden]) {
     --tw-space-x-reverse: 0;
     margin-right: calc(1rem * var(--tw-space-x-reverse));
     margin-left: calc(1rem * calc(1 - var(--tw-space-x-reverse)));
   }
-  
+
   .sm\:space-y-0>:not([hidden])~:not([hidden]) {
     --tw-space-y-reverse: 0;
     margin-top: calc(0px * calc(1 - var(--tw-space-y-reverse)));
     margin-bottom: calc(0px * var(--tw-space-y-reverse));
   }
-  
+
   .sm\:rounded-lg {
     border-radius: var(--radius);
   }
-  
+
   .sm\:text-left {
     text-align: left;
   }
@@ -1062,81 +1175,81 @@ All colors MUST be HSL.
   .md\:absolute {
     position: absolute;
   }
-  
+
   .md\:block {
     display: block;
   }
-  
+
   .md\:flex {
     display: flex;
   }
-  
+
   .md\:inline-flex {
     display: inline-flex;
   }
-  
+
   .md\:hidden {
     display: none;
   }
-  
+
   .md\:w-auto {
     width: auto;
   }
-  
+
   .md\:max-w-\[420px\] {
     max-width: 420px;
   }
-  
+
   .md\:grid-cols-2 {
-    grid-template-columns: repeat(2,minmax(0,1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  
+
   .md\:grid-cols-3 {
-    grid-template-columns: repeat(3,minmax(0,1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
-  
+
   .md\:grid-cols-4 {
-    grid-template-columns: repeat(4,minmax(0,1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
-  
+
   .md\:justify-start {
     justify-content: flex-start;
   }
-  
+
   .md\:p-16 {
     padding: 4rem;
-}
+  }
 
   .md\:py-16 {
     padding-top: 4rem;
     padding-bottom: 4rem;
   }
-  
+
   .md\:py-32 {
     padding-top: 8rem;
     padding-bottom: 8rem;
   }
-  
+
   .md\:text-5xl {
     font-size: 3rem;
     line-height: 1;
   }
-  
+
   .md\:text-7xl {
     font-size: 4.5rem;
     line-height: 1;
   }
-  
+
   .md\:text-sm {
     font-size: .875rem;
     line-height: 1.25rem;
   }
-  
+
   .md\:text-xl {
     font-size: 1.25rem;
     line-height: 1.75rem;
   }
-  
+
   .md\:opacity-0 {
     opacity: 0;
   }
@@ -1144,15 +1257,48 @@ All colors MUST be HSL.
 
 @media (min-width: 1024px) {
   .lg\:grid-cols-3 {
-    grid-template-columns: repeat(3,minmax(0,1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
-  
+
   .lg\:grid-cols-4 {
-    grid-template-columns: repeat(4,minmax(0,1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 
 /* Dark Mode Classes */
 .dark\:border-destructive:is(.dark *) {
   border-color: hsl(var(--destructive));
+}
+
+/* Clerk Branding Override */
+.cl-footer,
+.cl-internal-b3fm6y,
+.cl-userButtonPopoverFooter,
+.cl-internal-1dauvpw {
+  display: none !important;
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.3);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.5);
+}
+
+/* Firefox */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--muted-foreground) / 0.3) transparent;
 }

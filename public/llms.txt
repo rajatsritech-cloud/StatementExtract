@@ -1,0 +1,58 @@
+# Statement Extract
+
+> Extract data from bank statements, invoices & documents instantly using AI.
+
+Statement Extract is an AI-powered document processing platform that extracts structured data from bank statements, invoices, contracts, and other financial documents. It uses Intelligent Document Processing (IDP) technology that requires no templates, no training, and delivers instant results.
+
+## Documentation
+
+- [Home](https://statementextract.com/)
+- [Bank Statement to Excel/CSV](https://statementextract.com/convert-bank-statement-to-csv-excel/)
+- [Invoice to Excel](https://statementextract.com/convert-invoice-to-excel-csv/)
+- [Bank Statement to QuickBooks](https://statementextract.com/convert-bank-statement-to-quickbooks-xero/)
+
+## Free Tools
+
+### PDF Tools
+- [Merge PDF](https://statementextract.com/convert/merge-pdf/)
+- [Split PDF](https://statementextract.com/convert/split-pdf/)
+- [Compress PDF](https://statementextract.com/convert/compress-pdf/)
+- [Rotate PDF](https://statementextract.com/convert/rotate-pdf/)
+- [Unlock PDF](https://statementextract.com/convert/unlock-pdf/)
+- [Add Page Numbers to PDF](https://statementextract.com/convert/add-page-numbers-pdf/)
+- [JPG to PDF](https://statementextract.com/convert/jpg-to-pdf/)
+
+### Finance Converters
+- [CSV to QBO](https://statementextract.com/convert/csv-to-qbo/)
+- [CSV to OFX](https://statementextract.com/convert/csv-to-ofx/)
+- [CSV to MT940](https://statementextract.com/convert/csv-to-mt940/)
+- [QBO to CSV](https://statementextract.com/convert/qbo-to-csv/)
+- [QFX to CSV](https://statementextract.com/convert/qfx-to-csv/)
+- [QIF to CSV](https://statementextract.com/convert/qif-to-csv/)
+- [QIF to QBO](https://statementextract.com/convert/qif-to-qbo/)
+- [OFX to Excel](https://statementextract.com/convert/ofx-to-excel/)
+- [MT940 to Excel](https://statementextract.com/convert/mt940-to-excel/)
+- [Stripe to QBO](https://statementextract.com/convert/stripe-to-qbo/)
+- [PayPal to QBO](https://statementextract.com/convert/paypal-to-qbo/)
+
+### Finance Calculators
+- [Compound Interest Calculator](https://statementextract.com/tools/compound-interest-calculator/)
+- [Amortization Calculator](https://statementextract.com/tools/amortization-calculator/)
+- [Profit Margin Calculator](https://statementextract.com/tools/profit-margin-calculator/)
+- [GST/VAT Calculator](https://statementextract.com/tools/gst-vat-calculator/)
+
+### Image Tools
+- [Image Compressor](https://statementextract.com/convert/image-compressor/)
+- [Image to Base64](https://statementextract.com/convert/image-to-base64/)
+
+## Company
+
+- [About](https://statementextract.com/about/)
+- [Pricing](https://statementextract.com/pricing/)
+- [Blog](https://statementextract.com/blogs/)
+- [Contact](https://statementextract.com/contact/)
+
+## Social
+
+- [Twitter/X](https://x.com/statement3376)
+- [LinkedIn](https://linkedin.com/company/statement-extract)

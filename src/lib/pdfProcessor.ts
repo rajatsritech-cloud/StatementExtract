@@ -1,31 +1,63 @@
-import Tesseract from 'tesseract.js';
-import { debugExtractedText } from './textAnalyzer';
-import { extractUSBankTransactions, extractUSBankUserInfo } from './usBankPatterns';
-
-let pdfjsLibPromise: Promise<typeof import('pdfjs-dist/legacy/build/pdf.mjs')> | null = null;
-
-const loadPdfJs = async () => {
-  if (typeof window === 'undefined') {
-    throw new Error('PDF processing is only available in the browser');
-  }
-
-  if (!pdfjsLibPromise) {
-    pdfjsLibPromise = import('pdfjs-dist/legacy/build/pdf.mjs').then((module) => {
-      module.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${module.version}/legacy/build/pdf.worker.min.mjs`;
-      console.log('🔧 PDF.js worker configured:', module.GlobalWorkerOptions.workerSrc);
-      return module;
-    });
-  }
-
-  return pdfjsLibPromise;
-};
+"use client";
 
 export interface TransactionData {
   date: string;
+  date_iso?: string; // Standardized ISO date (YYYY-MM-DD)
   description: string;
   amount: number;
   balance: number;
   type: 'credit' | 'debit';
+  moneyIn?: number;
+  moneyOut?: number;
+  source_page?: number;  // Page number in PDF for audit trail
+  normalized_payee?: string;  // Cleaned up payee name (e.g., "Amazon Marketplace")
+
+  // Validation fields
+  suggested?: {
+    balance?: number | string;
+    credit?: number | string;
+    debit?: number | string;
+    message?: string;
+  };
+  _ledger_fixed?: boolean; // Keep for backward compatibility/styling
+  _validation_message?: string;
+  [key: string]: any; // Allow dynamic fields like "Reference", "Particulars"
+}
+
+// NEW: Section for multi-table display
+export interface TransactionSection {
+  name: string;  // "TRANSACTIONS", "CHECKS", etc.
+  transactions: TransactionData[];
+  summary?: {
+    transaction_count: number;
+    total_credits: number;
+    total_debits: number;
+    totalDepositsComputed?: number;
+    totalDepositsDiscrepancy?: boolean;
+    totalWithdrawalsComputed?: number;
+    totalWithdrawalsDiscrepancy?: boolean;
+  };
+}
+
+// NEW: Invoice Data Structure
+export interface InvoiceData {
+  metadata: {
+    invoiceNumber?: string;
+    invoiceDate?: string;
+    dueDate?: string;
+    vendorName?: string;
+    customerName?: string;
+    currency?: string;
+    subtotal?: number;
+    taxAmount?: number;
+    totalAmount?: number;
+  };
+  lineItems: Array<{
+    description: string;
+    quantity?: number;
+    unitPrice?: number;
+    amount?: number;
+  }>;
 }
 
 export interface ExtractedData {
@@ -35,487 +67,638 @@ export interface ExtractedData {
     accountNumber?: string;
     bankName?: string;
     statementPeriod?: string;
+    currency?: string; // Added currency field
     accountSummary?: {
       beginningBalance: number;
       endingBalance: number;
       totalDeposits: number;
       totalWithdrawals: number;
+      // Validation fields
+      totalDepositsComputed?: number;
+      totalDepositsDiscrepancy?: boolean;
+      totalWithdrawalsComputed?: number;
+      totalWithdrawalsDiscrepancy?: boolean;
     };
   };
   transactions: TransactionData[];
+  sections?: TransactionSection[];  // NEW: Multiple tables/sections
   summary: {
     totalCredits: number;
     totalDebits: number;
     netBalance: number;
     transactionCount: number;
   };
+  column_names?: { [key: string]: string }; // Added column_names field
+  markdown?: string;
+  fraud_analysis?: {
+    status: string;
+    alerts: Array<{
+      type: string;
+      severity: string;
+      message: string;
+      transaction_index?: number;
+    }>;
+    summary: {
+      total_alerts: number;
+      high_risk: number;
+      medium_risk: number;
+      low_risk: number;
+    };
+  };
+  reconciliation?: {
+    status: string;
+    reconciled: boolean;
+    checks: {
+      passed: number;
+      total: number;
+      percentage: number;
+    };
+    issues?: Array<{
+      check: string;
+      severity: string;
+      message: string;
+    }>;
+  };
+  human_review?: {
+    requires_human_review: boolean;
+    risk_level: 'low' | 'medium' | 'high';
+    review_reasons: string[];
+    auto_approved: boolean;
+  };
+  processing_steps?: Array<{
+    id: string;
+    name: string;
+    status: 'pending' | 'running' | 'complete' | 'skipped' | 'warning';
+    details?: string;
+    sub_steps?: string[];
+  }>;
+  processing_stats?: {
+    payees_normalized: number;
+    total_steps: number;
+    steps_passed: number;
+    extraction_method: string;
+  };
+  num_pages?: number;
+  llm_used?: boolean;
+  headers_inferred?: boolean;  // True if column headers were normalized/inferred
+  ledger_confidence?: number;  // Ledger solver confidence percentage (0-100)
+
+  // Enterprise Validation Fields
+  validation_summary?: {
+    status: 'VERIFIED' | 'NEEDS_REVIEW' | 'LOW_BALANCE_COVERAGE' | string;
+    issues: string[];
+    chain_integrity: number;
+    confidence: number;
+  };
+  chain_validation?: {
+    status: string;
+    opening_balance: number;
+    computed_closing: number;
+    total_credits: number;
+    total_debits: number;
+    broken_links: Array<{
+      row_index: number;
+      expected: number;
+      actual: number;
+      discrepancy: number;
+    }>;
+    chain_integrity: number;
+  };
+  missing_transaction_warnings?: Array<{
+    type: string;
+    row_index: number;
+    delta: number;
+    message: string;
+  }>;
+  duplicate_warnings?: Array<{
+    type: string;
+    row_index: number;
+    duplicate_of: number;
+    message: string;
+  }>;
+
+  // Invoice Specific Data
+  invoiceData?: InvoiceData;
 }
 
 export class PDFProcessor {
-  private static readonly TRANSACTION_PATTERNS = [
-    // Date patterns (MM/DD/YYYY, MM-DD-YYYY, DD/MM/YYYY, etc.)
-    /\b(0[1-9]|1[0-2])[-/](0[1-9]|[12][0-9]|3[01])[-/]\d{2,4}\b/g,
-    /\b(0[1-9]|[12][0-9]|3[01])[-/](0[1-9]|1[0-2])[-/]\d{2,4}\b/g,
-    // Amount patterns ($1,234.56, -$1,234.56, 1,234.56, etc.)
-    /\$?-?\d{1,3}(?:,\d{3})*(?:\.\d{2})?/g,
-    // Common transaction keywords
-    /\b(deposit|withdrawal|payment|transfer|purchase|fee|interest|credit|debit)\b/gi,
-  ];
+  static async processPDF(file: File, isSignedIn: boolean = false, token?: string | null, customEndpoint?: string): Promise<ExtractedData> {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('confidence_threshold', '0.3');
 
-  private static readonly BANK_PATTERNS = [
-    /\b(bank|banking|statement|account)\b/gi,
-    /\b(chase|bank of america|wells fargo|citibank|capital one|us bank)\b/gi,
-  ];
-
-  static async processPDF(file: File, isSignedIn: boolean = false): Promise<ExtractedData> {
     try {
-      // Check if we're in a browser environment
-      if (typeof window === 'undefined') {
-        throw new Error('PDF processing is only available in the browser');
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 300000);
+
+      const headers: HeadersInit = {};
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
       }
 
-      const pdfjsLib = await loadPdfJs();
+      const targetEndpoint = customEndpoint || '/api/v1/pdf-extract/extract';
 
-      console.log('📖 Starting PDF processing...');
-      const arrayBuffer = await file.arrayBuffer();
-      console.log('📁 File loaded into memory, size:', arrayBuffer.byteLength);
-      
-      // Load PDF directly without complex fallback
-      console.log('🔧 Loading PDF with pdf.js...');
-      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-      console.log('✅ PDF loaded successfully');
-      
-      let fullText = '';
-      const numPages = pdf.numPages;
-      console.log(`📄 PDF has ${numPages} pages`);
-      
-      // Extract text from all pages
-      for (let pageNum = 1; pageNum <= numPages; pageNum++) {
-        console.log(`📖 Processing page ${pageNum}/${numPages}...`);
-        const page = await pdf.getPage(pageNum);
-        const textContent = await page.getTextContent();
-        const pageText = textContent.items
-          .map((item: any) => item.str)
-          .join(' ');
-        fullText += pageText + '\n';
-        console.log(`✅ Page ${pageNum} processed, extracted ${pageText.length} characters`);
+      const { fetchWithFailover } = await import('./apiClient');
+
+      // Note: We use fetchWithFailover which now points to the relative path /api/...
+      // The Cloudflare Worker intercepts this and handles the Failover/Health Check server-side.
+
+      console.log(`[PDFProcessor] Uploading to ${targetEndpoint}...`);
+
+      const response = await fetchWithFailover(targetEndpoint, {
+        method: 'POST',
+        headers: headers,
+        body: formData,
+        signal: controller.signal,
+        timeout: 300000, // 5 minutes timeout for PDF processing
+      });
+
+      clearTimeout(timeoutId);
+
+      // Handle Errors
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.detail || `Backend API error: ${response.statusText}`);
       }
 
-      console.log(`📝 Total text extracted: ${fullText.length} characters`);
+      const result = await response.json();
 
-      // If no text found, try OCR on rendered pages (requires authentication)
-      if (fullText.trim().length < 100) {
-        console.log('⚠️ Limited text found in PDF');
-        console.log('🔐 Authentication status:', isSignedIn ? 'Signed In' : 'Not Signed In');
-        
-        if (!isSignedIn) {
-          console.log('❌ OCR requires authentication but user is not signed in');
-          console.log('⚠️ Returning minimal data - modal should have prevented this');
-          // Return minimal data instead of throwing error
-          // The UploadArea should have caught this before processing
+      // --------------------------------------------------------------------------
+      // 1. Handle "Extract" Endpoint Response (New PDFium/LLM Pipeline)
+      // --------------------------------------------------------------------------
+      if (result.success && result.transactions) {
+        console.log("Using PDFium extract endpoint:", result);
+
+        // Get account summary from the response
+        const accountSummary = result.account_summary || {};
+
+        const mapTransaction = (t: any) => {
+          const debitVal = t.debit_parsed ?? (t.debit ? parseFloat(String(t.debit).replace(/[^0-9.-]/g, '')) : 0);
+          const creditVal = t.credit_parsed ?? (t.credit ? parseFloat(String(t.credit).replace(/[^0-9.-]/g, '')) : 0);
+          const balanceVal = t.balance_parsed ?? (t.balance ? parseFloat(String(t.balance).replace(/[^0-9.-]/g, '')) : 0);
+
           return {
-            transactions: [],
-            userInfo: {
-              name: '',
-              accountNumber: '',
-              bankName: '',
-              statementPeriod: ''
-            },
-            summary: {
-              totalCredits: 0,
-              totalDebits: 0,
-              netBalance: 0,
-              transactionCount: 0
-            }
+            ...t, // Included all other fields (e.g. Reference, Particulars)
+            date: t.date,
+            date_iso: t.date_iso,
+            description: t.description,
+            amount: creditVal > 0 ? creditVal : debitVal,
+            balance: balanceVal,
+            type: creditVal > 0 ? 'credit' as const : 'debit' as const,
+            moneyIn: creditVal || 0,
+            moneyOut: debitVal || 0,
+            source_page: t.source_page || 1,
+            normalized_payee: t.normalized_payee,
+
+            // Map validation fields
+            suggested: t.suggested,
+            balance_corrected: t.balance_corrected,
+            debit_corrected: t.debit_corrected,
+            credit_corrected: t.credit_corrected,
+            _ledger_fixed: t._ledger_fixed,
+            _validation_message: t._validation_message,
+
+            // Preserve original balance string for UI display (since 'balance' is overwritten with number)
+            balance_display: t.balance
           };
-        }
-        console.log('⚠️ Limited text found, attempting OCR...');
-        fullText = await this.performOCROnPDF(pdf);
-      }
+        };
 
-      // Extract information from the text
-      console.log('🔍 Extracting data from text...');
-      console.log('📄 Raw text preview:', fullText.substring(0, 1000) + '...');
-      
-      // Debug the extracted text to understand the format
-      const analysis = debugExtractedText(fullText);
-      console.log('📊 Text analysis completed');
-      
-      const extractedData = this.extractDataFromText(fullText);
-      
-      console.log('✅ PDF processing completed successfully!');
-      return extractedData;
-      
-    } catch (error) {
-      console.error('❌ PDF processing error:', error);
-      
-      // Provide more specific error messages
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-      
-      if (errorMessage.includes('worker')) {
-        throw new Error('PDF.js worker failed to load. Please refresh the page and try again.');
-      } else if (errorMessage.includes('Invalid PDF')) {
-        throw new Error('The file is not a valid PDF. Please ensure it\'s not corrupted.');
-      } else if (errorMessage.includes('password')) {
-        throw new Error('The PDF is password protected. Please remove the password and try again.');
-      } else {
-        throw new Error(`Failed to process PDF: ${errorMessage}`);
-      }
-    }
-  }
+        console.log("PDFProcessor: Validation Summary present?", !!result.validation_summary, result.validation_summary);
 
-  private static async performOCROnPDF(pdf: any): Promise<string> {
-    let fullText = '';
-    const numPages = pdf.numPages;
-    
-    console.log(`🚀 Starting optimized Tesseract OCR on ${numPages} pages...`);
-    
-    try {
-      // Convert all PDF pages to images first
-      const imageBlobs = [];
-      
-      for (let pageNum = 1; pageNum <= numPages; pageNum++) {
-        const page = await pdf.getPage(pageNum);
-        
-        // Use optimized scale for balance of speed and accuracy
-        const viewport = page.getViewport({ scale: 1.5 });
-        const canvas = document.createElement('canvas');
-        const context = canvas.getContext('2d');
-        canvas.height = viewport.height;
-        canvas.width = viewport.width;
-        
-        console.log(`📄 Rendering page ${pageNum}/${numPages} for OCR...`);
-        
-        await page.render({ canvasContext: context, viewport }).promise;
-        
-        // Convert canvas to blob
-        const blob = await new Promise<Blob>((resolve) => {
-          canvas.toBlob((blob) => resolve(blob!), 'image/png');
-        });
-        
-        imageBlobs.push(blob);
-      }
-      
-      console.log(`🚀 Running optimized parallel OCR on ${imageBlobs.length} pages...`);
-      
-      // Process images in parallel with optimized Tesseract settings
-      const ocrPromises = imageBlobs.map((blob, index) => 
-        Tesseract.recognize(blob, 'eng', {
-          logger: (m) => {
-            if (m.status === 'recognizing text' && index === 0) {
-              // Only show progress for first page to avoid spam
-              if (Math.floor(m.progress * 100) % 25 === 0) {
-                console.log(`🔍 OCR progress: ${Math.floor(m.progress * 100)}%`);
-              }
-            }
-          }
-        }).then(result => result.data.text)
-      );
-      
-      const startTime = Date.now();
-      const ocrResults = await Promise.all(ocrPromises);
-      const endTime = Date.now();
-      
-      fullText = ocrResults.join('\n');
-      
-      console.log(`✅ Optimized Tesseract OCR completed in ${endTime - startTime}ms`);
-      console.log(`📝 Extracted ${fullText.length} characters`);
-      
-      return fullText;
-      
-    } catch (error) {
-      console.error('❌ OCR failed:', error);
-      console.log('⚠️ Falling back to no OCR (PDF text extraction only)');
-      return '';
-    }
-  }
-  
-  private static async ocrPage(pdf: any, pageNum: number): Promise<string> {
-    // This method is no longer needed with Scribe.js batch processing
-    return '';
-  }
-
-  static async processImage(file: File, isSignedIn: boolean = false): Promise<ExtractedData> {
-    try {
-      // Check if we're in a browser environment
-      if (typeof window === 'undefined') {
-        throw new Error('Image processing is only available in the browser');
-      }
-
-      // Check authentication for image OCR
-      console.log('🔐 Checking authentication for image OCR');
-      console.log('🔐 Authentication status:', isSignedIn ? 'Signed In' : 'Not Signed In');
-      
-      if (!isSignedIn) {
-        console.log('❌ Image OCR requires authentication but user is not signed in');
-        console.log('⚠️ Returning minimal data - modal should have prevented this');
-        // Return minimal data instead of throwing error
         return {
-          transactions: [],
           userInfo: {
-            name: '',
-            accountNumber: '',
-            bankName: '',
-            statementPeriod: ''
+            name: accountSummary.account_holder || '',
+            email: '',
+            accountNumber: accountSummary.account_number || '',
+            bankName: accountSummary.bank_name || 'Bank Statement',
+            statementPeriod: accountSummary.period_start && accountSummary.period_end
+              ? `${accountSummary.period_start} - ${accountSummary.period_end}`
+              : '',
+            currency: accountSummary.currency || '$',
+            accountSummary: {
+              beginningBalance: accountSummary.opening_balance || 0,
+              endingBalance: accountSummary.closing_balance || 0,
+              totalDeposits: accountSummary.total_credits || 0,
+              totalWithdrawals: accountSummary.total_debits || 0,
+
+              // Map validation fields
+              totalDepositsComputed: accountSummary.total_credits_computed,
+              totalDepositsDiscrepancy: accountSummary.total_credits_discrepancy,
+              totalWithdrawalsComputed: accountSummary.total_debits_computed,
+              totalWithdrawalsDiscrepancy: accountSummary.total_debits_discrepancy,
+            }
           },
+          transactions: result.transactions.map(mapTransaction),
+          sections: undefined,
+          summary: {
+            totalCredits: accountSummary.total_credits || 0,
+            totalDebits: accountSummary.total_debits || 0,
+            netBalance: (accountSummary.total_credits || 0) - (accountSummary.total_debits || 0),
+            transactionCount: result.transaction_count || result.transactions?.length || 0
+          },
+          // Standardized financial headers - use clean UI labels instead of raw PDF headers
+          // This ensures trust and consistency regardless of PDF formatting issues
+          column_names: (() => {
+            const STANDARD_HEADERS: Record<string, string> = {
+              date: 'Date',
+              description: 'Description',
+              debit: 'Debit',
+              credit: 'Credit',
+              balance: 'Balance',
+              amount: 'Amount',
+              reference: 'Reference',
+              particulars: 'Particulars',
+            };
+
+            const columns: Record<string, string> = {};
+            let headersWereInferred = false;
+
+            if (result.columns) {
+              Object.entries(result.columns).forEach(([key, val]: [string, any]) => {
+                // Use standardized header if available
+                const standardLabel = STANDARD_HEADERS[key.toLowerCase()];
+                if (standardLabel) {
+                  columns[key] = standardLabel;
+                } else {
+                  // For unknown columns, check if it was normalized
+                  const rawLabel = val?.label || key;
+                  const normalizedFrom = val?.normalized_from;
+
+                  if (normalizedFrom) {
+                    headersWereInferred = true;
+                    columns[key] = STANDARD_HEADERS[key] || key;
+                  } else {
+                    columns[key] = rawLabel;
+                  }
+                }
+              });
+            }
+
+            return columns;
+          })(),
+          // Confidence indicator for UI
+          headers_inferred: result.ledger_stats?.fixed > 0 ||
+            Object.values(result.columns || {}).some((col: any) => col?.normalized_from),
+          ledger_confidence: result.ledger_stats?.confidence,
+          markdown: '',
+          fraud_analysis: undefined,
+          reconciliation: undefined,
+          human_review: undefined,
+          processing_steps: undefined,
+          processing_stats: {
+            extraction_method: result.metadata?.extraction_method || 'pdfium-production',
+            payees_normalized: 0,
+            total_steps: 10,
+            steps_passed: 10
+          },
+          num_pages: result.metadata?.page_count,
+          llm_used: false,
+
+          // Enterprise Validation Data
+          validation_summary: result.validation_summary,
+          chain_validation: result.chain_validation,
+          missing_transaction_warnings: result.missing_transaction_warnings,
+          duplicate_warnings: result.duplicate_warnings,
+        };
+      }
+
+      // --------------------------------------------------------------------------
+      // 2. Handle Invoice Extraction Response
+      // --------------------------------------------------------------------------
+      if (result.success && result.metadata && result.line_items) {
+        console.log("Using Invoice extraction endpoint:", result);
+        return {
+          userInfo: {
+            // Map Invoice metadata to generic fields where it makes sense for fallback
+            bankName: result.metadata.vendor_name || 'Invoice Vendor',
+            accountSummary: {
+              beginningBalance: 0,
+              endingBalance: result.metadata.total_amount || 0,
+              totalDeposits: 0,
+              totalWithdrawals: 0
+            }
+          },
+          transactions: [], // No bank transactions
           summary: {
             totalCredits: 0,
             totalDebits: 0,
             netBalance: 0,
             transactionCount: 0
+          },
+          invoiceData: {
+            metadata: {
+              invoiceNumber: result.metadata.invoice_number || result.metadata.invoiceNumber,
+              invoiceDate: result.metadata.invoice_date || result.metadata.invoiceDate,
+              dueDate: result.metadata.due_date || result.metadata.dueDate,
+              vendorName: result.metadata.vendor_name || result.metadata.vendorName,
+              customerName: result.metadata.customer_name || result.metadata.customerName,
+              currency: result.metadata.currency,
+              subtotal: result.metadata.subtotal || result.metadata.subTotal,
+              taxAmount: result.metadata.tax_amount || result.metadata.taxAmount,
+              totalAmount: result.metadata.total_amount || result.metadata.totalAmount,
+            },
+            lineItems: result.line_items.map((item: any) => ({
+              description: item.description,
+              quantity: item.quantity,
+              unitPrice: item.unit_price,
+              amount: item.amount
+            }))
           }
         };
       }
 
-      console.log('🚀 Using optimized Tesseract for image OCR...');
-      
-      // Use optimized Tesseract.js for OCR on images
-      const startTime = Date.now();
-      const result = await Tesseract.recognize(file, 'eng', {
-        logger: (m) => {
-          if (m.status === 'recognizing text' && Math.floor(m.progress * 100) % 25 === 0) {
-            console.log(`🔍 Image OCR progress: ${Math.floor(m.progress * 100)}%`);
-          }
-        }
-      });
-      const endTime = Date.now();
-      
-      console.log(`✅ Optimized image OCR completed in ${endTime - startTime}ms`);
-      console.log(`📝 Extracted ${result.data.text.length} characters`);
-      
-      const extractedData = this.extractDataFromText(result.data.text);
-      
-      return extractedData;
-      
-    } catch (error) {
-      console.error('❌ Image processing error:', error);
-      throw new Error(`Failed to process image: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+      // Fallback: Handle /fast endpoint response (legacy path)
+      if (result.data) {
+        console.log("Using structured data from backend:", result.data);
+        const backendData = result.data;
 
-  private static extractDataFromText(text: string): ExtractedData {
-    console.log('🔍 Extracting data from text...');
-    
-    // First try US Bank specific extraction
-    if (text.toLowerCase().includes('us bank') || text.toLowerCase().includes('u.s. bank')) {
-      console.log('🏦 US Bank format detected, using specific patterns...');
-      
-      const userInfo = extractUSBankUserInfo(text);
-      const transactions = extractUSBankTransactions(text);
-      
-      // Type assertion to ensure transactions match TransactionData interface
-      const typedTransactions: TransactionData[] = transactions.map(t => ({
-        ...t,
-        type: t.type as 'credit' | 'debit'
-      }));
-      
-      // Calculate summary
-      let runningBalance = 0;
-      const summary = {
-        totalCredits: 0,
-        totalDebits: 0,
-        netBalance: 0,
-        transactionCount: 0
-      };
-      
-      typedTransactions.forEach(transaction => {
-        runningBalance += transaction.amount;
-        transaction.balance = runningBalance;
-        
-        if (transaction.amount > 0) {
-          summary.totalCredits += transaction.amount;
-        } else {
-          summary.totalDebits += transaction.amount;
-        }
-      });
-      
-      summary.netBalance = summary.totalCredits + summary.totalDebits;
-      summary.transactionCount = typedTransactions.length;
-      
-      console.log(`📊 US Bank extraction complete: ${typedTransactions.length} transactions, $${summary.netBalance.toFixed(2)} net balance`);
-      
+        // Map backend structure to frontend ExtractedData interface
+        const userInfoRaw = backendData.userInfo || backendData.user_info || {};
+        const summaryRaw = backendData.summary || {};
+
+        // Map transactions
+        const mapTransaction = (t: any) => ({
+          date: t.date,
+          description: t.description,
+          amount: t.money_in > 0 ? t.money_in : t.money_out,
+          balance: t.balance,
+          type: t.money_in > 0 ? 'credit' as const : 'debit' as const,
+          moneyIn: t.money_in,
+          moneyOut: t.money_out,
+          source_page: t.source_page,  // Add source page for audit trail
+          normalized_payee: t.normalized_payee  // Add normalized payee name
+        });
+
+        // Map sections if available (NEW: multi-table support)
+        const sections = backendData.sections?.map((s: any) => ({
+          name: s.name,
+          transactions: s.transactions.map(mapTransaction),
+          summary: s.summary
+        })) || undefined;
+
+        return {
+          userInfo: {
+            name: userInfoRaw.name,
+            email: userInfoRaw.email,
+            accountNumber: userInfoRaw.account_number || userInfoRaw.accountNumber,
+            bankName: userInfoRaw.bank_name || userInfoRaw.bankName || "Bank Statement",
+            statementPeriod: userInfoRaw.statement_period || userInfoRaw.statementPeriod,
+            currency: backendData.currency || userInfoRaw.currency || '$',
+            accountSummary: {
+              beginningBalance: summaryRaw.opening_balance || summaryRaw.beginningBalance || 0,
+              endingBalance: summaryRaw.closing_balance || summaryRaw.endingBalance || 0,
+              totalDeposits: summaryRaw.total_money_in || summaryRaw.totalDeposits || 0,
+              totalWithdrawals: summaryRaw.total_money_out || summaryRaw.totalWithdrawals || 0,
+            }
+          },
+          transactions: backendData.transactions.map(mapTransaction),
+          sections: sections,  // NEW: Include sections for multi-table UI
+          summary: {
+            totalCredits: summaryRaw.total_money_in || 0,
+            totalDebits: summaryRaw.total_money_out || 0,
+            netBalance: (summaryRaw.total_money_in || 0) - (summaryRaw.total_money_out || 0),
+            transactionCount: backendData.transactions?.length || 0
+          },
+          column_names: backendData.column_names, // Pass column names
+          markdown: result.markdown,
+          fraud_analysis: result.fraud_analysis,
+          reconciliation: result.reconciliation,
+          human_review: result.human_review,
+          processing_steps: result.processing_steps,  // Processing pipeline steps
+          processing_stats: backendData.processing_stats,  // Processing statistics
+          num_pages: result.num_pages,
+          llm_used: result.llm_used
+        };
+      }
+
+      // Fallback to frontend parsing (Legacy)
+      const transactions = this.parseMarkdownToTransactions(result.markdown);
+      const summary = this.calculateSummary(transactions);
+      const userInfo = this.parseUserInfo(result.markdown);
+
       return {
-        userInfo,
-        transactions: typedTransactions,
-        summary
+        userInfo: userInfo,
+        transactions: transactions,
+        summary: summary,
+        markdown: result.markdown,
+        fraud_analysis: result.fraud_analysis,
+        reconciliation: result.reconciliation,
+        human_review: result.human_review
       };
+
+    } catch (error) {
+      console.error('PDF processing error:', error);
+      throw error;
     }
-    
-    // Fallback to generic extraction (original logic)
-    console.log('🏛️ Using generic extraction patterns...');
-    const lines = text.split('\n').filter(line => line.trim().length > 0);
-    
-    // Extract user information
-    const userInfo = this.extractUserInfo(text);
-    
-    // Extract transactions
-    const transactions = this.extractTransactions(lines);
-    
-    // Calculate summary
-    const summary = this.calculateSummary(transactions);
-    
-    return {
-      userInfo,
-      transactions,
-      summary
-    };
   }
 
-  private static extractUserInfo(text: string): ExtractedData['userInfo'] {
-    const userInfo: ExtractedData['userInfo'] = {
-      name: '',
-      accountNumber: '',
-      bankName: '',
-      statementPeriod: ''
-    };
-    
-    // Generic patterns for other banks
-    const namePatterns = [
-      /(?:name|account holder|customer)[:\s]+([A-Za-z\s]+?)(?:\n|$)/i,
-      /^([A-Za-z\s]+?)(?:\n\s*(?:account|statement|date))/i,
-    ];
-    
-    for (const pattern of namePatterns) {
-      const match = text.match(pattern);
-      if (match) {
-        userInfo.name = match[1].trim();
-        break;
-      }
-    }
+  static async processImage(file: File, isSignedIn: boolean = false, token?: string | null): Promise<ExtractedData> {
+    return this.processPDF(file, isSignedIn, token);
+  }
 
-    const accountPatterns = [
-      /account\s*number[:\s]+(\*{4,}\d{4})/i,
-      /account[:\s]+(\*{4,}\d{4})/i,
-    ];
-    
-    for (const pattern of accountPatterns) {
-      const match = text.match(pattern);
-      if (match) {
-        userInfo.accountNumber = match[1].trim();
-        break;
-      }
-    }
+  static parseTableStructure(markdown: string): { headers: string[], rows: string[][] } {
+    if (!markdown) return { headers: [], rows: [] };
 
-    // Extract bank name
-    const bankNames = ['chase', 'bank of america', 'wells fargo', 'citibank', 'capital one'];
-    for (const bank of bankNames) {
-      if (text.toLowerCase().includes(bank)) {
-        userInfo.bankName = bank.charAt(0).toUpperCase() + bank.slice(1);
-        break;
-      }
-    }
+    const lines = markdown.split('\n');
+    let headers: string[] = [];
+    const rows: string[][] = [];
+    let isTable = false;
 
-    // Extract statement period
-    const periodPatterns = [
-      /(?:statement period|period)[:\s]+([A-Za-z]+\s\d{1,2}\s*[-–to]*\s*[A-Za-z]+\s\d{1,2},?\s\d{4})/i,
-      /(\d{1,2}[/\-]\d{1,2}[/\-]\d{2,4})\s*[-–to]+\s*(\d{1,2}[/\-]\d{1,2}[/\-]\d{2,4})/i,
-    ];
-    
-    for (const pattern of periodPatterns) {
-      const match = text.match(pattern);
-      if (match) {
-        if (match[1] && match[2]) {
-          userInfo.statementPeriod = `${match[1]} - ${match[2]}`;
-        } else if (match[1]) {
-          userInfo.statementPeriod = match[1];
+    for (const line of lines) {
+      const trimmedLine = line.trim();
+
+      // Check for header row
+      if (trimmedLine.startsWith('|') && !isTable) {
+        if (trimmedLine.includes('---')) continue; // Skip separator
+        const cols = trimmedLine.split('|').map(c => c.trim()).filter(c => c);
+        // Simple heuristic: if it looks like a header (has date/desc/amount keywords), treat as start
+        if (cols.some(c => /date|description|money|amount|balance|credit|debit/i.test(c))) {
+          headers = cols;
+          isTable = true;
+          continue;
         }
-        break;
+      }
+
+      // Process table rows
+      if (isTable && trimmedLine.startsWith('|')) {
+        if (trimmedLine.includes('---')) continue;
+        const cols = trimmedLine.split('|').map(c => c.trim()).filter(c => c !== '');
+
+        if (cols.length > 0) {
+          rows.push(cols);
+        }
       }
     }
-    
+
+    return { headers, rows };
+  }
+
+  private static parseUserInfo(markdown: string): ExtractedData['userInfo'] {
+    const userInfo: ExtractedData['userInfo'] = {
+      accountSummary: {
+        beginningBalance: 0,
+        endingBalance: 0,
+        totalDeposits: 0,
+        totalWithdrawals: 0
+      }
+    };
+
+    if (!markdown) return userInfo;
+
+    // Helper to extract value using regex (robust against markdown formatting)
+    const extract = (regex: RegExp): string | undefined => {
+      const match = markdown.match(regex);
+      return match ? match[1].replace(/\*\*/g, '').trim() : undefined;
+    };
+
+    // Helper to extract currency value
+    const extractCurrency = (regex: RegExp): number => {
+      const match = markdown.match(regex);
+      if (match) {
+        let valStr = match[1].replace(/,/g, '');
+        // Handle trailing negative sign (e.g., "100.00-")
+        if (valStr.endsWith('-')) {
+          valStr = '-' + valStr.slice(0, -1);
+        }
+
+        // Handle comma as decimal separator logic if needed, but for now standardizing on dot
+        // If the document uses commas for decimals (e.g. 40.000,00), simple replace might fail.
+        // But the user's example showed "40,000,00" which is ambiguous (could be 40k or 40).
+        // Assuming standard US/UK format for now as per previous success, but being robust to trailing chars.
+
+        return parseFloat(valStr.replace(/[^0-9.-]/g, '')) || 0;
+      }
+      return 0;
+    };
+
+    // Attempt to detect currency symbol
+    const currencyMatch = markdown.match(/([£$€¥])/);
+    if (currencyMatch) {
+      userInfo.currency = currencyMatch[1];
+    } else {
+      userInfo.currency = '$'; // Default
+    }
+
+    // Extract Account Details
+    userInfo.name = extract(/(?:Account Name|Name)[:\s*]+(?:\*\*)?(.*?)(?:\*\*)?$/m);
+    userInfo.accountNumber = extract(/(?:Account Number)[:\s*]+(?:\*\*)?(.*?)(?:\*\*)?$/m);
+    userInfo.bankName = extract(/(?:Bank Name)[:\s*]+(?:\*\*)?(.*?)(?:\*\*)?$/m) || "Bank Statement";
+    userInfo.statementPeriod = extract(/(?:Statement Period|Period|Statement Date)[:\s*]+(?:\*\*)?(.*?)(?:\*\*)?$/m);
+
+    // Extract Email if present
+    userInfo.email = extract(/(?:Email)[:\s*]+(?:\*\*)?(.*?)(?:\*\*)?$/m);
+
+    // Extract Account Summary
+    if (userInfo.accountSummary) {
+      // Regex looks for label, optional bold, optional currency symbol, and the number
+
+      userInfo.accountSummary.beginningBalance = extractCurrency(/(?:Opening Balance|Beginning Balance|Balance at [0-9]+ [A-Za-z]+)[^0-9]*[£$€]?([0-9,.]+)/i);
+      userInfo.accountSummary.endingBalance = extractCurrency(/(?:Closing Balance|Ending Balance|Balance at [0-9]+ [A-Za-z]+)[^0-9]*[£$€]?([0-9,.]+)/i);
+
+      // Try to find Total Credits/Deposits/Money In
+      userInfo.accountSummary.totalDeposits = extractCurrency(/(?:Total )?(?:Deposits|Credits|Money In)[^0-9]*[£$€]?([0-9,.]+)/i);
+
+      // Try to find Total Debits/Withdrawals/Money Out
+      userInfo.accountSummary.totalWithdrawals = extractCurrency(/(?:Total )?(?:Debits|Withdrawals|Money Out)[^0-9]*[£$€]?([0-9,.]+)/i);
+
+      // Fallback: If Total Debits is 0, try summing "Card Withdrawals" and "Other Withdrawals"
+      if (userInfo.accountSummary.totalWithdrawals === 0) {
+        const cardWithdrawals = extractCurrency(/Card Withdrawals[^0-9]*[£$€]?([0-9,.]+)/i);
+        const otherWithdrawals = extractCurrency(/Other Withdrawals[^0-9]*[£$€]?([0-9,.]+)/i);
+        if (cardWithdrawals > 0 || otherWithdrawals > 0) {
+          userInfo.accountSummary.totalWithdrawals = cardWithdrawals + otherWithdrawals;
+        }
+      }
+    }
+
     return userInfo;
   }
 
-  private static extractTransactions(lines: string[]): TransactionData[] {
+  private static parseMarkdownToTransactions(markdown: string): TransactionData[] {
+    if (!markdown) return [];
+
     const transactions: TransactionData[] = [];
-    
-    // Generic transaction patterns
-    const transactionPatterns = [
-      /^(\d{1,2}\/\d{1,2}\/\d{2,4})\s+(.+?)\s+(-?\$?\d{1,3}(?:,\d{3})*(?:\.\d{2})?)\s+(-?\$?\d{1,3}(?:,\d{3})*(?:\.\d{2})?)\s*(credit|debit)?$/i,
-      /^(\d{1,2}\/\d{1,2}\/\d{2,4})\s+(.+?)\s+(-?\$?\d{1,3}(?:,\d{3})*(?:\.\d{2})?)\s*(credit|debit)?$/i,
-    ];
+    const lines = markdown.split('\n');
+    let isTable = false;
+    let headers: string[] = [];
 
     for (const line of lines) {
-      if (line.length < 10) continue;
-      
-      for (const pattern of transactionPatterns) {
-        const match = line.match(pattern);
-        if (match) {
-          try {
-            let date = match[1];
-            let description = match[2];
-            let amountStr = match[3];
-            let balanceStr = match[4] || '';
-            let explicitType = match[5] || '';
-            
-            let amount = parseFloat(amountStr.replace(/[$,]/g, ''));
-            let balance = balanceStr ? parseFloat(balanceStr.replace(/[$,]/g, '')) : 0;
-            
-            let type: 'credit' | 'debit';
-            if (explicitType) {
-              type = explicitType.toLowerCase() === 'credit' ? 'credit' : 'debit';
-            } else {
-              type = amount >= 0 ? 'credit' : 'debit';
+      const trimmedLine = line.trim();
+
+      if (trimmedLine.startsWith('|') && !isTable) {
+        if (trimmedLine.includes('---')) continue;
+        const cols = trimmedLine.split('|').map(c => c.trim()).filter(c => c);
+        if (cols.some(c => /date|description|money|amount|balance/i.test(c))) {
+          headers = cols.map(c => c.toLowerCase());
+          isTable = true;
+          continue;
+        }
+      }
+
+      if (isTable && trimmedLine.startsWith('|')) {
+        if (trimmedLine.includes('---')) continue;
+        const cols = trimmedLine.split('|').map(c => c.trim()).filter(c => c !== '');
+
+        if (cols.length >= 3) {
+          const transaction: any = {};
+          let moneyIn = 0;
+          let moneyOut = 0;
+
+          headers.forEach((header, index) => {
+            if (index >= cols.length) return;
+            const value = cols[index];
+
+            if (header.includes('date')) {
+              transaction.date = value;
+            } else if (header.includes('description')) {
+              transaction.description = value;
+            } else if (header.includes('money in') || header.includes('credit')) {
+              if (value !== '-') {
+                const amount = parseFloat(value.replace(/[^0-9.-]/g, ''));
+                if (!isNaN(amount)) moneyIn = Math.abs(amount);
+              }
+            } else if (header.includes('money out') || header.includes('debit')) {
+              if (value !== '-') {
+                const amount = parseFloat(value.replace(/[^0-9.-]/g, ''));
+                if (!isNaN(amount)) moneyOut = Math.abs(amount);
+              }
+            } else if (header.includes('balance')) {
+              transaction.balance = parseFloat(value.replace(/[^0-9.-]/g, '')) || 0;
             }
-            
-            const transaction: TransactionData = {
-              date: this.normalizeDate(date),
-              description: description.trim(),
-              amount: amount,
-              balance: balance,
-              type: type
-            };
-            
-            transactions.push(transaction);
-            break;
-          } catch (error) {
-            console.log('⚠️ Failed to parse transaction:', line);
+          });
+
+          if (moneyIn > 0) {
+            transaction.amount = moneyIn;
+            transaction.type = 'credit';
+          } else if (moneyOut > 0) {
+            transaction.amount = moneyOut;
+            transaction.type = 'debit';
+          }
+
+          if (transaction.date && transaction.description && transaction.amount) {
+            transactions.push(transaction as TransactionData);
           }
         }
       }
     }
-    
+
     return transactions;
   }
 
   private static calculateSummary(transactions: TransactionData[]) {
-    const summary = {
-      totalCredits: 0,
-      totalDebits: 0,
-      netBalance: 0,
-      transactionCount: 0
-    };
-    
-    summary.totalCredits = transactions
-      .filter(t => t.type === 'credit')
-      .reduce((sum, t) => sum + t.amount, 0);
-    
-    summary.totalDebits = transactions
-      .filter(t => t.type === 'debit')
-      .reduce((sum, t) => sum + Math.abs(t.amount), 0);
-    
-    summary.netBalance = summary.totalCredits - summary.totalDebits;
-    summary.transactionCount = transactions.length;
-    
-    return summary;
-  }
+    let totalCredits = 0;
+    let totalDebits = 0;
 
-  private static normalizeDate(dateStr: string): string {
-    // Try various date formats
-    const patterns = [
-      /(\d{1,2})\/(\d{1,2})\/(\d{2,4})/,
-      /(\d{4})-(\d{2})-(\d{2})/,
-    ];
-    
-    for (const pattern of patterns) {
-      const match = dateStr.match(pattern);
-      if (match) {
-        let [, month, day, year] = match;
-        if (year.length === 2) year = '20' + year;
-        return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
-      }
-    }
-    
-    return dateStr;
+    transactions.forEach(t => {
+      if (t.type === 'credit') totalCredits += t.amount;
+      else totalDebits += t.amount;
+    });
+
+    return {
+      totalCredits,
+      totalDebits,
+      netBalance: totalCredits - totalDebits,
+      transactionCount: transactions.length
+    };
   }
 }

@@ -1,20 +1,94 @@
 import { TransactionData, ExtractedData } from './pdfProcessor';
+import * as XLSX from 'xlsx';
+
+export interface ExportSettings {
+  routingNumber?: string;
+  statementNumber?: string;
+  currency?: string;
+  accountNumber?: string;
+  bankName?: string;
+}
 
 export class ExportService {
   static exportToCSV(data: ExtractedData, filename: string = 'bank-statement.csv'): void {
-    const headers = ['Date', 'Description', 'Amount', 'Balance', 'Type'];
-    const rows = data.transactions.map(transaction => [
-      transaction.date,
-      transaction.description,
-      transaction.amount.toString(),
-      transaction.balance.toString(),
-      transaction.type
-    ]);
+    let csvContent = "";
 
-    const csvContent = [
-      headers.join(','),
-      ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
-    ].join('\n');
+    const processTransactionsToCSV = (transactions: TransactionData[]) => {
+      // Determine columns based on data
+      const colNames = data.column_names || {};
+      const hasMoneyInOut = transactions.some(t => t.moneyIn !== undefined || t.moneyOut !== undefined);
+      const hasNormalizedPayee = transactions.some(t => t.normalized_payee !== undefined);
+
+
+
+      const hasReference = transactions.some(t => t.reference && t.reference.toString().trim() !== '');
+
+      const dateHeader = colNames.date || 'Date';
+      const descHeader = colNames.desc || colNames.description || 'Description';
+      const refHeader = colNames.ref || colNames.reference || 'Reference';
+      const creditHeader = colNames.credit || 'Money In';
+      const debitHeader = colNames.debit || 'Money Out';
+      const balanceHeader = colNames.balance || 'Balance';
+
+      let headers = [dateHeader, descHeader];
+      if (hasReference) { headers.push(refHeader); }
+
+      // Add Clean Payee column if available
+      if (hasNormalizedPayee) {
+        headers.push('Clean Payee');
+      }
+
+      if (hasMoneyInOut) {
+        headers.push(creditHeader, debitHeader);
+      } else {
+        headers.push('Amount', 'Type');
+      }
+      headers.push(balanceHeader);
+
+
+
+      const rows = transactions.map(t => {
+        const row = [t.date, t.description];
+        if (hasReference) { row.push(t.reference || ""); }
+
+        // Add normalized payee
+        if (hasNormalizedPayee) {
+          row.push(t.normalized_payee || t.description);
+        }
+
+        if (hasMoneyInOut) {
+          row.push(
+            t.moneyIn !== undefined && t.moneyIn !== 0 ? t.moneyIn.toString() : "",
+            t.moneyOut !== undefined && t.moneyOut !== 0 ? t.moneyOut.toString() : ""
+          );
+        } else {
+          row.push(t.amount.toString(), t.type);
+        }
+        row.push(t.balance.toString());
+
+
+
+        return row.map(cell => {
+          const val = cell || "";
+          if (val.includes('"') || val.includes(',') || val.includes('\n')) {
+            return `"${val.replace(/"/g, '""')}"`;
+          }
+          return val;
+        }).join(',');
+      });
+
+      return [headers.join(','), ...rows].join('\n');
+    };
+
+    // Always use data.transactions as primary source (contains edited data)
+    // Only use sections for informational purposes if no main transactions
+    if (data.transactions && data.transactions.length > 0) {
+      csvContent = processTransactionsToCSV(data.transactions);
+    } else if (data.sections && data.sections.length > 0) {
+      // Fallback: Combine all sections
+      const allTxns = data.sections.flatMap(s => s.transactions);
+      csvContent = processTransactionsToCSV(allTxns);
+    }
 
     // Create download link
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -29,30 +103,131 @@ export class ExportService {
   }
 
   static exportToExcel(data: ExtractedData, filename: string = 'bank-statement.xlsx'): void {
-    // For now, export as CSV since ExcelJS is having issues
-    // In production, you'd want to fix the ExcelJS dependency
-    this.exportToCSV(data, filename.replace('.xlsx', '.csv'));
+    const workbook = XLSX.utils.book_new();
+
+    const processTransactionsToSheet = (transactions: TransactionData[], includeCategory: boolean = false) => {
+      const colNames = data.column_names || {};
+      const hasMoneyInOut = transactions.some(t => t.moneyIn !== undefined || t.moneyOut !== undefined);
+      const hasNormalizedPayee = transactions.some(t => t.normalized_payee !== undefined);
+
+
+
+      const hasReference = transactions.some(t => t.reference && t.reference.toString().trim() !== '');
+
+      const dateHeader = colNames.date || 'Date';
+      const descHeader = colNames.desc || colNames.description || 'Description';
+      const refHeader = colNames.ref || colNames.reference || 'Reference';
+      const creditHeader = colNames.credit || 'Credit';
+      const debitHeader = colNames.debit || 'Debit';
+      const balanceHeader = colNames.balance || 'Balance';
+
+      return transactions.map(t => {
+        const row: any = {};
+        row[dateHeader] = t.date;
+        row[descHeader] = t.description;
+        if (hasReference) { row[refHeader] = t.reference || ''; }
+
+        // Add normalized payee (clean merchant name) if available
+        if (hasNormalizedPayee) {
+          row['Clean Payee'] = t.normalized_payee || t.description;
+        }
+
+        if (includeCategory && (t as any).category) {
+          row['Category'] = (t as any).category;
+        }
+
+        if (hasMoneyInOut) {
+          row[creditHeader] = t.moneyIn || "";
+          row[debitHeader] = t.moneyOut || "";
+        } else {
+          row['Amount'] = t.amount;
+          row['Type'] = t.type;
+        }
+        row[balanceHeader] = t.balance;
+
+
+
+        return row;
+      });
+    };
+
+    // Sheet 1: Summary (Account Information)
+    // Sheet 1: Transactions (Single sheet export)
+    // Summary sheet removed as per user request
+
+    // Sheet 2: All Transactions (always use data.transactions as primary - contains edited data)
+    if (data.transactions && data.transactions.length > 0) {
+      const rows = processTransactionsToSheet(data.transactions);
+      const worksheet = XLSX.utils.json_to_sheet(rows);
+
+      // Auto-width columns
+      const maxDescLen = rows.reduce((w, r) => {
+        const descKey = data.column_names?.desc || data.column_names?.description || 'Description';
+        return Math.max(w, (r[descKey] as string)?.length || 0);
+      }, 10);
+      worksheet["!cols"] = [{ wch: 12 }, { wch: Math.min(maxDescLen, 50) }, { wch: 14 }, { wch: 14 }, { wch: 14 }];
+
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Transactions");
+    } else if (data.sections && data.sections.length > 0) {
+      // Fallback: Combine all sections if no main transactions
+      const allTransactions = data.sections.flatMap(s => s.transactions);
+      const rows = processTransactionsToSheet(allTransactions);
+      const worksheet = XLSX.utils.json_to_sheet(rows);
+      worksheet["!cols"] = [{ wch: 12 }, { wch: 50 }, { wch: 14 }, { wch: 14 }, { wch: 14 }];
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Transactions");
+    }
+
+    XLSX.writeFile(workbook, filename);
   }
 
   static copyToClipboard(data: ExtractedData): void {
     try {
-      const headers = ['Date', 'Description', 'Amount', 'Balance', 'Type'];
-      const rows = data.transactions.map(transaction => [
-        transaction.date,
-        transaction.description,
-        transaction.amount.toString(),
-        transaction.balance.toString(),
-        transaction.type
-      ]);
+      let textContent = "";
 
-      const csvContent = [
-        headers.join('\t'),
-        ...rows.map(row => row.join('\t'))
-      ].join('\n');
-      
+      const processTransactionsToText = (transactions: TransactionData[]) => {
+        const colNames = data.column_names || {};
+        const hasMoneyInOut = transactions.some(t => t.moneyIn !== undefined || t.moneyOut !== undefined);
+
+        const hasReference = transactions.some(t => t.reference && t.reference.toString().trim() !== '');
+
+        const dateHeader = colNames.date || 'Date';
+        const descHeader = colNames.desc || colNames.description || 'Description';
+        const refHeader = colNames.ref || colNames.reference || 'Reference';
+        const creditHeader = colNames.credit || 'Credit';
+        const debitHeader = colNames.debit || 'Debit';
+        const balanceHeader = colNames.balance || 'Balance';
+
+        let headers = [dateHeader, descHeader];
+        if (hasReference) { headers.push(refHeader); }
+
+        if (hasMoneyInOut) { headers.push(creditHeader, debitHeader); }
+        else { headers.push('Amount', 'Type'); }
+        headers.push(balanceHeader);
+
+        const rows = transactions.map(t => {
+          const row = [t.date, t.description];
+          if (hasReference) { row.push(t.reference || ""); }
+
+          if (hasMoneyInOut) {
+            row.push(t.moneyIn ? t.moneyIn.toString() : "", t.moneyOut ? t.moneyOut.toString() : "");
+          } else {
+            row.push(t.amount.toString(), t.type);
+          }
+          row.push(t.balance.toString());
+          return row.join('\t');
+        });
+        return [headers.join('\t'), ...rows].join('\n');
+      };
+
+      if (data.sections && data.sections.length > 0) {
+        textContent = data.sections.map(sec => `${sec.name}\n${processTransactionsToText(sec.transactions)}`).join('\n\n');
+      } else {
+        textContent = processTransactionsToText(data.transactions);
+      }
+
       // Only try clipboard if user has interacted with the page
       if (navigator.clipboard && document.hasFocus()) {
-        navigator.clipboard.writeText(csvContent)
+        navigator.clipboard.writeText(textContent)
           .then(() => {
             console.log('Data copied to clipboard successfully');
           })
@@ -77,17 +252,555 @@ export class ExportService {
       document.body.appendChild(textArea);
       textArea.focus();
       textArea.select();
-      
+
       const successful = document.execCommand('copy');
       if (successful) {
         console.log('Data copied to clipboard successfully (fallback method)');
       } else {
         console.error('Failed to copy to clipboard (fallback method failed)');
       }
-      
+
       document.body.removeChild(textArea);
     } catch (error) {
       console.error('Fallback clipboard copy failed:', error);
     }
   }
+
+  /**
+   * Export to QBO format (QuickBooks Web Connect)
+   * This creates an OFX-based XML file that can be imported directly into:
+   * - QuickBooks Desktop & Online
+   * - Xero
+   * - Wave
+   * - FreshBooks
+   * - Most other accounting software
+   */
+  static exportToQBO(data: ExtractedData, settings: ExportSettings = {}, filename: string = 'bank-statement.qbo'): void {
+    const now = new Date();
+    const dtserver = this.formatOFXDate(now);
+
+    const accountNumber = settings.accountNumber || data.userInfo?.accountNumber || '000000000';
+    const bankName = settings.bankName || data.userInfo?.bankName || 'Bank';
+    const routingNumber = settings.routingNumber || '000000000';
+    const currency = settings.currency || data.userInfo?.currency || 'USD';
+
+    // Generate a unique transaction ID based on date and amount
+    const generateFitID = (tx: TransactionData, index: number): string => {
+      const dateStr = tx.date.replace(/[^0-9]/g, '');
+      const amount = Math.abs(tx.moneyIn || tx.moneyOut || tx.amount || 0);
+      return `${dateStr}${index}${amount.toFixed(2).replace('.', '')}`;
+    };
+
+    // Format date for OFX (YYYYMMDDHHMMSS)
+    const formatTxDate = (tx: TransactionData): string => {
+      // Priority 1: Use pre-normalized date_iso from backend (YYYY-MM-DD)
+      if (tx.date_iso && tx.date_iso.match(/^\d{4}-\d{2}-\d{2}$/)) {
+        return tx.date_iso.replace(/-/g, '') + "120000";
+      }
+
+      const dateStr = tx.date;
+      if (!dateStr) return this.formatOFXDate(new Date());
+
+      // Try to parse the date
+      const parts = dateStr.split(/[-/]/);
+      if (parts.length >= 3) {
+        // ISO: YYYY-MM-DD
+        if (parts[0].length === 4) {
+          return `${parts[0]}${parts[1].padStart(2, '0')}${parts[2].padStart(2, '0')}120000`;
+        }
+        // US: MM/DD/YYYY or MM/DD/YY
+        const year = parts[2].length === 2 ? `20${parts[2]}` : parts[2];
+        const month = parts[0].padStart(2, '0');
+        const day = parts[1].padStart(2, '0');
+        return `${year}${month}${day}120000`;
+      } else if (parts.length === 2) {
+        // MM/DD without year - use current year
+        const now = new Date();
+        const month = parts[0].padStart(2, '0');
+        const day = parts[1].padStart(2, '0');
+        return `${now.getFullYear()}${month}${day}120000`;
+      }
+      // Fallback to today
+      return this.formatOFXDate(new Date());
+    };
+
+    // Collect ALL transactions - from both flat array and sections
+    let allTransactions: TransactionData[] = [];
+
+    // Add transactions from flat array
+    if (data.transactions && data.transactions.length > 0) {
+      allTransactions = [...data.transactions];
+    }
+
+    // Add transactions from sections (if any)
+    if (data.sections && data.sections.length > 0) {
+      for (const section of data.sections) {
+        if (section.transactions && section.transactions.length > 0) {
+          allTransactions = [...allTransactions, ...section.transactions];
+        }
+      }
+    }
+
+    // Remove duplicates (by date + description + amount)
+    const seen = new Set<string>();
+    allTransactions = allTransactions.filter(tx => {
+      const key = `${tx.date}|${tx.description}|${tx.moneyIn || 0}|${tx.moneyOut || 0}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+
+    // Filter out balance summary rows (not real transactions)
+    // Normalize: remove spaces for matching 'BeginningBalance' vs 'Beginning Balance'
+    const balanceKeywords = ['beginningbalance', 'endingbalance', 'openingbalance', 'closingbalance', 'ledgerbalance'];
+    allTransactions = allTransactions.filter(tx => {
+      const desc = (tx.description || '').toLowerCase().replace(/\s+/g, '');
+      return !balanceKeywords.some(kw => desc.includes(kw));
+    });
+
+    const transactionXML = allTransactions.map((tx, index) => {
+      const amount = tx.moneyIn && tx.moneyIn > 0
+        ? tx.moneyIn
+        : tx.moneyOut && tx.moneyOut > 0
+          ? -tx.moneyOut
+          : (tx.type === 'credit' ? tx.amount : -tx.amount);
+
+      const trnType = amount >= 0 ? 'CREDIT' : 'DEBIT';
+      const name = tx.normalized_payee || tx.description;
+      // Truncate name to 32 chars (OFX limit) and memo to 255
+      const truncatedName = name.substring(0, 32);
+      const memoRef = tx.reference ? ` Ref: ${tx.reference}` : '';
+      const truncatedMemo = (tx.description + memoRef).substring(0, 255);
+
+      return `<STMTTRN>
+<TRNTYPE>${trnType}
+<DTPOSTED>${formatTxDate(tx)}
+<TRNAMT>${amount.toFixed(2)}
+<FITID>${generateFitID(tx, index)}
+<NAME>${this.escapeXML(truncatedName)}
+<MEMO>${this.escapeXML(truncatedMemo)}
+</STMTTRN>`;
+    }).join('\n');
+
+    // Get date range - use formatTxDate for consistency
+    const formattedDates = allTransactions
+      .map(tx => formatTxDate(tx))
+      .filter(d => d && d !== this.formatOFXDate(new Date()))
+      .sort();
+    const startDate = formattedDates.length > 0 ? formattedDates[0] : dtserver;
+    const endDate = formattedDates.length > 0 ? formattedDates[formattedDates.length - 1] : dtserver;
+
+    // Build full QBO/OFX document
+    const qboContent = `OFXHEADER:100
+DATA:OFXSGML
+VERSION:102
+SECURITY:NONE
+ENCODING:USASCII
+CHARSET:1252
+COMPRESSION:NONE
+OLDFILEUID:NONE
+NEWFILEUID:NONE
+
+<OFX>
+<SIGNONMSGSRSV1>
+<SONRS>
+<STATUS>
+<CODE>0
+<SEVERITY>INFO
+</STATUS>
+<DTSERVER>${dtserver}
+<LANGUAGE>ENG
+<FI>
+<ORG>${this.escapeXML(bankName)}
+<FID>10001
+</FI>
+<INTU.BID>10001
+</SONRS>
+</SIGNONMSGSRSV1>
+<BANKMSGSRSV1>
+<STMTTRNRS>
+<TRNUID>0
+<STATUS>
+<CODE>0
+<SEVERITY>INFO
+</STATUS>
+<STMTRS>
+<CURDEF>${currency}
+<BANKACCTFROM>
+<BANKID>${routingNumber}
+<ACCTID>${accountNumber}
+<ACCTTYPE>CHECKING
+</BANKACCTFROM>
+<BANKTRANLIST>
+<DTSTART>${startDate}
+<DTEND>${endDate}
+${transactionXML}
+</BANKTRANLIST>
+<LEDGERBAL>
+<BALAMT>0.00
+<DTASOF>${endDate}
+</LEDGERBAL>
+</STMTRS>
+</STMTTRNRS>
+</BANKMSGSRSV1>
+</OFX>`;
+
+    // Create download - use data URI for better browser compatibility
+    const blob = new Blob([qboContent], { type: 'application/octet-stream' });
+    const reader = new FileReader();
+    reader.onload = function () {
+      const link = document.createElement('a');
+      link.href = reader.result as string;
+      link.download = filename;
+      link.style.display = 'none';
+      document.body.appendChild(link);
+      link.click();
+      setTimeout(() => {
+        document.body.removeChild(link);
+      }, 100);
+    };
+    reader.readAsDataURL(blob);
+  }
+
+  // Helper: Format date to OFX format (YYYYMMDDHHMMSS)
+  private static formatOFXDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+    return `${year}${month}${day}${hours}${minutes}${seconds}`;
+  }
+
+  // Helper: Escape XML special characters
+  private static escapeXML(str: string): string {
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&apos;');
+  }
+
+  /**
+   * Export to Tally XML format
+   * Creates vouchers that can be imported into Tally ERP 9 / TallyPrime
+   * Import via: Gateway of Tally → Import of Data → Vouchers
+   */
+  static exportToTally(data: ExtractedData, settings: ExportSettings = {}, filename: string = 'bank-statement-tally.xml'): void {
+    const bankName = settings.bankName || data.userInfo?.bankName || 'Bank Account';
+    const accountName = data.userInfo?.name || 'Bank Account';
+
+    // Format date for Tally (YYYYMMDD)
+    const formatTallyDate = (tx: TransactionData): string => {
+      if (tx.date_iso) return tx.date_iso.replace(/-/g, '');
+
+      const dateStr = tx.date;
+      const parts = dateStr.split(/[-/]/);
+      if (parts.length >= 3) {
+        const year = parts[0].length === 4 ? parts[0] : `20${parts[2]}`;
+        const month = parts[0].length === 4 ? parts[1] : parts[0];
+        const day = parts[0].length === 4 ? parts[2] : parts[1];
+        return `${year}${month.padStart(2, '0')}${day.padStart(2, '0')}`;
+      }
+      return new Date().toISOString().slice(0, 10).replace(/-/g, '');
+    };
+
+    // Collect ALL transactions - from both flat array and sections
+    let allTransactions: TransactionData[] = [];
+
+    if (data.transactions && data.transactions.length > 0) {
+      allTransactions = [...data.transactions];
+    }
+
+    if (data.sections && data.sections.length > 0) {
+      for (const section of data.sections) {
+        if (section.transactions && section.transactions.length > 0) {
+          allTransactions = [...allTransactions, ...section.transactions];
+        }
+      }
+    }
+
+    // Remove duplicates
+    const seen = new Set<string>();
+    allTransactions = allTransactions.filter(tx => {
+      const key = `${tx.date}|${tx.description}|${tx.moneyIn || 0}|${tx.moneyOut || 0}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+
+    const vouchers = allTransactions.map((tx, index) => {
+      const isCredit = (tx.moneyIn && tx.moneyIn > 0) || tx.type === 'credit';
+      const amount = tx.moneyIn && tx.moneyIn > 0
+        ? tx.moneyIn
+        : tx.moneyOut && tx.moneyOut > 0
+          ? tx.moneyOut
+          : Math.abs(tx.amount);
+
+      const voucherType = isCredit ? 'Receipt' : 'Payment';
+      const partyName = tx.normalized_payee || tx.description.substring(0, 50);
+      const voucherNumber = `BANK${formatTallyDate(tx)}${String(index + 1).padStart(4, '0')}`;
+
+      return `    <VOUCHER VCHTYPE="${voucherType}" ACTION="Create">
+      <DATE>${formatTallyDate(tx)}</DATE>
+      <VOUCHERTYPENAME>${voucherType}</VOUCHERTYPENAME>
+      <VOUCHERNUMBER>${voucherNumber}</VOUCHERNUMBER>
+      <NARRATION>${this.escapeXML(tx.description)}</NARRATION>
+      <ALLLEDGERENTRIES.LIST>
+        <LEDGERNAME>${this.escapeXML(bankName)}</LEDGERNAME>
+        <ISDEEMEDPOSITIVE>${isCredit ? 'Yes' : 'No'}</ISDEEMEDPOSITIVE>
+        <AMOUNT>${isCredit ? -amount : amount}</AMOUNT>
+      </ALLLEDGERENTRIES.LIST>
+      <ALLLEDGERENTRIES.LIST>
+        <LEDGERNAME>${this.escapeXML(partyName)}</LEDGERNAME>
+        <ISDEEMEDPOSITIVE>${isCredit ? 'No' : 'Yes'}</ISDEEMEDPOSITIVE>
+        <AMOUNT>${isCredit ? amount : -amount}</AMOUNT>
+      </ALLLEDGERENTRIES.LIST>
+    </VOUCHER>`;
+    }).join('\n');
+
+    // Build Tally XML document
+    const tallyXML = `<?xml version="1.0" encoding="UTF-8"?>
+<ENVELOPE>
+  <HEADER>
+    <TALLYREQUEST>Import Data</TALLYREQUEST>
+  </HEADER>
+  <BODY>
+    <IMPORTDATA>
+      <REQUESTDESC>
+        <REPORTNAME>Vouchers</REPORTNAME>
+      </REQUESTDESC>
+      <REQUESTDATA>
+        <TALLYMESSAGE xmlns:UDF="TallyUDF">
+${vouchers}
+        </TALLYMESSAGE>
+      </REQUESTDATA>
+    </IMPORTDATA>
+  </BODY>
+</ENVELOPE>`;
+
+    // Create download
+    const blob = new Blob([tallyXML], { type: 'application/octet-stream' });
+    const reader = new FileReader();
+    reader.onload = function () {
+      const link = document.createElement('a');
+      link.href = reader.result as string;
+      link.download = filename;
+      link.style.display = 'none';
+      document.body.appendChild(link);
+      link.click();
+      setTimeout(() => {
+        document.body.removeChild(link);
+      }, 100);
+    };
+    reader.readAsDataURL(blob);
+  }
+
+  /**
+   * Export to Xero CSV format
+   * Creates a CSV file that can be imported directly into Xero via Banking > Bank Statements
+   * Xero expects: Date, Amount, Payee, Description, Reference
+   */
+  static exportToXero(data: ExtractedData, _settings: ExportSettings = {}, filename: string = 'bank-statement-xero.csv'): void {
+    // Collect ALL transactions
+    let allTransactions: TransactionData[] = [];
+
+    if (data.transactions && data.transactions.length > 0) {
+      allTransactions = [...data.transactions];
+    }
+
+    if (data.sections && data.sections.length > 0) {
+      for (const section of data.sections) {
+        if (section.transactions && section.transactions.length > 0) {
+          allTransactions = [...allTransactions, ...section.transactions];
+        }
+      }
+    }
+
+    // Remove duplicates
+    const seen = new Set<string>();
+    allTransactions = allTransactions.filter(tx => {
+      const key = `${tx.date}|${tx.description}|${tx.moneyIn || 0}|${tx.moneyOut || 0}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+
+    // Xero CSV format headers
+    const headers = ['Date', 'Amount', 'Payee', 'Description', 'Reference', 'Check Number'];
+
+    // Format transactions for Xero
+    const rows = allTransactions.map((tx, index) => {
+      // Calculate amount (positive for credits, negative for debits)
+      const amount = tx.moneyIn && tx.moneyIn > 0
+        ? tx.moneyIn
+        : tx.moneyOut && tx.moneyOut > 0
+          ? -tx.moneyOut
+          : (tx.type === 'credit' ? tx.amount : -tx.amount);
+
+      // Payee (use normalized if available)
+      const payee = tx.normalized_payee || tx.description.substring(0, 50);
+
+      // Reference (Use actual reference if available, else synthetic ID)
+      const reference = tx.reference || `TXN${String(index + 1).padStart(5, '0')}`;
+
+      return [
+        tx.date_iso || tx.date,
+        amount.toFixed(2),
+        `"${payee.replace(/"/g, '""').substring(0, 255)}"`, // Escape quotes and truncate
+        `"${tx.description.replace(/"/g, '""').substring(0, 400)}"`, // Escape quotes and truncate
+        reference,
+        "" // Check Number
+      ].join(',');
+    });
+
+    const csvContent = [headers.join(','), ...rows].join('\n');
+
+    // Create download
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }
+  /**
+   * Export to MT940 SWIFT format
+   * Standard format for electronic bank statements used by many ERPs and accounting systems
+   */
+  static exportToMT940(data: ExtractedData, settings: ExportSettings = {}, filename: string = 'bank-statement-mt940.txt'): void {
+    const accountId = settings.accountNumber || data.userInfo?.accountNumber || 'ACCOUNT123';
+    const statementId = (settings.statementNumber || '00001').padStart(5, '0');
+    const currency = settings.currency || (data.userInfo?.currency && data.userInfo.currency.length === 3 ? data.userInfo.currency : 'USD');
+
+    // Format date for MT940 (YYMMDD)
+    const formatMT940Date = (dateStr: string, tx?: TransactionData): string => {
+      if (tx?.date_iso) return tx.date_iso.replace(/-/g, '').substring(2);
+
+      const parts = dateStr.split(/[-/]/);
+      if (parts.length >= 3) {
+        const year = parts[0].length === 4 ? parts[0].substring(2) : parts[2].substring(2);
+        const month = parts[0].length === 4 ? parts[1] : parts[0];
+        const day = parts[0].length === 4 ? parts[2] : parts[1];
+        return `${year}${month.padStart(2, '0')}${day.padStart(2, '0')}`;
+      }
+      const now = new Date();
+      const y = String(now.getFullYear()).substring(2);
+      const m = String(now.getMonth() + 1).padStart(2, '0');
+      const d = String(now.getDate()).padStart(2, '0');
+      return `${y}${m}${d}`;
+    };
+
+    // Helper for balance formatting (CDATE + CCY + AMOUNT)
+    const formatBalance = (amount: number, dateStr: string, ccy: string) => {
+      const type = amount >= 0 ? 'C' : 'D';
+      const absAmount = Math.abs(amount).toFixed(2).replace('.', ',');
+      return `${type}${formatMT940Date(dateStr)}${ccy}${absAmount}`;
+    };
+
+    // Collect ALL transactions and sort by date
+    let allTransactions: TransactionData[] = [];
+    if (data.transactions) allTransactions.push(...data.transactions);
+    if (data.sections) data.sections.forEach(s => allTransactions.push(...s.transactions));
+
+    // Deduplicate
+    const seen = new Set<string>();
+    allTransactions = allTransactions.filter(tx => {
+      const key = `${tx.date}|${tx.description}|${tx.amount}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+
+    // Filter out balance summary rows (not real transactions)
+    const balanceKeywords = ['beginningbalance', 'endingbalance', 'openingbalance', 'closingbalance', 'ledgerbalance'];
+    allTransactions = allTransactions.filter(tx => {
+      const desc = (tx.description || '').toLowerCase().replace(/\s+/g, '');
+      return !balanceKeywords.some(kw => desc.includes(kw));
+    });
+
+    // Determine Opening and Closing Balances
+    const openingBalance = data.userInfo?.accountSummary?.beginningBalance || 0;
+    const closingBalance = data.userInfo?.accountSummary?.endingBalance || 0;
+
+    // Get date range
+    const dates = allTransactions.map(t => t.date).filter(d => d).sort();
+    const startDate = dates.length > 0 ? dates[0] : new Date().toISOString().split('T')[0];
+    const endDate = dates.length > 0 ? dates[dates.length - 1] : new Date().toISOString().split('T')[0];
+
+    // Build blocks
+    let mt940 = '';
+
+    // Header Blocks {1:}{2:}{4:
+    mt940 += '{1:F01BANKDEFMAXXX0000000000}{2:I940BANKDEFMAXXXN}{4:\r\n';
+
+    // :20: Transaction Reference Number (TRN)
+    mt940 += `:20:${formatMT940Date(startDate)}STATEMENT\r\n`;
+
+    // :25: Account Identification
+    mt940 += `:25:${accountId}\r\n`;
+
+    // :28C: Statement Number / Sequence Number
+    mt940 += `:28C:${statementId}/1\r\n`;
+
+    // :60F: Opening Balance
+    // Set to 0 as per user request to remove summary dependencies
+    mt940 += `:60F:${formatBalance(0, startDate, currency)}\r\n`;
+
+    // Process Transactions
+    allTransactions.forEach(tx => {
+      const amount = tx.moneyIn || (tx.type === 'credit' ? tx.amount : 0) || -(tx.moneyOut || (tx.type === 'debit' ? tx.amount : 0));
+      const absAmount = Math.abs(amount).toFixed(2).replace('.', ',');
+      const sign = amount >= 0 ? 'C' : 'D';
+      const date = formatMT940Date(tx.date);
+      const ref = 'NMSC'; // Non-ref
+
+      // :61: Statement Line
+      // Format: YYMMDD (Date) + MMDD (Entry Date - optional, can be same) + D/C + Currency (First Letter optional? Usually just C/D then amount in SWIFT/MT940 standard usually doesn't strictly need currency code, but some variations do. Standard is D/C + Amount but often logic implies currency from header. Standard field 61 struc: 6!n[4!n]2a[1!a]15d1!a3!c16x//16x)
+      // Simplified: Date(6) + D/C(1-2) + Amount(1-15) + N(1) + 3char code + Reference
+      // Code 'TRF' = Transfer, 'MSC' = Misc
+      mt940 += `:61:${formatMT940Date(tx.date, tx)}${sign}${absAmount}NMSCNONREF\r\n`;
+
+      // :86: Information to Account Owner
+      // SWIFT MT940 standard requires lines of max 65 characters.
+      // Maximum 390 characters (6 lines).
+      const narrative = (tx.normalized_payee || tx.description).substring(0, 390);
+      const lines86 = [];
+      for (let i = 0; i < narrative.length; i += 65) {
+        lines86.push(narrative.substring(i, i + 65));
+      }
+
+      lines86.forEach((line, idx) => {
+        if (idx === 0) {
+          mt940 += `:86:${line}\r\n`;
+        } else {
+          mt940 += `${line}\r\n`;
+        }
+      });
+    });
+
+    // :62F: Closing Balance
+    // Set to 0 as per user request
+    mt940 += `:62F:${formatBalance(0, endDate, currency)}\r\n`;
+
+    // Footer Block
+    mt940 += '-}';
+
+    // Create Download
+    const blob = new Blob([mt940], { type: 'text/plain;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }
 }
+

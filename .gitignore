@@ -3,6 +3,7 @@
 # dependencies
 /node_modules
 /.open-next
+/.clerk
 /.pnp
 .pnp.*
 .yarn/*
@@ -21,8 +22,10 @@
 # production
 /build
 
-# misc
-.DS_Store
+# local-only admin tools (do not commit / deploy)
+/src/app/admin/
+/src/app/api/admin
+
 *.pem
 
 # debug
@@ -41,3 +44,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 package-lock.json
+
+src/app/admin
+src/app/api/admin

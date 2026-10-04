@@ -1,6 +1,6 @@
 "use client";
 
-import { SignInButton, SignUpButton } from "@clerk/nextjs";
+import { SignInButton, SignUpButton } from "@clerk/clerk-react";
 import { X, FileText, Image, Lock } from "lucide-react";
 
 interface OCRAuthModalProps {
@@ -13,10 +13,10 @@ export const OCRAuthModal = ({ isOpen, onClose, fileType }: OCRAuthModalProps) =
   if (!isOpen) return null;
 
   const isImageFile = fileType === 'image';
-  const title = isImageFile ? 'Image File Processing' : 'OCR Processing Required';
-  const description = isImageFile 
-    ? 'Image files require OCR processing to extract text and transactions.'
-    : 'This PDF appears to be image-based and requires OCR processing to extract text.';
+  const title = isImageFile ? 'Image File Processing' : 'Processing Required';
+  const description = isImageFile
+    ? 'Image files require intelligent processing to extract text and transactions.'
+    : 'This PDF appears to be image-based and requires intelligent processing to extract text.';
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
@@ -58,7 +58,7 @@ export const OCRAuthModal = ({ isOpen, onClose, fileType }: OCRAuthModalProps) =
                   {description}
                 </p>
                 <p className="text-sm text-[hsl(var(--muted-foreground))]">
-                  Create a free account to unlock OCR processing and extract data from your files.
+                  Create a free account to unlock intelligent processing and extract data from your files.
                 </p>
               </div>
             </div>
@@ -71,7 +71,7 @@ export const OCRAuthModal = ({ isOpen, onClose, fileType }: OCRAuthModalProps) =
             </div>
             <div className="flex items-center gap-2">
               <div className="h-1.5 w-1.5 rounded-full bg-[hsl(var(--primary))]" />
-              <span>Fast and accurate OCR processing</span>
+              <span>Fast and accurate intelligent processing</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="h-1.5 w-1.5 rounded-full bg-[hsl(var(--primary))]" />

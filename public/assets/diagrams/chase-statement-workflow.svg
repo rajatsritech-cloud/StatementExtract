@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 440" width="100%" height="100%" style="background: #09090b; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <defs>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#18181b" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#111113" stop-opacity="0.98"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background grid pattern -->
+  <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
+    <path d="M 24 0 L 0 0 0 24" fill="none" stroke="rgba(255, 255, 255, 0.04)" stroke-width="1"/>
+  </pattern>
+  <rect width="100%" height="100%" fill="url(#grid)" rx="16" />
+
+  <!-- Header Section -->
+  <g transform="translate(40, 36)">
+    <rect x="0" y="0" width="140" height="24" rx="12" fill="rgba(22, 163, 74, 0.15)" stroke="rgba(22, 163, 74, 0.3)" stroke-width="1"/>
+    <circle cx="12" cy="12" r="4" fill="#16a34a" />
+    <text x="24" y="16" fill="#4ade80" font-size="11" font-weight="600" letter-spacing="0.5">CHASE COMMERCIAL</text>
+    
+    <text x="0" y="54" fill="#f4f4f5" font-size="20" font-weight="700">JPMorgan Chase PDF Extraction Architecture</text>
+    <text x="0" y="74" fill="#a1a1aa" font-size="13">Vector decomposition and multi-column check register normalization to QBO/Excel</text>
+  </g>
+
+  <!-- Connectors -->
+  
+    <path d="M 245 182 L 265 182" fill="none" stroke="#3b82f6" stroke-width="2" stroke-dasharray="none" />
+    <circle cx="265" cy="182" r="3.5" fill="#3b82f6" />
+  
+    <path d="M 470 182 L 490 182" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="none" />
+    <circle cx="490" cy="182" r="3.5" fill="#8b5cf6" />
+  
+    <path d="M 695 182 L 715 182" fill="none" stroke="#10b981" stroke-width="2" stroke-dasharray="none" />
+    <circle cx="715" cy="182" r="3.5" fill="#10b981" />
+  
+    <path d="M 367 225 L 367 260" fill="none" stroke="#06b6d4" stroke-width="2" stroke-dasharray="4,4" />
+    <circle cx="367" cy="260" r="3.5" fill="#06b6d4" />
+  
+    <path d="M 592 225 L 592 260" fill="none" stroke="#ec4899" stroke-width="2" stroke-dasharray="4,4" />
+    <circle cx="592" cy="260" r="3.5" fill="#ec4899" />
+  
+
+  <!-- Nodes -->
+  
+    <g transform="translate(40, 140)">
+      <rect width="205" height="85" rx="12" fill="url(#cardGrad)" stroke="rgba(59,130,246,0.3)" stroke-width="1.5" />
+      <rect x="0" y="0" width="4" height="85" rx="2" fill="#3b82f6" />
+      <text x="16" y="24" fill="#71717a" font-size="10" font-weight="600" letter-spacing="0.8" text-transform="uppercase">Phase 1: Input</text>
+      <text x="16" y="44" fill="#f4f4f5" font-size="13" font-weight="600">Vector PDF Stream</text>
+      <text x="16" y="64" fill="#a1a1aa" font-size="11">Cartesian text coordinate map</text>
+    </g>
+  
+    <g transform="translate(265, 140)">
+      <rect width="205" height="85" rx="12" fill="url(#cardGrad)" stroke="rgba(139,92,246,0.3)" stroke-width="1.5" />
+      <rect x="0" y="0" width="4" height="85" rx="2" fill="#8b5cf6" />
+      <text x="16" y="24" fill="#71717a" font-size="10" font-weight="600" letter-spacing="0.8" text-transform="uppercase">Phase 2: Parsing</text>
+      <text x="16" y="44" fill="#f4f4f5" font-size="13" font-weight="600">Multi-Column Matrix</text>
+      <text x="16" y="64" fill="#a1a1aa" font-size="11">3-column check register unifier</text>
+    </g>
+  
+    <g transform="translate(490, 140)">
+      <rect width="205" height="85" rx="12" fill="url(#cardGrad)" stroke="rgba(16,185,129,0.3)" stroke-width="1.5" />
+      <rect x="0" y="0" width="4" height="85" rx="2" fill="#10b981" />
+      <text x="16" y="24" fill="#71717a" font-size="10" font-weight="600" letter-spacing="0.8" text-transform="uppercase">Phase 3: Audit</text>
+      <text x="16" y="44" fill="#f4f4f5" font-size="13" font-weight="600">Mathematical Proof</text>
+      <text x="16" y="64" fill="#a1a1aa" font-size="11">Opening + Credits - Debits == End</text>
+    </g>
+  
+    <g transform="translate(715, 140)">
+      <rect width="205" height="85" rx="12" fill="url(#cardGrad)" stroke="rgba(245,158,11,0.3)" stroke-width="1.5" />
+      <rect x="0" y="0" width="4" height="85" rx="2" fill="#f59e0b" />
+      <text x="16" y="24" fill="#71717a" font-size="10" font-weight="600" letter-spacing="0.8" text-transform="uppercase">Phase 4: Export</text>
+      <text x="16" y="44" fill="#f4f4f5" font-size="13" font-weight="600">Structured QBO / CSV</text>
+      <text x="16" y="64" fill="#a1a1aa" font-size="11">Native QuickBooks Web Connect</text>
+    </g>
+  
+    <g transform="translate(265, 260)">
+      <rect width="205" height="85" rx="12" fill="url(#cardGrad)" stroke="rgba(6,182,212,0.3)" stroke-width="1.5" />
+      <rect x="0" y="0" width="4" height="85" rx="2" fill="#06b6d4" />
+      <text x="16" y="24" fill="#71717a" font-size="10" font-weight="600" letter-spacing="0.8" text-transform="uppercase">Security Filter</text>
+      <text x="16" y="44" fill="#f4f4f5" font-size="13" font-weight="600">Account Masking</text>
+      <text x="16" y="64" fill="#a1a1aa" font-size="11">Redact SSN / Account routing</text>
+    </g>
+  
+    <g transform="translate(490, 260)">
+      <rect width="205" height="85" rx="12" fill="url(#cardGrad)" stroke="rgba(236,72,153,0.3)" stroke-width="1.5" />
+      <rect x="0" y="0" width="4" height="85" rx="2" fill="#ec4899" />
+      <text x="16" y="24" fill="#71717a" font-size="10" font-weight="600" letter-spacing="0.8" text-transform="uppercase">Ledger Map</text>
+      <text x="16" y="44" fill="#f4f4f5" font-size="13" font-weight="600">GL Categorization</text>
+      <text x="16" y="64" fill="#a1a1aa" font-size="11">Auto-match Chart of Accounts</text>
+    </g>
+  
+
+  <!-- Watermark -->
+  <text x="880" y="415" fill="#52525b" font-size="11" text-anchor="end" font-weight="500">Statement Extract • Technical Architecture</text>
+</svg>
