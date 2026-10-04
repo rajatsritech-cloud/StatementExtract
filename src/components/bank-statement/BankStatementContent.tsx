@@ -181,23 +181,15 @@ export const BankStatementSEOContent = () => {
                     </div>
                 </div>
 
-                {/* Targeted SEO Keyword Block */}
                 <div className="mb-12">
                     <h3 className="text-2xl font-bold text-[hsl(var(--foreground))] mb-4">
-                        Best Free PDF Bank Statement to Excel Converter Online
+                        Zero-Installation, Browser-Based Conversion
                     </h3>
                     <p className="text-[hsl(var(--muted-foreground))] mb-4">
-                        Looking for a <strong>free PDF bank statement to Excel converter</strong>? functionality, we provide a secure, browser-based solution that requires no downloads or software installation.
+                        Unlike desktop software that requires installation and licensing, Statement Extract provides a high-security, browser-based solution accessible on any operating system (Windows, macOS, Linux). Simply drag and drop your document to generate instant, audit-ready spreadsheets.
                     </p>
-                    <div className="flex flex-wrap gap-2 mb-6">
-                        {["Free PDF to Excel", "Online Converter", "No Signup Required", "Secure Download", "CSV Export", "QuickBooks Ready"].map((tag, i) => (
-                            <span key={i} className="px-3 py-1 bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))] text-sm rounded-full font-medium">
-                                {tag}
-                            </span>
-                        ))}
-                    </div>
                     <p className="text-[hsl(var(--muted-foreground))]">
-                        Whether you need to <strong>convert PDF bank statement to CSV free</strong> for personal budgeting or bulk process files for a client, our tool handles it all. We support major banks including <strong>Chase, Bank of America, Wells Fargo, and SBI</strong>, ensuring your data is extracted accurately every time.
+                        Whether you are reconciling personal accounts for tax filing or processing multi-account corporate batches for commercial clients, our conversion pipeline preserves dates, descriptions, checks, and balances with zero data loss.
                     </p>
                 </div>
 

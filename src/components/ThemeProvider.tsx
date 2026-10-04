@@ -28,31 +28,45 @@ export function ThemeProvider({
     storageKey = "vite-ui-theme",
     ...props
 }: ThemeProviderProps) {
-    // Start with default theme to avoid hydration mismatch
     const [theme, setTheme] = React.useState<Theme>(defaultTheme);
     const [mounted, setMounted] = React.useState(false);
 
-    // Read from localStorage only after mount (client-side)
     React.useEffect(() => {
-        const stored = localStorage.getItem(storageKey) as Theme;
-        if (stored && ["green", "blue", "violet", "orange"].includes(stored)) {
-            setTheme(stored);
+        try {
+            const storedTheme = localStorage.getItem(storageKey) as Theme;
+            if (storedTheme && ["green", "blue", "violet", "orange"].includes(storedTheme)) {
+                setTheme(storedTheme);
+            }
+        } catch {
+            // ignore localStorage errors
         }
         setMounted(true);
     }, [storageKey]);
 
     React.useEffect(() => {
+        try {
+            localStorage.removeItem("statement-extract-mode");
+            localStorage.removeItem("vite-ui-mode");
+        } catch {
+            // ignore
+        }
         if (mounted) {
             const root = window.document.documentElement;
             root.setAttribute("data-theme", theme);
+            root.classList.add("dark");
+            root.classList.remove("light");
         }
     }, [theme, mounted]);
 
     const value = {
         theme,
-        setTheme: (theme: Theme) => {
-            localStorage.setItem(storageKey, theme);
-            setTheme(theme);
+        setTheme: (newTheme: Theme) => {
+            try {
+                localStorage.setItem(storageKey, newTheme);
+            } catch {
+                // ignore
+            }
+            setTheme(newTheme);
         },
     };
 

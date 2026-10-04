@@ -141,16 +141,14 @@ export const viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} ${poppins.variable}`}>
+    <html lang="en" className={`dark ${inter.variable} ${poppins.variable}`} suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         {/* Google AdSense Verification Meta Tag */}
         <meta name="google-adsense-account" content="ca-pub-6246360771157819" />
-      </head>
-      <body className="antialiased overflow-x-hidden w-full max-w-[100vw]">
-        {/* Organization Schema for E-E-A-T - Moved to body to prevent hydration mismatch */}
-        <Script
+        {/* Organization Schema - placed in head as plain script to avoid React client-side script warning */}
+        <script
           id="organization-schema"
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -173,12 +171,33 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             })
           }}
         />
-        {/* Google AdSense Script - Using beforeInteractive for crawler visibility */}
+        {/* WebSite Schema for Brand Recognition & AdSense Verification */}
+        <script
+          id="website-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              "name": "Statement Extract",
+              "url": "https://statementextract.com",
+              "description": "AI-powered document processing platform for converting bank statements to Excel, CSV, QuickBooks, and Xero.",
+              "publisher": {
+                "@type": "Organization",
+                "name": "Statement Extract",
+                "url": "https://statementextract.com"
+              }
+            })
+          }}
+        />
+      </head>
+      <body className="antialiased overflow-x-hidden w-full max-w-[100vw]">
+        {/* Google AdSense Script - afterInteractive is the correct strategy for body-level scripts */}
         <Script
           id="google-adsense"
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6246360771157819"
           crossOrigin="anonymous"
-          strategy="beforeInteractive"
+          strategy="afterInteractive"
         />
         {isProduction && (
           <>

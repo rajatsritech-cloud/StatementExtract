@@ -1,0 +1,141 @@
+---
+title: "Importing Bank Statements into Sage 50 and Sage Intacct: CSV, OFX, and QIF Specifications"
+summary: "A technical reference guide to importing bank statements into Sage 50 and Sage Intacct. Learn exact CSV column ordering, electronic banking OFX configurations, and reconciliation workflows."
+coverImage: "/assets/import-bank-statement-tutorial.webp"
+date: "2026-04-03"
+tags: "Sage, Sage 50, Sage Intacct, Bank Reconciliation, Enterprise ERP"
+---
+
+## Introduction to Bank Statement Ingestion in Sage
+
+Sage is a pillar of enterprise and mid-market corporate accounting, with **Sage 50 (Cloud Accounts)** dominating small-to-mid manufacturing and trade businesses, and **Sage Intacct** serving as the preferred cloud financial management solution for mid-market CFOs and SaaS enterprises.
+
+While both Sage 50 and Sage Intacct feature bank feed modules, accountants frequently need to manually import bank statements when:
+- Establishing a new subsidiary entity.
+- Backfilling historical records for year-end corporate tax audits.
+- Processing statements from specialized credit unions, foreign banks, or regional lenders lacking direct Open Banking APIs.
+
+Unlike modern consumer apps, Sage enforces rigid legacy formatting parameters. A single misordered column or an unexpected date delimiter (`.` instead of `/`) will trigger silent import rejections or misallocate debits and credits across the general ledger.
+
+This guide provides the exact file specifications and step-by-step procedures to import bank statements cleanly into Sage 50 and Sage Intacct.
+
+---
+
+## The Sage 50 CSV Bank Statement Layout
+
+Sage 50 requires a specific comma-delimited CSV structure for manual electronic statement imports:
+
+```csv
+Date,Reference,Description,Amount
+01/03/2026,DEP001,CUSTOMER PAYMENT INV-4091,15400.00
+04/03/2026,1042,OFFICE LEASE MARCH 2026,-3200.00
+08/03/2026,DEB892,AMAZON WEB SERVICES,-412.50
+15/03/2026,PAYROLL,WAGE DISBURSEMENT ACH,-8950.00
+22/03/2026,DEP002,STRIPE MERCHANT PAYOUT,8420.00
+```
+
+### Essential Sage 50 Rules:
+1. **Four Columns Only**: Do not include extra columns for Running Balance, Category, or Check Images. The standard layout must strictly be: `Date`, `Reference`, `Description`, `Amount`.
+2. **Date Format**: Sage 50 relies on the Windows Regional Settings of the workstation running the software. In the UK and Commonwealth countries, dates must be `DD/MM/YYYY`. In the United States, dates must be `MM/DD/YYYY`.
+3. **Signed Amounts**: Sage 50 uses a single signed amount column:
+   - Money going out (payments, supplier bills, bank fees) must be **negative** (`-3200.00`).
+   - Money coming in (customer receipts, interest, transfers) must be **positive** (`15400.00`).
+4. **No Currency Symbols or Thousands Separators**: Values such as `£15,400.00` or `$15,400.00` will crash the import parser. Use plain numeric decimals: `15400.00`.
+
+---
+
+## The Sage Intacct Bank Reconciliation Specification
+
+Sage Intacct is a true cloud ERP and offers broader format flexibility, supporting **OFX (Open Financial Exchange)**, **QIF (Quicken Interchange Format)**, and custom **CSV** import maps.
+
+### Sage Intacct Standard CSV Import Headers:
+```csv
+Account Number,Statement Date,Transaction Date,Description,Amount,Check Number,Payee
+1010-00,2026-03-31,2026-03-02,CUSTOMER PAYMENT INV-904,12450.00,,ACME CORP
+1010-00,2026-03-31,2026-03-05,OFFICE RENT LEASE,-4500.00,1042,REALTY HOLDINGS
+1010-00,2026-03-31,2026-03-12,GOOGLE WORKSPACE,-140.00,,GOOGLE LLC
+```
+
+### Key Sage Intacct Features:
+- **Account Number Tagging**: Allows importing multi-bank statement batches into different subsidiary entities in a single file upload.
+- **Statement Date vs Transaction Date**: `Statement Date` represents the period closing date (e.g., `2026-03-31`), while `Transaction Date` represents the actual transaction posting date.
+- **Automatic Match Engine**: Sage Intacct matches transactions against existing Accounts Payable (AP) payments, Accounts Receivable (AR) deposits, and Journal Entries using the `Check Number` and exact dollar amounts.
+
+---
+
+## Step-by-Step: Importing Bank Statements into Sage 50
+
+```text
+[ Sage 50 Desktop ]
+         │
+         ▼
+[ Banking Menu > Bank Reconciliation ]
+         │
+         ▼
+[ Select Target Bank Account & Statement Date ]
+         │
+         ▼
+[ Click "Import" or "Electronic Banking" ]
+         │
+         ▼
+[ Choose Converted CSV File ]
+         │
+         ▼
+[ Auto-Match Matched Transactions & Post Unmatched ]
+```
+
+### Detailed Instructions:
+1. In Sage 50, navigate to **Banking** on the left navigation panel.
+2. Select your bank account from the register list and click **Reconcile**.
+3. In the Bank Reconciliation window, enter the **Statement Date** and **Ending Balance** from your physical bank statement PDF.
+4. Click **Import** (or **Import Bank Statement** depending on your release version).
+5. Browse to your formatted CSV or OFX file generated by Statement Extract.
+6. Sage 50 will read the file and automatically check off cleared checks and deposits that match your internal ledger transactions.
+7. Any unmatched transactions (such as unexpected bank service fees or direct debits) will appear in the unmatched pane, allowing you to create general ledger payments on the fly.
+
+---
+
+## Step-by-Step: Importing into Sage Intacct
+
+1. Log into your Sage Intacct dashboard.
+2. Navigate to **Cash Management > All > Reconciliation > Bank**.
+3. Select your entity and the relevant **Financial Institution Account**.
+4. In the upper-right corner, click **Import Statement**.
+5. Select your file format (**OFX** or **CSV**).
+6. Upload the file. Intacct validates the file schema and executes its automated reconciliation rule set.
+7. Review the **Matched**, **Partially Matched**, and **Unmatched** tabs to finalize reconciliation.
+
+---
+
+## Common Sage Import Errors & Solutions
+
+### Error 1: "The file could not be imported because the date format is invalid"
+- *Cause*: Sage 50 expected `DD/MM/YYYY` (e.g. `24/03/2026`) but received `MM/DD/YYYY` (`03/24/2026`).
+- *Solution*: Set your system date format to match your company file regional setting, or format all CSV dates in Excel using the exact expected delimiter before importing.
+
+### Error 2: "Duplicate record encountered in Electronic Statement"
+- *Cause*: Sage detects that a transaction with identical date, amount, and reference already exists in the statement repository.
+- *Solution*: Filter out any transactions that overlap with previously reconciled statement cycles.
+
+### Error 3: Inverted Account Balance
+- *Cause*: The CSV file lacked negative signs on payment transactions.
+- *Solution*: In Sage, cash outflows must always be negative numbers. Re-export your statement from Statement Extract with Sage-compatible signed amounts.
+
+---
+
+## How to Convert PDF Statements to Sage-Ready Formats
+
+Manually typing hundreds of transactions into Sage CSV templates is time-consuming and introduces human transposition errors.
+
+With [Statement Extract Bank Statement Converter](file:///convert-bank-statement-to-csv-excel):
+1. Upload any bank statement PDF (Chase, Barclays, HSBC, Wells Fargo, etc.).
+2. The AI parser extracts dates, vendor descriptions, reference numbers, and amounts.
+3. Select **Sage 50 CSV** or **Sage Intacct CSV** export.
+4. The tool formats headers, applies exact date syntax, normalizes negative outflow signs, and verifies the mathematical balance to 100% accuracy.
+5. Import directly into Sage with zero manual cleanup.
+
+---
+
+## Summary
+
+Importing electronic bank statements into Sage 50 and Sage Intacct accelerates the month-end close and eliminates manual journal entry errors. By adhering to Sage's specific column orders, date conventions, and signed amount standards, finance teams can reconcile high-volume accounts with speed and audit-ready precision.

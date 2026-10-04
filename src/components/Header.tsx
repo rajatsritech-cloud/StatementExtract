@@ -42,7 +42,7 @@ import {
   useUser,
 } from "@clerk/clerk-react";
 import { isAdminEmail } from "@/lib/auth-client";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { useTheme } from "@/components/ThemeProvider";
 import { FeedbackModal } from "@/components/FeedbackModal";
 
@@ -55,6 +55,7 @@ export const Header = () => {
   const [isMobileSolutionsOpen, setIsMobileSolutionsOpen] = useState(false);
   const [isMobileConvertersOpen, setIsMobileConvertersOpen] = useState(false);
   const [isMobileToolsOpen, setIsMobileToolsOpen] = useState(false);
+  const [isMobileCompanyOpen, setIsMobileCompanyOpen] = useState(false);
   const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const convertersTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const toolsTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -134,7 +135,47 @@ export const Header = () => {
     setIsToolsHovered(false);
   };
 
+  const closeAllDropdowns = useCallback(() => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+      hoverTimeoutRef.current = null;
+    }
+    if (convertersTimeoutRef.current) {
+      clearTimeout(convertersTimeoutRef.current);
+      convertersTimeoutRef.current = null;
+    }
+    if (toolsTimeoutRef.current) {
+      clearTimeout(toolsTimeoutRef.current);
+      toolsTimeoutRef.current = null;
+    }
+    setIsSolutionsHovered(false);
+    setIsConvertersHovered(false);
+    setIsToolsHovered(false);
+  }, []);
+
   const pathname = usePathname();
+
+  // Close dropdowns on route changes
+  useEffect(() => {
+    closeAllDropdowns();
+    setIsMobileMenuOpen(false);
+  }, [pathname, closeAllDropdowns]);
+
+  // Close dropdowns on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        closeAllDropdowns();
+        setIsMobileMenuOpen(false);
+      }
+    };
+    if (isAnyDropdownOpen || isMobileMenuOpen) {
+      window.addEventListener("keydown", handleKeyDown);
+    }
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isAnyDropdownOpen, isMobileMenuOpen, closeAllDropdowns]);
 
   if (pathname?.startsWith("/dashboard")) {
     return null;
@@ -174,20 +215,33 @@ export const Header = () => {
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
               >
-                <Link href="/convert-bank-statement-to-csv-excel" className="flex items-center gap-1 text-sm font-medium text-[hsl(var(--foreground))] hover:text-[hsl(var(--primary))] transition-colors">
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (isSolutionsHovered) {
+                      closeDropdown();
+                    } else {
+                      closeAllDropdowns();
+                      setIsSolutionsHovered(true);
+                    }
+                  }}
+                  className="flex items-center gap-1 text-sm font-medium text-[hsl(var(--foreground))] hover:text-[hsl(var(--primary))] transition-colors cursor-pointer"
+                  aria-expanded={isSolutionsHovered}
+                >
                   Solutions
-                  <ChevronDown className="h-4 w-4" />
-                </Link>
+                  <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isSolutionsHovered ? 'rotate-180 text-[hsl(var(--primary))]' : ''}`} />
+                </button>
 
                 {/* Solutions Dropdown */}
                 {isSolutionsHovered && (
                   <div
-                    className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 z-50"
+                    className="fixed top-[5.25rem] left-1/2 -translate-x-1/2 z-50 w-[min(94vw,900px)] pt-2"
                     onMouseEnter={handleMouseEnter}
                     onMouseLeave={handleMouseLeave}
                   >
                     {/* Dropdown card - Theme Aligned */}
-                    <div className="relative w-[880px] rounded-2xl bg-[hsl(var(--card))] shadow-2xl border border-[hsl(var(--border))] overflow-hidden animate-dropdown-enter">
+                    <div className="relative w-full rounded-2xl bg-[hsl(var(--card))] shadow-2xl border border-[hsl(var(--border))] overflow-hidden animate-dropdown-enter">
                       <div className="grid grid-cols-3 divide-x divide-[hsl(var(--border))]/70">
                         {/* Left: Company column */}
                         <div className="col-span-1 flex flex-col justify-between p-6">
@@ -329,9 +383,6 @@ export const Header = () => {
                   </div>
                 )}
               </div>
-              <Link href="/blogs" className="text-sm font-medium text-[hsl(var(--foreground))] transition-colors hover:text-[hsl(var(--primary))]">
-                Blogs
-              </Link>
 
               {/* Converters Dropdown */}
               <div
@@ -339,18 +390,31 @@ export const Header = () => {
                 onMouseEnter={handleConvertersMouseEnter}
                 onMouseLeave={handleConvertersMouseLeave}
               >
-                <Link href="/convert" className="flex items-center gap-1 text-sm font-medium text-[hsl(var(--foreground))] hover:text-[hsl(var(--primary))] transition-colors">
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (isConvertersHovered) {
+                      closeConvertersDropdown();
+                    } else {
+                      closeAllDropdowns();
+                      setIsConvertersHovered(true);
+                    }
+                  }}
+                  className="flex items-center gap-1 text-sm font-medium text-[hsl(var(--foreground))] hover:text-[hsl(var(--primary))] transition-colors cursor-pointer"
+                  aria-expanded={isConvertersHovered}
+                >
                   Converters
-                  <ChevronDown className="h-4 w-4" />
-                </Link>
+                  <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isConvertersHovered ? 'rotate-180 text-[hsl(var(--primary))]' : ''}`} />
+                </button>
 
                 {isConvertersHovered && (
                   <div
-                    className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 z-50"
+                    className="fixed top-[5.25rem] left-1/2 -translate-x-1/2 z-50 w-[min(94vw,1060px)] pt-2"
                     onMouseEnter={handleConvertersMouseEnter}
                     onMouseLeave={handleConvertersMouseLeave}
                   >
-                    <div className="relative w-[1100px] rounded-2xl bg-[hsl(var(--card))] shadow-2xl border border-[hsl(var(--border))] overflow-hidden animate-dropdown-enter">
+                    <div className="relative w-full rounded-2xl bg-[hsl(var(--card))] shadow-2xl border border-[hsl(var(--border))] overflow-hidden animate-dropdown-enter">
                       <div className="grid grid-cols-4 divide-x divide-[hsl(var(--border))]/70">
                         {/* PDF TOOLS - Orange Theme */}
                         <div className="col-span-1 p-6">
@@ -595,18 +659,31 @@ export const Header = () => {
                 onMouseEnter={handleToolsMouseEnter}
                 onMouseLeave={handleToolsMouseLeave}
               >
-                <Link href="/tools" className="flex items-center gap-1 text-sm font-medium text-[hsl(var(--foreground))] hover:text-[hsl(var(--primary))] transition-colors">
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (isToolsHovered) {
+                      closeToolsDropdown();
+                    } else {
+                      closeAllDropdowns();
+                      setIsToolsHovered(true);
+                    }
+                  }}
+                  className="flex items-center gap-1 text-sm font-medium text-[hsl(var(--foreground))] hover:text-[hsl(var(--primary))] transition-colors cursor-pointer"
+                  aria-expanded={isToolsHovered}
+                >
                   Tools
-                  <ChevronDown className="h-4 w-4" />
-                </Link>
+                  <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isToolsHovered ? 'rotate-180 text-[hsl(var(--primary))]' : ''}`} />
+                </button>
 
                 {isToolsHovered && (
                   <div
-                    className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 z-50"
+                    className="fixed top-[5.25rem] left-1/2 -translate-x-1/2 z-50 w-[min(94vw,1060px)] pt-2"
                     onMouseEnter={handleToolsMouseEnter}
                     onMouseLeave={handleToolsMouseLeave}
                   >
-                    <div className="relative w-[1100px] rounded-2xl bg-[hsl(var(--card))] shadow-xl border border-[hsl(var(--border))] overflow-hidden animate-dropdown-enter">
+                    <div className="relative w-full rounded-2xl bg-[hsl(var(--card))] shadow-xl border border-[hsl(var(--border))] overflow-hidden animate-dropdown-enter">
                       <div className="grid grid-cols-4 divide-x divide-[hsl(var(--border))]/70">
                         {/* INVOICING - Orange Theme */}
                         <div className="col-span-1 p-6">
@@ -856,6 +933,16 @@ export const Header = () => {
                 )}
               </div>
 
+              <Link href="/pricing" className="text-sm font-medium text-[hsl(var(--foreground))] transition-colors hover:text-[hsl(var(--primary))]">
+                Pricing
+              </Link>
+              <Link href="/blogs" className="text-sm font-medium text-[hsl(var(--foreground))] transition-colors hover:text-[hsl(var(--primary))]">
+                Blogs
+              </Link>
+              <Link href="/about" className="text-sm font-medium text-[hsl(var(--foreground))] transition-colors hover:text-[hsl(var(--primary))]">
+                About
+              </Link>
+
             </nav>
 
             <div className="flex items-center gap-2 lg:gap-4">
@@ -1010,13 +1097,24 @@ export const Header = () => {
               </div>
 
               <Link
+                href="/pricing"
+                className="flex w-full items-center justify-between px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))]/40 transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                <span className="flex items-center gap-3">
+                  <CreditCard className="h-4 w-4 text-[hsl(var(--primary))]" />
+                  <span>Pricing</span>
+                </span>
+              </Link>
+
+              <Link
                 href="/blogs"
-                className="flex w-full items-center justify-between px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))]"
+                className="flex w-full items-center justify-between px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))]/40 transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 <span className="flex items-center gap-3">
                   <FileIcon className="h-4 w-4 text-[hsl(var(--primary))]" />
-                  <span>Blogs</span>
+                  <span>Blogs & Guides</span>
                 </span>
               </Link>
 
@@ -1054,6 +1152,45 @@ export const Header = () => {
                       <Link href="/tools/fire-calculator" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">FIRE Calculator</Link>
                     </div>
                     <Link href="/tools" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-center rounded-lg px-2 py-2 mt-2 text-sm font-medium text-[hsl(var(--primary))] bg-[hsl(var(--primary))]/10">View All Tools</Link>
+                  </div>
+                )}
+              </div>
+
+              {/* Mobile Company & Legal Accordion */}
+              <div>
+                <button
+                  className="flex w-full items-center justify-between px-4 py-3 text-sm font-medium text-[hsl(var(--foreground))]"
+                  onClick={() => setIsMobileCompanyOpen(!isMobileCompanyOpen)}
+                >
+                  <span className="flex items-center gap-3">
+                    <Building className="h-4 w-4 text-[hsl(var(--primary))]" />
+                    <span>Company & Legal</span>
+                  </span>
+                  <ChevronDown className={`h-4 w-4 transition-transform duration-200 ${isMobileCompanyOpen ? 'rotate-180' : ''}`} />
+                </button>
+
+                {isMobileCompanyOpen && (
+                  <div className="bg-[hsl(var(--muted))]/30 px-4 py-2 space-y-1">
+                    <Link href="/about" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-2.5 w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">
+                      <Building className="h-3.5 w-3.5 text-[hsl(var(--muted-foreground))]" />
+                      <span>About Us</span>
+                    </Link>
+                    <Link href="/contact" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-2.5 w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">
+                      <Mail className="h-3.5 w-3.5 text-[hsl(var(--muted-foreground))]" />
+                      <span>Contact Us</span>
+                    </Link>
+                    <Link href="/privacy-policy" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-2.5 w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">
+                      <Shield className="h-3.5 w-3.5 text-[hsl(var(--muted-foreground))]" />
+                      <span>Privacy Policy</span>
+                    </Link>
+                    <Link href="/terms" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-2.5 w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">
+                      <Settings className="h-3.5 w-3.5 text-[hsl(var(--muted-foreground))]" />
+                      <span>Terms of Service</span>
+                    </Link>
+                    <Link href="/cookie-policy" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-2.5 w-full text-left rounded-lg px-2 py-2 text-sm text-[hsl(var(--foreground))] hover:bg-[hsl(var(--primary))]/10 hover:text-[hsl(var(--primary))]">
+                      <FileIcon className="h-3.5 w-3.5 text-[hsl(var(--muted-foreground))]" />
+                      <span>Cookie Policy</span>
+                    </Link>
                   </div>
                 )}
               </div>
@@ -1116,15 +1253,14 @@ export const Header = () => {
         </div >
       )}
 
-      {/* Backdrop Blur Overlay */}
-      {
-        isAnyDropdownOpen && (
-          <div
-            className="fixed inset-0 top-[5.25rem] z-40 bg-black/10 backdrop-blur-[2px] transition-all duration-300 animate-in fade-in"
-            aria-hidden="true"
-          />
-        )
-      }
+      {/* Backdrop Blur Overlay - Click off to dismiss */}
+      {isAnyDropdownOpen && (
+        <div
+          className="fixed inset-0 top-[5.25rem] z-40 bg-black/25 backdrop-blur-[2px] transition-all duration-300 animate-in fade-in cursor-pointer"
+          onClick={closeAllDropdowns}
+          aria-hidden="true"
+        />
+      )}
     </>
   );
 };

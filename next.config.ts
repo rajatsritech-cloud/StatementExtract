@@ -1,15 +1,13 @@
 import type { NextConfig } from "next";
 
+const isDev = process.env.NODE_ENV === "development";
+
 const nextConfig: NextConfig = {
-  // Enable static export for Cloudflare Pages (Pure Static)
-  output: "export",
+  // Static export only for production (Cloudflare Pages) — disabled in dev so Clerk SSR works
+  ...(isDev ? {} : { output: "export", trailingSlash: true }),
 
-  // Proper trailing slash handling for static hosting
-  trailingSlash: true,
-
-  // Add the 'images' config right here
   images: {
-    unoptimized: true, // Required for static export
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: "https",
@@ -19,6 +17,8 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+
+
 };
 
 export default nextConfig;

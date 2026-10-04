@@ -102,7 +102,7 @@ export function BlogsPageClient({ posts }: BlogsPageClientProps) {
                         </span>
                     </div>
                     <h1 className="text-4xl md:text-5xl font-bold text-[hsl(var(--foreground))] mb-6 tracking-tight">
-                        News, tutorials, and stories from <span className="bg-gradient-primary bg-clip-text text-transparent">Rajat Srivastava</span>
+                        News, tutorials, and stories from <span className="bg-gradient-primary bg-clip-text text-transparent">Statement Extract Team</span>
                     </h1>
                     <p className="text-lg text-[hsl(var(--muted-foreground))] max-w-2xl mx-auto leading-relaxed">
                         Stay up to date with best practices for document automation, release notes, and deep dives into how we power data extraction for world-class finance teams.
@@ -196,22 +196,13 @@ export function BlogsPageClient({ posts }: BlogsPageClientProps) {
                                 {/* Image Container - edge to edge, full quality */}
                                 <div className="aspect-[16/9] w-full relative bg-[hsl(var(--muted))] overflow-hidden">
                                     {post.coverImage ? (
-                                        <>
-                                            <Image
-                                                src={post.coverImage}
-                                                alt={post.title}
-                                                fill
-                                                className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                            />
-                                            {/* AI-Generated Image Disclosure */}
-                                            <div className="absolute bottom-2 right-2 flex items-center gap-1 bg-black/50 backdrop-blur-sm text-white/80 text-[9px] px-1.5 py-0.5 rounded">
-                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="h-2.5 w-2.5" aria-hidden="true">
-                                                    <path fillRule="evenodd" d="M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0ZM9 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM6.75 8a.75.75 0 0 0 0 1.5h.75v1.75a.75.75 0 0 0 1.5 0v-2.5A.75.75 0 0 0 8.25 8h-1.5Z" clipRule="evenodd" />
-                                                </svg>
-                                                <span>Illustration by Rajat Srivastava</span>
-                                            </div>
-                                        </>
+                                        <Image
+                                            src={post.coverImage}
+                                            alt={post.title}
+                                            fill
+                                            className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                        />
                                     ) : (
                                         <div className="absolute inset-0 flex items-center justify-center text-[hsl(var(--muted-foreground))] bg-[hsl(var(--muted))]">
                                             <BookOpen className="w-12 h-12 opacity-20" />

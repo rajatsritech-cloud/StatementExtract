@@ -5,7 +5,15 @@ export const dynamic = 'force-static'
 export default function robots(): MetadataRoute.Robots {
     return {
         rules: [
-            // Allow all bots for AdSense approval
+            // Explicitly allow Google AdSense crawler and Googlebot
+            {
+                userAgent: 'Mediapartners-Google',
+                allow: '/',
+            },
+            {
+                userAgent: 'Googlebot',
+                allow: '/',
+            },
             {
                 userAgent: '*',
                 allow: '/',

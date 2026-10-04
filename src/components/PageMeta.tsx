@@ -17,16 +17,16 @@ export const PageMeta = ({ lastUpdated = "March 2026", className = "" }: PageMet
         <div className={`flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-[hsl(var(--muted-foreground))] ${className}`}>
             <Link href="/about" className="flex items-center gap-2 group">
                 <Image
-                    src="/assets/Rajat Srivastava.png"
-                    alt="Rajat Srivastava"
-                    width={24}
-                    height={24}
-                    className="rounded-full object-cover"
+                    src="/favicon-32x32.png"
+                    alt="Statement Extract Team"
+                    width={20}
+                    height={20}
+                    className="rounded-full object-contain"
                 />
                 <span>
                     By{" "}
                     <span className="text-[hsl(var(--primary))] group-hover:underline font-medium">
-                        Rajat Srivastava
+                        Statement Extract Editorial Team
                     </span>
                 </span>
             </Link>

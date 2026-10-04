@@ -17,7 +17,7 @@ import styles from "./page.module.css";
 // Disable ISR (Incremental Static Regeneration)
 // We want strict SSG (Static Site Generation) to avoid Cloudflare Worker limits.
 // Content updates will require a site rebuild.
-export const dynamicParams = false; // 404 if slug not found in generateStaticParams
+export const dynamicParams = true;
 
 interface PageParams {
   params: Promise<{
@@ -399,12 +399,12 @@ export default async function BlogPostPage({ params }: PageParams) {
     "dateModified": date, // Assuming no separate modified date for now
     "author": {
       "@type": "Organization",
-      "name": "Rajat Srivastava",
-      "url": "https://statementextract.com"
+      "name": "Statement Extract Editorial Team",
+      "url": "https://statementextract.com/about"
     },
     "publisher": {
       "@type": "Organization",
-      "name": "Rajat Srivastava",
+      "name": "Statement Extract",
       "logo": {
         "@type": "ImageObject",
         "url": "https://statementextract.com/favicon-512x512.png"
@@ -412,6 +412,9 @@ export default async function BlogPostPage({ params }: PageParams) {
     },
     "description": summary,
     "keywords": tags.join(", "),
+    "inLanguage": "en-US",
+    "wordCount": content.split(/\s+/).filter(Boolean).length,
+    "articleSection": tags[0] || "Financial Engineering",
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": `${siteUrl}/blogs/${slug}`
@@ -480,13 +483,13 @@ export default async function BlogPostPage({ params }: PageParams) {
                     <div className="flex items-center gap-2 text-sm text-[hsl(var(--muted-foreground))]">
                       <Link href="/about" className="flex items-center gap-2 group">
                         <Image
-                          src="/assets/Rajat Srivastava.png"
-                          alt="Rajat Srivastava"
-                          width={28}
-                          height={28}
-                          className="rounded-full object-cover"
+                          src="/favicon-32x32.png"
+                          alt="Statement Extract Team"
+                          width={24}
+                          height={24}
+                          className="rounded-full object-contain"
                         />
-                        <span className="font-medium text-[hsl(var(--foreground))] group-hover:text-[hsl(var(--primary))] transition-colors">Rajat Srivastava</span>
+                        <span className="font-medium text-[hsl(var(--foreground))] group-hover:text-[hsl(var(--primary))] transition-colors">Statement Extract Team</span>
                       </Link>
                     <span className="text-[hsl(var(--border))]">•</span>
                     <time dateTime={date}>
@@ -567,19 +570,6 @@ export default async function BlogPostPage({ params }: PageParams) {
                     sizes="(max-width: 1024px) 100vw, 860px"
                   />
                 </div>
-                {/* AI-Generated Image Disclosure for Google Compliance */}
-                <div className="flex items-center justify-end gap-1.5 text-[10px] text-[hsl(var(--muted-foreground))]">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 16 16"
-                    fill="currentColor"
-                    className="h-3 w-3"
-                    aria-hidden="true"
-                  >
-                    <path fillRule="evenodd" d="M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0ZM9 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM6.75 8a.75.75 0 0 0 0 1.5h.75v1.75a.75.75 0 0 0 1.5 0v-2.5A.75.75 0 0 0 8.25 8h-1.5Z" clipRule="evenodd" />
-                  </svg>
-                  <span>Illustration by Rajat Srivastava</span>
-                </div>
               </div>
             )}
 
@@ -637,20 +627,11 @@ export default async function BlogPostPage({ params }: PageParams) {
                     <div className="aspect-[16/9] w-full rounded-2xl bg-gray-100 sm:aspect-[2/1] lg:aspect-[3/2] overflow-hidden relative">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       {post.coverImage ? (
-                        <>
-                          <img
-                            src={post.coverImage}
-                            alt={post.title}
-                            className="absolute inset-0 h-full w-full object-cover transition-transform duration-200 group-hover:scale-[1.02]"
-                          />
-                          {/* AI-Generated Image Disclosure */}
-                          <div className="absolute bottom-2 right-2 flex items-center gap-1 bg-black/50 backdrop-blur-sm text-white/80 text-[9px] px-1.5 py-0.5 rounded">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="h-2.5 w-2.5" aria-hidden="true">
-                              <path fillRule="evenodd" d="M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0ZM9 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM6.75 8a.75.75 0 0 0 0 1.5h.75v1.75a.75.75 0 0 0 1.5 0v-2.5A.75.75 0 0 0 8.25 8h-1.5Z" clipRule="evenodd" />
-                            </svg>
-                            <span>Illustration by Rajat Srivastava</span>
-                          </div>
-                        </>
+                        <img
+                          src={post.coverImage}
+                          alt={post.title}
+                          className="absolute inset-0 h-full w-full object-cover transition-transform duration-200 group-hover:scale-[1.02]"
+                        />
                       ) : (
                         <div className="flex h-full w-full items-center justify-center text-xs text-gray-400">
                           No cover image

@@ -3,6 +3,7 @@
 # dependencies
 /node_modules
 /.open-next
+/.clerk
 /.pnp
 .pnp.*
 .yarn/*

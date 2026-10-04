@@ -83,16 +83,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         '/convert/csv-to-iif/',
         '/convert/csv-to-excel/',
         '/convert/excel-to-csv/',
-        '/convert/csv-to-mt940/',
     ]
 
-    // 4. Static Info Pages - Low priority, rarely change. Priority 0.5, Monthly/Yearly.
+    // 4. Static Info Pages - High trust & conversion pages. Priority 0.7, Monthly.
     const infoPages = [
         '/about/',
         '/pricing/',
         '/careers/',
     ]
 
+    // 5. Legal & Contact Pages - Essential compliance pages. Priority 0.6, Monthly.
     const legalPages = [
         '/privacy-policy/',
         '/terms/',
@@ -100,8 +100,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         '/cookie-policy/',
     ]
 
-    // 5. Dynamic Blogs - Fetch from source
-    // We use the existing URL list logic for now, preventing broken links.
+    // 6. Dynamic Blogs - Fetch all MDX technical articles
     const blogListPage = '/blogs/'
     const staticBlogPosts = [
         '/blogs/bank-statement-converter-pdf-to-excel-csv/',
@@ -119,20 +118,37 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         '/blogs/automated-bank-reconciliation-software-guide/',
         '/blogs/bank-statement-organization-tax-preparation-guide/',
         '/blogs/how-to-read-bank-statement-guide/',
-        '/blogs/paperless-financial-document-management-2026/',
+        '/blogs/paperless-financial-document-management-2025/',
         '/blogs/bank-statement-for-visa-application-guide/',
+        '/blogs/mt940-format-bank-statement-specification-guide/',
+        '/blogs/qbo-web-connect-file-format-troubleshooting-guide/',
+        '/blogs/chase-bank-statement-pdf-to-excel-conversion-guide/',
+        '/blogs/bank-of-america-statement-extraction-quickbooks-guide/',
+        '/blogs/wells-fargo-bank-statement-pdf-to-csv-converter-guide/',
+        '/blogs/bai2-format-cash-management-bank-statement-guide/',
+        '/blogs/ofx-vs-qbo-vs-qfx-financial-file-comparison/',
+        '/blogs/bank-statement-audit-trail-fraud-detection-guide/',
+        '/blogs/convert-scanned-pdf-to-excel-ocr-guide/',
+        '/blogs/xero-bank-reconciliation-troubleshooting-guide/',
+        '/blogs/convert-credit-card-statements-to-csv-guide/',
+        '/blogs/citibank-statement-pdf-to-excel-conversion-guide/',
+        '/blogs/capital-one-statement-extraction-quickbooks-guide/',
+        '/blogs/pnc-bank-statement-pdf-to-excel-conversion-guide/',
+        '/blogs/td-bank-statement-pdf-to-excel-conversion-guide/',
+        '/blogs/quickbooks-desktop-vs-online-bank-feed-import-guide/',
+        '/blogs/sage-accounting-bank-statement-import-guide/',
+        '/blogs/wave-accounting-bank-statement-csv-formatting-guide/',
+        '/blogs/bank-statement-extraction-for-mortgage-underwriters-guide/',
+        '/blogs/tax-season-catch-up-bookkeeping-bank-statements-guide/',
     ]
 
-    // Try to fetch dynamic posts (Enterprise way), fallback to static list if empty
+    // Fetch dynamic posts from local content/posts or GitHub
     let dynamicPosts: { slug: string; date: string }[] = []
     try {
         dynamicPosts = await getAllPosts()
     } catch (e) {
         console.warn('Could not fetch dynamic blogs, using fallback list')
     }
-
-    // Use dynamic list if available, otherwise fallback to the hardcoded list
-    // const blogPosts = dynamicBlogRoutes.length > 0 ? dynamicBlogRoutes : staticBlogPosts
 
     const currentDate = new Date().toISOString().split('T')[0]
 
@@ -161,7 +177,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             priority: 0.8,
         })),
 
-        // Blogs List (0.9)
+        // Blogs Hub Page (0.9)
         {
             url: `${baseUrl}${blogListPage}`,
             lastModified: currentDate,
@@ -169,36 +185,36 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             priority: 0.9,
         },
 
-        // Individual Blog Posts
+        // Individual Blog Posts (0.85) - High-value comprehensive technical guides
         ...(dynamicPosts.length > 0
             ? dynamicPosts.map((post) => ({
                 url: `${baseUrl}/blogs/${post.slug}/`,
                 lastModified: post.date || currentDate,
                 changeFrequency: 'weekly' as const,
-                priority: 0.7,
+                priority: 0.85,
             }))
             : staticBlogPosts.map((route) => ({
                 url: `${baseUrl}${route}`,
                 lastModified: currentDate,
                 changeFrequency: 'weekly' as const,
-                priority: 0.7,
+                priority: 0.85,
             }))
         ),
 
-        // Info (0.5)
+        // Static Info Pages (0.7) - About, Pricing, Careers
         ...infoPages.map((route) => ({
             url: `${baseUrl}${route}`,
             lastModified: currentDate,
             changeFrequency: 'monthly' as const,
-            priority: 0.5,
+            priority: 0.7,
         })),
 
-        // Legal (0.3)
+        // Legal & Trust Pages (0.6) - Privacy, Terms, Contact, Cookie
         ...legalPages.map((route) => ({
             url: `${baseUrl}${route}`,
             lastModified: currentDate,
-            changeFrequency: 'yearly' as const,
-            priority: 0.3,
+            changeFrequency: 'monthly' as const,
+            priority: 0.6,
         })),
     ]
 }

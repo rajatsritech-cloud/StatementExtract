@@ -1,9 +1,10 @@
-// src/app/page.tsx
-
 import dynamic from 'next/dynamic';
 import { Hero } from "@/components/Hero";
 import { LandingPageSchema } from "@/components/LandingPageSchema";
 import { FlagshipTools } from "@/components/FlagshipTools";
+import { ScanDocumentHero } from "@/components/uselayouts/ScanDocumentHero";
+import { BentoFeatures } from "@/components/uselayouts/BentoFeatures";
+import { FinancialStandardsGuide } from "@/components/FinancialStandardsGuide";
 import { DocumentDemo } from "@/components/DocumentDemo";
 
 // Dynamic imports for components below the fold (performance optimization)
@@ -48,7 +49,12 @@ export default function Home() {
     <>
       <LandingPageSchema />
       <Hero />
+      <section className="px-4 py-8 md:py-12 bg-[hsl(var(--background))] border-b border-[hsl(var(--border))]/40">
+        <ScanDocumentHero />
+      </section>
       <FlagshipTools />
+      <BentoFeatures />
+      <FinancialStandardsGuide />
       <DocumentDemo />
       <ToolsShowcase />
       <Features />

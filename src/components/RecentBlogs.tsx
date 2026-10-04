@@ -1,122 +1,141 @@
 import Link from "next/link";
 import Image from "next/image";
 import { getAllPosts } from "@/lib/blogs";
+import { BookOpen, ArrowRight, Clock, Tag } from "lucide-react";
 
 export async function RecentBlogs() {
     const allPosts = await getAllPosts();
-    const recentPosts = allPosts.slice(0, 3);
+    // Display top 6 articles on the homepage for deep content visibility
+    const recentPosts = allPosts.slice(0, 6);
 
     if (recentPosts.length === 0) {
         return null;
     }
 
     return (
-        <section id="recent-blogs" aria-labelledby="recent-blogs-heading" className="relative bg-[hsl(var(--background))] py-12 md:py-20 overflow-hidden">
-            {/* Decorative Background */}
-            <div className="absolute inset-0 pointer-events-none">
-                {/* Themed Diamond Pattern */}
-                <div className="absolute inset-0 opacity-[0.06]" style={{
-                    backgroundImage: `repeating-linear-gradient(45deg, rgb(99 102 241 / 0.3) 0, rgb(99 102 241 / 0.3) 1px, transparent 0, transparent 50%), repeating-linear-gradient(-45deg, rgb(99 102 241 / 0.3) 0, rgb(99 102 241 / 0.3) 1px, transparent 0, transparent 50%)`,
-                    backgroundSize: '30px 30px'
-                }} />
-                <div className="absolute top-0 right-1/4 w-96 h-96 bg-indigo-500/5 rounded-full blur-3xl" />
-                <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-violet-500/5 rounded-full blur-3xl" />
+        <section 
+            id="knowledge-hub" 
+            aria-labelledby="knowledge-hub-heading" 
+            className="relative bg-[hsl(var(--background))] py-16 md:py-24 overflow-hidden border-t border-[hsl(var(--border))]/50"
+        >
+            {/* Subtle Grid Background */}
+            <div className="absolute inset-0 pointer-events-none opacity-[0.03]">
+                <div 
+                    className="absolute inset-0" 
+                    style={{
+                        backgroundImage: `radial-gradient(circle at 1px 1px, hsl(var(--foreground)) 1px, transparent 0)`,
+                        backgroundSize: '32px 32px'
+                    }} 
+                />
             </div>
 
             <div className="relative mx-auto max-w-7xl px-6 lg:px-8 z-10">
-                <div className="mx-auto max-w-2xl text-center">
-                    <div className="inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-4 py-1.5 mb-6">
-                        <span className="text-sm font-medium text-indigo-500">
-                            Knowledge Hub
-                        </span>
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+                    <div className="max-w-2xl">
+                        <div className="inline-flex items-center gap-2 rounded-full border border-[hsl(var(--primary))]/30 bg-[hsl(var(--primary))]/10 px-4 py-1.5 mb-4">
+                            <BookOpen className="h-4 w-4 text-[hsl(var(--primary))]" />
+                            <span className="text-xs font-semibold uppercase tracking-wider text-[hsl(var(--primary))]">
+                                Knowledge Hub & Technical Guides
+                            </span>
+                        </div>
+                        <h2 id="knowledge-hub-heading" className="text-3xl font-bold tracking-tight text-[hsl(var(--foreground))] sm:text-4xl md:text-5xl">
+                            Financial Document Guides & Insights
+                        </h2>
+                        <p className="mt-3 text-base text-[hsl(var(--muted-foreground))]">
+                            Authoritative technical tutorials on bank statement parsing, automated reconciliation, and accounting software integration.
+                        </p>
                     </div>
-                    <h2 id="recent-blogs-heading" className="text-4xl font-bold tracking-tight text-[hsl(var(--foreground))] md:text-5xl">
-                        Latest Articles & Guides
-                    </h2>
-                    <p className="mt-2 text-lg leading-8 text-[hsl(var(--muted-foreground))]">
-                        Learn more about bank statement extraction, financial automation, and industry best practices.
-                    </p>
+
+                    <Link
+                        href="/blogs"
+                        className="inline-flex items-center gap-2 text-sm font-semibold text-[hsl(var(--primary))] hover:underline shrink-0 group"
+                    >
+                        Explore all {allPosts.length} articles
+                        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    </Link>
                 </div>
-                <div className="mx-auto mt-12 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-12 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-                    {recentPosts.map((post) => (
-                        <Link
-                            key={post.slug}
-                            href={`/blogs/${post.slug}`}
-                            className="group flex flex-col items-start justify-between rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] p-6 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-indigo-500/50 hover:shadow-lg"
-                        >
-                            <div className="relative w-full">
-                                <div className="aspect-[16/9] w-full rounded-2xl bg-[hsl(var(--muted))] sm:aspect-[2/1] lg:aspect-[3/2] overflow-hidden relative">
-                                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                                    {post.coverImage ? (
-                                        <>
+
+                {/* 6-Card Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {recentPosts.map((post) => {
+                        const estimatedReadTime = Math.max(5, Math.ceil(post.title.length / 8));
+                        return (
+                            <Link
+                                key={post.slug}
+                                href={`/blogs/${post.slug}`}
+                                className="group flex flex-col justify-between rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] overflow-hidden shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:border-[hsl(var(--primary))]/50 hover:shadow-lg"
+                            >
+                                <div className="w-full">
+                                    <div className="aspect-[16/9] w-full bg-[hsl(var(--muted))] overflow-hidden relative">
+                                        {post.coverImage ? (
                                             <Image
                                                 src={post.coverImage}
                                                 alt={post.title}
                                                 fill
-                                                className="absolute inset-0 h-full w-full object-cover transition-transform duration-200 group-hover:scale-[1.02]"
+                                                className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                             />
-                                            {/* AI-Generated Image Disclosure */}
-                                            <div className="absolute bottom-2 right-2 flex items-center gap-1 bg-black/50 backdrop-blur-sm text-white/80 text-[9px] px-1.5 py-0.5 rounded">
-                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="h-2.5 w-2.5" aria-hidden="true">
-                                                    <path fillRule="evenodd" d="M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0ZM9 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM6.75 8a.75.75 0 0 0 0 1.5h.75v1.75a.75.75 0 0 0 1.5 0v-2.5A.75.75 0 0 0 8.25 8h-1.5Z" clipRule="evenodd" />
-                                                </svg>
-                                                <span>Illustration by Rajat Srivastava</span>
+                                        ) : (
+                                            <div className="flex h-full w-full items-center justify-center text-xs text-[hsl(var(--muted-foreground))]">
+                                                Technical Guide
                                             </div>
-                                        </>
-                                    ) : (
-                                        <div className="flex h-full w-full items-center justify-center text-xs text-[hsl(var(--muted-foreground))]">
-                                            No cover image
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                            <div className="max-w-xl">
-                                <div className="mt-8 flex items-center gap-x-4 text-xs">
-                                    <time dateTime={post.date} className="text-[hsl(var(--muted-foreground))]">
-                                        {post.date}
-                                    </time>
-                                    {post.tags.length > 0 && (
-                                        <div className="relative z-10 rounded-full bg-indigo-500/10 px-3 py-1.5 font-medium text-indigo-500">
-                                            {post.tags[0]}
-                                        </div>
-                                    )}
-                                </div>
-                                <div className="group relative">
-                                    <h3 className="mt-3 text-lg font-semibold leading-6 text-[hsl(var(--foreground))] group-hover:text-indigo-500 transition-colors">
-                                        <span className="absolute inset-0" />
-                                        {post.title}
-                                    </h3>
-                                    <p className="mt-5 line-clamp-3 text-sm leading-6 text-[hsl(var(--muted-foreground))]">
-                                        {post.summary}
-                                    </p>
-                                </div>
-                                <div className="mt-6 flex items-center gap-x-3 border-t border-[hsl(var(--border))]/50 pt-6 w-full">
-                                    <div className="relative h-8 w-8 rounded-full overflow-hidden border border-[hsl(var(--primary))]/20">
-                                        <Image
-                                            src="/assets/Rajat Srivastava.png"
-                                            alt="Rajat Srivastava"
-                                            fill
-                                            className="object-cover"
-                                        />
+                                        )}
                                     </div>
-                                    <div className="text-sm leading-6">
-                                        <p className="font-semibold text-[hsl(var(--foreground))]">
-                                            Rajat Srivastava
+
+                                    <div className="p-6">
+                                        <div className="flex items-center gap-3 text-xs text-[hsl(var(--muted-foreground))] mb-3">
+                                            {post.tags[0] && (
+                                                <span className="inline-flex items-center gap-1 rounded-md bg-[hsl(var(--primary))]/10 px-2.5 py-1 text-[11px] font-medium text-[hsl(var(--primary))]">
+                                                    <Tag className="h-3 w-3" />
+                                                    {post.tags[0]}
+                                                </span>
+                                            )}
+                                            <span className="flex items-center gap-1">
+                                                <Clock className="h-3 w-3" />
+                                                {estimatedReadTime} min read
+                                            </span>
+                                        </div>
+
+                                        <h3 className="text-lg font-bold leading-snug text-[hsl(var(--foreground))] group-hover:text-[hsl(var(--primary))] transition-colors line-clamp-2">
+                                            {post.title}
+                                        </h3>
+                                        <p className="mt-3 text-sm leading-relaxed text-[hsl(var(--muted-foreground))] line-clamp-3">
+                                            {post.summary}
                                         </p>
-                                        <p className="text-[hsl(var(--muted-foreground))]">Founder & Creator</p>
                                     </div>
                                 </div>
-                            </div>
-                        </Link>
-                    ))}
+
+                                <div className="px-6 pb-6 pt-2 border-t border-[hsl(var(--border))]/40 mt-auto flex items-center justify-between">
+                                    <div className="flex items-center gap-2.5">
+                                        <div className="h-7 w-7 rounded-full overflow-hidden border border-[hsl(var(--primary))]/20 bg-[hsl(var(--primary))]/10 flex items-center justify-center shrink-0">
+                                            <Image
+                                                src="/favicon-32x32.png"
+                                                alt="Statement Extract Team"
+                                                width={16}
+                                                height={16}
+                                                className="object-contain"
+                                            />
+                                        </div>
+                                        <div className="text-xs">
+                                            <span className="font-semibold text-[hsl(var(--foreground))]">Editorial Team</span>
+                                        </div>
+                                    </div>
+                                    <span className="text-xs font-medium text-[hsl(var(--primary))] group-hover:translate-x-0.5 transition-transform flex items-center gap-1">
+                                        Read Guide →
+                                    </span>
+                                </div>
+                            </Link>
+                        );
+                    })}
                 </div>
-                <div className="mt-10 flex justify-center">
+
+                <div className="mt-12 text-center">
                     <Link
                         href="/blogs"
-                        className="text-sm font-semibold leading-6 text-indigo-500 hover:text-indigo-600 transition-colors"
+                        className="inline-flex items-center gap-2 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-8 py-3.5 text-sm font-semibold text-[hsl(var(--foreground))] hover:border-[hsl(var(--primary))] transition-colors"
                     >
-                        View all posts <span aria-hidden="true">→</span>
+                        Browse Full Knowledge Base Library ({allPosts.length} Articles)
+                        <ArrowRight className="h-4 w-4 text-[hsl(var(--primary))]" />
                     </Link>
                 </div>
             </div>
