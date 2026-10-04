@@ -17,7 +17,7 @@ import styles from "./page.module.css";
 // Disable ISR (Incremental Static Regeneration)
 // We want strict SSG (Static Site Generation) to avoid Cloudflare Worker limits.
 // Content updates will require a site rebuild.
-export const dynamicParams = true;
+export const dynamicParams = false;
 
 interface PageParams {
   params: Promise<{
